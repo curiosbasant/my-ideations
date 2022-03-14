@@ -1,3 +1,88 @@
+@import url(https://fonts.googleapis.com/icon?family=Material+Icons+Round);
+@import url(https://fonts.googleapis.com/icon?family=Material+Icons+Outlined);
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  /* Icon */
+  .icon,
+  .icon-outline {
+    @apply inline-block text-2xl not-italic font-normal leading-none tracking-normal normal-case align-middle whitespace-nowrap;
+    word-wrap: normal;
+    direction: ltr;
+  }
+  .icon {
+    font-family: "Material Icons Round";
+  }
+  .icon-outline {
+    font-family: "Material Icons Outlined";
+  }
+
+  /* tooltip */
+  [data-tooltip-top],
+  [data-tooltip-left],
+  [data-tooltip-bottom],
+  [data-tooltip-right] {
+    @apply relative;
+  }
+
+  :is([data-tooltip-top], [data-tooltip-left], [data-tooltip-bottom], [data-tooltip-right])::before,
+  :is([data-tooltip-top], [data-tooltip-left], [data-tooltip-bottom], [data-tooltip-right])::after {
+    content: var(--tw-content);
+    @apply absolute z-50 transition-all ease-out delay-100 -translate-x-1/2 -translate-y-1/2 shadow opacity-0 pointer-events-none top-1/2 left-1/2;
+  }
+  :is([data-tooltip-top], [data-tooltip-left], [data-tooltip-bottom], [data-tooltip-right])::before {
+    @apply p-1.5 rounded-sm rotate-45;
+  }
+  :is([data-tooltip-top], [data-tooltip-left], [data-tooltip-bottom], [data-tooltip-right])::after {
+    --tw-content: attr(data-tooltip-top) attr(data-tooltip-left) attr(data-tooltip-bottom)
+      attr(data-tooltip-right);
+    @apply px-2 py-1 text-sm text-white rounded whitespace-nowrap;
+  }
+
+  :is([data-tooltip-top], [data-tooltip-left], [data-tooltip-bottom], [data-tooltip-right]):hover::before,
+  :is([data-tooltip-top], [data-tooltip-left], [data-tooltip-bottom], [data-tooltip-right]):hover::after {
+    @apply opacity-100 bg-emerald-500;
+  }
+
+  /* TOP */
+  [data-tooltip-top]:hover::before {
+    @apply -top-3;
+  }
+  [data-tooltip-top]:hover::after {
+    @apply -translate-y-full -top-3;
+  }
+  /* BOTTOM */
+  [data-tooltip-bottom]:hover::before {
+    top: calc(100% + theme("spacing.3"));
+  }
+  [data-tooltip-bottom]:hover::after {
+    top: calc(100% + theme("spacing.3"));
+    @apply translate-y-0;
+  }
+  /* LEFT */
+  [data-tooltip-left]:hover::before {
+    @apply -left-3;
+  }
+  [data-tooltip-left]:hover::after {
+    @apply -translate-x-full -left-3;
+  }
+  /* RIGHT */
+  [data-tooltip-right]:hover::before {
+    left: calc(100% + theme("spacing.3"));
+  }
+  [data-tooltip-right]:hover::after {
+    left: calc(100% + theme("spacing.3"));
+    @apply translate-x-0;
+  }
+}
+/* 
+top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2
+*/
+
+@layer components {
+  .surface {
+    @apply bg-slate-50 dark:bg-slate-800;
+  }
+}
