@@ -20,7 +20,8 @@ export default function Layout({
 }) {
   const user = useUser(userId)
   const server = useServer(serverId)
-  const channel = useChannel(channelId)
+  const channel = server.channels.find((ch) => ch.id == channelId) ?? server.channels[0]
+  console.log(channel)
 
   return (
     <Page title="Discord Clone">
@@ -45,7 +46,7 @@ export default function Layout({
               ) : (
                 <>
                   <GuildChannelList channels={server.channels} activeChannelId={channelId} />
-                  <ChannelMessageList channel={channel.data} messages={[...Array(8)]} />
+                  {channel && <ChannelMessageList channel={channel} messages={[...Array(8)]} />}
                 </>
               )}
             </div>
