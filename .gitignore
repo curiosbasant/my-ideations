@@ -37,3 +37,8 @@ yarn-error.log*
 *.tsbuildinfo
 delete_me
 private
+
+# lock files
+yarn.lock
+package-lock.json
+
