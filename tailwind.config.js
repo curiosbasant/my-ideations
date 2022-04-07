@@ -1,4 +1,6 @@
-// @ts-check
+// @ts-chexck
+const colors = require("tailwindcss/colors")
+const plugin = require("tailwindcss/plugin")
 
 /** @type {import("tailwindcss/tailwind-config").TailwindConfig} */
 module.exports = {
