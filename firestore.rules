@@ -4,5 +4,8 @@ service cloud.firestore {
     match /{document=**} {
       allow read, write: if false;
     }
+    match /dots-and-boxes/{gameId} {
+      allow read;
+    }
   }
 }

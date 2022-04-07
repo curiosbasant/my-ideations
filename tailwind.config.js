@@ -30,6 +30,9 @@ module.exports = {
   plugins: [
     require("@tailwindcss/forms"),
     require("./plugins/hover-balloons"),
-    //
+    plugin(function ({ addVariant }) {
+      addVariant("befter", ["&::before", "&::after"])
+      addVariant("hocus", ["&:hover", "&:focus"])
+    }),
   ],
 }

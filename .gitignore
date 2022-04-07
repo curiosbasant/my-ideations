@@ -35,6 +35,9 @@ yarn-error.log*
 
 # typescript
 *.tsbuildinfo
+
+#folders
+.firebase_backup
 delete_me
 private
 
@@ -42,3 +45,6 @@ private
 yarn.lock
 package-lock.json
 
+# files
+service-account.json
+*.log
