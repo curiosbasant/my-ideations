@@ -1,9 +1,10 @@
 import { cert, getApp, getApps, initializeApp, ServiceAccount } from "firebase-admin/app"
 import { getAuth } from "firebase-admin/auth"
 import { getFirestore } from "firebase-admin/firestore"
-import serviceAccount from "./service-account.json"
 
 if (!getApps().length) {
+  const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT ?? "")
+  serviceAccount.private_key = serviceAccount.private_key.replace(/\\n/g, "\n")
   initializeApp({
     projectId: serviceAccount.project_id,
     credential: cert(serviceAccount as ServiceAccount),
