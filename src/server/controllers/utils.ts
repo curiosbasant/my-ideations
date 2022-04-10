@@ -1,4 +1,4 @@
-import { auth } from "@/firebase/admin"
+import { auth } from "@/server/firebase"
 import type { DecodedIdToken } from "firebase-admin/auth"
 import type { NextApiHandler, NextApiRequest, NextApiResponse } from "next"
 
@@ -20,9 +20,9 @@ export function withAuth(callback, strict = true): NextApiHandler {
     try {
       const user = await auth.verifyIdToken(request.cookies.token)
       return callback(request, response, user)
-    } catch (error) {
+    } catch (error: any) {
       if (strict) {
-        response.status(401).end()
+        response.status(401).json({ error: error.message })
         return
       } else {
         return callback(request, response, null)

@@ -1,6 +1,6 @@
 import Head from "next/head"
 
-export const Page: React.FC<{ title: string }> = ({ title, children }) => {
+const Page: React.FC<{ title: string }> = ({ title, children }) => {
   return (
     <>
       <Head>
@@ -19,7 +19,7 @@ export const Page: React.FC<{ title: string }> = ({ title, children }) => {
     </>
   )
 }
-
+export default Page
 /* 
   <link
     rel="shortcut icon"
