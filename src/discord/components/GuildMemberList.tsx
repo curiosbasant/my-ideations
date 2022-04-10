@@ -5,13 +5,24 @@ export default function GuildMemberList() {
     <aside className="flex shrink-0 basis-72 flex-col bg-slate-700">
       <div className="h-0 grow overflow-y-auto">
         <ul className="space-y-1 p-2">
-          <div className="p-2 pb-0 text-sm font-semibold uppercase">Admin - 2</div>
+          <RoleLabel label="Admin" count="2" />
+          <MemberListItem data="Ankit" />
+          <MemberListItem data="Ankit" />
+          <RoleLabel label="Online Members" count="32" />
           {[...Array(32)].map((n, i) => (
             <MemberListItem data={i + ""} key={i} />
           ))}
         </ul>
       </div>
     </aside>
+  )
+}
+
+function RoleLabel({ label, count }: { label: string; count: number | string }) {
+  return (
+    <div className="p-2 pb-0 text-sm font-semibold uppercase">
+      {label} - {count}
+    </div>
   )
 }
 

@@ -1,12 +1,14 @@
 import Link from "next/link"
+import { useRouter } from "next/router"
 import { Dispatch, SetStateAction, useEffect, useState } from "react"
 import { NestedServer, ServerGroupType, ServerType } from "../types"
 
 type ServerListProps = {
   servers: NestedServer[]
   activeServerId: string
+  createNewServer?: (name: string) => void
 }
-export default function ServerList({ servers, activeServerId }: ServerListProps) {
+export default function ServerList({ servers, activeServerId, createNewServer }: ServerListProps) {
   return (
     <div className="flex shrink-0 basis-20 flex-col bg-slate-800">
       <div className="group flex items-center justify-between  p-3">
@@ -55,7 +57,7 @@ export default function ServerList({ servers, activeServerId }: ServerListProps)
               />
             )
           )}
-          <ServerItemButton icon="add" />
+          <ServerItemButton icon="add" onClick={() => createNewServer?.("New Server")} />
           <ServerItemButton icon="explore" />
           <Divider />
           <ServerItemButton icon="download" />
@@ -102,9 +104,12 @@ type ServerListItemProps = {
   pingCount?: number
 }
 function ServerListItem({ data, ...props }: ServerListItemProps) {
+  const router = useRouter()
+  const query = { ...router.query }
+  delete query.ids
   return (
     <ListItem {...props} title={data.name}>
-      <Link href={`/discord/${data.id}`} shallow>
+      <Link href={{ pathname: `/discord/${data.id}`, query }} shallow>
         <a
           className={`block h-full bg-slate-600 shadow-inner ${
             props.active
@@ -160,10 +165,10 @@ export function ServerGroupItem({ activeId, servers }: ServerGroupItemProps) {
   )
 }
 
-function ServerItemButton({ icon = "add" }) {
+function ServerItemButton({ icon, onClick = undefined }: { icon: string; onClick?: () => void }) {
   return (
     <div className="mt-2">
-      <button className="group block h-full w-full" type="button">
+      <button className="group block h-full w-full" onClick={onClick} type="button">
         <div className="aspect-square rounded-full bg-slate-600 pt-2.5 shadow-inner hover:rounded-2xl group-hover:bg-green-500">
           <span className="icon align-text-bottom text-3xl font-thin text-green-500 group-hover:text-white">
             {icon}

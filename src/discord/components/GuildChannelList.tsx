@@ -1,14 +1,23 @@
 import Link from "next/link"
+import { useRouter } from "next/router"
 import { useState } from "react"
 import { ChannelSidebar, PanelTop, UserProfileIcon } from "."
 import { splitArray } from "../../utils"
-import { ChannelType } from "../types"
+import { ChannelType, ServerType } from "../types"
 
 type GuildChannelListProps = {
+  server: ServerType
   channels: ChannelType[]
   activeChannelId: string
+  createNewChannel?: (name: string) => void
+  // createNewChannel?:(data:Partial<ChannelType>)=>void
 }
-export default function GuildChannelList({ channels, activeChannelId }: GuildChannelListProps) {
+export default function GuildChannelList({
+  server,
+  channels,
+  activeChannelId,
+  createNewChannel,
+}: GuildChannelListProps) {
   const categorizedChannels: Record<string, ChannelType[]> = { UNCATEGORIZED: [] }
   const [categoryChannels, nonCategoryChannels] = splitArray(
     channels,
@@ -32,16 +41,21 @@ export default function GuildChannelList({ channels, activeChannelId }: GuildCha
             <button
               className="flex h-full w-full items-center justify-between  px-4 text-xl font-semibold text-slate-300"
               type="button">
-              <h1 className="">Ownly One</h1>
+              <h1 className="">{server.name}</h1>
               <span className="icon">expand_more</span>
             </button>
           </div>
         </PanelTop>
         {/* Why h-0 works here? */}
         <nav className="relative h-0 grow overflow-y-auto p-2">
+          <button className="absolute inset-2 bottom-auto rounded-full bg-slate-500/90 py-1 text-sm font-semibold uppercase text-slate-300 shadow-md">
+            New Unreads
+          </button>
           <ul className="">
             <div className="flex justify-center py-4 hover:text-slate-300">
-              <button className="rounded-full bg-slate-600 px-4 py-3">
+              <button
+                className="rounded-full bg-slate-600 px-4 py-3"
+                onClick={(ev) => createNewChannel?.("awesome channel")}>
                 <span className="icon text-3xl">add</span>
               </button>
             </div>
@@ -67,9 +81,17 @@ type ChannelListItemProps = {
   active?: boolean
 }
 function ChannelListItem({ data, active }: ChannelListItemProps) {
+  const router = useRouter()
+  const query = { ...router.query }
+  delete query.ids
   return (
     <li>
-      <Link href={`/discord/${data.serverId}/${data.id}`} shallow>
+      <Link
+        href={{
+          pathname: `/discord/${data.serverId}/${data.id}`,
+          query,
+        }}
+        shallow>
         <a
           className={`group mt-1 flex items-center gap-2 rounded-md bg-slate-50 px-2 py-1.5 ${
             active ? "bg-opacity-10" : "bg-opacity-0 hover:bg-opacity-5"

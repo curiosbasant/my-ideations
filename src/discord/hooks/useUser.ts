@@ -1,14 +1,14 @@
-import SERVER_GROUPS from "../data/serverGroups.json"
-import SERVERS from "../data/servers.json"
+import { useDiscord } from "../providers/DiscordProvider"
 import { NestedServer, ServerGroupType, ServerType } from "../types"
 
 export default function useUser(userId = "123") {
+  const { state, dispatch } = useDiscord()
   const servers: ServerType[] = []
   const groups: Record<string, NestedServer> = {}
 
-  for (const ser of SERVERS) {
+  for (const ser of state.servers) {
     if (ser.groupId) {
-      const group = SERVER_GROUPS.find((grp) => grp.id == ser.groupId)
+      const group = state.serverGroups.find((grp) => grp.id == ser.groupId)
       // groups[ser.groupId].push(ser)
       if (group) {
         groups[group.id] ??= { ...group, servers: [], name: group.id }

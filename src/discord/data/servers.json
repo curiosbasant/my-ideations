@@ -1,6 +1,6 @@
 [
   { "id": "1", "position": 1, "name": "op group" },
-  { "id": "5", "position": 2, "name": "op group" },
+  { "id": "5", "position": 2, "name": "best group" },
 
   { "id": "2", "position": 2, "groupId": "10", "name": "position: 2" },
   { "id": "3", "position": 1, "groupId": "10", "name": "position: 1" },

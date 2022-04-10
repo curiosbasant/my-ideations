@@ -8,11 +8,11 @@ export default function FriendsList({}) {
       <PanelTop>
         <>
           <div className="flex items-center divide-x divide-slate-500/75">
-            <div className="pr-4 text-slate-300">
+            <div className="whitespace-nowrap pr-4 text-slate-300">
               <span className="icon px-2 text-3xl leading-none">person</span>
               <span className="align-middle font-bold">Friends</span>
             </div>
-            <nav className="px-4">
+            <nav className="shrink-0 px-4">
               <ul className="flex gap-4">
                 {["Online", "All", "Pending", "Blocked"].map((n, i) => (
                   <li className="" key={i}>
@@ -32,7 +32,7 @@ export default function FriendsList({}) {
               </ul>
             </nav>
           </div>
-          <div className="ml-auto flex items-center divide-x divide-slate-500/75">
+          <div className="ml-auto flex shrink-0 items-center divide-x divide-slate-500/75">
             <div className="px-4">
               <span className="icon text-3xl leading-none">add_comment</span>
             </div>

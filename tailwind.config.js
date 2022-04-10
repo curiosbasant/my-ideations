@@ -8,6 +8,13 @@ module.exports = {
 
   theme: {
     extend: {
+      backgroundColor: {
+        surface: {
+          a: colors.slate["800"],
+          b: colors.slate["700"],
+          c: colors.slate["600"],
+        },
+      },
       borderRadius: {
         "4xl": "2rem",
         "5xl": "2.5rem",
@@ -34,6 +41,7 @@ module.exports = {
     plugin(function ({ addVariant }) {
       addVariant("befter", ["&::before", "&::after"])
       addVariant("hocus", ["&:hover", "&:focus"])
+      addVariant("backdrop", "&::backdrop")
     }),
   ],
 }
