@@ -1,18 +1,9 @@
 import Head from "next/head"
 
-const Page: React.FC<{ title: string }> = ({ title, children }) => {
+function Page({ title, children }: React.PropsWithChildren<{ title: string }>) {
   return (
     <>
       <Head>
-        <link
-          href="https://fonts.googleapis.com/icon?family=Material+Icons+Round"
-          rel="stylesheet"
-        />
-        <link
-          href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined"
-          rel="stylesheet"
-        />
-
         <title>{title} — Ideation</title>
       </Head>
       {children}

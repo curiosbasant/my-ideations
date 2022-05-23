@@ -81,7 +81,7 @@ const ResumePage: NextPage = () => {
               </a>
               <a
                 href="https://www.linkedin.com/in/basant-barupal"
-                className="ml-2 inline-block h-8 w-8"
+                className="ml-4 inline-block h-8 w-8"
                 target="_blank">
                 <LinkedInLogo />
               </a>
@@ -158,10 +158,10 @@ const ResumePage: NextPage = () => {
                     { logo: "mongodb", label: "MongoDB", value: 65 },
                     { logo: "git", label: "Git/Github", value: 60 },
                     { logo: "graphql", label: "GraphQL", value: 30 },
-                    { logo: "wordpress", label: "Wordpress", value: 85 },
+                    { logo: "wordpress", label: "Wordpress", value: 65 },
                     { logo: "c", label: "C/C++", value: 75 },
                     { logo: "python", label: "Python", value: 70 },
-                    { logo: "discord", label: "Discord API", value: 80 },
+                    { logo: "discord", label: "Discord API", value: 85 },
                   ].map(({ logo, label, value }) => (
                     <li className="flex items-center gap-4" key={label}>
                       <div className="relative h-7 w-7 overflow-hidden rounded">
@@ -177,11 +177,12 @@ const ResumePage: NextPage = () => {
                 <p className="mt-8 text-base">
                   I'm also quite familiar with
                   <span className="ml-1.5 rounded bg-slate-100 p-1">JAVA</span>,
-                  <span className="ml-1.5 rounded bg-slate-100 p-1">Unity</span>,
-                  <span className="ml-1.5 rounded bg-slate-100 p-1">Blender</span>,
-                  <span className="ml-1.5 rounded bg-slate-100 p-1">Android</span>,
+                  <span className="ml-1.5 rounded bg-slate-100 p-1">PHP</span>,
+                  <span className="ml-1.5 rounded bg-slate-100 p-1">Rust</span>,
                   <span className="ml-1.5 rounded bg-slate-100 p-1">React Native</span>,
-                  <span className="ml-1.5 rounded bg-slate-100 p-1">Flutter</span>
+                  <span className="ml-1.5 rounded bg-slate-100 p-1">Flutter</span>,
+                  <span className="ml-1.5 rounded bg-slate-100 p-1">Unity</span>,
+                  <span className="ml-1.5 rounded bg-slate-100 p-1">Blender</span>
                 </p>
               </div>
             </section>
