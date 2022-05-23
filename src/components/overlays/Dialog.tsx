@@ -1,10 +1,7 @@
 import { Dialog as TWDialog, Transition } from "@headlessui/react"
 import React, { Fragment, useRef, useState } from "react"
 
-const Dialog: React.FC<{
-  title: string
-  button: React.ReactNode
-}> = ({ title, button, children }) => {
+function Dialog({ title, button, children }) {
   const initialFocusRef = useRef<HTMLElement>(null)
   const [isOpen, setIsOpen] = useState(false)
 
