@@ -65,11 +65,9 @@ export const Context = createContext({
   dispatch: {} as Dispatcher<typeof ActionMap>,
 })
 
-const DiscordProvider: React.FC = ({ children }) => {
+export default function DiscordProvider({ children }: React.PropsWithChildren<{}>) {
   const [state, dispatch] = useFunctionalReducer(ActionMap, initialState)
   return <Context.Provider value={{ state, dispatch }}>{children}</Context.Provider>
 }
 
 export const useDiscord = () => useContext(Context)
-
-export default DiscordProvider

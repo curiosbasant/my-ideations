@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { UserProfileIcon } from "."
 
-const ChannelSidebar: React.FC = ({ children }) => {
+export default function ChannelSidebar({ children }) {
   return (
     <aside className="flex shrink-0 grow-0 basis-72 flex-col bg-slate-700">
       <div className="flex grow flex-col">{children}</div>
@@ -12,7 +12,6 @@ const ChannelSidebar: React.FC = ({ children }) => {
     </aside>
   )
 }
-export default ChannelSidebar
 
 function UserArea() {
   return (

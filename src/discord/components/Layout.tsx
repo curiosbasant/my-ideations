@@ -1,7 +1,4 @@
-import { useToggle } from "@curiosbasant/react-compooks"
-import { Page } from "components/Page"
-import { useState } from "react"
-import useChannel from "../hooks/useChannel"
+import Page from "components/Page"
 import useServer from "../hooks/useServer"
 import useUser from "../hooks/useUser"
 import { useDiscord } from "../providers/DiscordProvider"

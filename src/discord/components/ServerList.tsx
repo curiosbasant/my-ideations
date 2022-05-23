@@ -1,7 +1,7 @@
 import Link from "next/link"
 import { useRouter } from "next/router"
-import { Dispatch, SetStateAction, useEffect, useState } from "react"
-import { NestedServer, ServerGroupType, ServerType } from "../types"
+import { useState } from "react"
+import { NestedServer, ServerType } from "../types"
 
 type ServerListProps = {
   servers: NestedServer[]
@@ -73,22 +73,20 @@ type ListItemProps = {
   pingCount?: number
 } & Pick<React.HTMLAttributes<HTMLLIElement>, "title">
 
-const ListItem: React.FC<ListItemProps> = ({ active, pingCount = 0, title, children }) => {
+function ListItem({ active, pingCount = 0, title, children }:React.PropsWithChildren<ListItemProps>) {
   return (
     <li
-      className={`flex items-center before:absolute before:left-0 before:block ${
-        active ? "before:h-8" : "before:h-2 before:scale-y-125 hover:before:h-4"
-      } before:w-1 before:rounded-r before:bg-white before:transition-all`}
+      className={`flex items-center before:absolute before:left-0 before:block ${active ? "before:h-8" : "before:h-2 before:scale-y-125 hover:before:h-4"} before:w-1 before:rounded-r before:bg-white before:transition-all`}
       title={title}>
-      <div className="relative aspect-square grow  ">
+      <div className="relative aspect-square grow">
         {children}
         {active && (
-          <span className="icon absolute top-0 right-0 h-4 w-4 rounded-full bg-emerald-500 text-center text-xs font-semibold leading-4 text-white ring-4 ring-slate-800">
+          <span className="icon absolute top-0 right-0 p-0.5 rounded-full bg-emerald-500 text-center text-xs font-semibold text-white ring-4 ring-slate-800">
             volume_up
           </span>
         )}
         {pingCount > 0 && (
-          <span className="absolute bottom-0 right-0 h-4 w-4 rounded-full bg-rose-500 text-center text-xs font-semibold leading-4 text-white ring-4 ring-slate-800">
+          <span className="absolute bottom-0 right-0 h-4 w-4 rounded-full bg-rose-500 text-center text-xs font-semibold text-white ring-4 ring-slate-800">
             {pingCount}
           </span>
         )}
@@ -169,8 +167,8 @@ function ServerItemButton({ icon, onClick = undefined }: { icon: string; onClick
   return (
     <div className="mt-2">
       <button className="group block h-full w-full" onClick={onClick} type="button">
-        <div className="aspect-square rounded-full bg-slate-600 pt-2.5 shadow-inner hover:rounded-2xl group-hover:bg-green-500">
-          <span className="icon align-text-bottom text-3xl font-thin text-green-500 group-hover:text-white">
+        <div className="aspect-square rounded-full bg-slate-600 flex shadow-inner hover:rounded-2xl group-hover:bg-green-500">
+          <span className="icon m-auto text-3xl font-thin text-green-500 group-hover:text-white">
             {icon}
           </span>
         </div>

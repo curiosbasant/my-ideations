@@ -3,7 +3,7 @@ import nookies from "nookies"
 import { useEffect } from "react"
 import { AuthProvider, FirebaseAppProvider, FirestoreProvider } from "reactfire"
 
-const FirebaseSDKProviders: React.FC = ({ children }) => {
+export default function FirebaseSDKProviders({ children }) {
   useEffect(() => {
     const unsubscriber = auth.onIdTokenChanged(async (user) => {
       if (!user) {
@@ -31,4 +31,3 @@ const FirebaseSDKProviders: React.FC = ({ children }) => {
     </FirebaseAppProvider>
   )
 }
-export default FirebaseSDKProviders

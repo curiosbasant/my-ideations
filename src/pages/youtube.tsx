@@ -1,4 +1,4 @@
-import { Page } from "components/Page"
+import Page from "components/Page"
 import { NextPage } from "next"
 import { useRef, useState } from "react"
 import { useImmer } from "use-immer"
