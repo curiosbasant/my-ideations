@@ -1,7 +1,8 @@
-import { Page } from "@/components/Page"
+import Page from "@/components/Page"
 import type { NextPage } from "next"
 import Link from "next/link"
 import { useMemo, useRef, useState } from "react"
+import { useImmer } from "use-immer"
 
 class Puzzle {
   moves = 0
@@ -87,8 +88,16 @@ class Puzzle {
 }
 
 const PuzzleGamePage: NextPage = () => {
-  const puzzle = useMemo(() => new Puzzle(4), [])
+  const [rows, setRows] = useState(4)
+  const [cols, setCols] = useState(4)
+  const puzzle = useMemo(() => new Puzzle(rows, cols), [rows, cols])
   const [positions, setpositions] = useState(puzzle.position)
+  const [image, setBackground] = useImmer({
+    src: "",
+    size: 1,
+    x: 0,
+    y: 0,
+  })
   const { current: config } = useRef({ isVert: Math.random() < 0.5, isShuffling: 0 })
 
   function onTileClick(position: number) {
@@ -116,13 +125,18 @@ const PuzzleGamePage: NextPage = () => {
       }, 100) as unknown as number
     }
   }
+  function updateBackground<T extends keyof typeof image>(key: T, value: typeof image[T]) {
+    setBackground((prev) => {
+      prev[key] = value
+    })
+  }
 
   return (
     <Page title="Puzzle Game">
       <div className="min-h-screen  bg-slate-50 py-20 text-slate-500">
-        <section className="mx-auto max-w-xl rounded border bg-white p-4 shadow-lg">
+        <section className="mx-auto max-w-xl rounded-md border bg-white p-4 shadow-lg">
           <div className="mb-4 flex items-center justify-between">
-            <h2 className="text-4xl font-bold">Puzzle</h2>
+            <h2 className="text-3xl font-bold">Puzzle</h2>
             <button
               className=" rounded bg-blue-500 px-4 py-1 text-white"
               onClick={handleShuffle}
@@ -133,17 +147,90 @@ const PuzzleGamePage: NextPage = () => {
             </button>
           </div>
           <div
-            className="grid rounded border bg-slate-50 p-px shadow-inner"
-            style={{ gridTemplateColumns: `repeat(${puzzle.cols}, 1fr)` }}>
-            {positions.map((p, i) => {
+            className="grid rounded-md border bg-slate-50 p-px shadow-inner"
+            style={{ gridTemplateColumns: `repeat(${cols}, 1fr)` }}>
+            {puzzle.position.map((p, i) => {
               const pc = puzzle.toRC(p),
                 ic = puzzle.toRC(i)
               const coords = { r: pc.r - ic.r, c: pc.c - ic.c }
 
               return (
-                <PuzzleTile coords={coords} ic={ic} onInteract={() => onTileClick(p)} key={i} />
+                <PuzzleTile
+                  coords={coords}
+                  ic={ic}
+                  bg={image}
+                  colCount={cols}
+                  onInteract={() => onTileClick(p)}
+                  key={i}
+                />
               )
             })}
+          </div>
+          <div className="mt-4 space-y-4">
+            <div className="">
+              <span className="">Puzzle</span>
+              <div className="space-x-4">
+                <label className="">
+                  Rows:{" "}
+                  <input
+                    className="rounded-md"
+                    value={rows}
+                    onChange={(ev) => {
+                      setRows(+ev.currentTarget.value)
+                    }}
+                    name="puzzleRows"
+                    type="number"
+                  />
+                </label>
+                <label className="">
+                  Cols:{" "}
+                  <input
+                    className="rounded-md"
+                    value={cols}
+                    onChange={(ev) => {
+                      setCols(+ev.currentTarget.value)
+                    }}
+                    name="puzzleCols"
+                    type="number"
+                  />
+                </label>
+              </div>
+            </div>
+            <label className="flex items-center">
+              Image Size:{" "}
+              <input
+                className=""
+                onChange={(ev) => {
+                  updateBackground("size", +ev.currentTarget.value)
+                }}
+                name="imageSize"
+                value={image.size}
+                min="0.01"
+                max="2"
+                step="0.01"
+                list="bg-size-values"
+                type="range"
+              />
+            </label>
+            <datalist id="bg-size-values">
+              <option value="0.5" />
+              <option value="1" />
+              <option value="1.5" />
+            </datalist>
+            <label className="cursor-pointer rounded-full bg-sky-500 px-4 py-2 text-sky-50">
+              Upload Image
+              <input
+                className="absolute -left-[9999px]"
+                onChange={(ev) => {
+                  const file = ev.currentTarget.files?.[0]
+                  if (!file) return
+                  updateBackground("src", URL.createObjectURL(file))
+                }}
+                name="puzzleImage"
+                accept="image/png, image/jpeg"
+                type="file"
+              />
+            </label>
           </div>
         </section>
       </div>
@@ -151,15 +238,17 @@ const PuzzleGamePage: NextPage = () => {
   )
 }
 
-function PuzzleTile({ coords, ic, onInteract }) {
+function PuzzleTile({ coords, ic, bg, colCount = 1, onInteract }) {
   return (
     <div
       className="relative aspect-square p-px transition duration-300 ease-out"
       style={{ transform: `translate(${coords.c}00%, ${coords.r}00%)` }}>
       <button
-        className="flex h-full w-full items-center justify-center rounded border bg-white bg-[image:url(/lion-wallpaper.jpg)] bg-[percentage:750%] text-5xl font-semibold transition-colors hover:bg-slate-100"
+        className="flex h-full w-full items-center justify-center rounded-md border bg-white text-5xl font-semibold transition-colors hover:bg-slate-100"
         style={{
-          backgroundPosition: `-${ic.c}00% -${ic.r}00%`,
+          backgroundImage: `url(${bg.src || "/lion-wallpaper.jpg"})`,
+          backgroundPosition: `${-ic.c * 100 + bg.x}% ${-ic.r * 100 + bg.y}%`,
+          backgroundSize: colCount * 100 * bg.size + "%",
         }}
         onClick={onInteract}
         type="button">
@@ -170,3 +259,46 @@ function PuzzleTile({ coords, ic, onInteract }) {
 }
 
 export default PuzzleGamePage
+
+type Event =
+  | {
+      type: "LOG_IN"
+      payload: {
+        userId: string
+      }
+    }
+  | {
+      type: "LOG_OUT"
+    }
+
+const sendEvent = <
+  O extends {
+    type: string
+    payload?: any
+  }
+>(
+  eventType: O["type"],
+  payload?: O["payload"]
+) => {}
+
+sendEvent("LOG_OUTm", { userId: "123" })
+sendEvent("")
+
+/*  */
+function compose(...args: any[]) {
+  return {} as any
+}
+
+const addOne = (a: number) => {
+  return a + 1
+}
+
+const numToString = (a: number) => {
+  return a.toString()
+}
+
+const stringToNum = (a: string) => {
+  return parseInt(a)
+}
+
+export const addOneToString = compose(addOne, numToString, stringToNum)
