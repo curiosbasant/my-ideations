@@ -1,6 +1,7 @@
 import { NextPage } from "next"
 import Image from "next/image"
 import Link from "next/link"
+import { useRef } from "react"
 
 const ResumePage: NextPage = () => {
   return (
@@ -32,10 +33,10 @@ const ResumePage: NextPage = () => {
             </Asides>
             <Asides label="Contact">
               <div className="flex gap-8">
-                <div className="-ml-20 w-12 space-y-2 rounded-full bg-sky-500 px-2.5 py-3 text-white">
-                  <span className="icon -mt-0.5 text-3xl">phone</span>
-                  <span className="icon -mt-0.5 text-3xl">mail</span>
-                  <span className="icon -mt-0.5 text-3xl">home</span>
+                <div className="-ml-20 w-12 space-y-4 rounded-full bg-sky-500 px-2.5 py-3 text-white">
+                  <span className="icon text-3xl">phone</span>
+                  <span className="icon text-3xl">mail</span>
+                  <span className="icon text-3xl">home</span>
                 </div>
                 <div className="flex flex-col gap-y-4 pt-4">
                   <span className="block">+917023367365</span>
@@ -64,10 +65,31 @@ const ResumePage: NextPage = () => {
                 </div>
               </div>
             </Asides>
+            <Asides icon="language" label="Languages">
+              <ul className="space-y-2">
+                <LanguageItem language="Hindi" level={5} />
+                <LanguageItem language="English" level={4} />
+                <LanguageItem language="Marwari" level={4} />
+              </ul>
+            </Asides>
+            <Asides icon="share" label="Social Handles">
+              <a
+                href="https://github.com/CuriosBasant"
+                className="inline-block h-8 w-8"
+                target="_blank">
+                <GithubLogo />
+              </a>
+              <a
+                href="https://www.linkedin.com/in/basant-barupal"
+                className="ml-2 inline-block h-8 w-8"
+                target="_blank">
+                <LinkedInLogo />
+              </a>
+            </Asides>
           </aside>
         </div>
 
-        <div className="relative grow">
+        <div className="relative flex-1">
           <div
             className="absolute h-96 w-full"
             style={{
@@ -100,7 +122,11 @@ const ResumePage: NextPage = () => {
               </p>
               <ProjectItem title="shadyantra" link="https://shadyantra.vercel.app/editor">
                 A real indian ancient online multiplayer 10x10 chess board game, built using the
-                tools - nextjs, tailwindcss, nodejs, typescript and firebase
+                tools - nextjs, tailwindcss, nodejs, typescript and firebase. <br />
+                Test the board of shadyantra -{" "}
+                <a href="https://shadyantra.vercel.app/editor" className="text-sky-500">
+                  Shadyantra Board Editor
+                </a>
               </ProjectItem>
               <ProjectItem title="inkcourse">
                 An online social platform where people can create and join group of there interest,
@@ -124,14 +150,14 @@ const ResumePage: NextPage = () => {
                     { logo: "react", label: "React", value: 85 },
                     { logo: "css", label: "HTML/CSS", value: 97 },
                     { logo: "tailwindcss", label: "TailwindCSS", value: 99 },
-                    { logo: "javascript", label: "Javascript", value: 95 },
                     { logo: "typescript", label: "Typescript", value: 85 },
+                    { logo: "javascript", label: "Javascript", value: 95 },
                     { logo: "nodejs", label: "NodeJS", value: 70 },
-                    { logo: "graphql", label: "GraphQL", value: 30 },
                     { logo: "firebase", label: "Firebase", value: 75 },
                     { logo: "mysql_full", label: "MySQL", value: 55 },
                     { logo: "mongodb", label: "MongoDB", value: 65 },
                     { logo: "git", label: "Git/Github", value: 60 },
+                    { logo: "graphql", label: "GraphQL", value: 30 },
                     { logo: "wordpress", label: "Wordpress", value: 85 },
                     { logo: "c", label: "C/C++", value: 75 },
                     { logo: "python", label: "Python", value: 70 },
@@ -154,6 +180,7 @@ const ResumePage: NextPage = () => {
                   <span className="ml-1.5 rounded bg-slate-100 p-1">Unity</span>,
                   <span className="ml-1.5 rounded bg-slate-100 p-1">Blender</span>,
                   <span className="ml-1.5 rounded bg-slate-100 p-1">Android</span>,
+                  <span className="ml-1.5 rounded bg-slate-100 p-1">React Native</span>,
                   <span className="ml-1.5 rounded bg-slate-100 p-1">Flutter</span>
                 </p>
               </div>
@@ -218,8 +245,11 @@ function Asides({
   return (
     <section className="space-y-4">
       <div className="flex items-center gap-8">
-        <div className={`h-12 w-12 rounded-full p-2 text-white ${icon ? "bg-sky-500" : ""} `}>
-          <span className="icon -mt-0.5 text-3xl">{icon}</span>
+        <div
+          className={`aspect-square shrink-0 basis-12 rounded-full p-2 text-center text-white ${
+            icon ? "bg-sky-500" : ""
+          } `}>
+          <span className="icon mt-px text-3xl">{icon}</span>
         </div>
         <h3 className="text-3xl font-bold text-sky-500">{label}</h3>
       </div>
@@ -239,3 +269,37 @@ function Range({ value = "50" }: { value?: string | number }) {
     </div>
   )
 }
+
+function LanguageItem({ language, level = 5 }) {
+  return (
+    <li className="flex items-center justify-between">
+      {language}
+      <ul className="flex gap-2">
+        {[...Array(5)].map((_, i) => (
+          <li
+            className={`rounded-full ${i < level ? "bg-sky-500" : "bg-slate-500/80"} p-1.5`}
+            key={i}
+          />
+        ))}
+      </ul>
+    </li>
+  )
+}
+
+const GithubLogo = () => (
+  <svg viewBox="0 0 16 16">
+    <path
+      fillRule="evenodd"
+      d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path>
+  </svg>
+)
+
+const LinkedInLogo = () => (
+  <svg viewBox="0 0 65.326 65.326">
+    <path
+      d="M958.98,112.559h-9.6V97.525c0-3.585-.064-8.2-4.993-8.2-5,0-5.765,3.906-5.765,7.939v15.294h-9.6V81.642h9.216v4.225h.129a10.1,10.1,0,0,1,9.093-4.994c9.73,0,11.524,6.4,11.524,14.726ZM918.19,77.416a5.571,5.571,0,1,1,5.57-5.572,5.571,5.571,0,0,1-5.57,5.572m4.8,35.143h-9.61V81.642h9.61Zm40.776-55.2h-55.21a4.728,4.728,0,0,0-4.781,4.67v55.439a4.731,4.731,0,0,0,4.781,4.675h55.21a4.741,4.741,0,0,0,4.8-4.675V62.025a4.738,4.738,0,0,0-4.8-4.67"
+      transform="translate(-903.776 -57.355)"
+      fill="#0a66c2"
+    />
+  </svg>
+)
