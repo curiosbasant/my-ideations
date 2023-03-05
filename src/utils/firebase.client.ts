@@ -9,8 +9,8 @@ if (!getApps().length) {
   const app = initializeApp({
     projectId,
     authDomain: `${projectId}.firebaseapp.com`,
-    // databaseURL: `https://${projectId}-default-rtdb.asia-southeast1.firebasedatabase.app/`,
-    databaseURL: `https://${projectId}.firebase.io`,
+    databaseURL: `https://${projectId}-default-rtdb.asia-southeast1.firebasedatabase.app/`,
+    // databaseURL: `https://${projectId}.firebase.io`,
 
     storageBucket: `${projectId}.appspot.com`,
     appId: '1:790325040832:web:45ddf9b45756e10fa5ff25',

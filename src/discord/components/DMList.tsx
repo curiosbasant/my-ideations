@@ -50,7 +50,15 @@ export default function DMList({ channels, activeChannelId = '' }: GuildChannelL
   )
 }
 
-function ChannelButtonListItem({ icon, label, active = false }) {
+function ChannelButtonListItem({
+  icon,
+  label,
+  active = false,
+}: {
+  icon: string
+  label: string
+  active?: boolean
+}) {
   return (
     <li className=''>
       <button

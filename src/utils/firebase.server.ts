@@ -2,24 +2,14 @@ import { cert, getApp, getApps, initializeApp, ServiceAccount } from 'firebase-a
 import { getAuth } from 'firebase-admin/auth'
 import { getDatabase } from 'firebase-admin/database'
 import { getFirestore } from 'firebase-admin/firestore'
-import serviceAccount from '../service-account.json'
 
 if (!getApps().length) {
-  console.log(
-    serviceAccount.project_id,
-    process.env.FIRESTORE_EMULATOR_HOST,
-    process.env.FIREBASE_DATABASE_EMULATOR_HOST
-  )
-  // const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT ?? '')
-  // serviceAccount.private_key = serviceAccount.private_key.replace(/\\n/g, '\n')
+  const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT ?? '')
+  serviceAccount.private_key = serviceAccount.private_key.replace(/\\n/g, '\n')
+
   initializeApp({
-    // projectId: 'demo-ideations',
-    projectId: serviceAccount.project_id,
-    databaseURL: `https://${serviceAccount.project_id}.firebase.io`,
-    // databaseURL: `https://${serviceAccount.project_id}.firebase.io`,
-    // databaseURL: `http://localhost:8030/?ns=${serviceAccount.project_id}`,
-    // databaseURL: `https://${serviceAccount.project_id}-default-rtdb.asia-southeast1.firebasedatabase.app`,
-    // credential: cert(serviceAccount as ServiceAccount),
+    credential: cert(serviceAccount as ServiceAccount),
+    databaseURL: `https://${serviceAccount.project_id}-default-rtdb.asia-southeast1.firebasedatabase.app`,
   })
 }
 

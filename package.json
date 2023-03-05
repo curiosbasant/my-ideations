@@ -5,7 +5,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "emulator": "firebase emulators:start --only=auth,firestore,database --import=./.firebase.archive --export-on-exit"
+    "emulator": "firebase emulators:start --only=auth,firestore,database --import=./.firebase.archive --export-on-exit=./.firebase.archive"
   },
   "dependencies": {
     "@curiosbasant/react-compooks": "^0.2.3",

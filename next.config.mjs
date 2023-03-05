@@ -11,9 +11,8 @@ const config = {
   swcMinify: true,
   experimental: {
     appDir: true,
-    // enableUndici: true,
     serverComponentsExternalPackages: ['tailwindcss', 'postcss', 'firebase-admin'],
-    typedRoutes: true,
+    // typedRoutes: true,
   },
   images: {
     domains: ['raw.githubusercontent.com', 'cdn.discordapp.com'],
@@ -30,17 +29,6 @@ const config = {
       destination: '/terms-of-service',
       permanent: true,
     },
-    // {
-    //   source: '/hootboard/:path((?!login$).*)',
-    //   missing: [
-    //     {
-    //       type: 'cookie',
-    //       key: 'auth-token',
-    //     },
-    //   ],
-    //   destination: '/hootboard/login',
-    //   permanent: true,
-    // },
   ],
 }
 

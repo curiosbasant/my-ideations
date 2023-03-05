@@ -1,7 +1,7 @@
-import { useState } from 'react'
+import { PropsWithChildren, useState } from 'react'
 import { UserProfileIcon } from '.'
 
-export default function ChannelSidebar({ children }) {
+export default function ChannelSidebar({ children }: PropsWithChildren) {
   return (
     <aside className='flex shrink-0 grow-0 basis-72 flex-col bg-slate-700'>
       <div className='flex grow flex-col'>{children}</div>

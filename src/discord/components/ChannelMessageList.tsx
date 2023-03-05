@@ -60,7 +60,7 @@ export default function ChannelMessageList({ channel, messages }: ChannelMessage
   )
 }
 
-function ChannelHeader({ channelName }) {
+function ChannelHeader({ channelName }: { channelName: string }) {
   const { state, dispatch } = useDiscord()
   return (
     <PanelTop>
