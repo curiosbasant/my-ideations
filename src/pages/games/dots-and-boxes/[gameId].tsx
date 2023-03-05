@@ -1,301 +1,293 @@
-import Dialog from "@/components/overlays/Dialog"
-import Page from "@/components/Page"
-import FirebaseSDKProviders from "@/providers/FirebaseSDKProviders"
-import { useEffectOnce } from "@curiosbasant/react-compooks"
-import Axios from "axios"
-import { signInAnonymously } from "firebase/auth"
-import { doc } from "firebase/firestore"
-import { NextPage } from "next"
-import { useRouter } from "next/router"
-import nookies from "nookies"
-import { useState } from "react"
-import { useAuth, useFirestore, useFirestoreDocData, useUser } from "reactfire"
+import { signInAnonymously } from 'firebase/auth'
+import { onValue, ref, set } from 'firebase/database'
+import { useRouter } from 'next/router'
+import { Fragment, useEffect, useState } from 'react'
 
-// export const getServerSideProps: GetServerSideProps = async ({ req, res, query }) => {
-//   // const gameId = query.gameId as string
-//   // let userId = ""
-//   // try {
-//   //   const user = await auth.verifyIdToken(req.cookies.token)
-//   //   userId = user.uid
-//   // } catch (error) {
-//   //   const user = await auth.createUser({})
-//   //   auth.updateUser(user.uid, { displayName: `Guest_${user.uid.slice(0, 6)}` })
-//   //   const token = await auth.createCustomToken(user.uid)
-//   //   userId = user.uid
-//   // }
+import GamesLayout from '~/app/games/layout'
+import { User } from '~/providers'
+import { api } from '~/utils/api'
+import { auth, database } from '~/utils/firebase.client'
 
-//   // await joinGame(gameId, userId)
+type GameType = {
+  id: string
+  config: { rows: number; cols: number }
+  players: {
+    id: string
+    displayName: string
+    isActive: boolean
+    boxCount: number
+  }[]
+  activePlayerIndex: 0
+  lastDash?: string | null
+  // Map of dash name to player index
+  dashes: Record<string, number>
+  boxes: Record<string, number>
+  status: 'waiting' | 'running'
+}
 
-//   return {
-//     props: {},
-//   }
-// }
+const DASH_COLORS = ['text-sky-500', 'text-orange-500', 'text-emerald-500', 'text-violet-500']
 
-const DASH_COLORS = ["text-sky-500", "text-orange-500", "text-emerald-500", "text-violet-500"]
-
-const DotsAndBoxesGamePage: NextPage = () => {
+export default function DotsAndBoxesPage() {
   const router = useRouter()
-  return (
-    <Page title="Dots and Boxes">
-      <FirebaseSDKProviders>
-        {router.query.gameId && <Layout gameId={router.query.gameId as string} />}
-      </FirebaseSDKProviders>
-    </Page>
-  )
-}
 
-export default DotsAndBoxesGamePage
+  const user = User.use()
+  const [game, setGame] = useState<GameType | null>(null)
 
-function Layout({ gameId = "" }) {
-  const auth = useAuth()
-  const { data: user } = useUser()
-  const firestore = useFirestore()
-  const { data: game, status } = useFirestoreDocData(doc(firestore, "dots-and-boxes", gameId))
-  const [error, setError] = useState("")
-
-  useEffectOnce(() => {
-    nookies.set(undefined, "gameId", gameId, { path: "/" })
-    return () => {
-      nookies.destroy(undefined, "gameId")
+  useEffect(() => {
+    if (router.query.gameId) {
+      const { stream } = streamPlay(router.query.gameId as string)
+      return stream(setGame)
     }
-  })
+  }, [router.query.gameId])
 
-  if (status != "success") return <p className="">"Loading..."</p>
-  if (!game) return <p>Doc dont exist</p>
-
-  const isOP = Boolean(user) && game.players[0].id == user!.uid
-  const myTurn =
-    Boolean(user) && game.status == "started" && game.players[game.activePlayer].id == user!.uid
-
-  const toggleDash = (name: string) => async () => {
-    try {
-      const { data } = await Axios.patch("/api/dots-and-boxes?action=make-move", { dash: name })
-    } catch (error: any) {
-      setError(error.code)
-    }
-
-    // console.log(data)
-  }
-
-  async function handleStartingGame() {
-    const { data } = await Axios.patch("/api/dots-and-boxes?action=start-game")
-    console.log(data)
-  }
-
-  async function handleJoiningGame() {
-    if (!user) await signInAnonymously(auth)
-    const { data } = await Axios.patch("/api/dots-and-boxes?action=join-game")
-    // console.log(data)
-  }
+  if (!game) return null
 
   return (
-    <div className="h-screen overflow-y-auto">
-      <div className="mx-auto flex h-full w-full max-w-7xl flex-col gap-x-8 px-4 lg:flex-row xl:px-0">
-        <section className="relative my-4 grow">
-          <div
-            className="grid"
-            style={{ gridTemplateColumns: `repeat(${game.config.cols}, minmax(0, 1fr))` }}>
-            {[...Array(game.config.rows * game.config.cols)].map((n, i) => (
-              <div className="flex  aspect-square " key={i}>
-                <span className="m-auto font-semibold sm:text-xl md:text-3xl ">
-                  {game.boxes[i]}
-                </span>
-              </div>
-            ))}
-          </div>
-          <div
-            className="absolute top-0 aspect-square"
-            style={{ width: 100 / game.config.cols + "%" }}>
-            {traverse(game.config.rows + 1, game.config.cols, (r: number, c: number) => {
-              const name = `${r * (game.config.cols + 1) + c}_${r * (game.config.cols + 1) + c + 1}`
-              return (
-                <Dash
-                  {...{ r, c }}
-                  highlighted={game.lastDash == name}
-                  colorClass={DASH_COLORS[game.dashes[name]]}
-                  setColor={myTurn ? toggleDash(name) : undefined}
-                  key={r + "_" + c}
-                />
-              )
-            })}
-            {traverse(game.config.rows, game.config.cols + 1, (r: number, c: number) => {
-              const name = `${r * (game.config.cols + 1) + c}_${
-                (r + 1) * (game.config.cols + 1) + c
-              }`
-              return (
-                <Dash
-                  {...{ r, c }}
-                  highlighted={game.lastDash == name}
-                  colorClass={DASH_COLORS[game.dashes[name]]}
-                  setColor={myTurn ? toggleDash(name) : undefined}
-                  vert
-                  key={r + "_" + c}
-                />
-              )
-            })}
-          </div>
-        </section>
-        <section className="shrink-0 basis-full py-4 lg:max-w-sm">
-          <span className="text-2xl font-bold">Players</span>
-          <ul className="my-4 ">
-            {game.players.map((p, i) => {
-              return (
-                <PlayerListItem
-                  position={i + 1}
-                  player={p}
-                  me={user?.uid == p.id}
-                  myTurn={game.players[game.activePlayer].id == p.id}
-                  count={Object.values(game.boxes).reduce<number>(
-                    (counter, pos) => counter + +(pos == i + 1),
-                    0
-                  )}
-                  color={DASH_COLORS[i]}
-                  showKickButton={isOP}
-                  key={p.id}
-                />
-              )
-            })}
-          </ul>
-          <div className="flex flex-col items-center">
-            {game.status == "waiting" &&
-              (isOP ? (
-                <button
-                  className="rounded-md bg-emerald-500 px-4 py-2 text-slate-50 transition-colors hover:bg-emerald-400 disabled:bg-slate-400"
-                  onClick={handleStartingGame}
-                  disabled={game.players.length < 2}>
-                  Start Game
-                </button>
-              ) : (
-                game.players.length < 4 && (
-                  <>
-                    <p className="">
-                      <span className="inline-block animate-spin rounded-full border-2 border-y-slate-500 border-x-transparent p-1.5 align-middle"></span>
-                      Waiting for players to join...
-                    </p>
-                    {!game.players.some((p) => p.id == user?.uid) && (
-                      <button
-                        className="mt-4 rounded-md bg-emerald-500 px-4 py-2 text-slate-50 transition-colors hover:bg-emerald-400 "
-                        onClick={handleJoiningGame}>
-                        Join Game
-                      </button>
-                    )}
-                  </>
-                )
-              ))}
-            {error && <p className="text-red-500">{error}</p>}
-            {user?.uid}
-          </div>
-        </section>
+    <GamesLayout>
+      <div className='flex w-full flex-col gap-8 lg:flex-row'>
+        <Arena
+          active={game.status === 'running' && game.players[game.activePlayerIndex].id === user?.id}
+          gameId={game.id}
+          userId={user?.id}
+          {...game.config}
+          boxes={game.boxes}
+          dashes={game.dashes}
+          activeDash={game.lastDash}
+        />
+        <Players
+          gameId={game.id}
+          userId={user?.id}
+          players={game.players}
+          isWaiting={game.status === 'waiting'}
+        />
       </div>
-    </div>
+    </GamesLayout>
   )
 }
 
-function Dash({ r = 0, c = 0, colorClass = "", setColor, highlighted = false, vert = false }) {
+function Arena(props: {
+  active?: boolean
+  gameId: string
+  userId?: string | null
+  rows: number
+  cols: number
+  boxes: Record<string, number>
+  dashes: Record<string, number>
+  activeDash?: string | null
+}) {
+  const makeMoveMutation = api.dotsAndBoxes.makeMove.useMutation()
+  const a = api.example.hello.useQuery()
+
+  const toggleDash = (name: string) => () => {
+    props.userId &&
+      makeMoveMutation.mutate({
+        dashName: name,
+        gameId: props.gameId,
+        playerId: props.userId,
+      })
+  }
+  const gridRowSize = props.rows * 2 + 1
+  const gridColSize = props.cols * 2 + 1
+
   return (
-    <div
-      className="pointer-events-none absolute h-full w-full"
-      style={{ transform: `translate(${c}00%,${r}00%) rotate(${-vert * 90}deg)` }}>
+    <section className='relative flex-1 p-2'>
       <div
-        className={`befter:absolute befter:pointer-events-none befter:top-0 befter:block befter:rounded-full hover:befter:z-50 befter:bg-slate-500 befter:p-2 befter:ring-offset-2 ${
-          highlighted ? "befter:ring-4" : "hover:befter:ring-2"
-        } pointer-events-auto relative h-4 -translate-y-1/2 ${
-          setColor ? "cursor-pointer" : ""
-        } rounded-full bg-clip-content py-1 transition-colors before:-left-2 after:-right-2 hover:z-50 ${
-          colorClass || "text-slate-200/50 hover:text-slate-300/75"
-        } bg-current`}
-        onClick={setColor}></div>
-    </div>
+        className='isolate grid mix-blend-darken'
+        style={{
+          gridTemplateColumns: `repeat(${props.cols}, 0.5rem 1fr) 0.5rem`,
+          gridTemplateRows: `repeat(${props.rows}, 0.5rem 1fr) 0.5rem`,
+          aspectRatio: props.cols / props.rows,
+        }}>
+        {[...Array(gridRowSize * gridColSize)].map((_, i) => {
+          const cellRowIndex = (i / gridColSize) | 0
+          const cellColIndex = i % gridColSize
+
+          const isRowEven = cellRowIndex % 2 === 0
+          const isColEven = cellColIndex % 2 === 0
+
+          // if Dot or Square
+          if (isRowEven === isColEven) {
+            // if Dot
+            if (isRowEven) {
+              return <span className='z-20 scale-[2] rounded-full bg-slate-500' key={i} />
+            }
+
+            const boxIndex = ((cellRowIndex - 1) * props.cols + cellColIndex - 1) / 2
+            const playerIndex = props.boxes[boxIndex]
+            return typeof playerIndex === 'number' ? (
+              <div className={`bg-current ${DASH_COLORS[playerIndex]} text-opacity-75`} key={i} />
+            ) : (
+              <Fragment key={i}>&ensp;</Fragment>
+            )
+          }
+
+          const hA = (cellRowIndex * (props.cols + 1) + cellColIndex - 1) / 2
+          const vA = ((cellRowIndex - 1) * (props.cols + 1) + cellColIndex) / 2
+          const dashName = isRowEven ? `${hA}_${hA + 1}` : `${vA}_${vA + props.cols + 1}`
+          const dashPlayerIndex = props.dashes[dashName]
+
+          return (
+            <button
+              className={`relative ${
+                // if occupied
+                typeof dashPlayerIndex === 'number'
+                  ? `bg-current ${DASH_COLORS[dashPlayerIndex]}`
+                  : 'bg-slate-300 bg-opacity-40 hover:bg-opacity-100'
+              } transition ${
+                // if horizontal
+                isRowEven
+                  ? 'before:right-full after:left-full befter:top-0'
+                  : 'before:bottom-full after:top-full befter:left-0'
+              } befter:absolute befter:z-10 befter:rounded-full befter:p-1 ${
+                dashName === props.activeDash ? 'befter:ring-2' : 'enabled:hover:befter:ring-2'
+              } befter:ring-offset-[5px]`}
+              onClick={toggleDash(dashName)}
+              disabled={!props.active || typeof dashPlayerIndex === 'number'}
+              type='button'
+              key={i}
+            />
+          )
+        })}
+      </div>
+    </section>
   )
 }
 
-type PlayerListItemProps = {
-  me?: boolean
-  myTurn?: boolean
-  position: number
-  color?: string
-  count?: number
-  player: { id: string; display: string }
-  showKickButton?: boolean
+function Players(props: {
+  gameId: string
+  userId?: string | null
+  players: GameType['players']
+  isWaiting?: boolean
+}) {
+  const startMutation = api.dotsAndBoxes.start.useMutation()
+  const joinMutation = api.dotsAndBoxes.join.useMutation()
+
+  const isOP = props.players.length > 0 && props.players[0].id === props.userId
+  const errorText = startMutation.error?.message || joinMutation.error?.message
+
+  return (
+    <section className='shrink-0 basis-full space-y-4 lg:max-w-sm'>
+      <h2 className='text-2xl font-bold'>Players</h2>
+      <ul className=''>
+        {props.players.map((player, i) => (
+          <PlayerListItem
+            isActive={player.isActive}
+            name={`${i + 1}. ${player.id === props.userId ? 'You' : player.displayName} ${
+              player.boxCount ? `(${player.boxCount})` : ''
+            }`}
+            color={DASH_COLORS[i]}
+            canBeKicked={i > 0 && isOP}
+            key={player.id}
+          />
+        ))}
+      </ul>
+      {props.isWaiting && (
+        <div className='flex flex-col items-center'>
+          <p className=''>
+            <span className='inline-block animate-spin rounded-full border-2 border-y-slate-500 border-x-transparent p-1.5 align-middle' />
+            &ensp;Waiting for players to join...
+          </p>
+          {isOP ? (
+            <button
+              className='mt-4 rounded-md bg-emerald-500 px-4 py-2 text-slate-50 transition-colors hover:bg-emerald-400 disabled:bg-slate-400'
+              onClick={() =>
+                props.userId
+                  ? startMutation.mutate({
+                      gameId: props.gameId,
+                      playerId: props.userId,
+                    })
+                  : undefined
+              }
+              disabled={props.players.length < 2}>
+              Start Game
+            </button>
+          ) : (
+            props.players.length < 4 && (
+              // Remove if already joined
+              <button
+                className='mt-4 rounded-md bg-emerald-500 px-4 py-2 text-slate-50 transition-colors hover:bg-emerald-400 disabled:bg-slate-500 '
+                onClick={async () => {
+                  const { user } = await signInAnonymously(auth)
+                  joinMutation.mutate({
+                    gameId: props.gameId,
+                    playerId: user.uid,
+                  })
+                }}
+                disabled={props.userId ? props.players.some((p) => p.id === props.userId) : false}>
+                {props.userId && props.players.some((p) => p.id === props.userId)
+                  ? 'Game Joined'
+                  : 'Join Game'}
+              </button>
+            )
+          )}
+          {errorText && <p className='text-sm text-rose-500'>{errorText}</p>}
+        </div>
+      )}
+    </section>
+  )
 }
-function PlayerListItem({
-  me = false,
-  myTurn = false,
-  position,
-  color = "",
-  count = 0,
-  player,
-  showKickButton = false,
-}: PlayerListItemProps) {
+
+function PlayerListItem(props: {
+  isActive?: boolean
+  color?: string
+  name: string
+  canBeKicked?: boolean
+}) {
   function handleKickingPlayer() {
-    Axios.patch("/api/dots-and-boxes?action=kick-player", { playerId: player.id })
+    // Axios.patch("/api/dots-and-boxes?action=kick-player", { playerId: player.id })
   }
 
   return (
     <li
-      className={`group ${
-        myTurn ? "bg-current font-semibold" : ""
-      } ${color} rounded-md px-4 py-2 transition-colors delay-150`}>
-      <div className={`flex justify-between ${myTurn ? "text-slate-50" : ""}`}>
-        <span className="block">
-          {position}. {me ? "You" : player.display} ({count})
-        </span>
-        {position > 1 && showKickButton && (
+      className={`group ${props.isActive ? 'bg-current font-semibold' : ''} ${
+        props.color
+      } rounded-md px-4 py-2 transition-colors delay-150`}>
+      <div className={`flex justify-between ${props.isActive ? 'text-slate-50' : ''}`}>
+        <h3 className='w-0 flex-1 truncate tabular-nums'>{props.name}</h3>
+        {props.canBeKicked && (
           <button
-            className="icon text-xl opacity-0 transition-opacity group-hover:opacity-100"
+            className='font-icon text-xl opacity-0 transition-opacity group-hover:opacity-100'
             onClick={handleKickingPlayer}>
             close
           </button>
         )}
-        {me && <EditNameDialog currentName={player.display} />}
+        {/* {me && <EditNameDialog currentName={player.display} />} */}
       </div>
     </li>
   )
 }
 
-function traverse<T>(R: number, C: number, callback: (r: number, c: number) => T) {
-  return [...Array(R)].flatMap((_, r) => [...Array(C)].map((_, c) => callback(r, c)))
-}
+function streamPlay(gameId: string) {
+  const gameRef = ref(database, `apps/games/dotsAndBoxes/${gameId}`)
+  const stream = (callback: (data: any) => void) =>
+    onValue(
+      gameRef,
+      (snapshot) => {
+        const data = snapshot.val() as GameType
+        if (!data) return callback(null)
 
-function EditNameDialog({ currentName = "" }) {
-  const [error, setError] = useState("")
-  function handleEditingName(newName: string) {
-    Axios.patch("/api/dots-and-boxes?action=edit-player-name", { newName }).catch((reason) =>
-      setError(reason.message)
+        const playerBoxMap = data.boxes
+          ? Object.values(data.boxes).reduce((playerMap, playerIndex) => {
+              playerMap[playerIndex] ??= 0
+              playerMap[playerIndex]++
+              return playerMap
+            }, {} as Record<string, number>)
+          : {}
+
+        callback({
+          ...data,
+          dashes: data.dashes || {},
+          boxes: data.boxes || {},
+          id: gameId,
+          players: data.players.map((p, i) => ({
+            ...p,
+            isActive: i === data.activePlayerIndex,
+            boxCount: playerBoxMap[i] ?? 0,
+          })),
+        })
+      },
+      console.log
     )
-  }
 
-  return (
-    <Dialog title="Edit your Display Name" button={<span className="icon text-xl">edit</span>}>
-      {({ initialFocusRef, closeDialog }) => (
-        <form
-          className="grid grid-cols-2 gap-4"
-          onSubmit={(ev) => {
-            ev.preventDefault()
-            const formData = new FormData(ev.currentTarget)
-            // ev.currentTarget.elements.namedItem("displayName")
-            // handleEditingName(formData.get("displayName") as string)
-            closeDialog()
-          }}>
-          <div className="col-span-2">
-            <input
-              ref={initialFocusRef}
-              className="w-full rounded-md border-slate-300 bg-slate-50 shadow-inner"
-              defaultValue={currentName}
-              name="displayName"
-              type="text"
-            />
-            {error && <p className="mt-1 text-sm text-red-500">{error}</p>}
-          </div>
-          <button className="rounded-md bg-emerald-500 px-4 py-2 text-slate-50">Save</button>
-          <button
-            className="rounded-md bg-slate-500 px-4 py-2 text-slate-50"
-            onClick={closeDialog}
-            type="button">
-            Cancel
-          </button>
-        </form>
-      )}
-    </Dialog>
-  )
+  return { stream }
 }

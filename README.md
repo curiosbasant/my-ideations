@@ -1,24 +1,7 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# `my-ideations`
 
-## Getting Started
+This is my collection of small ideas that I'm just throwing in one single project.
 
-First, run the development server:
+Something comes to my mind, I build it and throw it. I mean that's what we meant to do, right?
 
-```bash
-npm run dev
-# or
-yarn dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-## My Projects List
-
-This are the some pages, that you can visit to see different mini projects, I've created
-
-- [My Resume](https://curios.vercel.app/resume)
-- [Discord UI Clone](https://curios.vercel.app/discord)
-- [Youtube UI Clone](https://curios.vercel.app/youtube)
-- [Sliding Puzzle](https://curios.vercel.app/games/puzzle)
-- [Dots and Boxes](https://curios.vercel.app/games/dots-and-boxes)
-- [Shadyantra (The Online Multiplayer Ancient Indian Chess)](https://shadyantra.vercel.app/editor)
+https://curios.vercel.app
