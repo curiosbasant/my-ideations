@@ -19,13 +19,21 @@
   textarea {
     @apply border-inherit focus:outline-none focus:ring-transparent;
   }
-
-  [data-nextjs-scroll-focus-boundary] {
-    @apply contents;
-  }
 }
 
 @layer components {
+  .font-icon,
+  .font-icon-outline {
+    width: 1ch;
+    font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 48;
+    line-height: 1 !important;
+    @apply box-content block aspect-square cursor-default;
+  }
+  .font-icon-outline {
+    font-family: var(--material-icons);
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 48;
+  }
+
   /* Icon */
   .icon,
   .icon-fill,

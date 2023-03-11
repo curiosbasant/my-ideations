@@ -9,6 +9,7 @@ module.exports = {
       },
       fontFamily: {
         icon: 'var(--material-icons)',
+        'icon-outline': 'var(--material-icons)',
       },
       fontSize: {
         xxs: ['0.625rem', '0.75rem'],

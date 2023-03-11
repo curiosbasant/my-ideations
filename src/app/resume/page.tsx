@@ -7,20 +7,59 @@ export const metadata = {
   keywords: ['basant resume', 'basant barupal', 'curiosbasant'],
 }
 
+const WORK_EXPERIENCE = [
+  {
+    name: 'HootBoard',
+    position: 'Full Stack Developer',
+    link: 'https://www.hootboard.com',
+    joinedOn: new Date('06/06/2022'),
+    leftOn: null as Date | null,
+    skills: ['React', 'React Native', 'TypeScript', 'TailwindCSS', 'Redux', 'Nodejs', 'Express'],
+    points: [
+      'Created an entire production ready, mobile application from scratch in less than 6 months.',
+      'Worked and developed RSS Feed Reader App from scratch.',
+      'Developed a file uploading feature for board apps.',
+      'Managed and developed share functionality to share any item on the platform onto various other platforms.',
+      'Effectively working on both web and mobile react applications.',
+    ],
+  },
+]
+
+const PROFESSIONAL_SKILLS = [
+  { logo: 'nextjs', label: 'NextJS', value: 85 },
+  { logo: 'react', label: 'React', value: 88 },
+  { logo: 'react', label: 'React Native', value: 75 },
+  { logo: 'typescript', label: 'Typescript', value: 85 },
+  { logo: 'javascript', label: 'Javascript', value: 95 },
+  { logo: 'css', label: 'HTML/CSS', value: 97 },
+  { logo: 'tailwindcss', label: 'TailwindCSS', value: 99 },
+  { logo: 'nodejs', label: 'NodeJS', value: 70 },
+  { logo: 'firebase', label: 'Firebase', value: 75 },
+  { logo: 'mysql_full', label: 'MySQL', value: 55 },
+  { logo: 'mongodb', label: 'MongoDB', value: 65 },
+  { logo: 'git', label: 'Git/Github', value: 60 },
+  { logo: 'python', label: 'Python', value: 70 },
+  { logo: 'discord', label: 'Discord API', value: 85 },
+  { logo: 'wordpress', label: 'Wordpress', value: 65 },
+  { logo: 'c', label: 'C/C++', value: 75 },
+]
+
 export default function ResumePage() {
   return (
-    <div className='min-h-screen overflow-hidden bg-slate-100 shadow-lg'>
-      <div className='mx-auto flex max-w-7xl overflow-y-auto border-r bg-white text-lg print:max-w-none'>
+    <div className='min-h-screen overflow-y-auto bg-slate-100 shadow-lg'>
+      <div className='flex h-full print:hidden lg:hidden'>
+        <p className='m-auto text-center text-2xl text-slate-500'>Please view in Desktop Site</p>
+      </div>
+      <div className='mx-auto hidden max-w-7xl border-r bg-white text-lg print:flex print:max-w-none lg:flex'>
         <div className='relative w-96 shrink-0 overflow-hidden border-x border-x-sky-200/75 bg-sky-100'>
           <div className='absolute -m-16 h-48 w-64 rotate-[24deg] skew-x-[45deg] bg-sky-200'></div>
           <aside className='space-y-8 p-8 text-slate-500'>
             <section className='py-8'>
               <div className='relative mx-auto h-64 w-64 overflow-hidden rounded-full border-8 border-sky-400 bg-slate-200 shadow-inner'>
                 <Image
-                  className='object-cover'
+                  className='object-cover object-[center_-8px]'
                   src='/assets/passport_photo.jpg'
                   alt="Basant's Picture"
-                  objectPosition='center -8px'
                   fill
                 />
               </div>
@@ -52,20 +91,20 @@ export default function ResumePage() {
               </div>
             </Asides>
             <Asides icon='school' label='Education'>
-              <div className='space-y-6'>
-                <div className='space-y-2'>
+              <ul className='space-y-6'>
+                <li className='space-y-2'>
                   <strong className='text-base text-slate-400'>2017 - 2020</strong>
                   <p className='leading-6'>Bachelor of Computer Application</p>
                   <p className='leading-6'>Maharaja Ganga Singh University, Bikaner</p>
-                </div>
-                <div className='space-y-2'>
+                </li>
+                <li className='space-y-2'>
                   <strong className='text-base text-slate-400'>2015 - 2017</strong>
                   <p className='leading-6'>
                     Higher Secondary School: Physics, Chemistry, Maths and Computer Science
                   </p>
                   <p className='leading-6'>Central Board of Secondary Education (KVS)</p>
-                </div>
-              </div>
+                </li>
+              </ul>
             </Asides>
             <Asides icon='language' label='Languages'>
               <ul className='space-y-2'>
@@ -128,25 +167,9 @@ export default function ResumePage() {
               <h3 className='text-3xl font-bold text-sky-500'>Work Experience</h3>
 
               <ul className='space-y-4'>
-                {[
-                  {
-                    name: 'HootBoard',
-                    position: 'Full Stack Developer',
-                    link: 'https://www.hootboard.com',
-                    joinedOn: new Date('06/06/2022'),
-                    leftOn: null as Date | null,
-                    skills: ['React', 'React Native', 'TypeScript', 'TailwindCSS', 'Redux'],
-                    points: [
-                      'Created an entire production ready mobile application from scratch in less than 6 months.',
-                      'Developed a file uploading feature for board apps.',
-                      'Managed and developed share functionality to share any item from the platform to various other platforms.',
-                      'Worked and developed RSS Feed Reader App from scratch.',
-                      'Effectively working on both web and mobile react applications.',
-                    ],
-                  },
-                ].map((company, i) => (
+                {WORK_EXPERIENCE.map((company, i) => (
                   <li className='flex items-start gap-4' key={i}>
-                    <div className='rounded-md border p-1'>
+                    <div className='rounded-lg border p-1'>
                       <a
                         href={company.link}
                         className='block h-12 w-12 rounded-md bg-[#0067f9] fill-white'>
@@ -174,9 +197,9 @@ export default function ResumePage() {
                           </li>
                         ))}
                       </ul>
-                      <ul className='mt-4'>
+                      <ul className='mt-4 -ml-2'>
                         {company.points.map((point, i) => (
-                          <li className='list-disc' key={i}>
+                          <li className='list-disc pl-2' key={i}>
                             <p className=''>{point}</p>
                           </li>
                         ))}
@@ -217,30 +240,17 @@ export default function ResumePage() {
               </p>
               <div className=''>
                 <ul className='space-y-8'>
-                  {[
-                    { logo: 'nextjs', label: 'NextJS', value: 85 },
-                    { logo: 'react', label: 'React', value: 88 },
-                    { logo: 'react', label: 'React Native', value: 75 },
-                    { logo: 'typescript', label: 'Typescript', value: 85 },
-                    { logo: 'javascript', label: 'Javascript', value: 95 },
-                    { logo: 'css', label: 'HTML/CSS', value: 97 },
-                    { logo: 'tailwindcss', label: 'TailwindCSS', value: 99 },
-                    { logo: 'nodejs', label: 'NodeJS', value: 70 },
-                    { logo: 'firebase', label: 'Firebase', value: 75 },
-                    { logo: 'mysql_full', label: 'MySQL', value: 55 },
-                    { logo: 'mongodb', label: 'MongoDB', value: 65 },
-                    { logo: 'git', label: 'Git/Github', value: 60 },
-                    { logo: 'python', label: 'Python', value: 70 },
-                    { logo: 'discord', label: 'Discord API', value: 85 },
-                    { logo: 'wordpress', label: 'Wordpress', value: 65 },
-                    { logo: 'c', label: 'C/C++', value: 75 },
-                  ].map(({ logo, label, value }) => (
+                  {PROFESSIONAL_SKILLS.map(({ logo, label, value }) => (
                     <li className='flex items-center gap-4' key={label}>
-                      <div className='relative h-7 w-7 overflow-hidden rounded'>
-                        <Image src={`/assets/logos/${logo}.svg`} alt={label + "'s logo"} fill />
-                      </div>
-                      <div className='w-32 overflow-ellipsis text-xl font-medium'>{label}</div>
-                      <div className='grow'>
+                      <Image
+                        className='rounded'
+                        src={`/assets/logos/${logo}.svg`}
+                        alt={label + "'s logo"}
+                        width='28'
+                        height='28'
+                      />
+                      <h3 className='w-32 truncate text-xl font-medium'>{label}</h3>
+                      <div className='flex-1'>
                         <Range value={value} />
                       </div>
                     </li>
@@ -281,55 +291,53 @@ export default function ResumePage() {
   )
 }
 
-function ProjectItem({
-  title,
-  link,
-  children,
-}: PropsWithChildren<{ title: string; link?: string }>) {
+function ProjectItem(props: PropsWithChildren<{ title: string; link?: string }>) {
   return (
     <div className='space-y-2'>
-      {link ? (
+      {props.link ? (
         <a
-          href={link}
+          href={props.link}
           className='group inline-flex items-end gap-2 text-slate-500'
           rel='noreferrer'
           target='_blank'>
-          <h4 className='border-b border-dotted text-xl font-semibold tracking-wide'>{title}</h4>
+          <h4 className='border-b border-dotted text-xl font-semibold tracking-wide'>
+            {props.title}
+          </h4>
           <span className='font-icon opacity-20 transition-opacity group-hover:opacity-80 print:opacity-50'>
             link
           </span>
         </a>
       ) : (
-        <h4 className='text-xl font-semibold tracking-wide text-slate-500'>{title}</h4>
+        <h4 className='text-xl font-semibold tracking-wide text-slate-500'>{props.title}</h4>
       )}
-      <p className=''>{children}</p>
+      <p className=''>{props.children}</p>
     </div>
   )
 }
 
-function Asides({ icon, label, children }: PropsWithChildren<{ icon?: string; label: string }>) {
+function Asides(props: PropsWithChildren<{ icon?: string; label: string }>) {
   return (
     <section className='space-y-4'>
       <div className='flex items-center gap-8'>
         <div
           className={`aspect-square shrink-0 basis-12 rounded-full p-2 text-center text-white ${
-            icon ? 'bg-sky-500' : ''
+            props.icon ? 'bg-sky-500' : ''
           } `}>
-          <span className='mt-px font-icon text-3xl'>{icon}</span>
+          <span className='font-props.icon mt-px text-3xl'>{props.icon}</span>
         </div>
-        <h3 className='text-3xl font-bold text-sky-500'>{label}</h3>
+        <h3 className='text-3xl font-bold text-sky-500'>{props.label}</h3>
       </div>
-      <div className='pl-20'>{children}</div>
+      <div className='pl-20'>{props.children}</div>
     </section>
   )
 }
 
-function Range({ value = '50' }: { value?: string | number }) {
+function Range(props: { value?: string | number }) {
   return (
     <div className='h-3 rounded-full bg-slate-100 shadow-inner'>
       <div
         className='relative h-full rounded-full bg-sky-400 shadow shadow-sky-200'
-        style={{ width: value + '%' }}>
+        style={{ width: (props.value ?? 50) + '%' }}>
         <span className='absolute right-0 top-1/2 h-5 w-5 translate-x-1/2 -translate-y-1/2 rounded-full border bg-white shadow'></span>
       </div>
     </div>
@@ -369,6 +377,7 @@ const LinkedInLogo = () => (
     />
   </svg>
 )
+
 const HootBoardLogo = () => (
   <svg
     version='1.0'
