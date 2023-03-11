@@ -1,6 +1,6 @@
+import { useRouter } from 'next/router'
 import { useToggle } from '@curiosbasant/react-compooks'
 import { signInAnonymously } from 'firebase/auth'
-import { useRouter } from 'next/router'
 
 import GamesLayout from '~/app/games/layout'
 import { api } from '~/utils/api'

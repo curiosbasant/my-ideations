@@ -11,7 +11,7 @@ export default function YoutubePage() {
         <header className='h-16 bg-gray-900/75'></header>
       </div>
       <div
-        className={'grid h-full gap-6  overflow-y-auto p-6'}
+        className={'grid h-full gap-6 overflow-y-auto p-6'}
         style={{ gridTemplateColumns: '1fr 26rem', gridTemplateRows: 'auto 1fr' }}>
         <VideoDisplay />
         <div className='row-start-2 divide-y divide-gray-500'>

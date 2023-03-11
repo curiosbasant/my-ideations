@@ -1,7 +1,7 @@
-import { useDiscord } from "../providers/DiscordProvider"
-import { NestedServer, ServerGroupType, ServerType } from "../types"
+import { useDiscord } from '../providers/DiscordProvider'
+import { NestedServer, ServerGroupType, ServerType } from '../types'
 
-export default function useUser(userId = "123") {
+export default function useUser(userId = '123') {
   const { state, dispatch } = useDiscord()
   const servers: ServerType[] = []
   const groups: Record<string, NestedServer> = {}

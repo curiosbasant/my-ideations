@@ -1,11 +1,11 @@
-import { useFunctionalReducer } from "@curiosbasant/react-compooks"
-import { Dispatcher } from "@curiosbasant/react-compooks/dist/cjs/types/hooks/useFunctionalReducer"
-import { createContext, useContext } from "react"
-import CHANNELS from "../data/channels.json"
-import SERVER_GROUPS from "../data/serverGroups.json"
-import SERVERS from "../data/servers.json"
-import { ChannelType, ServerGroupType, ServerType } from "../types"
-import { generateRandomId } from "../utils"
+import { createContext, useContext } from 'react'
+import { Dispatcher, useFunctionalReducer } from '@curiosbasant/react-compooks'
+
+import CHANNELS from '../data/channels.json'
+import SERVER_GROUPS from '../data/serverGroups.json'
+import SERVERS from '../data/servers.json'
+import { ChannelType, ServerGroupType, ServerType } from '../types'
+import { generateRandomId } from '../utils'
 
 const initialState = {
   serverGroups: SERVER_GROUPS as ServerGroupType[],
@@ -36,7 +36,7 @@ const ActionMap = {
   createServer(draft: IState, data: Partial<ServerType>) {
     draft.servers.push({
       id: generateRandomId(),
-      name: "no-server-name",
+      name: 'no-server-name',
       position: 0,
       ...data,
     })
@@ -51,10 +51,10 @@ const ActionMap = {
   createChannel(draft: IState, data: Partial<ChannelType>) {
     draft.channels.push({
       id: generateRandomId(),
-      serverId: "@me",
-      name: "no-channel-name",
+      serverId: '@me',
+      name: 'no-channel-name',
       position: 0,
-      type: "text",
+      type: 'text',
       ...data,
     })
   },

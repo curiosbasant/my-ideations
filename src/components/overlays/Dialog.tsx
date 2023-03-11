@@ -1,5 +1,5 @@
-import { Dialog as TWDialog, Transition } from '@headlessui/react'
 import { Fragment, useRef, useState } from 'react'
+import { Dialog as TWDialog, Transition } from '@headlessui/react'
 
 function Dialog({ title, button, children }: any) {
   const initialFocusRef = useRef<HTMLElement>(null)

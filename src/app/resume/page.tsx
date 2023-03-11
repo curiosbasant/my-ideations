@@ -1,6 +1,6 @@
-import formatDistanceStrict from 'date-fns/formatDistanceStrict'
-import Image from 'next/image'
 import { PropsWithChildren } from 'react'
+import Image from 'next/image'
+import formatDistanceStrict from 'date-fns/formatDistanceStrict'
 
 export const metadata = {
   title: "Basant's Resume",

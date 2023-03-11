@@ -1,6 +1,6 @@
 /** @type {import('prettier').Config} */
 module.exports = {
-  plugins: [require("prettier-plugin-tailwindcss")],
+  plugins: ['@ianvs/prettier-plugin-sort-imports', 'prettier-plugin-tailwindcss'],
 
   bracketSameLine: true,
   jsxSingleQuote: true,
@@ -8,6 +8,25 @@ module.exports = {
   semi: false,
   singleQuote: true,
   tabWidth: 2,
-  trailingComma: "es5",
+  trailingComma: 'es5',
   useTabs: false,
+
+  importOrder: [
+    '^(react/(.*)$)|^(react$)',
+    '^(next/(.*)$)|^(next$)',
+    '<THIRD_PARTY_MODULES>',
+    '',
+    '^~/server/(.*)$',
+    '^~/app/(.*)$',
+    '^~/components/(.*)$',
+    '^~/(.*)$',
+    '^~/utils/(.*)$',
+    '^[./]',
+  ],
+  importOrderSeparation: false,
+  importOrderSortSpecifiers: true,
+  importOrderBuiltinModulesToTop: true,
+  importOrderParserPlugins: ['typescript', 'jsx', 'decorators-legacy'],
+  importOrderMergeDuplicateImports: true,
+  importOrderCombineTypeAndValueImports: true,
 }

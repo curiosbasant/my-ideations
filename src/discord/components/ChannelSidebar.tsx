@@ -1,4 +1,5 @@
 import { PropsWithChildren, useState } from 'react'
+
 import { UserProfileIcon } from '.'
 
 export default function ChannelSidebar({ children }: PropsWithChildren) {

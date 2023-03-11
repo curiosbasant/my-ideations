@@ -1,4 +1,4 @@
-import Head from "next/head"
+import Head from 'next/head'
 
 function Page({ title, children }: React.PropsWithChildren<{ title: string }>) {
   return (
@@ -11,9 +11,3 @@ function Page({ title, children }: React.PropsWithChildren<{ title: string }>) {
   )
 }
 export default Page
-/* 
-  <link
-    rel="shortcut icon"
-    href="https://www.inkcourse.com/wp-content/uploads/2021/08/favicon.png"
-  />
-*/

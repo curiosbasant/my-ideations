@@ -1,8 +1,9 @@
-import { Layout } from "discord/components"
-import DiscordProvider from "discord/providers/DiscordProvider"
-import { NextPage } from "next"
-import { useRouter } from "next/router"
-import { useEffect, useState } from "react"
+import { useEffect, useState } from 'react'
+import { NextPage } from 'next'
+import { useRouter } from 'next/router'
+
+import { Layout } from '~/discord/components'
+import DiscordProvider from '~/discord/providers/DiscordProvider'
 
 const DiscordPage: NextPage = () => {
   const router = useRouter()
@@ -11,7 +12,7 @@ const DiscordPage: NextPage = () => {
   useEffect(() => {
     if (!router.query.ids) return
     if (!router.query.ids[0]) {
-      router.push("/discord/@me")
+      router.push('/discord/@me')
       return
     }
     setIds(router.query.ids as string[])
@@ -20,10 +21,10 @@ const DiscordPage: NextPage = () => {
   return ids[0] ? (
     <DiscordProvider>
       <Layout
-        userId="123"
+        userId='123'
         serverId={ids[0]}
         channelId={ids[1]}
-        enableControls={"controls" in router.query}
+        enableControls={'controls' in router.query}
       />
     </DiscordProvider>
   ) : null

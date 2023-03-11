@@ -1,7 +1,7 @@
+import { Fragment, useEffect, useState } from 'react'
+import { useRouter } from 'next/router'
 import { signInAnonymously } from 'firebase/auth'
 import { onValue, ref, set } from 'firebase/database'
-import { useRouter } from 'next/router'
-import { Fragment, useEffect, useState } from 'react'
 
 import GamesLayout from '~/app/games/layout'
 import { User } from '~/providers'

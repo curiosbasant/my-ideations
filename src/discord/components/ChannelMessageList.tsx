@@ -1,4 +1,5 @@
 import { useLayoutEffect, useRef } from 'react'
+
 import { useDiscord } from '../providers/DiscordProvider'
 import { ChannelType, MessageType } from '../types'
 import ChannelMessageListItem from './ChannelMessageListItem'

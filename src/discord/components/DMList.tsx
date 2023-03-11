@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { useState } from 'react'
+
 import { ChannelSidebar, PanelTop, UserProfileIcon } from '.'
 import { ChannelType } from '../types'
 
@@ -7,6 +7,7 @@ type GuildChannelListProps = {
   channels: ChannelType[]
   activeChannelId?: string
 }
+
 export default function DMList({ channels, activeChannelId = '' }: GuildChannelListProps) {
   return (
     <ChannelSidebar>

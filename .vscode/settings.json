@@ -5,6 +5,9 @@
     "resume",
     "youtube"
   ],
+  "editor.codeActionsOnSave": {
+    "source.sortImports": false,
+  },
   "cSpell.words": [
     "shadyantra"
   ],

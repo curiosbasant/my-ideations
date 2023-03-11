@@ -2,6 +2,7 @@ import { getApp, getApps, initializeApp } from 'firebase/app'
 import { connectAuthEmulator, getAuth } from 'firebase/auth'
 import { connectDatabaseEmulator, getDatabase } from 'firebase/database'
 import { connectFirestoreEmulator, getFirestore } from 'firebase/firestore'
+
 import { USE_FIREBASE_EMULATORS, __DEV__ } from '~/constants'
 
 if (!getApps().length) {

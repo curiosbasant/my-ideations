@@ -1,6 +1,7 @@
+import { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { useState } from 'react'
+
 import { splitArray } from '~/utils/general.util'
 import { ChannelSidebar, PanelTop, UserProfileIcon } from '.'
 import { ChannelType, ServerType } from '../types'

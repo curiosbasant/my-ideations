@@ -1,9 +1,9 @@
 import { TRPCError } from '@trpc/server'
 import { ServerValue } from 'firebase-admin/database'
 import z from 'zod'
+
 import { database } from '~/utils/firebase.server'
 import { generateId } from '~/utils/general.util'
-
 import { publicProcedure, router } from '../trpc'
 
 type Game = {

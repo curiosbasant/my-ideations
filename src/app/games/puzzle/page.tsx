@@ -1,7 +1,7 @@
 'use client'
 
-import { useToggle } from '@curiosbasant/react-compooks'
 import { useMemo, useRef, useState } from 'react'
+import { useToggle } from '@curiosbasant/react-compooks'
 
 class Puzzle {
   moves = 0

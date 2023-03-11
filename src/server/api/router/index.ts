@@ -1,6 +1,6 @@
 import { router } from '../trpc'
-import exampleRouter from './example'
 import dotsAndBoxesRouter from './dotsAndBoxes'
+import exampleRouter from './example'
 
 export const appRouter = router({
   example: exampleRouter,

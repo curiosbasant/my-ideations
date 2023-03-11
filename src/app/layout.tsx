@@ -1,6 +1,6 @@
 import '~/globals.css'
-
 import { PropsWithChildren } from 'react'
+
 import { latoFont, materialIcon } from '~/utils/fonts'
 
 export default function RootLayout(props: PropsWithChildren) {

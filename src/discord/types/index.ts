@@ -15,7 +15,7 @@ export type ChannelType = Common & {
   serverId: string
   parentId?: string
   locked?: boolean
-  type: "category" | "text" | "voice"
+  type: 'category' | 'text' | 'voice'
 }
 
 export type MessageType = {
