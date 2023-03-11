@@ -323,7 +323,7 @@ function Asides(props: PropsWithChildren<{ icon?: string; label: string }>) {
           className={`aspect-square shrink-0 basis-12 rounded-full p-2 text-center text-white ${
             props.icon ? 'bg-sky-500' : ''
           } `}>
-          <span className='font-props.icon mt-px text-3xl'>{props.icon}</span>
+          <span className='mt-px font-icon text-3xl'>{props.icon}</span>
         </div>
         <h3 className='text-3xl font-bold text-sky-500'>{props.label}</h3>
       </div>
