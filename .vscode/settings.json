@@ -2,7 +2,8 @@
   "conventionalCommits.promptBody": false,
   "conventionalCommits.promptFooter": false,
   "conventionalCommits.scopes": [
-    "resume"
+    "resume",
+    "youtube"
   ],
   "cSpell.words": [
     "shadyantra"
