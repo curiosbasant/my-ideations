@@ -1,0 +1,17 @@
+{
+  "conventionalCommits.promptBody": false,
+  "conventionalCommits.promptFooter": false,
+  "conventionalCommits.scopes": [
+    "resume"
+  ],
+  "cSpell.words": [
+    "shadyantra"
+  ],
+  // "editor.codeLens": false,
+  "tailwindCSS.experimental.configFile": {
+    "tailwind.config.js": "src/**",
+    "src/app/hootboard/tailwind.config.js": "src/app/hootboard/**"
+  },
+  "typescript.enablePromptUseWorkspaceTsdk": true,
+  "typescript.tsdk": "node_modules/typescript/lib"
+}

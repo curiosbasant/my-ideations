@@ -8,7 +8,7 @@
     "emulator": "firebase emulators:start --only=auth,firestore,database --import=./.firebase.archive --export-on-exit=./.firebase.archive"
   },
   "dependencies": {
-    "@curiosbasant/react-compooks": "^0.2.3",
+    "@curiosbasant/react-compooks": "^0.3.0",
     "@dnd-kit/core": "^6.0.7",
     "@dnd-kit/sortable": "^7.0.2",
     "@dnd-kit/utilities": "^3.2.1",

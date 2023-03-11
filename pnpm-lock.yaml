@@ -1,7 +1,7 @@
 lockfileVersion: 5.4
 
 specifiers:
-  '@curiosbasant/react-compooks': ^0.2.3
+  '@curiosbasant/react-compooks': ^0.3.0
   '@dnd-kit/core': ^6.0.7
   '@dnd-kit/sortable': ^7.0.2
   '@dnd-kit/utilities': ^3.2.1
@@ -46,7 +46,7 @@ specifiers:
   zod: ^3.20.2
 
 dependencies:
-  '@curiosbasant/react-compooks': 0.2.3_ksokwxs2fn5cxr6gmowabnp2c4
+  '@curiosbasant/react-compooks': 0.3.0_nld2haqiapwvkynldfhwngqgx4
   '@dnd-kit/core': 6.0.7_biqbaboplfbrettd7655fr4n2y
   '@dnd-kit/sortable': 7.0.2_pmudlfv2z3i7vvlookxjkeidxe
   '@dnd-kit/utilities': 3.2.1_react@18.2.0
@@ -125,15 +125,15 @@ packages:
     dev: false
     optional: true
 
-  /@curiosbasant/react-compooks/0.2.3_ksokwxs2fn5cxr6gmowabnp2c4:
-    resolution: {integrity: sha512-lXnpW1TqE72NsheUiwwKMbAhE6hs0MCajg6q793dJLgT0qVpGIb7WtfFkQWZsy7rWak/QbtMzeRxRLfC+i9IHA==}
+  /@curiosbasant/react-compooks/0.3.0_nld2haqiapwvkynldfhwngqgx4:
+    resolution: {integrity: sha512-GcGbGtr6Wx354vW5Hs31FXkbqvlu0CdVpPWF8xoYC+Y4gpES/NnKT/7w9x3uZyfo++BjlXVzMFMHc/q5N6V9bg==}
     peerDependencies:
-      immer: 9.0.11
-      nookies: ^2.5.2
+      immer: 8 || 9
+      js-cookie: '3'
       react: 16 || 17 || 18
     dependencies:
       immer: 9.0.18
-      nookies: 2.5.2
+      js-cookie: 3.0.1
       react: 18.2.0
     dev: false
 

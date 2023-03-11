@@ -40,5 +40,4 @@ archive
 *.archive
 *.archive.*
 
-.vscode
 service-account.json

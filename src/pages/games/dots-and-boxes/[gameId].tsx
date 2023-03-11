@@ -76,7 +76,6 @@ function Arena(props: {
   activeDash?: string | null
 }) {
   const makeMoveMutation = api.dotsAndBoxes.makeMove.useMutation()
-  const a = api.example.hello.useQuery()
 
   const toggleDash = (name: string) => () => {
     props.userId &&
