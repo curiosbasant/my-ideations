@@ -27,11 +27,15 @@
     width: 1ch;
     font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 48;
     line-height: 1 !important;
-    @apply box-content block aspect-square cursor-default;
+    @apply box-content block aspect-square text-2xl;
   }
   .font-icon-outline {
     font-family: var(--material-icons);
     font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 48;
+  }
+
+  :is(.font-icon, .font-icon-outline):not(:is(a, button)) {
+    @apply cursor-default;
   }
 
   /* Icon */
@@ -53,4 +57,9 @@
   .icon-outline {
     font-family: 'Material Symbols Outlined';
   }
+}
+
+.font-icon,
+.font-icon-outline {
+  line-height: 1 !important;
 }

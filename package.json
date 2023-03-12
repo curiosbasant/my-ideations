@@ -4,8 +4,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "format": "prettier --write \"src/**/*.{ts,tsx,md}\"",
+    "lint": "tsc",
+    "format": "prettier -w \"src/**/*.{ts,tsx,md}\" -u --ignore-path .gitignore",
     "emulator": "firebase emulators:start --only=auth,firestore,database --import=./.firebase.archive --export-on-exit=./.firebase.archive"
   },
   "dependencies": {

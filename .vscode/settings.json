@@ -3,7 +3,8 @@
   "conventionalCommits.promptFooter": false,
   "conventionalCommits.scopes": [
     "resume",
-    "youtube"
+    "youtube",
+    "discord"
   ],
   "editor.codeActionsOnSave": {
     "source.sortImports": false,
