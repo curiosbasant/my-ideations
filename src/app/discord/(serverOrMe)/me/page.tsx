@@ -1,12 +1,12 @@
 import { PageProps } from '~/types/utilities.type'
 import UserAvatar from '../UserAvatar'
 
-export default function MeDiscordPage(hi: PageProps) {
+export default function MeDiscordPage(props: PageProps) {
   return (
     <>
       <header className='flex shrink-0 basis-12 items-center divide-x divide-slate-600 border-b border-slate-800/50 shadow'>
-        <div className='whitespace-nowrap px-4 text-slate-300'>
-          <span className='pr-2 font-icon'>person</span>
+        <div className='flex items-center gap-2 whitespace-nowrap px-4 text-slate-300'>
+          <span className='font-icon'>person</span>
           <span className='align-middle font-bold'>Friends</span>
         </div>
         <nav className='flex flex-1 gap-4 px-4'>
@@ -29,7 +29,7 @@ export default function MeDiscordPage(hi: PageProps) {
           </ul>
           <button className='ml-auto font-icon'>add_comment</button>
         </nav>
-        <div className='space-x-4 px-4'>
+        <div className='flex items-center gap-4 px-4'>
           <button className='ml-auto font-icon'>chat</button>
           <button className='ml-auto font-icon'>help</button>
         </div>
@@ -115,7 +115,7 @@ function FriendListItem() {
             ratione?
           </p>
         </div>
-        <div className='space-x-3 self-center'>
+        <div className='flex items-center gap-3 self-center'>
           <button className='h-8 w-8 rounded-full bg-slate-800 bg-opacity-50 font-icon text-lg group-hover:bg-opacity-75'>
             message
           </button>
