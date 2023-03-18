@@ -15,7 +15,7 @@ const config = {
     // typedRoutes: true,
   },
   images: {
-    domains: ['raw.githubusercontent.com', 'cdn.discordapp.com', 'i.pravatar.cc'],
+    domains: ['raw.githubusercontent.com', 'cdn.discordapp.com', 'i.pravatar.cc', 'picsum.photos'],
     remotePatterns: [{ hostname: '*.cloudfront.net' }],
   },
   redirects: async () => [

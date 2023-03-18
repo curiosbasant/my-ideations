@@ -9,7 +9,7 @@ export async function POST(req: NextRequest) {
     name: serverName,
     description: randPhrase(),
     position: 0,
-    iconUrl: `https://i.pravatar.cc/150?u=${serverName}`,
+    // iconUrl: `https://i.pravatar.cc/150?u=${serverName}`,
     createdAt: Timestamp.now(),
   })
 

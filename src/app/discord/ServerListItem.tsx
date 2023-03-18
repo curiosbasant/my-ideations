@@ -29,10 +29,10 @@ export default function ServerListItem(
         href={props.href}>
         {props.children ? (
           props.children
-        ) : props.iconUrl ? (
+        ) : props.iconUrl || 1 ? (
           <Image
             className='rounded-inherit object-cover object-center'
-            src={props.iconUrl}
+            src={props.iconUrl || `https://picsum.photos/seed/${props.name}/200`}
             alt={`${props.name}'s icon`}
             fill
           />
