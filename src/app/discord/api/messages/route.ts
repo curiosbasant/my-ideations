@@ -4,13 +4,13 @@ import { ServerValue } from 'firebase-admin/database'
 import { database } from '~/utils/firebase.server'
 
 export async function POST(req: NextRequest) {
-  const { channelId, message } = await req.json()
+  const { channelId, content } = await req.json()
 
-  const hmm = await database.ref(`discord/messages`).push({
-    content: message,
+  const message = await database.ref(`discord/messages`).push({
+    content,
     channelId: channelId,
     createdAt: ServerValue.TIMESTAMP,
   })
 
-  NextResponse.json({ id: hmm.key })
+  return NextResponse.json({ id: message.key })
 }

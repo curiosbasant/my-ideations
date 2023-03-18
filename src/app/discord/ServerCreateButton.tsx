@@ -1,9 +1,10 @@
 'use client'
 
 import { useMutation } from '~/hooks'
+import apiRequest from '~/lib/apiRequest'
 import ServerListButton from './ServerListButton'
 
-const createServer = () => fetch('/discord/api/servers/create', { method: 'POST' })
+const createServer = () => apiRequest.post('/discord/api/servers')
 
 export default function ServerCreateButton() {
   const mutation = useMutation(createServer)

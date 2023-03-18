@@ -7,7 +7,7 @@ import { slugify } from '~/utils/general.util'
 export async function POST(req: NextRequest) {
   const { serverId } = await req.json()
 
-  const hmm = await APPS.discord.collection(`channels`).add({
+  const channel = await APPS.discord.collection(`channels`).add({
     name: randEmoji() + '-' + slugify(randVerb() + ' ' + randWord()),
     description: randPhrase(),
     position: 0,
@@ -16,5 +16,5 @@ export async function POST(req: NextRequest) {
     createdAt: Timestamp.now(),
   })
 
-  NextResponse.json({ id: hmm.id })
+  return NextResponse.json({ id: channel.id })
 }

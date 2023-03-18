@@ -6,7 +6,7 @@ import { APPS, Timestamp } from '~/utils/firebase.server'
 export async function POST(req: NextRequest) {
   const { serverId, userId = randUuid() } = await req.json()
 
-  const hmm = await APPS.discord
+  await APPS.discord
     .collection(`servers/${serverId}/members`)
     .doc(userId)
     .create({
@@ -16,5 +16,5 @@ export async function POST(req: NextRequest) {
       joinedAt: Timestamp.now(),
     })
 
-  NextResponse.json({ success: true })
+  return NextResponse.json({ success: true })
 }

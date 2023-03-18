@@ -1,9 +1,10 @@
 'use client'
 
 import { useMutation } from '~/hooks'
+import apiRequest from '~/lib/apiRequest'
 
 const createChannel = (payload: { serverId: string }) =>
-  fetch('/discord/api/channels/create', { method: 'POST', body: JSON.stringify(payload) })
+  apiRequest.post('/discord/api/channels', payload)
 
 export default function ChannelCreateButton(props: { serverId: string }) {
   const mutation = useMutation(createChannel)

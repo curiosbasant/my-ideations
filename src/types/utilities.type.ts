@@ -10,6 +10,9 @@ import { PropsWithChildren } from 'react'
  */
 export type AutoComplete<T extends string | number> = T | Omit<string | number, T>
 
+export type Literals = string | number | boolean
+export type LiteralNullish = Literals | null | undefined
+
 export type PageProps<P = {}> = {
   params: P
   searchParams: {}

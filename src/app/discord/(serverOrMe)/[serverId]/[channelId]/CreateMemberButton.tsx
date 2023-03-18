@@ -1,12 +1,10 @@
 'use client'
 
 import { useMutation } from '~/hooks'
+import apiRequest from '~/lib/apiRequest'
 
 const createMember = (payload: { serverId: string; userId?: string }) =>
-  fetch('/discord/api/members/create', {
-    method: 'POST',
-    body: JSON.stringify(payload),
-  })
+  apiRequest.post('/discord/api/members', payload)
 
 export default function CreateMemberButton(props: { serverId: string; userId?: string }) {
   const mutation = useMutation(createMember)

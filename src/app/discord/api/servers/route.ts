@@ -5,7 +5,7 @@ import { APPS, Timestamp } from '~/utils/firebase.server'
 
 export async function POST(req: NextRequest) {
   const serverName = randWord({ capitalize: true })
-  const hmm = await APPS.discord.collection('servers').add({
+  const server = await APPS.discord.collection('servers').add({
     name: serverName,
     description: randPhrase(),
     position: 0,
@@ -13,5 +13,5 @@ export async function POST(req: NextRequest) {
     createdAt: Timestamp.now(),
   })
 
-  NextResponse.json({ id: hmm.id })
+  return NextResponse.json({ id: server.id })
 }

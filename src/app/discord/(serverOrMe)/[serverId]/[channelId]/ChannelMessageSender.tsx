@@ -1,13 +1,11 @@
 'use client'
 
 import { useMutation } from '~/hooks'
+import apiRequest from '~/lib/apiRequest'
 import TypingAnimation from './TypingAnimation'
 
-const sendMessage = (payload: { channelId: string; message: string }) =>
-  fetch('/discord/api/messages/create', {
-    method: 'POST',
-    body: JSON.stringify(payload),
-  })
+const sendMessage = (payload: { channelId: string; content: string }) =>
+  apiRequest.post('/discord/api/messages', payload)
 
 export default function ChannelMessageSender(props: { channelId: string; channelName: string }) {
   const mutation = useMutation(sendMessage)
@@ -26,12 +24,12 @@ export default function ChannelMessageSender(props: { channelId: string; channel
 
           if ('messageContent' in ev.currentTarget.elements) {
             const inputRef = ev.currentTarget.elements.messageContent as HTMLInputElement
-            const message = inputRef.value
+            const content = inputRef.value
             inputRef.value = ''
 
             mutation.mutate({
               channelId: props.channelId,
-              message,
+              content,
             })
           }
         }}>

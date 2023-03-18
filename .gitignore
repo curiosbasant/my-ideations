@@ -41,3 +41,4 @@ archive
 *.archive.*
 
 service-account.json
+firebase-export-*
