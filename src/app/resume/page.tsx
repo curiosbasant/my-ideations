@@ -16,7 +16,7 @@ const WORK_EXPERIENCE = [
     leftOn: null as Date | null,
     skills: ['React', 'React Native', 'TypeScript', 'TailwindCSS', 'Redux', 'Nodejs', 'Express'],
     points: [
-      'Created an entire production ready, mobile application from scratch in less than 6 months.',
+      'Created an entire production ready, mobile application from scratch.',
       'Worked and developed RSS Feed Reader App from scratch.',
       'Developed a file uploading feature for board apps.',
       'Managed and developed share functionality to share any item on the platform onto various other platforms.',
@@ -197,7 +197,7 @@ export default function ResumePage() {
                           </li>
                         ))}
                       </ul>
-                      <ul className='mt-4 -ml-2'>
+                      <ul className='-ml-2 mt-4'>
                         {company.points.map((point, i) => (
                           <li className='list-disc pl-2' key={i}>
                             <p className=''>{point}</p>
@@ -323,7 +323,7 @@ function Asides(props: PropsWithChildren<{ icon?: string; label: string }>) {
           className={`aspect-square shrink-0 basis-12 rounded-full p-2 text-center text-white ${
             props.icon ? 'bg-sky-500' : ''
           } `}>
-          <span className='mt-px font-icon text-3xl'>{props.icon}</span>
+          <span className='m-auto font-icon text-3xl'>{props.icon}</span>
         </div>
         <h3 className='text-3xl font-bold text-sky-500'>{props.label}</h3>
       </div>
@@ -338,7 +338,7 @@ function Range(props: { value?: string | number }) {
       <div
         className='relative h-full rounded-full bg-sky-400 shadow shadow-sky-200'
         style={{ width: (props.value ?? 50) + '%' }}>
-        <span className='absolute right-0 top-1/2 h-5 w-5 translate-x-1/2 -translate-y-1/2 rounded-full border bg-white shadow'></span>
+        <span className='absolute right-0 top-1/2 h-5 w-5 -translate-y-1/2 translate-x-1/2 rounded-full border bg-white shadow'></span>
       </div>
     </div>
   )

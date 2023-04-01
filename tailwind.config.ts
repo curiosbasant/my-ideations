@@ -1,5 +1,5 @@
-import type {Config} from 'tailwindcss'
-import plugin from "tailwindcss/plugin";
+import type { Config } from 'tailwindcss'
+import plugin from 'tailwindcss/plugin'
 
 export default {
   content: ['./src/(app|pages)/**/*.tsx', './src/*/components/**/*.tsx'],
@@ -23,8 +23,14 @@ export default {
       },
       flex: { 2: '2 1 auto', 3: '3 1 auto' },
       fontFamily: {
-        icon: 'var(--material-icons)',
-        'icon-outline': 'var(--material-icons)',
+        icon: [
+          'var(--material-icons)',
+          { fontVariationSettings: "'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 48" },
+        ],
+        'icon-outline': [
+          'var(--material-icons)',
+          { fontVariationSettings: "'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 48" },
+        ],
       },
       fontSize: {
         xxs: ['0.625rem', '0.75rem'],
