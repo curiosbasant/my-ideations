@@ -1,5 +1,7 @@
-/** @type {import('tailwindcss').Config} */
-module.exports = {
+import type {Config} from 'tailwindcss'
+import plugin from "tailwindcss/plugin";
+
+export default {
   content: ['./src/(app|pages)/**/*.tsx', './src/*/components/**/*.tsx'],
   darkMode: 'class',
   theme: {
@@ -19,6 +21,7 @@ module.exports = {
       colors: {
         aqua: '#05a989',
       },
+      flex: { 2: '2 1 auto', 3: '3 1 auto' },
       fontFamily: {
         icon: 'var(--material-icons)',
         'icon-outline': 'var(--material-icons)',
@@ -56,26 +59,30 @@ module.exports = {
     },
   },
   plugins: [
+    require('@headlessui/tailwindcss'),
     require('@tailwindcss/container-queries'),
     require('@tailwindcss/forms'),
-    require('@tailwindcss/line-clamp'),
-    require('tailwindcss/plugin')(({ addComponents, addUtilities, addVariant }) => {
+    plugin(({ addComponents, addUtilities, addVariant }) => {
       addComponents({
+        'surface-a': 'bg-slate-100 dark:bg-slate-800',
+      })
+
+      addUtilities({
+        // Pointer Events
         '.pointer-events-box-none': {
           pointerEvents: 'none',
-          '& *': {
+          '& > *:not(.pointer-events-none)': {
             pointerEvents: 'auto',
           },
         },
         '.pointer-events-box-only': {
           pointerEvents: 'auto',
-          '& *': {
+          '& > *:not(.pointer-events-auto)': {
             pointerEvents: 'none',
           },
         },
-      })
 
-      addUtilities({
+        // Scrollbar
         '.scrollbar-auto': { 'scrollbar-width': 'auto' },
         '.scrollbar-thin': { 'scrollbar-width': 'thin' },
         '.scrollbar-none': {
@@ -89,4 +96,4 @@ module.exports = {
       addVariant('befter', ['&::before', '&::after'])
     }),
   ],
-}
+} satisfies Config
