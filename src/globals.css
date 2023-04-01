@@ -1,0 +1,35 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply border-slate-300 dark:border-slate-500;
+  }
+
+  small {
+    @apply text-sm;
+  }
+
+  input,
+  textarea {
+    @apply w-full placeholder:text-sm placeholder:leading-6 placeholder:text-slate-500;
+  }
+  input[type],
+  textarea {
+    @apply border-inherit focus:outline-none focus:ring-transparent;
+  }
+
+  .font-icon,
+  .font-icon-outline {
+    width: 1ch;
+    line-height: 1 !important;
+    @apply box-content block aspect-square text-2xl;
+  }
+}
+
+@layer components {
+  :is(.font-icon, .font-icon-outline):not(:is(a, button)) {
+    @apply cursor-default;
+  }
+}

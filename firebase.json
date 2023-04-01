@@ -1,7 +1,13 @@
 {
+  "database": {
+    "rules": "database.rules.json"
+  },
   "firestore": {
     "rules": "firestore.rules",
     "indexes": "firestore.indexes.json"
+  },
+  "storage": {
+    "rules": "storage.rules"
   },
   "emulators": {
     "auth": {
@@ -10,11 +16,15 @@
     "firestore": {
       "port": 8020
     },
-    "storage": {
+    "database": {
       "port": 8030
+    },
+    "storage": {
+      "port": 8040
     },
     "ui": {
       "enabled": true
-    }
+    },
+    "singleProjectMode": true
   }
 }
