@@ -1,9 +1,9 @@
 'use client'
 
-import { PropsWithChildren } from 'react'
 import Image from 'next/image'
 import Link, { LinkProps } from 'next/link'
 import { usePathname } from 'next/navigation'
+import { PropsWithChildren } from 'react'
 
 export default function ServerListItem(
   props: PropsWithChildren<{
@@ -39,17 +39,17 @@ export default function ServerListItem(
         ) : (
           <span className='text-xl uppercase leading-12'>{props.name[0]}</span>
         )}
-        <span className='absolute top-0 right-0 z-10 rounded-full bg-emerald-500 p-0.5 text-center font-icon text-xs text-white'>
+        <span className='absolute right-0 top-0 z-10 rounded-full bg-emerald-500 p-0.5 text-center font-icon text-xs text-white'>
           volume_up
         </span>
         {props.pingCount! > 0 && (
-          <span className='absolute bottom-0 right-0 z-10 rounded-full bg-rose-500 py-0.5 px-1 text-center text-xs leading-none text-white'>
+          <span className='absolute bottom-0 right-0 z-10 rounded-full bg-rose-500 px-1 py-0.5 text-center text-xs leading-none text-white'>
             {props.pingCount}
           </span>
         )}
       </Link>
       <span
-        className={`absolute top-1/2 left-0 w-1 ${
+        className={`absolute left-0 top-1/2 w-1 ${
           active ? 'h-3/4' : `${true ? 'h-1/5' : 'h-0'} peer-hover:h-1/2`
         } -translate-y-1/2 rounded-r-full bg-slate-50 transition-all duration-300`}
       />

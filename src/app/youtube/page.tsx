@@ -35,7 +35,7 @@ export default function YoutubePage() {
                 </button>
               </div>
             </div>
-            <div className='mt-4 ml-16 space-y-4'>
+            <div className='ml-16 mt-4 space-y-4'>
               <p className='text-white'>
                 My Website | www.twodollarstwenty.com Support the Channel by Becoming a Patron
               </p>

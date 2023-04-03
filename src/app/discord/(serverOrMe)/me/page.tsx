@@ -35,7 +35,7 @@ export default function MeDiscordPage(props: PageProps) {
         </div>
       </header>
       <div className='flex h-0 flex-1 divide-x divide-slate-600'>
-        <main className='flex flex-1 flex-col py-4 px-8'>
+        <main className='flex flex-1 flex-col px-8 py-4'>
           <label className='relative block'>
             <input
               className='h-8 w-full rounded border-none bg-slate-900/50 pl-2 pr-10 text-slate-300 placeholder:text-slate-400'

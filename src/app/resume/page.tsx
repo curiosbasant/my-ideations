@@ -1,5 +1,5 @@
-import { PropsWithChildren } from 'react'
 import Image from 'next/image'
+import { PropsWithChildren } from 'react'
 import formatDistanceStrict from 'date-fns/formatDistanceStrict'
 
 export const metadata = {

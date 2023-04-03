@@ -37,7 +37,7 @@ export default async function ServerChannelViewPage(props: {
           <span className='relative inline-block'>
             <span className='-skew-x-8 font-icon'>tag</span>
             {true && (
-              <span className='absolute top-1 right-0 inline-block rounded-sm bg-slate-700 p-px font-icon text-[0.5rem]'>
+              <span className='absolute right-0 top-1 inline-block rounded-sm bg-slate-700 p-px font-icon text-[0.5rem]'>
                 lock
               </span>
             )}
@@ -81,7 +81,7 @@ export default async function ServerChannelViewPage(props: {
         <main className='flex flex-1 flex-col'>
           <section className='flex flex-1 flex-col overflow-y-auto'>
             <UnreadMessagesTopNotifier />
-            <div className='mt-auto space-y-1.5 py-8 px-4'>
+            <div className='mt-auto space-y-1.5 px-4 py-8'>
               <span className='inline-block select-none rounded-full bg-slate-50/10 p-2'>
                 <span className='-skew-x-8 font-icon text-5xl text-slate-300'>tag</span>
               </span>
@@ -128,7 +128,7 @@ function ChannelMessageListItem(props: { content: string }) {
   return (
     <li className='group isolate mb-2 grid grid-cols-[auto,1fr] gap-y-1 px-4 py-1 hover:bg-slate-500/20'>
       <div className=''>
-        <span className='relative top-1/2 left-1/2 -ml-px block h-1/2 w-[calc(100%_-_0.5rem)] rounded-tl border-l-2 border-t-2 border-slate-600' />
+        <span className='relative left-1/2 top-1/2 -ml-px block h-1/2 w-[calc(100%_-_0.5rem)] rounded-tl border-l-2 border-t-2 border-slate-600' />
       </div>
       <div className='flex items-center gap-1 px-4'>
         <UserAvatar size='xs' ringColor='slate-700' />

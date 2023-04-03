@@ -88,7 +88,7 @@ export default function VideoDisplay() {
                   }
                 }}>
                 <div
-                  className='pointer-events-none relative h-full bg-white after:absolute after:top-1/2 after:right-0 after:translate-x-1/2 after:-translate-y-1/2 after:rounded-full after:bg-white after:p-1.5 after:shadow-sm'
+                  className='pointer-events-none relative h-full bg-white after:absolute after:right-0 after:top-1/2 after:-translate-y-1/2 after:translate-x-1/2 after:rounded-full after:bg-white after:p-1.5 after:shadow-sm'
                   style={{ width: state.volume * 100 + '%' }}></div>
               </div>
             </div>

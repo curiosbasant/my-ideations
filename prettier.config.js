@@ -12,8 +12,8 @@ module.exports = {
   useTabs: false,
 
   importOrder: [
-    '^(react/(.*)$)|^(react$)',
     '^(next/(.*)$)|^(next$)',
+    '^(react/(.*)$)|^(react$)',
     '<THIRD_PARTY_MODULES>',
     '',
     '^~/server/(.*)$',

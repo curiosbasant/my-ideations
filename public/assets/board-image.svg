@@ -1,0 +1,18 @@
+<svg  version="1.1" xmlns="http://www.w3.org/2000/svg" width="90" height="90">
+  <rect width="10" height="10" fill="tomato" />
+  <rect x="10" width="80" height="10" fill="skyblue" />
+  <rect y="10" width="10" height="80" fill="lime" />
+  <rect x="10" y="10" width="80" height="80" fill="yellow" />
+
+<!-- 
+  <rect width="10" height="10" fill="tomato" />
+  <rect x="10" width="80" height="10" fill="skyblue" />
+  <rect x="90" width="10" height="10" fill="tomato" />
+  <rect y="10" width="10" height="80" fill="lime" />
+  <rect x="10" y="10" width="80" height="80" fill="yellow" />
+  <rect x="90" y="10" width="10" height="80" fill="lime" />
+  <rect y="90" width="10" height="10" fill="tomato" />
+  <rect x="10" y="90" width="80" height="10" fill="skyblue" />
+  <rect x="90" y="90" width="10" height="10" fill="tomato" />
+-->
+</svg>

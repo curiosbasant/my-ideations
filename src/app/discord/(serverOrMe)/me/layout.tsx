@@ -28,7 +28,7 @@ export default function MeLayout(props: LayoutProps) {
             {[{ id: 2, name: 'name big one' }].map((ch) => (
               <li className='' key={ch.id}>
                 <Link
-                  className='group flex w-full items-center gap-4 rounded-md bg-slate-50 bg-opacity-0 py-1 px-2 text-slate-400 transition hover:bg-opacity-5 focus:bg-opacity-10'
+                  className='group flex w-full items-center gap-4 rounded-md bg-slate-50 bg-opacity-0 px-2 py-1 text-slate-400 transition hover:bg-opacity-5 focus:bg-opacity-10'
                   href={`/discord/me/${ch.id}`}
                   shallow>
                   <UserAvatar presence='dnd' ringColor='slate-700' />
@@ -51,7 +51,7 @@ function ChannelButtonListItem(props: { icon: string; label: string; active?: bo
   return (
     <li className=''>
       <button
-        className={`flex w-full items-center gap-3 rounded-md bg-slate-50 bg-opacity-0 py-2 px-4 ${
+        className={`flex w-full items-center gap-3 rounded-md bg-slate-50 bg-opacity-0 px-4 py-2 ${
           props.active ? 'bg-opacity-10 text-slate-300' : 'bg-opacity-0 hover:bg-opacity-5'
         }`}>
         <span className='font-icon'>{props.icon}</span> {props.label}

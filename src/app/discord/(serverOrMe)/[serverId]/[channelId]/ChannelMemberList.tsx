@@ -30,7 +30,7 @@ export default async function ChannelMemberList(props: { serverId: string }) {
 
 function RoleLabel(props: { label: string; count: number | string }) {
   return (
-    <div className='mt-5 mb-1 select-none px-2 text-xs font-semibold uppercase'>
+    <div className='mb-1 mt-5 select-none px-2 text-xs font-semibold uppercase'>
       {props.label} &mdash; {props.count}
     </div>
   )

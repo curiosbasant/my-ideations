@@ -13,6 +13,12 @@
     "shadyantra"
   ],
   // "editor.codeLens": false,
+  "tailwindCSS.experimental.classRegex": [
+    [ "Classes ?\\=([^;]*)", "'([^']*)'" ],
+    [ "Classes ?\\=([^;]*)", "\"([^\"]*)\"" ],
+    [ "Classes ?\\=([^;]*)", "\\`([^\\`]*)\\`" ],
+    [ "cva\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]" ]
+  ],
   "tailwindCSS.experimental.configFile": {
     "tailwind.config.js": "src/**",
     "src/app/hootboard/tailwind.config.js": "src/app/hootboard/**"

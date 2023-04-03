@@ -77,7 +77,7 @@ function ChannelListItem(
             <span className='font-icon'>volume_up</span>
           )}
           {props.locked && (
-            <span className='absolute top-1 right-0 inline-block rounded-sm bg-slate-700 p-px font-icon text-[0.5rem]'>
+            <span className='absolute right-0 top-1 inline-block rounded-sm bg-slate-700 p-px font-icon text-[0.5rem]'>
               lock
             </span>
           )}
@@ -88,7 +88,7 @@ function ChannelListItem(
           <button className='w-5 font-icon text-base text-slate-300'>settings</button>
         </div>
         {props.type === 'voice' && (
-          <div className='relative overflow-hidden rounded-full bg-slate-600 py-px px-1.5 text-sm shadow group-hover:hidden'>
+          <div className='relative overflow-hidden rounded-full bg-slate-600 px-1.5 py-px text-sm shadow group-hover:hidden'>
             <span className='absolute -inset-1 left-1/2 -skew-x-8 bg-slate-800/80' />
             <span className='relative mr-2 px-0.5'>03</span>
             <span className='relative px-0.5'>12</span>

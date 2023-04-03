@@ -1,5 +1,5 @@
-import { Fragment, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
+import { Fragment, useEffect, useState } from 'react'
 import { signInAnonymously } from 'firebase/auth'
 import { onValue, ref, set } from 'firebase/database'
 
@@ -183,7 +183,7 @@ function Players(props: {
       {props.isWaiting && (
         <div className='flex flex-col items-center'>
           <p className=''>
-            <span className='inline-block animate-spin rounded-full border-2 border-y-slate-500 border-x-transparent p-1.5 align-middle' />
+            <span className='inline-block animate-spin rounded-full border-2 border-x-transparent border-y-slate-500 p-1.5 align-middle' />
             &ensp;Waiting for players to join...
           </p>
           {isOP ? (

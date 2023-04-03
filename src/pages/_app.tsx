@@ -1,7 +1,7 @@
 import '~/globals.css'
-import { useState } from 'react'
 import type { AppType } from 'next/app'
 import dynamic from 'next/dynamic'
+import { useState } from 'react'
 import { useIsoMorphicEffect } from '@curiosbasant/react-compooks'
 
 import { __DEV__ } from '~/constants'

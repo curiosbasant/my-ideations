@@ -94,10 +94,10 @@ function ServerGroupListItem(props: {
   return (
     <li className='relative'>
       <ul className='group relative isolate'>
-        <div className='absolute inset-0 -z-10 mx-3 rounded-t-3xl rounded-b-5xl bg-slate-50/10 opacity-0 transition-all duration-500 group-[:has([data-toggle-folder]:checked)]:opacity-100' />
+        <div className='absolute inset-0 -z-10 mx-3 rounded-b-5xl rounded-t-3xl bg-slate-50/10 opacity-0 transition-all duration-500 group-[:has([data-toggle-folder]:checked)]:opacity-100' />
 
         <li className='relative z-10'>
-          <span className='absolute top-1/2 left-0 h-2 w-1 -translate-y-1/2 rounded-r-full transition-all duration-300 group-[:has([data-toggle-folder]:not(:checked))]:bg-slate-50 peer-[:has(:first-child:hover)]:h-6' />
+          <span className='absolute left-0 top-1/2 h-2 w-1 -translate-y-1/2 rounded-r-full transition-all duration-300 group-[:has([data-toggle-folder]:not(:checked))]:bg-slate-50 peer-[:has(:first-child:hover)]:h-6' />
           <div className='relative mx-3'>
             {props.servers.length === 0 ? (
               <button
@@ -107,7 +107,7 @@ function ServerGroupListItem(props: {
               </button>
             ) : (
               <label
-                className='group pointer-events-box-only relative block aspect-square cursor-pointer overflow-hidden rounded-2xl bg-slate-50 bg-opacity-0 transition-all duration-300 hover:bg-opacity-10 group-[:has([data-toggle-folder]:not(:checked))]:bg-opacity-20'
+                className='group relative block aspect-square cursor-pointer overflow-hidden rounded-2xl bg-slate-50 bg-opacity-0 transition-all duration-300 pointer-events-box-only hover:bg-opacity-10 group-[:has([data-toggle-folder]:not(:checked))]:bg-opacity-20'
                 title={props.name}
                 role='button'>
                 <input className='absolute appearance-none' data-toggle-folder type='checkbox' />

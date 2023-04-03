@@ -37,7 +37,7 @@ export default function UserArea() {
       </div>
       <div className='flex items-center gap-1 p-1.5 pr-2'>
         <button
-          className='flex w-0 flex-1 items-center gap-2 rounded-md bg-slate-50 bg-opacity-0 py-1 px-0.5 hover:bg-opacity-10'
+          className='flex w-0 flex-1 items-center gap-2 rounded-md bg-slate-50 bg-opacity-0 px-0.5 py-1 hover:bg-opacity-10'
           type='button'>
           <UserAvatar ringColor='slate-800/60' />
           <div className='flex w-0 flex-1 flex-col'>
@@ -74,7 +74,7 @@ export default function UserArea() {
         onClick={() => setOpen(!open)}
         type='button'>
         <span
-          className={`absolute top-1.5 right-1.5 block w-0.5 ${
+          className={`absolute right-1.5 top-1.5 block w-0.5 ${
             open ? 'h-0' : 'h-7'
           } origin-top rotate-45 rounded-full bg-rose-500 transition-all duration-75`}
         />
