@@ -3,10 +3,6 @@
 @tailwind utilities;
 
 @layer base {
-  * {
-    @apply border-slate-300 dark:border-slate-500;
-  }
-
   small {
     @apply text-sm;
   }
@@ -19,9 +15,7 @@
   textarea {
     @apply border-inherit focus:outline-none focus:ring-transparent;
   }
-}
 
-@layer components {
   .font-icon,
   .font-icon-outline {
     width: 1ch;
