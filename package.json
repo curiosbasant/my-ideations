@@ -11,6 +11,7 @@
   "dependencies": {
     "@curiosbasant/react-compooks": "^0.4.0",
     "@supabase/supabase-js": "^2.26.0",
+    "jszip": "^3.10.1",
     "next": "^13.4.12",
     "qr-scanner": "^1.4.2",
     "qrcode": "^1.5.3",

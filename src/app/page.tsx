@@ -3,6 +3,7 @@
 import { useState } from 'react'
 
 import { QRCodePreview, QRCodeScanner } from '~/components/qr-code'
+import { zipFiles } from '~/lib/file'
 import { getSupabaseClient } from '~/lib/supabase'
 
 const supabaseClient = getSupabaseClient()
@@ -46,7 +47,7 @@ export default function HomePage() {
         ) : (
           <InitialView
             onSelectFiles={async (files) => {
-              const [fileToUpload] = files
+              const fileToUpload = files.length > 1 ? await zipFiles(files) : files[0]
 
               const filesBucket = supabaseClient.storage.from('files')
 
@@ -56,9 +57,7 @@ export default function HomePage() {
                 return
               }
 
-              const { data } = filesBucket.getPublicUrl(fileToUpload.name, {
-                download: fileToUpload.name,
-              })
+              const { data } = filesBucket.getPublicUrl(fileToUpload.name, { download: true })
 
               setUploadedFileUrl(data.publicUrl)
             }}
