@@ -3,7 +3,7 @@ import formsPlugin from '@tailwindcss/forms'
 
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: ['./src/(app|pages|ui)/**/*.tsx', './src/*/components/**/*.tsx'],
+  content: ['./src/(app|components|pages)/**/*.tsx', './src/*/components/**/*.tsx'],
   darkMode: 'class',
   theme: {
     extend: {

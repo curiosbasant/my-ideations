@@ -5,6 +5,8 @@ import Image from 'next/image'
 import QRScanner from 'qr-scanner'
 import QRCode from 'qrcode'
 
+import Spinner from './spinner'
+
 export function QRCodeScanner(props: { onDecode(text: string): void }) {
   const videoRef = useRef<HTMLVideoElement>(null)
 
@@ -19,6 +21,7 @@ export function QRCodeScanner(props: { onDecode(text: string): void }) {
 
     return () => {
       scanner.stop()
+      scanner.destroy()
     }
   }, [])
 
@@ -41,6 +44,6 @@ export function QRCodePreview(props: { text: string }) {
       width={212}
     />
   ) : (
-    <div className='animate-spin rounded-full border-2 border-slate-500 border-x-transparent p-4' />
+    <Spinner />
   )
 }

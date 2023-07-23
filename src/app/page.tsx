@@ -3,34 +3,41 @@
 import { useState } from 'react'
 
 import { QRCodePreview, QRCodeScanner } from '~/components/qr-code'
+import Spinner from '~/components/spinner'
 import { zipFiles } from '~/lib/file'
 import { getSupabaseClient } from '~/lib/supabase'
 
 const supabaseClient = getSupabaseClient()
 
 export default function HomePage() {
-  const [isScanning, setIsScanning] = useState(false)
+  const [activeView, setActiveView] = useState<'initial' | 'scanning' | 'uploading' | 'uploaded'>(
+    'initial'
+  )
   const [uploadedFileUrl, setUploadedFileUrl] = useState('')
 
   return (
     <div className='h-full px-4'>
       <div className='mx-auto flex h-full max-w-md flex-col gap-4 py-8'>
-        {isScanning ? (
+        {activeView === 'scanning' ? (
           <div className='flex flex-1 flex-col items-center justify-center gap-4'>
             <QRCodeScanner
               onDecode={(text) => {
                 window.open(text, '__blank')
-                setIsScanning(false)
+                setActiveView('initial')
               }}
             />
             <button
               className='flex gap-2 rounded-md bg-blue-500 px-4 py-2 text-white'
-              onClick={() => void setUploadedFileUrl('')}
+              onClick={() => void setActiveView('initial')}
               type='button'>
               <span className='font-icon'>arrow_back_ios_new</span> Go Back
             </button>
           </div>
-        ) : uploadedFileUrl ? (
+        ) : activeView === 'uploading' ? (
+          <div className='flex flex-1 items-center justify-center gap-4'>
+            <Spinner /> Uploading files...
+          </div>
+        ) : activeView === 'uploaded' ? (
           <div className='flex flex-1 flex-col items-center justify-center gap-4'>
             <p className='text-center'>
               Ask your friend to scan this QR Code to get access to the uploaded file on their
@@ -39,7 +46,7 @@ export default function HomePage() {
             <QRCodePreview text={uploadedFileUrl} />
             <button
               className='flex gap-2 rounded-md bg-blue-500 px-4 py-2 text-white'
-              onClick={() => void setUploadedFileUrl('')}
+              onClick={() => void setActiveView('initial')}
               type='button'>
               <span className='font-icon'>arrow_back_ios_new</span> Go Back
             </button>
@@ -47,21 +54,27 @@ export default function HomePage() {
         ) : (
           <InitialView
             onSelectFiles={async (files) => {
-              const fileToUpload = files.length > 1 ? await zipFiles(files) : files[0]
+              setActiveView('uploading')
 
-              const filesBucket = supabaseClient.storage.from('files')
+              try {
+                const fileToUpload = files.length > 1 ? await zipFiles(files) : files[0]
 
-              const { error } = await filesBucket.upload(fileToUpload.name, fileToUpload)
-              if (error) {
-                console.log(error)
-                return
+                const filesBucket = supabaseClient.storage.from('files')
+                const { error } = await filesBucket.upload(fileToUpload.name, fileToUpload)
+                if (error) {
+                  console.log(error)
+                  return
+                }
+
+                const { data } = filesBucket.getPublicUrl(fileToUpload.name, { download: true })
+
+                setUploadedFileUrl(data.publicUrl)
+                setActiveView('uploaded')
+              } catch (err) {
+                setActiveView('initial')
               }
-
-              const { data } = filesBucket.getPublicUrl(fileToUpload.name, { download: true })
-
-              setUploadedFileUrl(data.publicUrl)
             }}
-            onScanPress={() => setIsScanning(true)}
+            onScanPress={() => setActiveView('scanning')}
           />
         )}
       </div>
