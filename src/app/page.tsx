@@ -1,14 +1,11 @@
 'use client'
 
-import { Suspense, use, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
-import { createClient } from '@supabase/supabase-js'
 import QRScanner from 'qr-scanner'
 import QRCode from 'qrcode'
 
 import { getSupabaseClient } from '~/lib/supabase'
-
-// import QRCodeScanner from '~/QRCodeScanner'
 
 const supabaseClient = getSupabaseClient()
 
@@ -77,7 +74,6 @@ export default function HomePage() {
 
 function QRCodePreview(props: { text: string }) {
   const [qrCodeDataUrl, setQrCodeDataUrl] = useState('')
-  // const qrCodeDataUrl = use(QRCode.toDataURL(props.text))
 
   useEffect(() => {
     QRCode.toDataURL(props.text).then(setQrCodeDataUrl)
@@ -147,20 +143,14 @@ function InitialView(props: { onSelectFiles(files: File[]): void; onScanPress():
   )
 }
 
-/* 
-"upi://pay?pa=basantbrpl@oksbi&pn=Basant%20Barupal&aid=uGICAgIDTxLD_bg"
-"upi://pay?pa=basantbrpl@oksbi&pn=Basant%20Barupal&aid=uGICAgIDTxLD_bg&am=25.00&cu=INR"
-*/
 function QRCodeScanner(props: { onComplete(text: string): void }) {
   const videoRef = useRef<HTMLVideoElement>(null)
-  // const propEvents = usePropEvents(props)
 
   useEffect(() => {
     const videoElem = videoRef.current
     if (!videoElem) return
 
     const scanner = new QRScanner(videoElem, ({ data }) => props.onComplete(data), {
-      // returnDetailedScanResult: true,
       highlightScanRegion: true,
     })
     scanner.start()
@@ -170,63 +160,5 @@ function QRCodeScanner(props: { onComplete(text: string): void }) {
     }
   }, [])
 
-  /*   useEffect(() => {
-    const videoElem = videoRef.current
-    if (!videoElem) return
-
-    // const canvas = document.createElement('canvas')
-    // canvas.width = 1920
-    // canvas.height = 1080
-    
-    let 
-
-    // const ctx = canvas.getContext('2d')!
-    let intervalId: NodeJS.Timer | null = null
-    let mediaStream: MediaStream | null = null
-
-    // navigator.mediaDevices
-    //   .getUserMedia({ video: { facingMode: 'user' }, audio: false })
-    //   .then((stream) => {
-    //     console.log({ stream, videoElem })
-    //     videoElem.srcObject = mediaStream = stream
-    //     setTimeout(() => {
-    //       stream.getTracks().forEach((track) => track.stop())
-    //     }, 2000)
-    //   })
-    //   .catch((err) => {
-    //     console.log('User rejected', err)
-    //   })
-
-    intervalId = setInterval(() => {
-      console.log('capturing')
-      // ctx.drawImage(videoElem, 0, 0, canvas.width, canvas.height)
-      // QRScanner.scanImage(videoElem, { returnDetailedScanResult: true }).then(console.log)
-    }, 1e3)
-
-    return () => {
-      console.log('clearing', intervalId, mediaStream)
-      intervalId && clearInterval(intervalId)
-
-      mediaStream?.getTracks().forEach((track) => track.stop())
-      const videoSrc = videoElem.srcObject
-      if (videoSrc && 'getVideoTracks' in videoSrc) {
-        videoSrc.getVideoTracks().forEach((track) => track.stop())
-      }
-    }
-  }, [videoRef.current]) */
-
   return <video ref={videoRef} width={1920} height={1080} autoPlay muted playsInline />
-}
-
-function convertFileToBase64(file: File) {
-  return new Promise<string>((resolve, reject) => {
-    const reader = new FileReader()
-    reader.onload = (e) => resolve(reader.result as string)
-    reader.addEventListener('progress', () => {
-      // console.log(reader.result?.length)
-    })
-    reader.onerror = reject
-
-    reader.readAsDataURL(file)
-  })
 }

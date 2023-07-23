@@ -3,8 +3,8 @@ import './globals.css'
 import { latoFont, materialIcon } from '~/lib/fonts'
 
 export const metadata = {
-  title: 'File Sharer',
-  description: 'A file sharing platform.',
+  title: 'SnapFile',
+  description: 'Instantly share files by scanning and generating QRCodes!',
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
