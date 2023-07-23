@@ -1,0 +1,19 @@
+{
+  "conventionalCommits.promptBody": false,
+  "conventionalCommits.promptFooter": false,
+  "conventionalCommits.promptScopes": false,
+  "cSpell.words": ["supabase"],
+  "editor.codeActionsOnSave": {
+    "source.sortImports": false
+  },
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "tailwindCSS.experimental.classRegex": [
+    ["Classes ?\\=([^;]*)", "'([^']*)'"],
+    ["Classes ?\\=([^;]*)", "\"([^\"]*)\""],
+    ["Classes ?\\=([^;]*)", "\\`([^\\`]*)\\`"],
+    ["cva\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"]
+  ],
+  "typescript.preferences.importModuleSpecifier": "non-relative",
+  "typescript.tsdk": "node_modules/typescript/lib"
+}
