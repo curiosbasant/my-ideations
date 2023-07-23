@@ -1,10 +1,8 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
-import Image from 'next/image'
-import QRScanner from 'qr-scanner'
-import QRCode from 'qrcode'
+import { useState } from 'react'
 
+import { QRCodePreview, QRCodeScanner } from '~/components/qr-code'
 import { getSupabaseClient } from '~/lib/supabase'
 
 const supabaseClient = getSupabaseClient()
@@ -19,7 +17,7 @@ export default function HomePage() {
         {isScanning ? (
           <div className='flex flex-1 flex-col items-center justify-center gap-4'>
             <QRCodeScanner
-              onComplete={(text) => {
+              onDecode={(text) => {
                 window.open(text, '__blank')
                 setIsScanning(false)
               }}
@@ -72,26 +70,6 @@ export default function HomePage() {
   )
 }
 
-function QRCodePreview(props: { text: string }) {
-  const [qrCodeDataUrl, setQrCodeDataUrl] = useState('')
-
-  useEffect(() => {
-    QRCode.toDataURL(props.text).then(setQrCodeDataUrl)
-  }, [props.text])
-
-  return qrCodeDataUrl ? (
-    <Image
-      className='h-72 w-72 rounded-md border shadow-md'
-      src={qrCodeDataUrl}
-      alt='QR Code'
-      height={212}
-      width={212}
-    />
-  ) : (
-    <div className='animate-spin rounded-full border-2 border-slate-500 border-x-transparent p-4' />
-  )
-}
-
 function InitialView(props: { onSelectFiles(files: File[]): void; onScanPress(): void }) {
   const handleFileDrop = (ev: React.DragEvent<HTMLDivElement>) => {
     ev.preventDefault()
@@ -141,24 +119,4 @@ function InitialView(props: { onSelectFiles(files: File[]): void; onScanPress():
       </footer>
     </>
   )
-}
-
-function QRCodeScanner(props: { onComplete(text: string): void }) {
-  const videoRef = useRef<HTMLVideoElement>(null)
-
-  useEffect(() => {
-    const videoElem = videoRef.current
-    if (!videoElem) return
-
-    const scanner = new QRScanner(videoElem, ({ data }) => props.onComplete(data), {
-      highlightScanRegion: true,
-    })
-    scanner.start()
-
-    return () => {
-      scanner.stop()
-    }
-  }, [])
-
-  return <video ref={videoRef} width={1920} height={1080} autoPlay muted playsInline />
 }

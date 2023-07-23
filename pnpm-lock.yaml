@@ -11,9 +11,6 @@ dependencies:
   '@supabase/supabase-js':
     specifier: ^2.26.0
     version: 2.26.0
-  html5-qrcode:
-    specifier: ^2.3.8
-    version: 2.3.8
   next:
     specifier: ^13.4.12
     version: 13.4.12(@babel/core@7.22.9)(react-dom@18.2.0)(react@18.2.0)
@@ -999,10 +996,6 @@ packages:
     dependencies:
       function-bind: 1.1.1
     dev: true
-
-  /html5-qrcode@2.3.8:
-    resolution: {integrity: sha512-jsr4vafJhwoLVEDW3n1KvPnCCXWaQfRng0/EEYk1vNcQGcG/htAdhJX0be8YyqMoSz7+hZvOZSTAepsabiuhiQ==}
-    dev: false
 
   /imurmurhash@0.1.4:
     resolution: {integrity: sha512-JmXMZ6wuvDmLiHEml9ykzqO6lwFbof0GG4IkcGaENdCRDDmMVnny7s5HsIgHCbaq0w2MyPhDqkhTUgS2LU2PHA==}
