@@ -26,7 +26,7 @@ export default function HomePage() {
               }}
             />
             <button
-              className='flex gap-2 rounded-md bg-blue-500 px-4 py-2 text-white'
+              className='flex gap-2 rounded-md bg-blue-500 px-4 py-2 text-white transition hover:opacity-80'
               onClick={() => void setActiveView('initial')}
               type='button'>
               <span className='font-icon'>arrow_back_ios_new</span> Go Back
@@ -46,7 +46,7 @@ export default function HomePage() {
             <small className=''>or copy and share this url.</small>
             <CopyLinkForm link={uploadedFileUrl} />
             <button
-              className='flex gap-2 rounded-md bg-blue-500 px-4 py-2 text-white'
+              className='flex gap-2 rounded-md bg-blue-500 px-4 py-2 text-white transition hover:opacity-80'
               onClick={() => void setActiveView('initial')}
               type='button'>
               <span className='font-icon'>arrow_back_ios_new</span> Go Back
@@ -114,7 +114,7 @@ function CopyLinkForm(props: { link: string }) {
         {props.link.slice(0, slashIndex)}
         <span className='text-lg font-bold text-slate-700'>{props.link.slice(slashIndex)}</span>
       </p>
-      <button className='p-2 font-icon-outline'>content_copy</button>
+      <button className='p-2 font-icon-outline transition hover:opacity-80'>content_copy</button>
     </form>
   )
 }
@@ -141,7 +141,7 @@ function InitialView(props: { onSelectFiles(files: File[]): void; onScanPress():
         onDrop={handleFileDrop}>
         <p className=''>Drop files here to share!</p>
         <span className=''>or</span>
-        <label className='flex gap-2 rounded-md bg-blue-500 px-4 py-2 text-white'>
+        <label className='flex cursor-pointer gap-2 rounded-md bg-blue-500 px-4 py-2 text-white transition hover:opacity-80'>
           <input
             className='woosh'
             multiple
@@ -160,7 +160,7 @@ function InitialView(props: { onSelectFiles(files: File[]): void; onScanPress():
       </div>
       <footer className='flex w-full justify-center'>
         <button
-          className='flex gap-2 rounded-md bg-blue-500 px-4 py-2 text-white'
+          className='flex gap-2 rounded-md bg-blue-500 px-4 py-2 text-white transition hover:opacity-80'
           onClick={props.onScanPress}
           type='button'>
           <span className='font-icon'>qr_code_scanner</span> Scan QR to Download

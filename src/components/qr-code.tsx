@@ -9,6 +9,7 @@ import Spinner from './spinner'
 
 export function QRCodeScanner(props: { onDecode(text: string): void }) {
   const videoRef = useRef<HTMLVideoElement>(null)
+  const [error, setError] = useState('')
 
   useEffect(() => {
     const videoElem = videoRef.current
@@ -17,7 +18,8 @@ export function QRCodeScanner(props: { onDecode(text: string): void }) {
     const scanner = new QRScanner(videoElem, ({ data }) => props.onDecode(data), {
       highlightScanRegion: true,
     })
-    scanner.start()
+
+    scanner.start().catch(setError)
 
     return () => {
       scanner.stop()
@@ -25,7 +27,13 @@ export function QRCodeScanner(props: { onDecode(text: string): void }) {
     }
   }, [])
 
-  return <video ref={videoRef} width={1920} height={1080} autoPlay muted playsInline />
+  return error ? (
+    <p className='mb-8 text-center text-rose-500'>
+      This device either does not have a camera or does not have permission to access it.
+    </p>
+  ) : (
+    <video ref={videoRef} width={1920} height={1080} autoPlay muted playsInline />
+  )
 }
 
 export function QRCodePreview(props: { text: string }) {
