@@ -28,7 +28,7 @@ export function QRCodeScanner(props: { onDecode(text: string): void }) {
   }, [])
 
   return error ? (
-    <p className='mb-8 text-center text-rose-500'>
+    <p className='mb-8 text-center text-rose-500 text-balance'>
       This device either does not have a camera or does not have permission to access it.
     </p>
   ) : (

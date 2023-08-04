@@ -1,5 +1,6 @@
 import containerQueriesPlugin from '@tailwindcss/container-queries'
 import formsPlugin from '@tailwindcss/forms'
+import plugin from 'tailwindcss/plugin'
 
 /** @type {import('tailwindcss').Config} */
 export default {
@@ -19,5 +20,15 @@ export default {
       },
     },
   },
-  plugins: [containerQueriesPlugin, formsPlugin],
+  plugins: [
+    containerQueriesPlugin,
+    formsPlugin,
+    plugin(({ addUtilities }) => {
+      addUtilities({
+        '.text-wrap': { 'text-wrap': 'wrap' },
+        '.text-nowrap': { 'text-wrap': 'nowrap' },
+        '.text-balance': { 'text-wrap': 'balance' },
+      })
+    }),
+  ],
 }
