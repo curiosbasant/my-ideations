@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@curiosbasant/react-compooks": "^0.4.0",
+    "@supabase/auth-helpers-nextjs": "^0.7.3",
     "@supabase/supabase-js": "^2.26.0",
     "jszip": "^3.10.1",
     "next": "^13.4.12",

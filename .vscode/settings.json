@@ -2,7 +2,7 @@
   "conventionalCommits.promptBody": false,
   "conventionalCommits.promptFooter": false,
   "conventionalCommits.promptScopes": false,
-  "cSpell.words": ["qrcode", "snapfile", "supabase"],
+  "cSpell.words": ["qrcode", "shortcode", "snapfile", "supabase"],
   "editor.codeActionsOnSave": {
     "source.sortImports": false
   },
