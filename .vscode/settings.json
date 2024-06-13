@@ -1,3 +1,14 @@
 {
-  "cSpell.words": ["supabase"]
+  "conventionalCommits.promptBody": false,
+  "conventionalCommits.promptFooter": false,
+  "conventionalCommits.promptScopes": false,
+  "cSpell.words": ["supabase"],
+  "editor.codeActionsOnSave": {
+    "source.sortImports": "never"
+  },
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "typescript.enablePromptUseWorkspaceTsdk": true,
+  "typescript.tsdk": "node_modules\\typescript\\lib",
+  "typescript.tsserver.experimental.enableProjectDiagnostics": true
 }
