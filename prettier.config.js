@@ -35,5 +35,5 @@ module.exports = {
   importOrderParserPlugins: ['typescript', 'jsx', 'decorators-legacy'],
   importOrderSeparation: false,
   importOrderSortSpecifiers: true,
-  importOrderTypeScriptVersion: '5.4.5',
+  importOrderTypeScriptVersion: '~5.3.3',
 }
