@@ -34,7 +34,7 @@ export interface ButtonProps extends PressableProps, VariantProps<typeof buttonV
   icon?: IconName
 }
 
-const buttonLabelVariants = cva('', {
+const buttonLabelVariants = cva('font-bold tracking-wide', {
   variants: {
     variant: {
       primary: 'text-white',

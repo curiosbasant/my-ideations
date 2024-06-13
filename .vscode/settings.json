@@ -12,6 +12,15 @@
   "files.associations": {
     "*.css": "tailwindcss"
   },
+  "tailwindCSS.experimental.classRegex": [
+    ["Classes ?\\=([^;]*)", "'([^']*)'"],
+    ["Classes ?\\=([^;]*)", "\"([^\"]*)\""],
+    ["Classes ?\\=([^;]*)", "\\`([^\\`]*)\\`"],
+    ["ClassName ?\\=([^;]*)", "'([^']*)'"],
+    ["ClassName ?\\=([^;]*)", "\"([^\"]*)\""],
+    ["ClassName ?\\=([^;]*)", "\\`([^\\`]*)\\`"],
+    ["cva\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"]
+  ],
   "typescript.enablePromptUseWorkspaceTsdk": true,
   "typescript.tsdk": "node_modules\\typescript\\lib",
   "typescript.tsserver.experimental.enableProjectDiagnostics": true

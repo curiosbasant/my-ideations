@@ -1,6 +1,6 @@
 import { TextInput, View } from 'react-native'
 
-import { Button, Input } from '~/components/ui'
+import { Button, Input, Screen } from '~/components/ui'
 import { useLoginMutation } from '~/features/auth/hooks'
 import { useRefs } from '~/hooks'
 import { Controller, useForm, z, zodResolver } from '~/lib/hook-form'
@@ -9,9 +9,9 @@ export default function LoginScreen() {
   const { mutate, isPending } = useLoginMutation()
 
   return (
-    <View className='h-screen w-screen bg-background p-4 py-6'>
+    <Screen loading={isPending}>
       <LoginForm loading={isPending} onSubmit={mutate} />
-    </View>
+    </Screen>
   )
 }
 
