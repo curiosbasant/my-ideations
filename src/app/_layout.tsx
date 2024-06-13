@@ -31,7 +31,8 @@ export default function RootLayout() {
     <ReactQueryProvider>
       <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
         <StatusBar style={colorScheme === 'dark' ? 'light' : 'dark'} animated translucent />
-      <Stack>
+        <Stack screenOptions={{ animation: 'slide_from_right', headerShadowVisible: true }}>
+          <Stack.Screen name='(auth)/login' options={{ title: 'Login', animation: 'none' }} />
           <Stack.Screen name='+not-found' />
         </Stack>
       </ThemeProvider>
