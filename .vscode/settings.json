@@ -2,12 +2,13 @@
   "conventionalCommits.promptBody": false,
   "conventionalCommits.promptFooter": false,
   "conventionalCommits.promptScopes": false,
-  "cSpell.words": ["supabase"],
+  "cSpell.words": ["nativewind", "supabase", "tanstack"],
   "editor.codeActionsOnSave": {
     "source.sortImports": "never"
   },
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true,
+  "editor.formatOnSaveMode": "file",
   "typescript.enablePromptUseWorkspaceTsdk": true,
   "typescript.tsdk": "node_modules\\typescript\\lib",
   "typescript.tsserver.experimental.enableProjectDiagnostics": true
