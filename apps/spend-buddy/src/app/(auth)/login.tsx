@@ -1,9 +1,11 @@
-import { TextInput, View } from 'react-native'
+import { View, type TextInput } from 'react-native'
+
+import { Controller, useForm, zodResolver } from '@my/core/hook-form'
+import { useRefs } from '@my/core/hooks'
+import { signInSchema } from '@my/lib/schema/auth'
 
 import { Button, Input, Screen } from '~/components/ui'
 import { useLoginMutation } from '~/features/auth/hooks'
-import { useRefs } from '~/hooks'
-import { Controller, useForm, z, zodResolver } from '~/lib/hook-form'
 
 export default function LoginScreen() {
   const { mutate, isPending } = useLoginMutation()
@@ -15,24 +17,17 @@ export default function LoginScreen() {
   )
 }
 
-const formSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(6),
-})
-
-type FormFields = z.infer<typeof formSchema>
-
-function LoginForm(props: { loading?: boolean; onSubmit(data: FormFields): void }) {
+function LoginForm(props: { loading?: boolean; onSubmit(data: signInSchema): void }) {
   const [emailRef, passwordRef] = useRefs<TextInput | null>(null)
-  const { control, handleSubmit, getValues } = useForm<FormFields>({
-    resolver: zodResolver(formSchema),
+  const { control, handleSubmit, getValues } = useForm<signInSchema>({
+    resolver: zodResolver(signInSchema),
   })
 
   return (
     <View className='gap-6'>
       <Controller
         control={control}
-        name='email'
+        name='userIdentity'
         render={({ field, fieldState }) => (
           <Input.Email
             ref={emailRef}
@@ -63,7 +58,9 @@ function LoginForm(props: { loading?: boolean; onSubmit(data: FormFields): void 
             autoComplete='current-password'
             returnKeyType='done'
             onSubmitEditing={() => {
-              getValues('email').length ? handleSubmit(props.onSubmit) : emailRef.current?.focus()
+              getValues('userIdentity').length
+                ? handleSubmit(props.onSubmit)
+                : emailRef.current?.focus()
             }}
           />
         )}

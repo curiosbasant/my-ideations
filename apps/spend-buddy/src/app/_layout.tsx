@@ -7,7 +7,7 @@ import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native
 import { useColorScheme } from 'nativewind'
 
 import { Toast } from '~/components/ui/toast'
-import { ReactQueryProvider } from '~/lib/react-query'
+import { TRPCProvider } from '~/lib/trpc'
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync()
@@ -16,7 +16,7 @@ export default function RootLayout() {
   const { colorScheme } = useColorScheme()
 
   return (
-    <ReactQueryProvider>
+    <TRPCProvider>
       <Toast.Provider>
         <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
           <StatusBar style={colorScheme === 'dark' ? 'light' : 'dark'} animated translucent />
@@ -35,6 +35,6 @@ export default function RootLayout() {
           </Stack>
         </ThemeProvider>
       </Toast.Provider>
-    </ReactQueryProvider>
+    </TRPCProvider>
   )
 }

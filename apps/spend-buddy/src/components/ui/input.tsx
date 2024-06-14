@@ -1,7 +1,8 @@
 import { forwardRef } from 'react'
 import { Text, TextInput, View, type TextInputProps, type ViewStyle } from 'react-native'
 
-import { useToggle } from '~/hooks'
+import { useToggle } from '@my/core/hooks'
+
 import { Icon, type IconName } from './icon'
 
 type InputProps = TextInputProps & {
