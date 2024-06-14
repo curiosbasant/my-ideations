@@ -1,31 +1,19 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
-node_modules
-.pnp
+/node_modules
+/.pnp
 .pnp.js
 
 # testing
-coverage
+/coverage
 
 # next.js
-.vercel
-.next/
-out/
-next-env.d.ts
-
-# nitro
-.nitro/
-.output/
-
-# expo
-.expo/
-dist/
-expo-env.d.ts
-apps/expo/.gitignore
+/.next/
+/out/
 
 # production
-build
+/build
 
 # misc
 .DS_Store
@@ -39,7 +27,6 @@ yarn-error.log*
 *.log
 
 # local env files
-.env
 .env*.local
 
 # vercel
@@ -47,10 +34,11 @@ yarn-error.log*
 
 # typescript
 *.tsbuildinfo
-
-# turbo
-.turbo
+next-env.d.ts
 
 archive
 *.archive
 *.archive.*
+
+service-account.json
+firebase-export-*

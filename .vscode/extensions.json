@@ -1,0 +1,11 @@
+{
+  "recommendations": [
+    "bradlc.vscode-tailwindcss",
+    "esbenp.prettier-vscode",
+    "expo.vscode-expo-tools",
+    "mhutchie.git-graph",
+    "streetsidesoftware.code-spell-checker",
+    "vivaxy.vscode-conventional-commits",
+    "yoavbls.pretty-ts-errors"
+  ]
+}

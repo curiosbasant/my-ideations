@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "display": "Default",
+  "compilerOptions": {
+    /* LANGUAGE COMPILATION OPTIONS */
+    "target": "ES2020",
+    "composite": false,
+    "isolatedModules": true,
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "resolveJsonModule": true,
+    "verbatimModuleSyntax": true, // Ensures using correct cjs or esm syntax
+    "moduleDetection": "force", // Treats every ts file as module and not global script
+    "incremental": true,
+
+    /* EMIT RULES */
+    "removeComments": true,
+    "noEmit": true,
+
+    /* TYPE CHECKING RULES */
+    "strict": true,
+    // "noFallthroughCasesInSwitch": true,
+    // "noImplicitAny": true,                // Included in "Strict"
+    "noImplicitOverride": true,
+    "noImplicitReturns": true,
+    // "noImplicitThis": true,               // Included in "Strict"
+    // TLDR - Checking an indexed value (array[0]) now forces type <T | undefined> as there is no confirmation that index exists
+    // "noUncheckedIndexedAccess": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    // "strictBindCallApply": true,          // Included in "Strict"
+    // "strictFunctionTypes": true,          // Included in "Strict"
+    // "strictNullChecks": true,             // Included in "Strict"
+    // "strictPropertyInitialization": true, // Included in "Strict"
+    "useUnknownInCatchVariables": true,
+
+    // THE BELOW ARE EXTRA STRICT OPTIONS THAT SHOULD ONLY BY CONSIDERED IN VERY SAFE PROJECTS
+    // TLDR - Setting to undefined is not the same as a property not being defined at all
+    // "exactOptionalPropertyTypes": true,
+    // TLDR - Use dot notation for objects if you're sure it exists, use ['index'] notation if unsure
+    "noPropertyAccessFromIndexSignature": true,
+
+    /* OTHER OPTIONS */
+    "allowJs": true,
+    "allowSyntheticDefaultImports": true,
+    "checkJs": true,
+    // "emitDecoratorMetadata": true,
+    "esModuleInterop": true,
+    // "experimentalDecorators": true,
+    "forceConsistentCasingInFileNames": true,
+    "preserveWatchOutput": true,
+    "skipLibCheck": true,
+    "useDefineForClassFields": true
+  },
+  // Remember to also copy these, if overriding
+  "exclude": ["node_modules", "archive", "*.archive", "*.archive.*"]
+}

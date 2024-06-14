@@ -1,28 +1,57 @@
 {
   "conventionalCommits.promptBody": false,
   "conventionalCommits.promptFooter": false,
-  "conventionalCommits.scopes": [
-    "resume",
-    "youtube",
-    "discord"
+  "conventionalCommits.promptScopes": false,
+  "cSpell.words": [
+    "hookform",
+    "ianvs",
+    "immer",
+    "inkcourse",
+    "nativewind",
+    "Pressable",
+    "signin",
+    "smartnotes",
+    "snaplet",
+    "supabase",
+    "superjson",
+    "tailwindcss",
+    "tanstack",
+    "trpc",
+    "zustand"
   ],
   "editor.codeActionsOnSave": {
-    "source.sortImports": false,
+    "source.sortImports": "never"
   },
-  "cSpell.words": [
-    "shadyantra"
-  ],
-  // "editor.codeLens": false,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "editor.formatOnSaveMode": "file",
+  "reactSnippets.settings.importReactOnTop": false,
+  "reactSnippets.settings.languageScopes": "typescriptreact,javascriptreact",
   "tailwindCSS.experimental.classRegex": [
-    [ "Classes ?\\=([^;]*)", "'([^']*)'" ],
-    [ "Classes ?\\=([^;]*)", "\"([^\"]*)\"" ],
-    [ "Classes ?\\=([^;]*)", "\\`([^\\`]*)\\`" ],
-    [ "cva\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]" ]
+    ["Classes ?\\=([^;]*)", "'([^']*)'"],
+    ["Classes ?\\=([^;]*)", "\"([^\"]*)\""],
+    ["Classes ?\\=([^;]*)", "\\`([^\\`]*)\\`"],
+    ["ClassName ?\\=([^;]*)", "'([^']*)'"],
+    ["ClassName ?\\=([^;]*)", "\"([^\"]*)\""],
+    ["ClassName ?\\=([^;]*)", "\\`([^\\`]*)\\`"],
+    ["cva\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"]
   ],
   "tailwindCSS.experimental.configFile": {
-    "tailwind.config.js": "src/**",
-    "src/app/hootboard/tailwind.config.js": "src/app/hootboard/**"
+    "apps/web/tailwind.config.js": ["apps/web/src/**/*.tsx", "packages/ui/**/*.tsx"],
+    "apps/mobile/tailwind.config.ts": "apps/mobile/src/**/*.tsx",
+    "tooling/tailwind/base.js": "tooling/emails/**/*.tsx"
   },
   "typescript.enablePromptUseWorkspaceTsdk": true,
-  "typescript.tsdk": "node_modules/typescript/lib"
+  "typescript.preferences.autoImportFileExcludePatterns": [
+    "next/router.d.ts",
+    "next/dist/client/router.d.ts"
+  ],
+  "typescript.preferences.importModuleSpecifier": "non-relative",
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "typescript.tsserver.experimental.enableProjectDiagnostics": true,
+  "workbench.editor.customLabels.enabled": true,
+  "workbench.editor.customLabels.patterns": {
+    "**/app/**/{page,layout,template,loading,error,route}.{ts,tsx}": "${dirname(1)}/${dirname} <${filename}>",
+    "**/{client,index}.{ts,tsx}": "${dirname} <${filename}>"
+  }
 }

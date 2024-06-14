@@ -1,0 +1,41 @@
+{
+  "name": "@my/db",
+  "version": "0.0.0",
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "scripts": {
+    "clean": "rm -rf .turbo node_modules",
+    "lint": "tsc -P tsconfig.lint.json",
+    "degenerate": "drizzle-kit drop",
+    "generate": "drizzle-kit generate",
+    "generate:blank": "drizzle-kit generate --custom",
+    "list": "supabase migration list --local",
+    "migrate": "supabase migration up --include-all",
+    "pull": "supabase db pull",
+    "push": "supabase db push",
+    "reset": "supabase db reset",
+    "seed": "pnpm with-env -v DRY=0 -- tsx seed.ts",
+    "seed:dry": "pnpm --silent with-env -v DRY=1 -- tsx seed.ts > ../../supabase/seed.sql",
+    "seed:gen": "pnpm with-env -- snaplet-seed generate",
+    "seed:sync": "pnpm with-env -- snaplet-seed sync",
+    "start": "supabase start -x edge-runtime,imgproxy,migra,pgadmin-schema-diff,realtime,storage-api,logflare,vector",
+    "stop": "supabase stop",
+    "studio": "drizzle-kit studio",
+    "with-env": "dotenv -e ../../.env"
+  },
+  "dependencies": {
+    "@my/lib": "workspace:*",
+    "drizzle-orm": "^0.30.10",
+    "postgres": "^3.3.5"
+  },
+  "devDependencies": {
+    "@my/tsconfig": "workspace:*",
+    "@snaplet/copycat": "^5.0.0",
+    "@snaplet/seed": "^0.96.0",
+    "dotenv-cli": "^7.4.1",
+    "drizzle-kit": "^0.21.4",
+    "typescript": "^5.4.4"
+  },
+  "private": true
+}
