@@ -1,13 +1,14 @@
 {
-  "name": "spend-buddy",
-  "main": "expo-router/entry",
+  "name": "@my/spend-buddy",
   "version": "0.1.0",
+  "main": "expo-router/entry",
   "scripts": {
-    "start": "expo start",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
-    "web": "expo start --web",
-    "lint": "expo lint"
+    "start": "pnpm with-env expo start",
+    "android": "pnpm with-env expo start --android",
+    "ios": "pnpm with-env expo start --ios",
+    "web": "pnpm with-env expo start --web",
+    "lint": "expo lint",
+    "with-env": "dotenv -e ../../.env --"
   },
   "dependencies": {
     "@dev-plugins/react-query": "^0.0.6",
@@ -44,6 +45,7 @@
     "@babel/core": "^7.20.0",
     "@ianvs/prettier-plugin-sort-imports": "^4.2.1",
     "@types/react": "~18.2.45",
+    "dotenv-cli": "^7.4.1",
     "prettier": "^3.3.2",
     "prettier-plugin-tailwindcss": "^0.6.2",
     "typescript": "~5.3.3"
