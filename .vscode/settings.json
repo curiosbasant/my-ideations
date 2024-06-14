@@ -25,6 +25,9 @@
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true,
   "editor.formatOnSaveMode": "file",
+  "files.associations": {
+    "*.css": "tailwindcss"
+  },
   "reactSnippets.settings.importReactOnTop": false,
   "reactSnippets.settings.languageScopes": "typescriptreact,javascriptreact",
   "tailwindCSS.experimental.classRegex": [
@@ -37,9 +40,8 @@
     ["cva\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"]
   ],
   "tailwindCSS.experimental.configFile": {
-    "apps/web/tailwind.config.js": ["apps/web/src/**/*.tsx", "packages/ui/**/*.tsx"],
-    "apps/mobile/tailwind.config.ts": "apps/mobile/src/**/*.tsx",
-    "tooling/tailwind/base.js": "tooling/emails/**/*.tsx"
+    "apps/random/tailwind.config.ts": "apps/random/src/**/*.tsx",
+    "apps/spend-buddy/tailwind.config.ts": "apps/spend-buddy/src/**/*.tsx"
   },
   "typescript.enablePromptUseWorkspaceTsdk": true,
   "typescript.preferences.autoImportFileExcludePatterns": [
@@ -47,7 +49,7 @@
     "next/dist/client/router.d.ts"
   ],
   "typescript.preferences.importModuleSpecifier": "non-relative",
-  "typescript.tsdk": "node_modules/typescript/lib",
+  "typescript.tsdk": "node_modules\\typescript\\lib",
   "typescript.tsserver.experimental.enableProjectDiagnostics": true,
   "workbench.editor.customLabels.enabled": true,
   "workbench.editor.customLabels.patterns": {
