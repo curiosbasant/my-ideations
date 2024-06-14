@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation'
 
-import { MessageType, channelSchema, messageSchema, serverSchema } from '~/discord/schemas'
+import { channelSchema, messageSchema, MessageType, serverSchema } from '~/discord/schemas'
 import { APPS, database } from '~/utils/firebase.server'
 import UserAvatar from '../../UserAvatar'
 import ChannelMemberList from './ChannelMemberList'
@@ -26,7 +26,7 @@ export default async function ServerChannelViewPage(props: {
   const channelMessagesObj = channelMessagesSnapshot.val()
   const channelMessages: MessageType[] = channelMessagesObj
     ? Object.entries(channelMessagesObj).map(([messageKey, message]) =>
-        messageSchema.parse({ ...(message as any), id: messageKey })
+        messageSchema.parse({ ...(message as any), id: messageKey }),
       )
     : []
 
@@ -104,7 +104,6 @@ export default async function ServerChannelViewPage(props: {
           <ChannelMessageSender channelId={props.params.channelId} channelName={channel.name} />
         </main>
 
-        {/* @ts-expect-error */}
         <ChannelMemberList serverId={props.params.serverId} />
       </div>
     </>
@@ -140,7 +139,7 @@ function ChannelMessageListItem(props: { content: string }) {
             sed saepe laboriosam labore quos repellendus?
           </p>
           &nbsp;
-          <small className='self-end text-xxs leading-5'>(edited)</small>
+          <small className='text-xxs self-end leading-5'>(edited)</small>
         </div>
       </div>
       <UserAvatar size='lg' ringColor='slate-700' />

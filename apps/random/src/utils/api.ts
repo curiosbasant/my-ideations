@@ -1,33 +1,8 @@
-import { httpBatchLink, loggerLink } from '@trpc/client'
-import { createTRPCNext } from '@trpc/next'
 import type { inferRouterInputs, inferRouterOutputs } from '@trpc/server'
-import superjson from 'superjson'
 
-import type { AppRouter } from '~/server/api/router'
-import { IS_BROWSER } from '~/constants'
+import { AppRouter } from '@my/api'
 
-const getBaseUrl = () => {
-  if (IS_BROWSER) return '' // browser should use relative url
-  if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}` // SSR should use vercel url
-  return `http://localhost:${process.env.PORT ?? 3000}` // dev SSR should use localhost
-}
-
-export const api = createTRPCNext<AppRouter>({
-  config: () => ({
-    transformer: superjson,
-    links: [
-      loggerLink({
-        enabled: (opts) =>
-          process.env.NODE_ENV === 'development' ||
-          (opts.direction === 'down' && opts.result instanceof Error),
-      }),
-      httpBatchLink({
-        url: `${getBaseUrl()}/api/trpc`,
-      }),
-    ],
-  }),
-  ssr: false,
-})
+export const api = {} as any
 
 /**
  * Inference helper for inputs

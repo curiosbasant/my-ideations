@@ -9,7 +9,7 @@
 import { initTRPC, TRPCError } from '@trpc/server'
 
 import { db } from '@my/db'
-import type { SupabaseClient } from '@my/lib'
+import type { SupabaseClient } from '@my/lib/supabase'
 import { SuperJSON } from '@my/lib/superjson'
 import { ZodError } from '@my/lib/zod'
 

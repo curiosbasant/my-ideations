@@ -6,7 +6,6 @@ export const revalidate = 10
 export default function DiscordLayout({ children }: LayoutProps) {
   return (
     <div className='grid h-screen grid-cols-[4.5rem,1fr] grid-rows-1 items-stretch overflow-hidden font-sans text-slate-400'>
-      {/* @ts-expect-error Server Component */}
       <Sidebar />
       <div className='flex flex-col'>
         {false && (
