@@ -1,7 +1,8 @@
 import { useEffect } from 'react'
-import { Text } from 'react-native'
+import { Pressable, Text } from 'react-native'
 import { useFonts } from 'expo-font'
 import { Redirect, SplashScreen, Tabs } from 'expo-router'
+import { useColorScheme } from 'nativewind'
 
 import { Icon, type IconName } from '~/components/ui'
 import { useSession } from '~/features/auth/hooks'
@@ -28,13 +29,27 @@ export default function ProtectedLayout() {
       initialRouteName='index'
       screenOptions={{
         headerShadowVisible: true,
+        tabBarButton(props) {
+          const { colorScheme } = useColorScheme()
+          return (
+            <Pressable
+              {...props}
+              android_ripple={{
+                color: colorScheme === 'dark' ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)',
+              }}
+            />
+          )
+        },
         tabBarLabel: (props) => (
           <Text className={`text-xs ${props.focused ? 'color-primary' : 'color-muted-foreground'}`}>
             {props.children}
           </Text>
         ),
       }}>
-      <Tabs.Screen name='index' options={{ title: 'Home', tabBarIcon: getTabIconByName('home') }} />
+      <Tabs.Screen
+        name='index'
+        options={{ title: 'Groups', tabBarIcon: getTabIconByName('users') }}
+      />
       <Tabs.Screen
         name='settings'
         options={{ title: 'Settings', tabBarIcon: getTabIconByName('cog') }}

@@ -40,7 +40,7 @@ export const caller = createTRPCClient<AppRouter>(trpcClientOptions)
 const queryClientConfig: QueryClientConfig = {
   defaultOptions: {
     queries: {
-      staleTime: 5 * 60 * 1000,
+      staleTime: __DEV__ ? 0 : 5 * 60 * 1000,
     },
     mutations: {
       onError(error) {
