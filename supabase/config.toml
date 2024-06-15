@@ -87,7 +87,7 @@ enable_manual_linking = false
 
 # This hook runs before a token is issued and allows you to add additional claims based on the authentication method used.
 [auth.hook.custom_access_token]
-enabled = true
+enabled = false
 uri = "pg-functions://postgres/public/custom_access_token_hook"
 
 [auth.email]
@@ -106,7 +106,7 @@ enable_confirmations = true
 
 [auth.sms]
 # Allow/disallow new user signups via SMS to your project.
-enable_signup = true
+enable_signup = false
 # If enabled, users need to confirm their phone number before signing in.
 enable_confirmations = false
 # Template for sending OTP to users
@@ -139,7 +139,7 @@ redirect_uri = ""
 url = ""
 
 [analytics]
-enabled = false
+enabled = true
 port = 54327
 vector_port = 54328
 # Configure one of the supported backends: `postgres`, `bigquery`.

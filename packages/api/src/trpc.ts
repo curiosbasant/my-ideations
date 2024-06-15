@@ -13,8 +13,6 @@ import type { SupabaseClient } from '@my/lib/supabase'
 import { SuperJSON } from '@my/lib/superjson'
 import { ZodError } from '@my/lib/zod'
 
-import { getJwtPayload } from './lib/utils'
-
 /**
  * 1. CONTEXT
  *
@@ -100,15 +98,10 @@ const enforceUserIsAuthenticated = t.middleware(async ({ ctx, next }) => {
     throw new TRPCError({ code: 'UNAUTHORIZED' })
   }
 
-  const { payload: jwtPayload } = (await getJwtPayload(ctx.session.access_token))!
-
   return next({
     ctx: {
       session: ctx.session,
       authUserId: ctx.session.user.id,
-      payload: {
-        userPermissionMask: BigInt(jwtPayload.permissions_mask ?? 0),
-      },
     },
   })
 })

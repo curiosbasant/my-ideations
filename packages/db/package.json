@@ -13,7 +13,7 @@
     "list": "supabase migration list --local",
     "migrate": "supabase migration up --include-all",
     "pull": "supabase db pull",
-    "push": "supabase db push",
+    "push": "pnpm with-env -- drizzle-kit push",
     "reset": "supabase db reset",
     "seed": "pnpm with-env -v DRY=0 -- tsx seed.ts",
     "seed:dry": "pnpm --silent with-env -v DRY=1 -- tsx seed.ts > ../../supabase/seed.sql",
@@ -32,7 +32,7 @@
   "devDependencies": {
     "@my/tsconfig": "workspace:*",
     "@snaplet/copycat": "^5.0.0",
-    "@snaplet/seed": "^0.96.0",
+    "@snaplet/seed": "^0.96.1",
     "dotenv-cli": "^7.4.1",
     "drizzle-kit": "^0.21.4",
     "typescript": "^5.4.4"

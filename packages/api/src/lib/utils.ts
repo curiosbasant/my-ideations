@@ -1,11 +1,4 @@
-import { SQL } from 'drizzle-orm'
-import { PgColumn, type PgSelect } from 'drizzle-orm/pg-core'
 import { jwtVerify } from 'jose'
-
-import { z } from '@my/lib/zod'
-
-export const idSchema = z.string()
-export const userIdSchema = idSchema.uuid()
 
 export function splitFullName(name: string): [string, string?] {
   name = name.trim().replace(/ +/, ' ')
@@ -20,12 +13,4 @@ export function getJwtPayload(token: string) {
   } catch (_) {
     return null
   }
-}
-
-export function withPagination<T extends PgSelect>(
-  qb: T,
-  options: { orderBy: PgColumn | SQL | SQL.Aliased; limit: number; page?: number },
-) {
-  qb = qb.orderBy(options.orderBy).limit(options.limit)
-  return options.page ? qb.offset((options.page - 1) * options.limit) : qb
 }
