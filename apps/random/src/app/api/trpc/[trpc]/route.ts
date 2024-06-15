@@ -19,7 +19,6 @@ function setCorsHeaders(res: Response) {
 }
 
 async function handler(req: NextRequest) {
-  console.log(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!)
   const response = await fetchRequestHandler({
     endpoint: '/api/trpc',
     router: appRouter,

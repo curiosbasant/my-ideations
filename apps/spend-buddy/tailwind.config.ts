@@ -5,13 +5,13 @@ import type { Config } from 'tailwindcss'
 export default {
   content: ['./src/(app|components)/**/*.tsx'],
   presets: [nativewind],
+  darkMode: 'class',
   theme: {
     extend: {
       borderColor: {
         DEFAULT: 'rgb(var(--border) / <alpha-value>)',
       },
       colors: {
-        cool: '#f00f0f',
         border: 'rgb(var(--border) / <alpha-value>)',
         input: 'rgb(var(--input) / <alpha-value>)',
         ring: 'rgb(var(--ring) / <alpha-value>)',

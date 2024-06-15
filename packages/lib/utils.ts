@@ -123,6 +123,17 @@ export function safeParseText<T>(schema: ZodSchema<T>, value: unknown) {
 }
 
 /**
+ * Safely parses a json string without errors
+ */
+export function safeParseJsonText(text: string) {
+  try {
+    return JSON.parse(text)
+  } catch (_) {
+    return null
+  }
+}
+
+/**
  * Groups an array of items by a specified key.
  * Return `null` to skip the current iteration.
  */
