@@ -14,7 +14,12 @@ Toast.show = (message: string, options?: ToastOptions) => {
 }
 
 Toast.error = (message: string, options?: ToastOptions) => {
-  NativeToast.show(message, { ...defaultOptions, ...options, backgroundColor: 'red' })
+  NativeToast.show(message, {
+    ...defaultOptions,
+    duration: NativeToast.durations.LONG,
+    ...options,
+    backgroundColor: 'red',
+  })
 }
 
 Toast.Provider = RootSiblingParent

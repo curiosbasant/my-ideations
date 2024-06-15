@@ -22,6 +22,7 @@ export default function RootLayout() {
           <StatusBar style={colorScheme === 'dark' ? 'light' : 'dark'} animated translucent />
           <Stack screenOptions={{ animation: 'slide_from_right', headerShadowVisible: true }}>
             <Stack.Screen name='(auth)/login' options={{ title: 'Login', animation: 'none' }} />
+            <Stack.Screen name='(auth)/register' options={{ title: 'Create Account' }} />
             <Stack.Screen name='(protected)' options={{ headerShown: false }} />
             <Stack.Screen
               name='loading'

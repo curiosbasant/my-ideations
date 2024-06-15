@@ -1,12 +1,14 @@
 {
-  "extends": "expo/tsconfig.base",
+  "extends": "@my/tsconfig/base.json",
   "compilerOptions": {
-    "strict": true,
     "paths": {
       "~/*": ["./src/*"],
       "~/assets/*": ["./assets/*"]
     },
+    "jsx": "react-native",
+    "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json",
     "types": ["nativewind/types"]
   },
-  "include": ["src/**/*.ts", "src/**/*.tsx", ".expo/types/**/*.ts", "expo-env.d.ts"]
+  "include": ["src", "*.ts", "*.js", ".expo/types/**/*.ts", "expo-env.d.ts"],
+  "exclude": ["node_modules"]
 }

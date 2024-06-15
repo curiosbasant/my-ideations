@@ -18,7 +18,7 @@ export const SITE_URL = (() => {
       return 'https://inkpreview.vercel.app'
 
     default: {
-      return 'http://localhost:3000'
+      return 'http://10.0.2.2:3000'
     }
   }
 })()

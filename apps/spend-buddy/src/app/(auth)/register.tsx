@@ -3,38 +3,57 @@ import { Link } from 'expo-router'
 
 import { Controller, useForm, zodResolver } from '@my/core/hook-form'
 import { useRefs } from '@my/core/hooks'
-import { signInSchema } from '@my/lib/schema/auth'
+import { signUpSchema } from '@my/lib/schema/auth'
 
 import { Button, Input, Screen } from '~/components/ui'
-import { useLoginMutation } from '~/features/auth'
+import { useRegisterMutation } from '~/features/auth'
 
-export default function LoginScreen() {
-  const { mutate, isPending } = useLoginMutation()
+export default function RegisterScreen() {
+  const { mutate, isPending } = useRegisterMutation()
 
   return (
     <Screen loading={isPending} className='gap-10'>
-      <LoginForm loading={isPending} onSubmit={mutate} />
+      <RegisterForm loading={isPending} onSubmit={mutate} />
       <Text className='color-foreground text-center text-sm'>
-        Don't have an account yet?{' '}
-        <Link href='/register' className='color-primary'>
-          Create one now!
+        Already have an account?{' '}
+        <Link href='/login' className='color-primary'>
+          Login now!
         </Link>
       </Text>
     </Screen>
   )
 }
 
-function LoginForm(props: { loading?: boolean; onSubmit(data: signInSchema): void }) {
-  const [emailRef, passwordRef] = useRefs<TextInput | null>(null)
-  const { control, handleSubmit, getValues } = useForm<signInSchema>({
-    resolver: zodResolver(signInSchema),
+function RegisterForm(props: { loading?: boolean; onSubmit(data: signUpSchema): void }) {
+  const [fullNameRef, emailRef, passwordRef] = useRefs<TextInput | null>(null)
+  const { control, handleSubmit, getValues } = useForm<signUpSchema>({
+    resolver: zodResolver(signUpSchema),
   })
 
   return (
     <View className='gap-6'>
       <Controller
         control={control}
-        name='userIdentity'
+        name='fullName'
+        render={({ field: { value, onChange, onBlur } }) => (
+          <Input.Text
+            ref={fullNameRef}
+            value={value}
+            onChangeText={onChange}
+            onBlur={onBlur}
+            label='Full Name'
+            icon='user-tie'
+            autoCapitalize='words'
+            autoComplete='name'
+            spellCheck={false}
+            returnKeyType='next'
+            onSubmitEditing={() => emailRef.current?.focus()}
+          />
+        )}
+      />
+      <Controller
+        control={control}
+        name='mobileOrEmail'
         render={({ field, fieldState }) => (
           <Input.Email
             ref={emailRef}
@@ -62,10 +81,10 @@ function LoginForm(props: { loading?: boolean; onSubmit(data: signInSchema): voi
             label='Password'
             icon='key'
             errorMessage={fieldState.error?.message}
-            autoComplete='current-password'
+            autoComplete='new-password'
             returnKeyType='done'
             onSubmitEditing={() => {
-              getValues('userIdentity').length
+              getValues('mobileOrEmail').length
                 ? handleSubmit(props.onSubmit)
                 : emailRef.current?.focus()
             }}
@@ -74,7 +93,7 @@ function LoginForm(props: { loading?: boolean; onSubmit(data: signInSchema): voi
       />
 
       <Button loading={props.loading} onPress={handleSubmit(props.onSubmit)}>
-        Login
+        Create Account
       </Button>
     </View>
   )

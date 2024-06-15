@@ -46,6 +46,8 @@
     "@babel/core": "^7.20.0",
     "@dev-plugins/react-query": "^0.0.6",
     "@my/api": "workspace:*",
+    "@my/tsconfig": "workspace:*",
+    "@types/babel__core": "^7.20.5",
     "@types/react": "~18.2.45",
     "dotenv-cli": "^7.4.1",
     "typescript": "~5.3.3"
