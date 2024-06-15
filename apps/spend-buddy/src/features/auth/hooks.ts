@@ -37,3 +37,12 @@ export function useLoginMutation() {
     },
   })
 }
+
+export function useLogout() {
+  const utils = api.useUtils()
+  return api.auth.signOut.useMutation({
+    onMutate() {
+      utils.auth.getSession.setData(undefined, null)
+    },
+  })
+}

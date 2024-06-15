@@ -35,6 +35,10 @@ export default function ProtectedLayout() {
         ),
       }}>
       <Tabs.Screen name='index' options={{ title: 'Home', tabBarIcon: getTabIconByName('home') }} />
+      <Tabs.Screen
+        name='settings'
+        options={{ title: 'Settings', tabBarIcon: getTabIconByName('cog') }}
+      />
     </Tabs>
   ) : (
     <Redirect href='/login' />
