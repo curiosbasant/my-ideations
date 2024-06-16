@@ -1,5 +1,5 @@
 import { Pressable, Text } from 'react-native'
-import { Redirect, Tabs } from 'expo-router'
+import { Link, Redirect, Tabs } from 'expo-router'
 import { useColorScheme } from 'nativewind'
 
 import { Icon, type IconName } from '~/components/ui'
@@ -16,6 +16,7 @@ export default function TabsLayout() {
   return (
     <Tabs
       screenOptions={{
+        headerPressColor: pressColor,
         headerShadowVisible: true,
         tabBarButton: (props) => <Pressable {...props} android_ripple={{ color: pressColor }} />,
         tabBarLabel: (props) => (
@@ -26,7 +27,20 @@ export default function TabsLayout() {
       }}>
       <Tabs.Screen
         name='groups'
-        options={{ title: 'Groups', tabBarIcon: getTabIconByName('users') }}
+        options={{
+          headerRightContainerStyle: { paddingEnd: 14 },
+          headerRight: (props) => (
+            <Link href='/groups/create' asChild>
+              <Pressable
+                className='items-center justify-center rounded-full p-1 px-2'
+                android_ripple={{ color: props.pressColor, radius: 30 }}>
+                <Icon name='plus' className='color-foreground' size={22} />
+              </Pressable>
+            </Link>
+          ),
+          title: 'Groups',
+          tabBarIcon: getTabIconByName('users'),
+        }}
       />
       <Tabs.Screen
         name='settings'

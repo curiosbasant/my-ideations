@@ -1,5 +1,5 @@
 import { count, eq, schema, sql } from '@my/db'
-import { z } from '@my/lib/zod'
+import { groupCreateSchema } from '@my/lib/schema/spend-buddy'
 
 import { protectedProcedure } from '../trpc'
 
@@ -21,5 +21,27 @@ export const spendBuddyRouter = {
 
       return rows
     }),
+    create: protectedProcedure
+      .input(groupCreateSchema)
+      .mutation(async ({ ctx: { db, authUserId }, input }) => {
+        const data = await db.transaction(async (tx) => {
+          const [group] = await tx
+            .insert(schema.group)
+            .values({
+              name: input.name,
+              createdBy: authUserId,
+            })
+            .returning({ id: schema.group.id })
+
+          await tx.insert(schema.member).values({
+            groupId: group.id,
+            userId: authUserId,
+          })
+
+          return group
+        })
+
+        return data
+      }),
   },
 }

@@ -1,6 +1,11 @@
 import { index, integer, pgTableCreator, primaryKey, text, varchar } from 'drizzle-orm/pg-core'
 
-import { getBaseColumns, getCurrentTimestampColumn, getUserIdColumn } from './base'
+import {
+  CASCADE_ON_DELETE,
+  getBaseColumns,
+  getCurrentTimestampColumn,
+  getUserIdColumn,
+} from './base'
 
 const table = pgTableCreator((tableName) => `sb__${tableName}`)
 
@@ -12,7 +17,7 @@ export const group = table('group', {
 export const member = table(
   'group_member',
   {
-    groupId: text('group_id').references(() => group.id),
+    groupId: text('group_id').references(() => group.id, CASCADE_ON_DELETE),
     userId: getUserIdColumn('user_id'),
     joinedAt: getCurrentTimestampColumn('joined_at'),
   },
@@ -25,7 +30,7 @@ export const spend = table(
   'group_spend',
   {
     ...getBaseColumns(),
-    groupId: text('group_id').references(() => group.id),
+    groupId: text('group_id').references(() => group.id, CASCADE_ON_DELETE),
     amount: integer('amount').notNull(),
     note: text('note'),
   },
