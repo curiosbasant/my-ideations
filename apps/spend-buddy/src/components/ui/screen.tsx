@@ -20,6 +20,7 @@ export function Screen(props: PropsWithChildren<ScreenProps>) {
     </Container>
   )
 }
+Screen.displayName = 'ui/Screen'
 
 export function LoadingScreenManager(props: { bool?: boolean }) {
   const pathname = usePathname()
@@ -55,3 +56,4 @@ export function LoadingScreen() {
     </View>
   )
 }
+Screen.Loading = LoadingScreen

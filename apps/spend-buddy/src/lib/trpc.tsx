@@ -41,6 +41,7 @@ const queryClientConfig: QueryClientConfig = {
   defaultOptions: {
     queries: {
       staleTime: __DEV__ ? 0 : 5 * 60 * 1000,
+      retry: __DEV__ ? false : undefined,
     },
     mutations: {
       onError(error) {

@@ -6,6 +6,12 @@ import { api } from '~/lib/trpc'
 export function useSession() {
   return api.auth.getSession.useQuery()
 }
+export function useUser() {
+  const utils = api.useUtils()
+  const user = utils.auth.getSession.getData()?.user
+  if (!user) throw new Error('Where did the user go?')
+  return user
+}
 
 export function useRegisterMutation() {
   const utils = api.useUtils()

@@ -1,5 +1,7 @@
 import { jwtVerify } from 'jose'
 
+import { schema, sql } from '@my/db'
+
 export function splitFullName(name: string): [string, string?] {
   name = name.trim().replace(/ +/, ' ')
   const li = name.lastIndexOf(' ')
@@ -14,3 +16,8 @@ export function getJwtPayload(token: string) {
     return null
   }
 }
+
+export const userDisplayName =
+  sql<string>`coalesce(${schema.profile.firstName} || ' ' || ${schema.profile.lastName}, ${schema.profile.firstName}, ${schema.profile.lastName}, ${schema.profile.username}, ${schema.profile.id}::text)`.as(
+    'display_name',
+  )
