@@ -1,20 +1,23 @@
 import { useEffect, type PropsWithChildren } from 'react'
-import { Keyboard, View } from 'react-native'
+import { Keyboard, ScrollView, Text, View } from 'react-native'
 import { router, usePathname } from 'expo-router'
 
 import { cn } from '~/lib/cva'
+import { Spinner } from './spinner'
 
 export type ScreenProps = {
-  loading?: boolean
   className?: string
+  loading?: boolean
+  scrollable?: boolean
 }
 
 export function Screen(props: PropsWithChildren<ScreenProps>) {
+  const Container = props.scrollable ? ScrollView : View
   return (
-    <View className={cn('flex-1 bg-background p-8', props.className)}>
+    <Container className={cn('flex-1 bg-background p-8', props.className)}>
       <LoadingScreenManager bool={props.loading} />
       {props.children}
-    </View>
+    </Container>
   )
 }
 
@@ -43,3 +46,12 @@ export const showLoadingScreen = () => {
   router.push('/loading')
 }
 export const hideLoadingScreen = () => router.canGoBack() && router.back()
+
+export function LoadingScreen() {
+  return (
+    <View className='flex-1 items-center justify-center gap-4 bg-background/85'>
+      <Spinner className='color-primary' size={64} />
+      <Text className='color-foreground text-lg font-bold'>Please wait...</Text>
+    </View>
+  )
+}

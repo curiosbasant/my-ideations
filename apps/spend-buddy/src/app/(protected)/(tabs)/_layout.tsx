@@ -1,45 +1,23 @@
-import { useEffect } from 'react'
 import { Pressable, Text } from 'react-native'
-import { useFonts } from 'expo-font'
-import { Redirect, SplashScreen, Tabs } from 'expo-router'
+import { Redirect, Tabs } from 'expo-router'
 import { useColorScheme } from 'nativewind'
 
 import { Icon, type IconName } from '~/components/ui'
 import { useSession } from '~/features/auth/hooks'
-import LoadingScreen from '../loading'
 
-export default function ProtectedLayout() {
-  const { data, isSuccess, isLoading } = useSession()
-  const [isFontLoaded] = useFonts({
-    SpaceMono: require('~/assets/fonts/SpaceMono-Regular.ttf'),
-  })
+export default function TabsLayout() {
+  const { colorScheme } = useColorScheme()
+  const { data, isSuccess } = useSession()
 
-  const shouldWait = isLoading || !isFontLoaded
+  if (isSuccess && !data) return <Redirect href='/login' />
 
-  useEffect(() => {
-    if (!shouldWait) {
-      SplashScreen.hideAsync()
-    }
-  }, [shouldWait])
+  const pressColor = colorScheme === 'dark' ? 'rgba(255,255,255,0.066)' : 'rgba(0,0,0,0.066)'
 
-  if (shouldWait) return <LoadingScreen />
-
-  return data && isSuccess ? (
+  return (
     <Tabs
-      initialRouteName='index'
       screenOptions={{
         headerShadowVisible: true,
-        tabBarButton(props) {
-          const { colorScheme } = useColorScheme()
-          return (
-            <Pressable
-              {...props}
-              android_ripple={{
-                color: colorScheme === 'dark' ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)',
-              }}
-            />
-          )
-        },
+        tabBarButton: (props) => <Pressable {...props} android_ripple={{ color: pressColor }} />,
         tabBarLabel: (props) => (
           <Text className={`text-xs ${props.focused ? 'color-primary' : 'color-muted-foreground'}`}>
             {props.children}
@@ -47,7 +25,7 @@ export default function ProtectedLayout() {
         ),
       }}>
       <Tabs.Screen
-        name='index'
+        name='groups'
         options={{ title: 'Groups', tabBarIcon: getTabIconByName('users') }}
       />
       <Tabs.Screen
@@ -55,8 +33,6 @@ export default function ProtectedLayout() {
         options={{ title: 'Settings', tabBarIcon: getTabIconByName('cog') }}
       />
     </Tabs>
-  ) : (
-    <Redirect href='/login' />
   )
 }
 
