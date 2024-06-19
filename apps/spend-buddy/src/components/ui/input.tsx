@@ -20,7 +20,7 @@ export function Input(props: InputProps) {
         {props.label}
         {props.optional && <Text className='text-sm text-muted-foreground'> (Optional)</Text>}
       </Text>
-      <View className='h-10 flex-row items-center rounded-md border border-input focus-within:border-primary'>
+      <View className='h-10 flex-row items-center rounded-md border border-input'>
         {props.icon && <Icon name={props.icon} className='pl-2.5 text-foreground opacity-75' />}
         {props.children}
       </View>

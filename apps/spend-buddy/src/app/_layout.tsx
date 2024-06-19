@@ -3,12 +3,10 @@ import '../styles.css'
 
 import { useEffect } from 'react'
 import { useFonts } from 'expo-font'
-import { Slot, SplashScreen, Stack } from 'expo-router'
+import { Slot, SplashScreen } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native'
-import { useColorScheme } from 'nativewind'
 
-import { Toast } from '~/components/ui/toast'
+import { Stack, Toast } from '~/components/ui'
 import { useSession } from '~/features/auth'
 import { TRPCProvider } from '~/lib/trpc'
 
@@ -16,15 +14,11 @@ import { TRPCProvider } from '~/lib/trpc'
 SplashScreen.preventAutoHideAsync()
 
 export default function RootLayout() {
-  const { colorScheme } = useColorScheme()
-
   return (
     <TRPCProvider>
       <Toast.Provider>
-        <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-          <StatusBar style={colorScheme === 'dark' ? 'light' : 'dark'} animated translucent />
+        <StatusBar style='light' animated translucent />
           <StackScreens />
-        </ThemeProvider>
       </Toast.Provider>
     </TRPCProvider>
   )
@@ -47,7 +41,9 @@ function StackScreens() {
   if (shouldWait) return <Slot />
 
   return (
-    <Stack screenOptions={{ animation: 'slide_from_right', headerShadowVisible: true }}>
+    <Stack
+      headerClassName='bg-primary color-primary-foreground'
+      screenOptions={{ animation: 'slide_from_right' }}>
       <Stack.Screen name='(auth)/login' options={{ title: 'Login', animation: 'none' }} />
       <Stack.Screen name='(auth)/register' options={{ title: 'Create Account' }} />
 

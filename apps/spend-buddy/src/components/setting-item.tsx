@@ -20,7 +20,7 @@ export function SettingItem(
     children: (
       <>
         <Icon name={props.iconName} className='color-foreground w-6 opacity-75' size={16} />
-        <Text className='color-foreground flex-1 text-lg'>{props.label}</Text>
+        <Text className='color-foreground flex-1 text-lg capitalize'>{props.label}</Text>
         {'to' in props && (
           <Icon name='chevron-right' className='color-foreground w-6 opacity-75' size={14} />
         )}

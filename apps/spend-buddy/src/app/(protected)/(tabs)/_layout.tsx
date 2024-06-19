@@ -1,8 +1,8 @@
-import { Pressable, Text } from 'react-native'
-import { Link, Redirect, Tabs } from 'expo-router'
+import { Pressable } from 'react-native'
+import { Link, Redirect } from 'expo-router'
 import { useColorScheme } from 'nativewind'
 
-import { Icon, type IconName } from '~/components/ui'
+import { Icon, Tabs, type IconName } from '~/components/ui'
 import { useSession } from '~/features/auth/hooks'
 
 export default function TabsLayout() {
@@ -15,26 +15,23 @@ export default function TabsLayout() {
 
   return (
     <Tabs
+      headerClassName='bg-primary color-primary-foreground'
+      headerRightContainerClassName='pr-4'
+      tabBarClassName='color-muted-foreground bg-secondary border-border'
+      tabBarActiveClassName='color-primary bg-secondary'
       screenOptions={{
         headerPressColor: pressColor,
-        headerShadowVisible: true,
         tabBarButton: (props) => <Pressable {...props} android_ripple={{ color: pressColor }} />,
-        tabBarLabel: (props) => (
-          <Text className={`text-xs ${props.focused ? 'color-primary' : 'color-muted-foreground'}`}>
-            {props.children}
-          </Text>
-        ),
       }}>
       <Tabs.Screen
         name='groups'
         options={{
-          headerRightContainerStyle: { paddingEnd: 14 },
           headerRight: (props) => (
             <Link href='/groups/create' asChild>
               <Pressable
                 className='items-center justify-center rounded-full p-1 px-2'
                 android_ripple={{ color: props.pressColor, radius: 30 }}>
-                <Icon name='plus' className='color-foreground' size={22} />
+                <Icon name='plus' color={props.tintColor} size={20} />
               </Pressable>
             </Link>
           ),
@@ -55,7 +52,7 @@ const getTabIconByName =
   (props: { focused: boolean; color: string; size: number }) => (
     <Icon
       name={props.focused ? activeIconName : iconName}
-      className={props.focused ? 'color-primary' : 'color-muted-foreground'}
+      color={props.color}
       size={props.size * 0.75}
     />
   )
