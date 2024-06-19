@@ -1,5 +1,6 @@
-import { FlatList, Pressable, Text, View, type ListRenderItemInfo } from 'react-native'
+import { Pressable, Text, View } from 'react-native'
 import { Link } from 'expo-router'
+import { FlashList, type ListRenderItemInfo } from '@shopify/flash-list'
 
 import { Screen } from '~/components/ui'
 import { useGroupList, type GroupListItem } from '~/features/group'
@@ -13,18 +14,24 @@ export default function GroupsScreen() {
 }
 
 function GroupList() {
-  const { data, isLoading } = useGroupList()
+  const { data, isLoading, isRefetching, refetch } = useGroupList()
 
   if (data) {
     return data.length === 0 ? (
       <View></View>
     ) : (
-      <FlatList className='' data={data} renderItem={GroupListItem} />
+      <FlashList
+        data={data}
+        renderItem={GroupListItem}
+        refreshing={isRefetching}
+        onRefresh={refetch}
+        estimatedItemSize={70}
+      />
     )
   }
 
   if (isLoading) return <Text className='color-foreground mt-8 text-center'>Loading...</Text>
-  return <Text className='color-foreground text-center'>Something went wrong</Text>
+  return <Screen.Crash />
 }
 
 function GroupListItem(props: ListRenderItemInfo<GroupListItem>) {

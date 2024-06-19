@@ -1,4 +1,5 @@
 import { Text, View } from 'react-native'
+import { Image } from 'expo-image'
 import { Stack, useLocalSearchParams } from 'expo-router'
 import { FlashList, type ListRenderItemInfo } from '@shopify/flash-list'
 
@@ -23,6 +24,7 @@ export default function GroupViewScreen() {
         <FlashList
           data={group.spends}
           extraData={user.id}
+          ListEmptyComponent={EmptyListView}
           renderItem={SpendListItem}
           inverted={!!group.spends.length}
           refreshing={isRefetching}
@@ -43,7 +45,7 @@ export default function GroupViewScreen() {
     )
   }
 
-  return null
+  return <Screen.Crash />
 }
 
 function SpendListItem(props: ListRenderItemInfo<GroupSpendListItem>) {
@@ -63,6 +65,19 @@ function SpendListItem(props: ListRenderItemInfo<GroupSpendListItem>) {
       <Text className='color-muted-foreground self-center text-xs'>
         {formatDistanceToNow(props.item.createdAt)} ago
       </Text>
+    </View>
+  )
+}
+
+function EmptyListView() {
+  return (
+    <View className='flex-1 items-center justify-center gap-8 p-16'>
+      <Image
+        className='size-64 bg-blue-400'
+        style={{ tintColor: 'white', width: 150, height: 150 }}
+        source={require('~/assets/icons/wallet_empty.png')}
+      />
+      <Text className='color-secondary-foreground text-lg font-bold'>No Spendings Yet!</Text>
     </View>
   )
 }

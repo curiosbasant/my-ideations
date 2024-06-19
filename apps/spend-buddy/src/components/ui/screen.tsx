@@ -1,5 +1,6 @@
 import { useEffect, type PropsWithChildren } from 'react'
 import { Keyboard, ScrollView, Text, View } from 'react-native'
+import { Image } from 'expo-image'
 import { router, usePathname } from 'expo-router'
 
 import { cn } from '~/lib/cva'
@@ -57,3 +58,26 @@ export function LoadingScreen() {
   )
 }
 Screen.Loading = LoadingScreen
+
+export function CrashScreen(props: Partial<{ title: string | null; message: string | null }>) {
+  return (
+    <View className='items-center gap-2 p-16'>
+      <Image
+        source={require('~/assets/icons/snap_error.png')}
+        contentFit='contain'
+        style={{ height: 150, width: '100%' }}
+      />
+      {props.title === null || (
+        <Text className='color-foreground mt-8 text-center text-3xl font-bold'>
+          {props.title || 'Oops!'}
+        </Text>
+      )}
+      {props.message === null || (
+        <Text className='color-foreground text-center'>
+          {props.message || 'Something went wrong'}
+        </Text>
+      )}
+    </View>
+  )
+}
+Screen.Crash = CrashScreen
