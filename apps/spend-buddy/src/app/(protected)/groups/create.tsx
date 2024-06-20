@@ -11,6 +11,8 @@ export default function GroupCreateScreen() {
     resolver: zodResolver(groupCreateSchema),
   })
 
+  const triggerSubmit = handleSubmit((data) => mutate(data))
+
   return (
     <Screen className='gap-6' loading={isPending}>
       <Controller
@@ -23,13 +25,12 @@ export default function GroupCreateScreen() {
             onBlur={field.onBlur}
             label='Group Name'
             errorMessage={fieldState.error?.message}
-            blurOnSubmit={false}
             returnKeyType='done'
-            onSubmitEditing={() => handleSubmit((data) => mutate(data))}
+            onSubmitEditing={triggerSubmit}
           />
         )}
       />
-      <Button onPress={handleSubmit((data) => mutate(data))}>Create</Button>
+      <Button onPress={triggerSubmit}>Create</Button>
     </Screen>
   )
 }

@@ -16,15 +16,15 @@
       "label": "Start Server",
       "script": "dev",
       "path": "apps/random",
-      "detail": "pnpm with-env next dev",
+      "detail": "next dev",
       "type": "npm",
       "problemMatcher": []
     },
     {
       "label": "Start Mobile",
-      "script": "dev",
+      "script": "android",
       "path": "apps/spend-buddy",
-      "detail": "adb reverse tcp:3000 tcp:3000 & pnpm with-env expo start --android",
+      "detail": "expo start --android",
       "type": "npm",
       "problemMatcher": []
     },

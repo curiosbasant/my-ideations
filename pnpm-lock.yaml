@@ -15,8 +15,8 @@ importers:
         specifier: ^1.13.2
         version: 1.13.4(@types/node@20.14.2)(typescript@5.4.5)
       supabase:
-        specifier: ^1.172.2
-        version: 1.176.10
+        specifier: ^1.178.2
+        version: 1.178.2
       turbo:
         specifier: ^1.13.2
         version: 1.13.4
@@ -67,7 +67,7 @@ importers:
         version: 4.36.1(@tanstack/react-query@4.36.1(react-dom@18.2.0(react@18.2.0))(react-native@0.74.2(@types/react@18.2.79)(react@18.2.0))(react@18.2.0))(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       '@trpc/server':
         specifier: next
-        version: 11.0.0-rc.403
+        version: 11.0.0-rc.413
       cookie:
         specifier: ^0.5.0
         version: 0.5.0
@@ -223,7 +223,7 @@ importers:
         specifier: ~13.0.3
         version: 13.0.3(expo@51.0.14(@babel/core@7.24.7)(@babel/preset-env@7.24.7(@babel/core@7.24.7)))
       nativewind:
-        specifier: 4.0.36
+        specifier: ^4.0.36
         version: 4.0.36(@babel/core@7.24.7)(react-native-reanimated@3.10.1(@babel/core@7.24.7)(react-native@0.74.2(@babel/core@7.24.7)(@babel/preset-env@7.24.7(@babel/core@7.24.7))(@types/react@18.2.79)(react@18.2.0))(react@18.2.0))(react-native-safe-area-context@4.10.1(react-native@0.74.2(@babel/core@7.24.7)(@babel/preset-env@7.24.7(@babel/core@7.24.7))(@types/react@18.2.79)(react@18.2.0))(react@18.2.0))(react-native@0.74.2(@babel/core@7.24.7)(@babel/preset-env@7.24.7(@babel/core@7.24.7))(@types/react@18.2.79)(react@18.2.0))(react@18.2.0)(tailwindcss@3.4.4(ts-node@10.9.2(@types/node@20.14.2)(typescript@5.3.3)))
       react:
         specifier: 18.2.0
@@ -294,7 +294,7 @@ importers:
         version: link:../lib
       '@trpc/server':
         specifier: next
-        version: 11.0.0-rc.403
+        version: 11.0.0-rc.413
       jose:
         specifier: ^5.2.3
         version: 5.4.0
@@ -325,10 +325,10 @@ importers:
         version: 5.45.0(react@18.2.0)
       '@trpc/client':
         specifier: next
-        version: 11.0.0-rc.403(@trpc/server@11.0.0-rc.403)
+        version: 11.0.0-rc.413(@trpc/server@11.0.0-rc.413)
       '@trpc/react-query':
         specifier: next
-        version: 11.0.0-rc.403(@tanstack/react-query@5.45.0(react@18.2.0))(@trpc/client@11.0.0-rc.403(@trpc/server@11.0.0-rc.403))(@trpc/server@11.0.0-rc.403)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+        version: 11.0.0-rc.413(@tanstack/react-query@5.45.0(react@18.2.0))(@trpc/client@11.0.0-rc.413(@trpc/server@11.0.0-rc.413))(@trpc/server@11.0.0-rc.413)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       '@uidotdev/usehooks':
         specifier: ^2.4.1
         version: 2.4.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
@@ -3395,25 +3395,25 @@ packages:
     peerDependencies:
       '@trpc/server': 10.45.2
 
-  '@trpc/client@11.0.0-rc.403':
-    resolution: {integrity: sha512-4Elc4/PQI1H2Mpt3VWVINtYI8HhuPkvu/xowGDlHhYemmuvR3OqnE4H3I1XiPS9EXDOT397VadTJ5eGhQIZxPA==}
+  '@trpc/client@11.0.0-rc.413':
+    resolution: {integrity: sha512-+5WRP5gK2OLHWSCkNDkrEeO0EmLScytUPU0jhp3gdKrpyx1AkVqCXUDioofkNXCmQd/WNUrWF35tkVfY3kYwlQ==}
     peerDependencies:
-      '@trpc/server': 11.0.0-rc.403+ab71a1be6
+      '@trpc/server': 11.0.0-rc.413+87f0cbc94
 
-  '@trpc/react-query@11.0.0-rc.403':
-    resolution: {integrity: sha512-a4emDWo0EBTPULqzC92pJaJYTjM71GzdZfYcKYMxGMaevruUQAgmnXumeTkUUrj3QP6eszxVgolSu69Jw+iiSQ==}
+  '@trpc/react-query@11.0.0-rc.413':
+    resolution: {integrity: sha512-b+mmkhmdijEFa3vEoUwgpcq36ha7U5f/1w2RW/UQGMFrEJyZJn3lFQpEXQSvn23AEnE0ckDBJo+y/TDrleMCNQ==}
     peerDependencies:
       '@tanstack/react-query': ^5.40.0
-      '@trpc/client': 11.0.0-rc.403+ab71a1be6
-      '@trpc/server': 11.0.0-rc.403+ab71a1be6
+      '@trpc/client': 11.0.0-rc.413+87f0cbc94
+      '@trpc/server': 11.0.0-rc.413+87f0cbc94
       react: '>=18.2.0'
       react-dom: '>=18.2.0'
 
   '@trpc/server@10.45.2':
     resolution: {integrity: sha512-wOrSThNNE4HUnuhJG6PfDRp4L2009KDVxsd+2VYH8ro6o/7/jwYZ8Uu5j+VaW+mOmc8EHerHzGcdbGNQSAUPgg==}
 
-  '@trpc/server@11.0.0-rc.403':
-    resolution: {integrity: sha512-DIt0GijW3nzq3zk9rFw1Ly/b6E9eTcsKV+caOMSeJl6A7Pby8QpdKaN8yJZDHhEojULeIVFNE4Izals5T0fQgg==}
+  '@trpc/server@11.0.0-rc.413':
+    resolution: {integrity: sha512-fQl7/69pSfk+7+Emm5eOCoAW6f2anxKV/3mUObQfFe0NLH0d4XwGyJuYV+sK7NBy1oit0Qwg12B0EXdsIryDuw==}
 
   '@tsconfig/node10@1.0.11':
     resolution: {integrity: sha512-DcRjDCujK/kCk/cUe8Xz8ZSpm8mS3mNNpta+jGCA6USEDfktlNvm1+IuZ9eTcDbNk41BHwpHHeW+N1lKCz4zOw==}
@@ -5047,6 +5047,10 @@ packages:
     resolution: {integrity: sha512-CrWQNaEl1/6WeZoarcM9LHupTo3RpZO2Pdk1vktwzPiQTsJnAKJmm3TACKeG5UZbWDfaH2AbvYxzP96y0MT7fA==}
     engines: {node: '>=14'}
 
+  foreground-child@3.2.1:
+    resolution: {integrity: sha512-PXUUyLqrR2XCWICfv6ukppP96sdFwWbNEnfEMt7jNsISjMsvaLNinAHNDYyvkyU+SZG2BTSbT5NjG+vZslfGTA==}
+    engines: {node: '>=14'}
+
   form-data@3.0.1:
     resolution: {integrity: sha512-RHkBKtLWUVwd7SqRIvCZMEvAMoGUp0XU+seQiZejj0COz3RI3hWP4sCv3gZWWLjJTd7rGwcsF5eKZGii0r/hbg==}
     engines: {node: '>= 6'}
@@ -5192,6 +5196,11 @@ packages:
 
   glob@10.4.1:
     resolution: {integrity: sha512-2jelhlq3E4ho74ZyVLN03oKdAZVUa6UDZzFLVH1H7dnoax+y9qyaq8zBkfDIggjniU19z0wU18y16jMB2eyVIw==}
+    engines: {node: '>=16 || 14 >=14.18'}
+    hasBin: true
+
+  glob@10.4.2:
+    resolution: {integrity: sha512-GwMlUF6PkPo3Gk21UxkCohOv0PLcIXVtKyLlpEI28R/cO/4eNOdmLk3CMW1wROV/WR/EsZOWAfBbBOqYvs88/w==}
     engines: {node: '>=16 || 14 >=14.18'}
     hasBin: true
 
@@ -6703,6 +6712,9 @@ packages:
     resolution: {integrity: sha512-5NPgf87AT2STgwa2ntRMr45jTKrYBGkVU36yT0ig/n/GMAa3oPqhZfIQ2kMEimReg0+t9kZViDVZ83qfVUlckg==}
     engines: {node: '>= 14'}
 
+  package-json-from-dist@1.0.0:
+    resolution: {integrity: sha512-dATvCeZN/8wQsGywez1mzHtTlP22H8OEfPrVMLNr4/eGa+ijtLn/6M5f0dY8UKNrC2O9UCU6SSoG3qRKnt7STw==}
+
   pako@0.2.9:
     resolution: {integrity: sha512-NUcwaKxUxWrZLpDG+z/xZaCgQITkA/Dv4V/T6bw7VON6l1Xz/VnrBqrYjZQ12TamKHzITTfOEIYUj48y2KXImA==}
 
@@ -7786,8 +7798,8 @@ packages:
   sudo-prompt@9.2.1:
     resolution: {integrity: sha512-Mu7R0g4ig9TUuGSxJavny5Rv0egCEtpZRNMrZaYS1vxkiIxGiGUwoezU3LazIQ+KE04hTrTfNPgxU5gzi7F5Pw==}
 
-  supabase@1.176.10:
-    resolution: {integrity: sha512-VS+dRcNk7H2+qG4hCz2WqSKFeZxrMZ0k+LQnHiUX+d9bls1QyZvpXj3qmo4Hs30VS6ZYRQ3sgNVE2tEKWv6kcA==}
+  supabase@1.178.2:
+    resolution: {integrity: sha512-JdjNY56cF5PbuhFdhgdYah5qXOPRsLQn0kXaY7uapTFopdIFX4tRiFXqKSig8S0SdznF/y/f6vLdq30Sek1ZZQ==}
     engines: {npm: '>=8'}
     hasBin: true
 
@@ -7839,8 +7851,8 @@ packages:
     resolution: {integrity: sha512-DZ4yORTwrbTj/7MZYq2w+/ZFdI6OZ/f9SFHR+71gIVUZhOQPHzVCLpvRnPgyaMpfWxxk/4ONva3GQSyNIKRv6A==}
     engines: {node: '>=10'}
 
-  tar@7.2.0:
-    resolution: {integrity: sha512-hctwP0Nb4AB60bj8WQgRYaMOuJYRAPMGiQUAotms5igN8ppfQM+IvjQ5HcKu1MaZh2Wy2KWVTe563Yj8dfc14w==}
+  tar@7.4.0:
+    resolution: {integrity: sha512-XQs0S8fuAkQWuqhDeCdMlJXDX80D7EOVLDPVFkna9yQfzS+PHKgfxcei0jf6/+QAWcjqrnC8uM3fSAnrQl+XYg==}
     engines: {node: '>=18'}
 
   teeny-request@8.0.3:
@@ -12262,21 +12274,21 @@ snapshots:
     dependencies:
       '@trpc/server': 10.45.2
 
-  '@trpc/client@11.0.0-rc.403(@trpc/server@11.0.0-rc.403)':
+  '@trpc/client@11.0.0-rc.413(@trpc/server@11.0.0-rc.413)':
     dependencies:
-      '@trpc/server': 11.0.0-rc.403
+      '@trpc/server': 11.0.0-rc.413
 
-  '@trpc/react-query@11.0.0-rc.403(@tanstack/react-query@5.45.0(react@18.2.0))(@trpc/client@11.0.0-rc.403(@trpc/server@11.0.0-rc.403))(@trpc/server@11.0.0-rc.403)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)':
+  '@trpc/react-query@11.0.0-rc.413(@tanstack/react-query@5.45.0(react@18.2.0))(@trpc/client@11.0.0-rc.413(@trpc/server@11.0.0-rc.413))(@trpc/server@11.0.0-rc.413)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)':
     dependencies:
       '@tanstack/react-query': 5.45.0(react@18.2.0)
-      '@trpc/client': 11.0.0-rc.403(@trpc/server@11.0.0-rc.403)
-      '@trpc/server': 11.0.0-rc.403
+      '@trpc/client': 11.0.0-rc.413(@trpc/server@11.0.0-rc.413)
+      '@trpc/server': 11.0.0-rc.413
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
 
   '@trpc/server@10.45.2': {}
 
-  '@trpc/server@11.0.0-rc.403': {}
+  '@trpc/server@11.0.0-rc.413': {}
 
   '@tsconfig/node10@1.0.11': {}
 
@@ -14152,6 +14164,11 @@ snapshots:
       cross-spawn: 7.0.3
       signal-exit: 4.1.0
 
+  foreground-child@3.2.1:
+    dependencies:
+      cross-spawn: 7.0.3
+      signal-exit: 4.1.0
+
   form-data@3.0.1:
     dependencies:
       asynckit: 0.4.0
@@ -14325,6 +14342,15 @@ snapshots:
       jackspeak: 3.4.0
       minimatch: 9.0.4
       minipass: 7.1.2
+      path-scurry: 1.11.1
+
+  glob@10.4.2:
+    dependencies:
+      foreground-child: 3.2.1
+      jackspeak: 3.4.0
+      minimatch: 9.0.4
+      minipass: 7.1.2
+      package-json-from-dist: 1.0.0
       path-scurry: 1.11.1
 
   glob@6.0.4:
@@ -16049,6 +16075,8 @@ snapshots:
       degenerator: 5.0.1
       netmask: 2.0.2
 
+  package-json-from-dist@1.0.0: {}
+
   pako@0.2.9: {}
 
   pako@1.0.11: {}
@@ -16888,7 +16916,7 @@ snapshots:
 
   rimraf@5.0.7:
     dependencies:
-      glob: 10.4.1
+      glob: 10.4.2
 
   run-async@2.4.1: {}
 
@@ -17267,12 +17295,12 @@ snapshots:
 
   sudo-prompt@9.2.1: {}
 
-  supabase@1.176.10:
+  supabase@1.178.2:
     dependencies:
       bin-links: 4.0.4
       https-proxy-agent: 7.0.4
       node-fetch: 3.3.2
-      tar: 7.2.0
+      tar: 7.4.0
     transitivePeerDependencies:
       - supports-color
 
@@ -17406,7 +17434,7 @@ snapshots:
       mkdirp: 1.0.4
       yallist: 4.0.0
 
-  tar@7.2.0:
+  tar@7.4.0:
     dependencies:
       '@isaacs/fs-minipass': 4.0.1
       chownr: 3.0.0

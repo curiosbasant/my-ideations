@@ -66,7 +66,7 @@ function LoginForm(props: { loading?: boolean; onSubmit(data: signInSchema): voi
             returnKeyType='done'
             onSubmitEditing={() => {
               getValues('userIdentity').length
-                ? handleSubmit(props.onSubmit)
+                ? handleSubmit(props.onSubmit)()
                 : emailRef.current?.focus()
             }}
           />

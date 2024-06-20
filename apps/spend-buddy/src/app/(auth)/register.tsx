@@ -85,7 +85,7 @@ function RegisterForm(props: { loading?: boolean; onSubmit(data: signUpSchema): 
             returnKeyType='done'
             onSubmitEditing={() => {
               getValues('mobileOrEmail').length
-                ? handleSubmit(props.onSubmit)
+                ? handleSubmit(props.onSubmit)()
                 : emailRef.current?.focus()
             }}
           />
