@@ -1,29 +1,16 @@
-import { setStatusBarStyle } from 'expo-status-bar'
-import { useColorScheme } from 'nativewind'
-
 import { SettingItem } from '~/components/setting-item'
 import { Screen } from '~/components/ui'
+import type { ThemeValue } from '~/features/theme'
 import { useStorage } from '~/lib/storage'
 
-type ThemeValue = 'light' | 'dark' | 'system'
-
 export default function ChangeThemeScreen() {
-  const { colorScheme, setColorScheme } = useColorScheme()
-  const [preference, setPreference] = useStorage<ThemeValue>('theme-preference')
-  const currentTheme = preference ?? colorScheme ?? 'system'
-
-  const handleThemeChange = (theme: ThemeValue) => {
-    setColorScheme(theme)
-    setPreference(theme)
-    // Keeping status bar light, as header is always dark
-    setStatusBarStyle('light')
-  }
+  const [preference, setPreference] = useStorage<ThemeValue>('theme-preference', 'system')
 
   return (
     <Screen className='gap-6 px-0'>
-      <ThemeItem currentTheme={currentTheme} theme='system' onThemeChange={handleThemeChange} />
-      <ThemeItem currentTheme={currentTheme} theme='light' onThemeChange={handleThemeChange} />
-      <ThemeItem currentTheme={currentTheme} theme='dark' onThemeChange={handleThemeChange} />
+      <ThemeItem currentTheme={preference} theme='system' onThemeChange={setPreference} />
+      <ThemeItem currentTheme={preference} theme='light' onThemeChange={setPreference} />
+      <ThemeItem currentTheme={preference} theme='dark' onThemeChange={setPreference} />
     </Screen>
   )
 }

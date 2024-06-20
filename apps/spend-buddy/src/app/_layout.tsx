@@ -8,6 +8,7 @@ import { StatusBar } from 'expo-status-bar'
 
 import { Stack, Toast } from '~/components/ui'
 import { useSession } from '~/features/auth'
+import { useTheme } from '~/features/theme'
 import { TRPCProvider } from '~/lib/trpc'
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
@@ -25,6 +26,8 @@ export default function RootLayout() {
 }
 
 function StackScreens() {
+  // Load and set theme, imperatively
+  useTheme()
   const { isLoading } = useSession()
   const [isFontLoaded] = useFonts({
     SpaceMono: require('~/assets/fonts/SpaceMono-Regular.ttf'),
