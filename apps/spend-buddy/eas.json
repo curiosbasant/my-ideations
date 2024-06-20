@@ -1,0 +1,53 @@
+{
+  "cli": {
+    "version": ">= 10.0.2"
+  },
+  "build": {
+    "base": {
+      "node": "20.11.1",
+      "ios": {
+        "resourceClass": "m-medium"
+      }
+    },
+    "development": {
+      "extends": "base",
+      "developmentClient": true,
+      "distribution": "internal",
+      "env": {
+        "APP_NAME": "Dev Spend Buddy",
+        "APP_ICON": "./assets/brand/icon.dev.png",
+        "APP_ADAPTIVE_ICON": "./assets/brand/adaptive-icon.dev.png",
+        "APP_PACKAGE_ID": "com.curios.spendbuddy.dev"
+      }
+    },
+    "preview": {
+      "extends": "base",
+      "channel": "preview",
+      "distribution": "internal",
+      "ios": {
+        "simulator": true
+      },
+      "env": {
+        "APP_NAME": "Preview Spend Buddy",
+        "APP_ICON": "./assets/brand/icon.preview.png",
+        "APP_ADAPTIVE_ICON": "./assets/brand/adaptive-icon.preview.png",
+        "APP_PACKAGE_ID": "com.curios.spendbuddy.preview",
+        "EXPO_PUBLIC_SITE_URL": "https://curios.vercel.app"
+      }
+    },
+    "production": {
+      "extends": "base",
+      "channel": "production",
+      "env": {
+        "APP_NAME": "Spend Buddy",
+        "APP_ICON": "./assets/brand/icon.png",
+        "APP_ADAPTIVE_ICON": "./assets/brand/adaptive-icon.png",
+        "APP_PACKAGE_ID": "com.curios.spendbuddy",
+        "EXPO_PUBLIC_SITE_URL": "https://curios.vercel.app"
+      }
+    }
+  },
+  "submit": {
+    "production": {}
+  }
+}

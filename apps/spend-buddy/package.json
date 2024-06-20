@@ -8,6 +8,8 @@
     "ios": "pnpm with-env expo start --ios",
     "web": "pnpm with-env expo start --web",
     "lint": "expo lint",
+    "eas:build": "eas build --profile preview --platform android",
+    "eas:update": "eas update --branch preview --platform android",
     "with-env": "dotenv -e ../../.env --"
   },
   "dependencies": {
@@ -52,6 +54,7 @@
     "@types/babel__core": "^7.20.5",
     "@types/react": "~18.2.45",
     "dotenv-cli": "^7.4.1",
+    "eas-cli": "^10.0.2",
     "typescript": "~5.3.3"
   },
   "private": true

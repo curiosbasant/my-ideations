@@ -13,9 +13,9 @@ export const SITE_URL = (() => {
   // Being used for eas-updates
   switch (channel) {
     case 'production':
-      return 'https://inkcourse.vercel.app'
+      return 'https://curios.vercel.app'
     case 'preview':
-      return 'https://inkpreview.vercel.app'
+      return 'https://curios.vercel.app'
 
     default: {
       return 'http://10.0.2.2:3000'
