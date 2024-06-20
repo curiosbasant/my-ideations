@@ -1,5 +1,5 @@
 import { and, count, desc, eq, schema, sql } from '@my/db'
-import { groupCreateSchema } from '@my/lib/schema/spend-buddy'
+import { groupCreateSchema, groupSpendCreateSchema } from '@my/lib/schema/spend-buddy'
 import { z } from '@my/lib/zod'
 
 import { userDisplayName } from '../lib/utils'
@@ -12,7 +12,9 @@ export const spendBuddyRouter = {
         .select({
           id: schema.group.id,
           name: schema.group.name,
-          totalSpends: sql<number>`sum(${schema.spend.amount}) / 100`.as('total_spends'),
+          totalSpends: sql<number>`coalesce(sum(${schema.spend.amount}) / 100, 0)`.as(
+            'total_spends',
+          ),
           memberCount: count(schema.member.groupId),
         })
         .from(schema.member)
@@ -77,5 +79,22 @@ export const spendBuddyRouter = {
 
       return group
     }),
+    spend: {
+      create: protectedProcedure
+        .input(groupSpendCreateSchema)
+        .mutation(async ({ ctx: { db, authUserId }, input }) => {
+          const [spend] = await db
+            .insert(schema.spend)
+            .values({
+              groupId: input.groupId,
+              amount: input.amount * 100,
+              note: input.note,
+              createdBy: authUserId,
+            })
+            .returning({ id: schema.spend.id })
+
+          return spend
+        }),
+    },
   },
 }

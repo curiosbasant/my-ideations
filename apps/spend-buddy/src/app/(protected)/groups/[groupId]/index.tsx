@@ -1,10 +1,10 @@
-import { Text, View } from 'react-native'
-import { Stack, useLocalSearchParams } from 'expo-router'
+import { Pressable, Text, View } from 'react-native'
+import { Link, Stack, useLocalSearchParams } from 'expo-router'
 import { FlashList, type ListRenderItemInfo } from '@shopify/flash-list'
 
 import { formatDistanceToNow } from '@my/lib/date'
 
-import { Image, Screen } from '~/components/ui'
+import { Icon, Image, Screen } from '~/components/ui'
 import { useUser } from '~/features/auth'
 import { useGroup, type GroupSpendListItem } from '~/features/group'
 import { UserAvatar } from '~/features/user'
@@ -19,7 +19,18 @@ export default function GroupViewScreen() {
   if (group) {
     return (
       <Screen className='p-0'>
-        <Stack.Screen options={{ title: group.name }} />
+        <Stack.Screen
+          options={{
+            title: group.name,
+            headerRight: (props) => (
+              <Link href={`/groups/${group.id}/spend`} asChild>
+                <Pressable className='items-center justify-center rounded-full p-1 px-2'>
+                  <Icon name='plus' color={props.tintColor} size={20} />
+                </Pressable>
+              </Link>
+            ),
+          }}
+        />
         <FlashList
           data={group.spends}
           extraData={user.id}
@@ -79,4 +90,3 @@ function EmptyListView() {
     </View>
   )
 }
-

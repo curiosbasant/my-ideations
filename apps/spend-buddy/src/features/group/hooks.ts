@@ -23,3 +23,14 @@ export function useGroupList() {
 export function useGroup(groupId: string) {
   return api.get.useQuery(groupId)
 }
+
+export function useGroupSpendAdd() {
+  const utils = rootApi.useUtils()
+  return api.spend.create.useMutation({
+    async onSuccess(_, input) {
+      utils.spendBuddy.group.get.invalidate()
+      Toast.show('Spend added to the group!')
+      router.navigate(`/groups/${input.groupId}`)
+    },
+  })
+}

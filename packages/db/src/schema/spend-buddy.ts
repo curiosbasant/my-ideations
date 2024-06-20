@@ -17,7 +17,9 @@ export const group = table('group', {
 export const member = table(
   'group_member',
   {
-    groupId: text('group_id').references(() => group.id, CASCADE_ON_DELETE),
+    groupId: text('group_id')
+      .notNull()
+      .references(() => group.id, CASCADE_ON_DELETE),
     userId: getUserIdColumn('user_id'),
     joinedAt: getCurrentTimestampColumn('joined_at'),
   },
@@ -30,7 +32,9 @@ export const spend = table(
   'group_spend',
   {
     ...getBaseColumns(),
-    groupId: text('group_id').references(() => group.id, CASCADE_ON_DELETE),
+    groupId: text('group_id')
+      .notNull()
+      .references(() => group.id, CASCADE_ON_DELETE),
     amount: integer('amount').notNull(),
     note: text('note'),
   },

@@ -19,7 +19,7 @@ export default function RootLayout() {
     <TRPCProvider>
       <Toast.Provider>
         <StatusBar style='light' animated translucent />
-          <StackScreens />
+        <StackScreens />
       </Toast.Provider>
     </TRPCProvider>
   )
@@ -52,6 +52,8 @@ function StackScreens() {
 
       <Stack.Screen name='(protected)/(tabs)' options={{ headerShown: false }} />
       <Stack.Screen name='(protected)/groups/create' options={{ title: 'Create Group' }} />
+      <Stack.Screen name='(protected)/groups/[groupId]/index' />
+      <Stack.Screen name='(protected)/groups/[groupId]/spend' options={{ title: 'Add Spend' }} />
       <Stack.Screen name='(protected)/settings/change-theme' options={{ title: 'Change Theme' }} />
 
       <Stack.Screen
