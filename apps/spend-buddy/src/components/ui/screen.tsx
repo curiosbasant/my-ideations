@@ -2,6 +2,7 @@ import { useEffect, type PropsWithChildren } from 'react'
 import { Keyboard, ScrollView, Text, View } from 'react-native'
 import { Image } from 'expo-image'
 import { router, usePathname } from 'expo-router'
+import { StatusBar } from 'expo-status-bar'
 
 import { cn } from '~/lib/cva'
 import { Spinner } from './spinner'
@@ -16,6 +17,7 @@ export function Screen(props: PropsWithChildren<ScreenProps>) {
   const Container = props.scrollable ? ScrollView : View
   return (
     <Container className={cn('flex-1 bg-background p-8', props.className)}>
+      <StatusBar style='light' animated translucent />
       <LoadingScreenManager bool={props.loading} />
       {props.children}
     </Container>

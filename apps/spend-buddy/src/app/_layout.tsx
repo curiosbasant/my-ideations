@@ -4,7 +4,6 @@ import '../styles.css'
 import { useEffect } from 'react'
 import { useFonts } from 'expo-font'
 import { Slot, SplashScreen } from 'expo-router'
-import { StatusBar } from 'expo-status-bar'
 
 import { Stack, Toast } from '~/components/ui'
 import { useSession } from '~/features/auth'
@@ -18,7 +17,6 @@ export default function RootLayout() {
   return (
     <TRPCProvider>
       <Toast.Provider>
-        <StatusBar style='light' animated translucent />
         <StackScreens />
       </Toast.Provider>
     </TRPCProvider>

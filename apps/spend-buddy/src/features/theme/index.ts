@@ -1,5 +1,4 @@
 import { useEffect } from 'react'
-import { setStatusBarStyle } from 'expo-status-bar'
 import { colorScheme } from 'nativewind'
 
 import { useStorage } from '~/lib/storage'
@@ -11,8 +10,6 @@ export function useTheme() {
 
   useEffect(() => {
     colorScheme.set(preference)
-    //  Keeping status bar light, as header is always dark
-    setStatusBarStyle('light')
   }, [preference])
 
   return [preference, setPreference] as const

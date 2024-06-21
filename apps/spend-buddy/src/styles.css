@@ -14,7 +14,7 @@
     --popover: var(--background);
     --popover-foreground: var(--foreground);
     /* Primary colors for <Button /> */
-    --primary: 257.31 82.53% 73.27%;
+    --primary: 257.31 80% 70%;
     --primary-foreground: 210 20% 98%;
     /* Secondary colors for <Button /> */
     --secondary: 220 14.3% 95.9%;

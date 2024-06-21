@@ -61,18 +61,24 @@ export default function GroupViewScreen() {
 
 function SpendListItem(props: ListRenderItemInfo<GroupSpendListItem>) {
   const isMine = props.item.user.id === props.extraData
+  const textColor = isMine ? 'color-primary-foreground' : 'color-foreground'
   return (
     <View
       className={`gap-4 p-4 ${isMine ? 'flex-row-reverse self-end' : 'flex-row self-start'} items-start`}>
       <UserAvatar url={props.item.user.avatarUrl} />
       <View
-        className={`max-w-[50%] flex-1 gap-2 ${isMine ? 'bg-primary/75' : 'bg-secondary'} rounded-lg px-4 pb-3 pt-2.5`}>
-        <Text className='color-foreground text-sm'>{props.item.user.displayName}</Text>
+        className={`relative max-w-[50%] flex-1 gap-2 ${isMine ? 'bg-primary' : 'bg-secondary'} rounded-lg px-4 pb-3 pt-2`}>
+        <Icon
+          name='play'
+          className={`absolute ${isMine ? 'color-primary -right-2' : 'color-secondary -left-2'} -top-0.5 rotate-90`}
+          size={18}
+        />
+        <Text className={`${textColor} font-bold`}>{props.item.user.displayName}</Text>
         <View className='mt-2 flex-row items-end justify-center'>
-          <Text className='color-foreground self-center text-3xl font-bold'>₹</Text>
-          <Text className='color-foreground text-5xl font-bold'>{props.item.amount}</Text>
+          <Text className={`${textColor} self-center text-3xl font-bold`}>₹</Text>
+          <Text className={`${textColor} text-5xl font-bold`}>{props.item.amount}</Text>
         </View>
-        <Text className='color-secondary-foreground text-sm'>{props.item.note}</Text>
+        <Text className={`${textColor} text-sm`}>{props.item.note}</Text>
       </View>
       <Text className='color-muted-foreground self-center text-xs'>
         {formatDistanceToNow(props.item.createdAt)} ago

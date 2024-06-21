@@ -35,14 +35,16 @@ function RegisterForm(props: { loading?: boolean; onSubmit(data: signUpSchema): 
       <Controller
         control={control}
         name='fullName'
-        render={({ field: { value, onChange, onBlur } }) => (
+        render={({ field, fieldState }) => (
           <Input.Text
             ref={fullNameRef}
-            value={value}
-            onChangeText={onChange}
-            onBlur={onBlur}
+            value={field.value}
+            onChangeText={field.onChange}
+            onBlur={field.onBlur}
             label='Full Name'
+            errorMessage={fieldState.error?.message}
             icon='user-tie'
+            blurOnSubmit={false}
             autoCapitalize='words'
             autoComplete='name'
             spellCheck={false}
@@ -81,12 +83,13 @@ function RegisterForm(props: { loading?: boolean; onSubmit(data: signUpSchema): 
             label='Password'
             icon='key'
             errorMessage={fieldState.error?.message}
+            blurOnSubmit={Boolean(getValues('fullName')?.length)}
             autoComplete='new-password'
             returnKeyType='done'
             onSubmitEditing={() => {
-              getValues('mobileOrEmail').length
+              getValues('fullName')?.length
                 ? handleSubmit(props.onSubmit)()
-                : emailRef.current?.focus()
+                : fullNameRef.current?.focus()
             }}
           />
         )}

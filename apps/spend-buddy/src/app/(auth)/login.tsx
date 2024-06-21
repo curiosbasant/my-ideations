@@ -62,10 +62,11 @@ function LoginForm(props: { loading?: boolean; onSubmit(data: signInSchema): voi
             label='Password'
             icon='key'
             errorMessage={fieldState.error?.message}
+            blurOnSubmit={Boolean(getValues('userIdentity')?.length)}
             autoComplete='current-password'
             returnKeyType='done'
             onSubmitEditing={() => {
-              getValues('userIdentity').length
+              getValues('userIdentity')?.length
                 ? handleSubmit(props.onSubmit)()
                 : emailRef.current?.focus()
             }}
