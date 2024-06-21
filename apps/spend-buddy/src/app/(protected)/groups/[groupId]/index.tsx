@@ -32,6 +32,7 @@ export default function GroupViewScreen() {
           }}
         />
         <FlashList
+          contentContainerClassName='py-4'
           data={group.spends}
           extraData={user.id}
           ListEmptyComponent={EmptyListView}
@@ -61,7 +62,8 @@ export default function GroupViewScreen() {
 function SpendListItem(props: ListRenderItemInfo<GroupSpendListItem>) {
   const isMine = props.item.user.id === props.extraData
   return (
-    <View className={`gap-4 p-4 ${isMine ? 'flex-row-reverse self-end' : 'flex-row self-start'}`}>
+    <View
+      className={`gap-4 p-4 ${isMine ? 'flex-row-reverse self-end' : 'flex-row self-start'} items-start`}>
       <UserAvatar url={props.item.user.avatarUrl} />
       <View
         className={`max-w-[50%] flex-1 gap-2 ${isMine ? 'bg-primary/75' : 'bg-secondary'} rounded-lg px-4 pb-3 pt-2.5`}>

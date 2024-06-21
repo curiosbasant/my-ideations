@@ -19,6 +19,7 @@ export default function TabsLayout() {
       headerRightContainerClassName='pr-4'
       tabBarClassName='color-muted-foreground bg-secondary border-border'
       tabBarActiveClassName='color-primary bg-secondary'
+      tabBarLabelClassName='mb-1'
       screenOptions={{
         headerPressColor: pressColor,
         tabBarButton: (props) => <Pressable {...props} android_ripple={{ color: pressColor }} />,

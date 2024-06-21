@@ -24,7 +24,8 @@ export function useStorage<T>(key: string, defaultValue?: T) {
 
       return typeof defaultValue === 'undefined' ? value : safeParseJsonText(value) ?? value
     },
-    initialData: defaultValue,
+    // @ts-expect-error
+    placeholderData: defaultValue,
     staleTime: Infinity,
   })
   const { mutate } = useMutation({

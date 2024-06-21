@@ -2,7 +2,7 @@ import { Pressable, Text, View } from 'react-native'
 import { Link } from 'expo-router'
 import { FlashList, type ListRenderItemInfo } from '@shopify/flash-list'
 
-import { Screen } from '~/components/ui'
+import { Image, Screen } from '~/components/ui'
 import { useGroupList, type GroupListItem } from '~/features/group'
 
 export default function GroupsScreen() {
@@ -17,12 +17,12 @@ function GroupList() {
   const { data, isLoading, isRefetching, refetch } = useGroupList()
 
   if (data) {
-    return data.length === 0 ? (
-      <View></View>
-    ) : (
+    return (
       <FlashList
+        contentContainerClassName='py-5'
         data={data}
         renderItem={GroupListItem}
+        ListEmptyComponent={EmptyListView}
         refreshing={isRefetching}
         onRefresh={refetch}
         estimatedItemSize={70}
@@ -40,7 +40,7 @@ function GroupListItem(props: ListRenderItemInfo<GroupListItem>) {
       href={`/groups/${props.item.id}?groupName=${props.item.name}`}
       asChild
       key={props.item.id}>
-      <Pressable className='mb-1 gap-2 bg-secondary px-6 py-2'>
+      <Pressable className='mb-1 gap-2 bg-secondary px-6 py-3'>
         <Text className='color-foreground text-xl font-bold' numberOfLines={1}>
           {props.item.name}
         </Text>
@@ -49,5 +49,16 @@ function GroupListItem(props: ListRenderItemInfo<GroupListItem>) {
         </Text>
       </Pressable>
     </Link>
+  )
+}
+
+function EmptyListView() {
+  return (
+    <View className='flex-1 items-center justify-center gap-8 p-16'>
+      <Image className='size-40' source={require('~/assets/icons/empty_box.png')} />
+      <Text className='color-secondary-foreground text-lg font-bold'>
+        You have not joined any groups yet
+      </Text>
+    </View>
   )
 }

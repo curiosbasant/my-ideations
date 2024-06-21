@@ -14,6 +14,7 @@ function CustomTabs({
   headerRightContainerStyle,
   tabBarStyle,
   tabBarActiveStyle,
+  tabBarLabelStyle,
   ...props
 }: ExpoTabProps &
   Partial<{
@@ -21,9 +22,11 @@ function CustomTabs({
     headerRightContainerStyle: ViewStyle & TextStyle
     tabBarStyle: ViewStyle & TextStyle
     tabBarActiveStyle: ViewStyle & TextStyle
+    tabBarLabelStyle: TextStyle
   }>) {
   const screenOptions: BottomTabNavigationOptions = {
     headerRightContainerStyle,
+    tabBarLabelStyle,
   }
 
   if (headerStyle) {
@@ -73,6 +76,7 @@ export const Tabs = Object.assign(
     headerRightContainerClassName: 'headerRightContainerStyle',
     tabBarClassName: 'tabBarStyle',
     tabBarActiveClassName: 'tabBarActiveStyle',
+    tabBarLabelClassName: 'tabBarLabelStyle',
   }),
   {
     Screen: ExpoTabs.Screen,
