@@ -1,11 +1,11 @@
 import type { ConfigContext, ExpoConfig } from 'expo/config'
 
 export default function defineConfig({ config }: ConfigContext): ExpoConfig {
-  // Fallback to dev environment
-  const appName = process.env.APP_NAME || 'Dev Spend Buddy'
-  const appPackageId = process.env.APP_PACKAGE_ID || 'com.curios.spendbuddy.dev'
-  const appIcon = process.env.APP_ICON || './assets/brand/icon.dev.png'
-  const appAdaptiveIcon = process.env.APP_ADAPTIVE_ICON || './assets/brand/adaptive-icon.dev.png'
+  // Fallback to production environment
+  const appName = process.env.APP_NAME || 'Spend Buddy'
+  const appPackageId = process.env.APP_PACKAGE_ID || 'com.curios.spendbuddy'
+  const appIcon = process.env.APP_ICON || './assets/brand/icon.png'
+  const appAdaptiveIcon = process.env.APP_ADAPTIVE_ICON || './assets/brand/adaptive-icon.png'
 
   const appSplashImage = process.env.APP_SLASH_IMAGE || './assets/brand/splash.png'
 
@@ -15,7 +15,7 @@ export default function defineConfig({ config }: ConfigContext): ExpoConfig {
     ...config,
     // App details
     name: appName,
-    version: '0.1.0',
+    version: '0.1.1',
     slug: 'spend-buddy',
     scheme: 'spend-buddy',
     description: 'A platform track money spends with friends to split later.',

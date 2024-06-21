@@ -69,10 +69,6 @@ export default {
     require('@tailwindcss/container-queries'),
     require('@tailwindcss/forms'),
     plugin(({ addComponents, addUtilities, addVariant }) => {
-      addComponents({
-        'surface-a': 'bg-slate-100 dark:bg-slate-800',
-      })
-
       addUtilities({
         // Pointer Events
         '.pointer-events-box-none': {

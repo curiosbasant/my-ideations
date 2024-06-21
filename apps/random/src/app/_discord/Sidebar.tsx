@@ -1,7 +1,7 @@
 import Image from 'next/image'
 
-import { ServerGroupType, ServerType, serverGroupSchema, serverSchema } from '~/discord/schemas'
 import { firestore } from '~/utils/firebase.server'
+import { serverGroupSchema, ServerGroupType, serverSchema, ServerType } from './schemas'
 import ServerCreateButton from './ServerCreateButton'
 import ServerListItem from './ServerListItem'
 
@@ -11,13 +11,13 @@ async function fetchServers() {
     firestore.collection('apps/discord/servers').get(),
   ])
   const servers = serversSnapshot.docs.map((doc) =>
-    serverSchema.parse({ ...doc.data(), id: doc.id })
+    serverSchema.parse({ ...doc.data(), id: doc.id }),
   )
 
   const groupDataCache = serverGroupsSnapshot.docs.reduce(
     (cache, group) =>
       cache.set(group.id, serverGroupSchema.parse({ ...group.data(), id: group.id })),
-    new Map<string, ServerGroupType>()
+    new Map<string, ServerGroupType>(),
   )
 
   const obj: Record<
@@ -72,7 +72,7 @@ export default async function Sidebar() {
               <ServerGroupListItem {...server} key={server.id} />
             ) : (
               <ServerListItem {...server} href={`/discord/${server.id}`} key={server.id} />
-            )
+            ),
           )}
           <ServerGroupListItem name='wow' servers={[]} />
 
@@ -94,7 +94,7 @@ function ServerGroupListItem(props: {
   return (
     <li className='relative'>
       <ul className='group relative isolate'>
-        <div className='absolute inset-0 -z-10 mx-3 rounded-b-5xl rounded-t-3xl bg-slate-50/10 opacity-0 transition-all duration-500 group-[:has([data-toggle-folder]:checked)]:opacity-100' />
+        <div className='rounded-b-5xl absolute inset-0 -z-10 mx-3 rounded-t-3xl bg-slate-50/10 opacity-0 transition-all duration-500 group-[:has([data-toggle-folder]:checked)]:opacity-100' />
 
         <li className='relative z-10'>
           <span className='absolute left-0 top-1/2 h-2 w-1 -translate-y-1/2 rounded-r-full transition-all duration-300 group-[:has([data-toggle-folder]:not(:checked))]:bg-slate-50 peer-[:has(:first-child:hover)]:h-6' />

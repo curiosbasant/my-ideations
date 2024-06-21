@@ -5,7 +5,12 @@
   "build": {
     "base": {
       "node": "20.11.1",
+      "pnpm": "9.4.0",
+      "android": {
+        "image": "latest"
+      },
       "ios": {
+        "image": "latest",
         "resourceClass": "m-medium"
       }
     },
@@ -26,23 +31,12 @@
       "distribution": "internal",
       "ios": {
         "simulator": true
-      },
-      "env": {
-        "APP_NAME": "Preview Spend Buddy",
-        "APP_ICON": "./assets/brand/icon.preview.png",
-        "APP_ADAPTIVE_ICON": "./assets/brand/adaptive-icon.preview.png",
-        "APP_PACKAGE_ID": "com.curios.spendbuddy.preview",
-        "EXPO_PUBLIC_SITE_URL": "https://curios.vercel.app"
       }
     },
     "production": {
       "extends": "base",
       "channel": "production",
       "env": {
-        "APP_NAME": "Spend Buddy",
-        "APP_ICON": "./assets/brand/icon.png",
-        "APP_ADAPTIVE_ICON": "./assets/brand/adaptive-icon.png",
-        "APP_PACKAGE_ID": "com.curios.spendbuddy",
         "EXPO_PUBLIC_SITE_URL": "https://curios.vercel.app"
       }
     }

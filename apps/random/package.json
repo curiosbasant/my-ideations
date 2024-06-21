@@ -44,19 +44,18 @@
     "zustand": "^4.3.6"
   },
   "devDependencies": {
-    "@headlessui/tailwindcss": "^0.1.2",
+    "@headlessui/tailwindcss": "^0.2.1",
     "@ngneat/falso": "^6.4.0",
-    "@tailwindcss/container-queries": "^0.1.1",
-    "@tailwindcss/forms": "^0.5.3",
+    "@tailwindcss/forms": "^0.5.7",
     "@types/cookie": "^0.5.1",
     "@types/js-cookie": "^3.0.3",
     "@types/node": "18.15.11",
     "@types/react": "^18.0.32",
     "@types/react-dom": "^18.0.11",
-    "autoprefixer": "^10.4.14",
+    "autoprefixer": "^10.4.19",
     "dotenv-cli": "^7.4.1",
-    "postcss": "^8.4.21",
-    "tailwindcss": "^3.3.1",
+    "postcss": "^8.4.38",
+    "tailwindcss": "^3.4.4",
     "typescript": "~5.0.3"
   },
   "private": true
