@@ -52,6 +52,8 @@ export default function defineConfig({ config }: ConfigContext): ExpoConfig {
       },
     },
     githubUrl: 'https://github.com/curiosbasant/my-ideations.git',
+    // Required to auto build by expo for this "extra.eas.projectId"
+    owner: 'curiosbasant',
     plugins: ['expo-router'],
     runtimeVersion: {
       policy: 'appVersion',
