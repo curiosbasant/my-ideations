@@ -1,7 +1,7 @@
 import { router } from 'expo-router'
 
-import { Toast } from '~/components/ui'
 import { api as rootApi } from '~/lib/trpc'
+import { Toast } from '~/ui'
 
 const api = rootApi.spendBuddy.group
 

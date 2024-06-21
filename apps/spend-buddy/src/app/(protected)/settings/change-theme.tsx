@@ -1,7 +1,7 @@
-import { SettingItem } from '~/components/setting-item'
-import { Screen } from '~/components/ui'
+import { SettingItem } from '~/features/global'
 import type { ThemeValue } from '~/features/theme'
 import { useStorage } from '~/lib/storage'
+import { Screen } from '~/ui'
 
 export default function ChangeThemeScreen() {
   const [preference, setPreference] = useStorage<ThemeValue>('theme-preference', 'system')

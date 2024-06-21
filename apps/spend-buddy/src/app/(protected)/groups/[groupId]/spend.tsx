@@ -5,8 +5,8 @@ import { Controller, useForm, zodResolver } from '@my/core/hook-form'
 import { useRefs } from '@my/core/hooks'
 import { groupSpendCreateSchema } from '@my/lib/schema/spend-buddy'
 
-import { Button, Input, Screen } from '~/components/ui'
 import { useGroupSpendAdd } from '~/features/group'
+import { Button, Input, Screen } from '~/ui'
 
 export default function GroupSpendCreateScreen() {
   const params = useLocalSearchParams<{ groupId: string }>()

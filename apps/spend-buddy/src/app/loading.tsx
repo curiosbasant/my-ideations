@@ -1,1 +1,1 @@
-export { LoadingScreen as default } from '~/components/ui'
+export { LoadingScreen as default } from '~/ui/screen'

@@ -2,8 +2,8 @@ import { Pressable } from 'react-native'
 import { Link, Redirect } from 'expo-router'
 import { useColorScheme } from 'nativewind'
 
-import { Icon, Tabs, type IconName } from '~/components/ui'
 import { useSession } from '~/features/auth/hooks'
+import { Icon, Tabs, type IconName } from '~/ui'
 
 export default function TabsLayout() {
   const { colorScheme } = useColorScheme()

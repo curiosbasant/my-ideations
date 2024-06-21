@@ -1,8 +1,8 @@
 import { Controller, useForm, zodResolver } from '@my/core/hook-form'
 import { groupCreateSchema } from '@my/lib/schema/spend-buddy'
 
-import { Button, Input, Screen } from '~/components/ui'
 import { useGroupCreate } from '~/features/group'
+import { Button, Input, Screen } from '~/ui'
 
 export default function GroupCreateScreen() {
   const { isPending, mutate } = useGroupCreate()

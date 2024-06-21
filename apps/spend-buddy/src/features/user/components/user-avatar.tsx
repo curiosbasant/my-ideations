@@ -1,6 +1,6 @@
 import { Image, View } from 'react-native'
 
-import { Icon } from '~/components/ui'
+import { Icon } from '~/ui'
 
 export function UserAvatar(props: { url?: string | null }) {
   return (

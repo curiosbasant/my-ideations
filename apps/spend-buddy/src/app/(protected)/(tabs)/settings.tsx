@@ -2,9 +2,9 @@ import { checkForUpdateAsync, fetchUpdateAsync, reloadAsync, useUpdates } from '
 
 import { tuplifyPromise } from '@my/lib/utils'
 
-import { SettingItem } from '~/components/setting-item'
-import { Screen, Toast } from '~/components/ui'
 import { useLogout } from '~/features/auth'
+import { AppVersion, SettingItem } from '~/features/global'
+import { Screen, Toast } from '~/ui'
 
 export default function SettingsScreen() {
   return (
@@ -12,6 +12,7 @@ export default function SettingsScreen() {
       <SettingItem iconName='palette' label='Change Theme' to='/settings/change-theme' />
       <AppUpdateButton />
       <LogoutButton />
+      <AppVersion />
     </Screen>
   )
 }

@@ -1,7 +1,7 @@
 import { router } from 'expo-router'
 
-import { Toast } from '~/components/ui'
 import { api } from '~/lib/trpc'
+import { Toast } from '~/ui'
 
 export function useSession() {
   return api.auth.getSession.useQuery()

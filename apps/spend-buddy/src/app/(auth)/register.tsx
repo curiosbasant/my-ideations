@@ -5,8 +5,8 @@ import { Controller, useForm, zodResolver } from '@my/core/hook-form'
 import { useRefs } from '@my/core/hooks'
 import { signUpSchema } from '@my/lib/schema/auth'
 
-import { Button, Input, Screen } from '~/components/ui'
 import { useRegisterMutation } from '~/features/auth'
+import { Button, Input, Screen } from '~/ui'
 
 export default function RegisterScreen() {
   const { mutate, isPending } = useRegisterMutation()

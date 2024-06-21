@@ -5,8 +5,9 @@ import { Controller, useForm, zodResolver } from '@my/core/hook-form'
 import { useRefs } from '@my/core/hooks'
 import { signInSchema } from '@my/lib/schema/auth'
 
-import { Button, Input, Screen } from '~/components/ui'
 import { useLoginMutation } from '~/features/auth'
+import { AppVersion } from '~/features/global'
+import { Button, Input, Screen } from '~/ui'
 
 export default function LoginScreen() {
   const { mutate, isPending } = useLoginMutation()
@@ -77,6 +78,7 @@ function LoginForm(props: { loading?: boolean; onSubmit(data: signInSchema): voi
       <Button loading={props.loading} onPress={handleSubmit(props.onSubmit)}>
         Login
       </Button>
+      <AppVersion />
     </View>
   )
 }

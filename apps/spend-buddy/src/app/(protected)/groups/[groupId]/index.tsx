@@ -4,10 +4,10 @@ import { FlashList, type ListRenderItemInfo } from '@shopify/flash-list'
 
 import { formatDistanceToNow } from '@my/lib/date'
 
-import { Icon, Image, Screen } from '~/components/ui'
 import { useUser } from '~/features/auth'
 import { useGroup, type GroupSpendListItem } from '~/features/group'
 import { UserAvatar } from '~/features/user'
+import { Icon, Image, Screen } from '~/ui'
 
 export default function GroupViewScreen() {
   const params = useLocalSearchParams<{ groupId: string; groupName?: string }>()

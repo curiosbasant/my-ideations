@@ -5,10 +5,10 @@ import { useEffect } from 'react'
 import { useFonts } from 'expo-font'
 import { Slot, SplashScreen } from 'expo-router'
 
-import { Stack, Toast } from '~/components/ui'
 import { useSession } from '~/features/auth'
 import { useTheme } from '~/features/theme'
 import { TRPCProvider } from '~/lib/trpc'
+import { Stack, Toast } from '~/ui'
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync()

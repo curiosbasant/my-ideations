@@ -14,8 +14,8 @@ import {
 } from '@my/core/trpc'
 import { SuperJSON } from '@my/lib/superjson'
 
-import { Toast } from '~/components/ui'
 import { SITE_URL } from '~/lib/utils/config'
+import { Toast } from '~/ui'
 
 const trpcClientOptions: CreateTRPCClientOptions<AppRouter> = {
   links: [

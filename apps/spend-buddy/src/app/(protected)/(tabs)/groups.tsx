@@ -2,8 +2,8 @@ import { Pressable, Text, View } from 'react-native'
 import { Link } from 'expo-router'
 import { FlashList, type ListRenderItemInfo } from '@shopify/flash-list'
 
-import { Image, Screen } from '~/components/ui'
 import { useGroupList, type GroupListItem } from '~/features/group'
+import { Image, Screen } from '~/ui'
 
 export default function GroupsScreen() {
   return (
