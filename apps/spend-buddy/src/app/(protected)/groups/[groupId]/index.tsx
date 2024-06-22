@@ -23,11 +23,18 @@ export default function GroupViewScreen() {
           options={{
             title: group.name,
             headerRight: (props) => (
-              <Link href={`/groups/${group.id}/spend`} asChild>
-                <Pressable className='items-center justify-center rounded-full p-1 px-2'>
-                  <Icon name='plus' color={props.tintColor} size={20} />
-                </Pressable>
-              </Link>
+              <View className='flex-row gap-2'>
+                <Link href={`/groups/${group.id}/spend`} asChild>
+                  <Pressable className='items-center justify-center rounded-full p-1 px-2'>
+                    <Icon name='plus' color={props.tintColor} size={20} />
+                  </Pressable>
+                </Link>
+                <Link href={`/groups/${group.id}/members`} asChild>
+                  <Pressable className='items-center justify-center rounded-full p-1 px-2'>
+                    <Icon name='users' color={props.tintColor} size={20} />
+                  </Pressable>
+                </Link>
+              </View>
             ),
           }}
         />

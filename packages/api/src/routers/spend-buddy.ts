@@ -10,9 +10,9 @@ export const spendBuddyRouter = {
     all: protectedProcedure.query(async ({ ctx: { db, authUserId }, input }) => {
       const myGroups = db.$with('my_groups').as(
         db
-        .select({
-          id: schema.group.id,
-          name: schema.group.name,
+          .select({
+            id: schema.group.id,
+            name: schema.group.name,
           })
           .from(schema.member)
           .innerJoin(schema.group, eq(schema.group.id, schema.member.groupId))
@@ -24,11 +24,11 @@ export const spendBuddyRouter = {
           .select({
             id: myGroups.id,
             totalSpends: sql<string>`coalesce(sum(${schema.spend.amount}) / 100, 0)`.as(
-            'total_spends',
-          ),
+              'total_spends',
+            ),
             memberCount: countDistinct(schema.member.userId).as('member_count'),
-        })
-        .from(schema.member)
+          })
+          .from(schema.member)
           .innerJoin(myGroups, eq(myGroups.id, schema.member.groupId))
           .leftJoin(schema.spend, eq(myGroups.id, schema.spend.groupId))
           .groupBy(myGroups.id),
@@ -74,6 +74,7 @@ export const spendBuddyRouter = {
         .select({
           id: schema.group.id,
           name: schema.group.name,
+          ownerId: schema.group.createdBy,
           spend: {
             id: schema.spend.id,
             amount: sql<number>`${schema.spend.amount} / 100`.as('amount_rupee'),
@@ -117,6 +118,22 @@ export const spendBuddyRouter = {
 
           return spend
         }),
+    },
+    member: {
+      all: protectedProcedure.input(z.string()).query(async ({ ctx: { db }, input }) => {
+        return await db
+          .select({
+            id: schema.profile.id,
+            displayName: userDisplayName,
+            avatarUrl: schema.profile.avatarUrl,
+            joinedAt: schema.member.joinedAt,
+          })
+          .from(schema.member)
+          .innerJoin(schema.group, eq(schema.group.id, schema.member.groupId))
+          .innerJoin(schema.profile, eq(schema.profile.id, schema.member.userId))
+          .where(eq(schema.group.id, input))
+          .orderBy(desc(schema.member.joinedAt))
+      }),
     },
   },
 }

@@ -25,6 +25,10 @@ export function useGroup(groupId: string) {
   return api.get.useQuery(groupId)
 }
 
+export function useGroupMembers(groupId: string) {
+  return api.member.all.useQuery(groupId)
+}
+
 export function useGroupSpendAdd() {
   const utils = rootApi.useUtils()
   return api.spend.create.useMutation({
