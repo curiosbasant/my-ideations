@@ -10,7 +10,8 @@ export function useGroupCreate() {
   return api.create.useMutation({
     onSuccess(data) {
       utils.spendBuddy.group.all.invalidate()
-      router.replace(`/groups/${data.id}?groupName=${data.name}`)
+      router.dismissAll()
+      router.navigate(`/groups/${data.id}?groupName=${data.name}`)
       Toast.show('Group is created!')
     },
   })

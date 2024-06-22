@@ -4,6 +4,9 @@ export * from './use-debounce-callback'
 export * from './use-local-storage'
 export * from './use-timer'
 
+/**
+ * @default false
+ */
 export function useToggle(initialState?: boolean | (() => boolean)) {
   return (
     typeof initialState === 'function'

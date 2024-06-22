@@ -5,6 +5,7 @@ import { router, usePathname } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
 
 import { cn } from '~/lib/cva'
+import { Button } from './button'
 import { Spinner } from './spinner'
 
 export type ScreenProps = {
@@ -61,13 +62,15 @@ export function LoadingScreen() {
 }
 Screen.Loading = LoadingScreen
 
-export function CrashScreen(props: Partial<{ title: string | null; message: string | null }>) {
+export function CrashScreen(
+  props: Partial<{ title: string | null; message: string | null; onRetry: () => void }>,
+) {
   return (
     <View className='items-center gap-2 p-16'>
       <Image
         source={require('~/assets/icons/snap_error.png')}
         contentFit='contain'
-        style={{ height: 150, width: '100%' }}
+        style={{ height: 128, width: '100%' }}
       />
       {props.title === null || (
         <Text className='color-foreground mt-8 text-center text-3xl font-bold'>
@@ -79,6 +82,9 @@ export function CrashScreen(props: Partial<{ title: string | null; message: stri
           {props.message || 'Something went wrong'}
         </Text>
       )}
+      <Button className='mt-8 px-6' variant='outline' onPress={props.onRetry}>
+        Retry
+      </Button>
     </View>
   )
 }

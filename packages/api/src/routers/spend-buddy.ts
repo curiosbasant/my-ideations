@@ -1,4 +1,4 @@
-import { and, count, desc, eq, schema, sql } from '@my/db'
+import { and, countDistinct, desc, eq, schema, sql } from '@my/db'
 import { groupCreateSchema, groupSpendCreateSchema } from '@my/lib/schema/spend-buddy'
 import { z } from '@my/lib/zod'
 
@@ -8,20 +8,42 @@ import { protectedProcedure } from '../trpc'
 export const spendBuddyRouter = {
   group: {
     all: protectedProcedure.query(async ({ ctx: { db, authUserId }, input }) => {
-      const rows = await db
+      const myGroups = db.$with('my_groups').as(
+        db
         .select({
           id: schema.group.id,
           name: schema.group.name,
-          totalSpends: sql<number>`coalesce(sum(${schema.spend.amount}) / 100, 0)`.as(
+          })
+          .from(schema.member)
+          .innerJoin(schema.group, eq(schema.group.id, schema.member.groupId))
+          .where(eq(schema.member.userId, authUserId)),
+      )
+      const groupData = db.$with('group_data').as(
+        db
+          .with(myGroups)
+          .select({
+            id: myGroups.id,
+            totalSpends: sql<string>`coalesce(sum(${schema.spend.amount}) / 100, 0)`.as(
             'total_spends',
           ),
-          memberCount: count(schema.member.groupId),
+            memberCount: countDistinct(schema.member.userId).as('member_count'),
         })
         .from(schema.member)
-        .innerJoin(schema.group, eq(schema.group.id, schema.member.groupId))
-        .leftJoin(schema.spend, eq(schema.group.id, schema.spend.groupId))
-        .groupBy(schema.group.id)
-        .where(eq(schema.member.userId, authUserId))
+          .innerJoin(myGroups, eq(myGroups.id, schema.member.groupId))
+          .leftJoin(schema.spend, eq(myGroups.id, schema.spend.groupId))
+          .groupBy(myGroups.id),
+      )
+
+      const rows = await db
+        .with(myGroups, groupData)
+        .select({
+          id: myGroups.id,
+          name: myGroups.name,
+          totalSpends: groupData.totalSpends,
+          memberCount: groupData.memberCount,
+        })
+        .from(groupData)
+        .innerJoin(myGroups, eq(groupData.id, myGroups.id))
 
       return rows
     }),

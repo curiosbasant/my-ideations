@@ -31,7 +31,7 @@ function GroupList() {
   }
 
   if (isLoading) return <Text className='color-foreground mt-8 text-center'>Loading...</Text>
-  return <Screen.Crash />
+  return <Screen.Crash onRetry={() => refetch()} />
 }
 
 function GroupListItem(props: ListRenderItemInfo<GroupListItem>) {
