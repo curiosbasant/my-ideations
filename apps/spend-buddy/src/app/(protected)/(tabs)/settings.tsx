@@ -8,7 +8,7 @@ import { Screen, Toast } from '~/ui'
 
 export default function SettingsScreen() {
   return (
-    <Screen className='gap-6 px-0' scrollable>
+    <Screen className='gap-6 py-8' scrollable>
       <SettingItem iconName='palette' label='Change Theme' to='/settings/change-theme' />
       <AppUpdateButton />
       <LogoutButton />

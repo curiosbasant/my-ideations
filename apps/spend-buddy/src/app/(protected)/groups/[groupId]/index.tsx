@@ -1,5 +1,5 @@
 import { Pressable, Text, View } from 'react-native'
-import { Link, Stack, useLocalSearchParams } from 'expo-router'
+import { Link, useLocalSearchParams } from 'expo-router'
 import { FlashList, type ListRenderItemInfo } from '@shopify/flash-list'
 
 import { formatDistanceToNow } from '@my/lib/date'
@@ -14,30 +14,31 @@ export default function GroupViewScreen() {
   if (!params.groupId) throw new Error('Huh! Which group?')
 
   const user = useUser()
-  const { isPending, data: group, isRefetching, refetch } = useGroup(params.groupId)
+  const { isPending, isError, data: group, isRefetching, refetch } = useGroup(params.groupId)
 
-  if (group) {
-    return (
-      <Screen className='p-0'>
-        <Stack.Screen
-          options={{
-            title: group.name,
-            headerRight: (props) => (
-              <View className='flex-row gap-2'>
-                <Link href={`/groups/${group.id}/spend`} asChild>
-                  <Pressable className='items-center justify-center rounded-full p-1 px-2'>
-                    <Icon name='plus' color={props.tintColor} size={20} />
-                  </Pressable>
-                </Link>
-                <Link href={`/groups/${group.id}/members`} asChild>
-                  <Pressable className='items-center justify-center rounded-full p-1 px-2'>
-                    <Icon name='users' color={props.tintColor} size={20} />
-                  </Pressable>
-                </Link>
-              </View>
-            ),
-          }}
-        />
+  if (isError && !group) {
+    return <Screen.Crash />
+  }
+
+  return (
+    <Screen
+      loading={isPending}
+      title={group?.name || params.groupName}
+      headerRight={(props) => (
+        <View className='flex-row gap-2'>
+          <Link href={`/groups/${params.groupId}/spend`} asChild>
+            <Pressable className='items-center justify-center rounded-full p-1 px-2'>
+              <Icon name='plus' color={props.tintColor} size={20} />
+            </Pressable>
+          </Link>
+          <Link href={`/groups/${params.groupId}/members`} asChild>
+            <Pressable className='items-center justify-center rounded-full p-1 px-2'>
+              <Icon name='users' color={props.tintColor} size={20} />
+            </Pressable>
+          </Link>
+        </View>
+      )}>
+      {group && (
         <FlashList
           contentContainerClassName='py-4'
           data={group.spends}
@@ -50,20 +51,9 @@ export default function GroupViewScreen() {
           keyExtractor={(item) => item.id}
           estimatedItemSize={190}
         />
-      </Screen>
-    )
-  }
-
-  if (isPending) {
-    return (
-      <>
-        {!params.groupName || <Stack.Screen options={{ title: params.groupName }} />}
-        <Screen.Loading />
-      </>
-    )
-  }
-
-  return <Screen.Crash />
+      )}
+    </Screen>
+  )
 }
 
 function SpendListItem(props: ListRenderItemInfo<GroupSpendListItem>) {

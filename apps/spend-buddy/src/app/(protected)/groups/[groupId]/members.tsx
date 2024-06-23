@@ -16,7 +16,7 @@ export default function GroupMembersScreen() {
   const { isPending, data: members, isRefetching, refetch } = useGroupMembers(params.groupId)
 
   return (
-    <Screen className='p-0 px-4' loading={isPending}>
+    <Screen className='px-4' loading={isPending}>
       <FlashList
         contentContainerClassName='py-4'
         data={members}
@@ -26,7 +26,7 @@ export default function GroupMembersScreen() {
         refreshing={isRefetching}
         onRefresh={refetch}
         keyExtractor={(item) => item.id}
-        estimatedItemSize={190}
+        estimatedItemSize={50}
       />
     </Screen>
   )

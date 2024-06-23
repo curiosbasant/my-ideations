@@ -7,7 +7,7 @@ export default function ChangeThemeScreen() {
   const [preference, setPreference] = useStorage<ThemeValue>('theme-preference', 'system')
 
   return (
-    <Screen className='gap-6 px-0'>
+    <Screen className='gap-6 py-8'>
       <ThemeItem currentTheme={preference} theme='system' onThemeChange={setPreference} />
       <ThemeItem currentTheme={preference} theme='light' onThemeChange={setPreference} />
       <ThemeItem currentTheme={preference} theme='dark' onThemeChange={setPreference} />

@@ -25,7 +25,7 @@ export default function GroupSpendCreateScreen() {
   const triggerSubmit = handleSubmit((data) => mutate(data))
 
   return (
-    <Screen className='gap-6' loading={isPending}>
+    <Screen className='gap-6 p-8' waiting={isPending}>
       <Controller
         control={control}
         name='amount'

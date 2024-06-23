@@ -24,7 +24,7 @@
       "label": "Start Mobile",
       "script": "android",
       "path": "apps/spend-buddy",
-      "detail": "expo start --android",
+      "detail": "expo run:android",
       "type": "npm",
       "problemMatcher": []
     },

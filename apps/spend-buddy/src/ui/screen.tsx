@@ -3,30 +3,50 @@ import { Keyboard, ScrollView, Text, View } from 'react-native'
 import { Image } from 'expo-image'
 import { router, usePathname } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
+import type { NativeStackNavigationOptions } from '@react-navigation/native-stack'
 
 import { cn } from '~/lib/cva'
 import { Button } from './button'
+import { Stack } from './native'
 import { Spinner } from './spinner'
 
-export type ScreenProps = {
+export type ScreenProps = NativeStackNavigationOptions & {
   className?: string
+  /** Shows a loading state, when the screen is not full ready to display content */
   loading?: boolean
+  /** Shows a loading state, on top of the current screen, on some user action */
+  waiting?: boolean
+  /** Makes the screen scrollable */
   scrollable?: boolean
 }
 
-export function Screen(props: PropsWithChildren<ScreenProps>) {
-  const Container = props.scrollable ? ScrollView : View
+export function Screen({
+  className,
+  loading,
+  waiting,
+  scrollable,
+  children,
+  ...screenOptions
+}: PropsWithChildren<ScreenProps>) {
+  const Container = scrollable ? ScrollView : View
   return (
-    <Container className={cn('flex-1 bg-background p-8', props.className)}>
+    <Container className={cn('flex-1 bg-background', className)}>
       <StatusBar style='light' animated translucent />
-      <LoadingScreenManager bool={props.loading} />
-      {props.children}
+      <Stack.Screen options={screenOptions} />
+      {loading ? (
+        <LoadingScreen />
+      ) : (
+        <>
+          <LoadingScreenManager bool={waiting ?? false} />
+          {children}
+        </>
+      )}
     </Container>
   )
 }
 Screen.displayName = 'ui/Screen'
 
-export function LoadingScreenManager(props: { bool?: boolean }) {
+export function LoadingScreenManager(props: { bool: boolean }) {
   const pathname = usePathname()
 
   useEffect(() => {

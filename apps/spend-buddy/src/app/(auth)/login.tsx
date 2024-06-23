@@ -13,7 +13,7 @@ export default function LoginScreen() {
   const { mutate, isPending } = useLoginMutation()
 
   return (
-    <Screen loading={isPending} className='gap-10'>
+    <Screen waiting={isPending} className='gap-10 p-8'>
       <LoginForm loading={isPending} onSubmit={mutate} />
       <Text className='color-foreground text-center text-sm'>
         Don't have an account yet?{' '}

@@ -6,32 +6,25 @@ import { useGroupList, type GroupListItem } from '~/features/group'
 import { Image, Screen } from '~/ui'
 
 export default function GroupsScreen() {
+  const { isPending, isError, data: groups, isRefetching, refetch } = useGroupList()
+
+  if (isError && !groups) {
+    return <Screen.Crash onRetry={() => refetch()} />
+  }
+
   return (
-    <Screen className='p-0'>
-      <GroupList />
-    </Screen>
-  )
-}
-
-function GroupList() {
-  const { data, isLoading, isRefetching, refetch } = useGroupList()
-
-  if (data) {
-    return (
+    <Screen loading={isPending}>
       <FlashList
-        contentContainerClassName='py-5'
-        data={data}
+        contentContainerClassName='py-4'
+        data={groups}
         renderItem={GroupListItem}
         ListEmptyComponent={EmptyListView}
         refreshing={isRefetching}
         onRefresh={refetch}
         estimatedItemSize={70}
       />
-    )
-  }
-
-  if (isLoading) return <Text className='color-foreground mt-8 text-center'>Loading...</Text>
-  return <Screen.Crash onRetry={() => refetch()} />
+    </Screen>
+  )
 }
 
 function GroupListItem(props: ListRenderItemInfo<GroupListItem>) {

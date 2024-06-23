@@ -12,7 +12,7 @@ export default function RegisterScreen() {
   const { mutate, isPending } = useRegisterMutation()
 
   return (
-    <Screen loading={isPending} className='gap-10'>
+    <Screen waiting={isPending} className='gap-10 p-8'>
       <RegisterForm loading={isPending} onSubmit={mutate} />
       <Text className='color-foreground text-center text-sm'>
         Already have an account?{' '}
