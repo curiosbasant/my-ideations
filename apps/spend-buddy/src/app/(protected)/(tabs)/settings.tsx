@@ -27,26 +27,26 @@ function AppUpdateButton() {
 
   return isChecking ? (
     <SettingItem iconName='download' label='Checking for updates...' disabled />
+  ) : isUpdatePending ? (
+    <SettingItem iconName='download' label='Reload to update' onPress={reloadAsync} />
+  ) : isDownloading ? (
+    <SettingItem iconName='download' label='Downloading new updates...' disabled />
   ) : isUpdateAvailable ? (
     <SettingItem
       iconName='download'
       label='Download Update'
       onPress={async () => {
-        const [error, result] = await tuplifyPromise(fetchUpdateAsync)()
+        const [error, result] = await tuplifyPromise(fetchUpdateAsync())
         if (error) return Toast.error('Updates are not supported in the current environment.')
         if (result.isNew) Toast.show('Downloading the update!')
       }}
     />
-  ) : isDownloading ? (
-    <SettingItem iconName='download' label='Downloading new updates...' disabled />
-  ) : isUpdatePending ? (
-    <SettingItem iconName='download' label='Reload to update' onPress={reloadAsync} />
   ) : (
     <SettingItem
       iconName='download'
       label='Check for updates'
       onPress={async () => {
-        const [error, result] = await tuplifyPromise(checkForUpdateAsync)()
+        const [error, result] = await tuplifyPromise(checkForUpdateAsync())
         if (error) return Toast.error('Updates are not supported in the current environment.')
         if (!result.isAvailable) Toast.show('There are no new updates available!')
       }}
