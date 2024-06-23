@@ -29,6 +29,17 @@ export function useGroupMembers(groupId: string) {
   return api.member.all.useQuery(groupId)
 }
 
+export function useGroupMemberInvite() {
+  const utils = rootApi.useUtils()
+  return api.member.invite.useMutation({
+    async onSuccess(_, input) {
+      utils.spendBuddy.group.member.all.invalidate()
+      Toast.show('Member added to the group!')
+      router.navigate(`/groups/${input.groupId}/members`)
+    },
+  })
+}
+
 export function useGroupSpendAdd() {
   const utils = rootApi.useUtils()
   return api.spend.create.useMutation({

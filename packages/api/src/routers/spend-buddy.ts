@@ -1,5 +1,9 @@
-import { and, countDistinct, desc, eq, schema, sql } from '@my/db'
-import { groupCreateSchema, groupSpendCreateSchema } from '@my/lib/schema/spend-buddy'
+import { and, countDistinct, desc, eq, schema, sql, type Database } from '@my/db'
+import {
+  groupCreateSchema,
+  groupMemberInviteSchema,
+  groupSpendCreateSchema,
+} from '@my/lib/schema/spend-buddy'
 import { z } from '@my/lib/zod'
 
 import { userDisplayName } from '../lib/utils'
@@ -134,6 +138,37 @@ export const spendBuddyRouter = {
           .where(eq(schema.group.id, input))
           .orderBy(desc(schema.member.joinedAt))
       }),
+      invite: protectedProcedure
+        .input(groupMemberInviteSchema)
+        .mutation(async ({ ctx: { db }, input }) => {
+          const userId = await resolveUserId(db, input.userIdentity)
+          if (!userId) {
+            return {
+              success: false,
+            }
+          }
+          await db.insert(schema.member).values({
+            groupId: input.groupId,
+            userId,
+          })
+
+          return {
+            success: true,
+          }
+        }),
     },
   },
+}
+
+async function resolveUserId(db: Database, userIdentity: string) {
+  if (!userIdentity.includes('@')) return userIdentity
+
+  const [row] = await db
+    .select({ id: schema.profile.id })
+    .from(schema.profile)
+    .where(eq(schema.profile.email, userIdentity))
+
+  if (!row?.id) return null
+  // TODO: handle sending user email about the invite
+  return row.id
 }

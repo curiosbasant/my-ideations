@@ -51,7 +51,14 @@ function StackScreens() {
       <Stack.Screen name='(protected)/(tabs)' options={{ headerShown: false }} />
       <Stack.Screen name='(protected)/groups/create' options={{ title: 'Create Group' }} />
       <Stack.Screen name='(protected)/groups/[groupId]/index' />
-      <Stack.Screen name='(protected)/groups/[groupId]/members' options={{ title: 'Members' }} />
+      <Stack.Screen
+        name='(protected)/groups/[groupId]/members/index'
+        options={{ title: 'Members' }}
+      />
+      <Stack.Screen
+        name='(protected)/groups/[groupId]/members/invite'
+        options={{ title: 'Invite Member' }}
+      />
       <Stack.Screen name='(protected)/groups/[groupId]/spend' options={{ title: 'Add Spend' }} />
       <Stack.Screen name='(protected)/settings/change-theme' options={{ title: 'Change Theme' }} />
 

@@ -4,6 +4,7 @@ import { FlashList, type ListRenderItemInfo } from '@shopify/flash-list'
 
 import { formatDistanceToNow } from '@my/lib/date'
 
+import { HeaderButton } from '~/features/global'
 import { useGroup, useGroupMembers, type GroupMemberListItem } from '~/features/group'
 import { UserAvatar } from '~/features/user'
 import { Icon, Image, Screen } from '~/ui'
@@ -16,7 +17,18 @@ export default function GroupMembersScreen() {
   const { isPending, data: members, isRefetching, refetch } = useGroupMembers(params.groupId)
 
   return (
-    <Screen className='px-4' loading={isPending}>
+    <Screen
+      className='px-4'
+      loading={isPending}
+      headerRight={(props) => (
+        <View className='flex-row gap-2'>
+          <HeaderButton
+            to={`/groups/${params.groupId}/members/invite`}
+            icon='plus'
+            color={props.tintColor}
+          />
+        </View>
+      )}>
       <FlashList
         contentContainerClassName='py-4'
         data={members}

@@ -1,10 +1,11 @@
-import { Pressable, Text, View } from 'react-native'
-import { Link, useLocalSearchParams } from 'expo-router'
+import { Text, View } from 'react-native'
+import { useLocalSearchParams } from 'expo-router'
 import { FlashList, type ListRenderItemInfo } from '@shopify/flash-list'
 
 import { formatDistanceToNow } from '@my/lib/date'
 
 import { useUser } from '~/features/auth'
+import { HeaderButton } from '~/features/global'
 import { useGroup, type GroupSpendListItem } from '~/features/group'
 import { UserAvatar } from '~/features/user'
 import { Icon, Image, Screen } from '~/ui'
@@ -26,16 +27,16 @@ export default function GroupViewScreen() {
       title={group?.name || params.groupName}
       headerRight={(props) => (
         <View className='flex-row gap-2'>
-          <Link href={`/groups/${params.groupId}/spend`} asChild>
-            <Pressable className='items-center justify-center rounded-full p-1 px-2'>
-              <Icon name='plus' color={props.tintColor} size={20} />
-            </Pressable>
-          </Link>
-          <Link href={`/groups/${params.groupId}/members`} asChild>
-            <Pressable className='items-center justify-center rounded-full p-1 px-2'>
-              <Icon name='users' color={props.tintColor} size={20} />
-            </Pressable>
-          </Link>
+          <HeaderButton
+            to={`/groups/${params.groupId}/spend`}
+            icon='plus'
+            color={props.tintColor}
+          />
+          <HeaderButton
+            to={`/groups/${params.groupId}/members`}
+            icon='users'
+            color={props.tintColor}
+          />
         </View>
       )}>
       {group && (

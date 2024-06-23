@@ -12,3 +12,9 @@ export const groupSpendCreateSchema = z.object({
   note: z.string().max(50).optional(),
 })
 export type groupSpendCreateSchema = z.infer<typeof groupSpendCreateSchema>
+
+export const groupMemberInviteSchema = z.object({
+  groupId: z.string(),
+  userIdentity: z.union([z.string(), z.string().email()]),
+})
+export type groupMemberInviteSchema = z.infer<typeof groupMemberInviteSchema>
