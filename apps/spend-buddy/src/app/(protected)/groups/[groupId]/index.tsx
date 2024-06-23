@@ -18,7 +18,7 @@ export default function GroupViewScreen() {
   const { isPending, isError, data: group, isRefetching, refetch } = useGroup(params.groupId)
 
   if (isError && !group) {
-    return <Screen.Crash />
+    return <Screen.Crash onRetry={refetch} />
   }
 
   return (

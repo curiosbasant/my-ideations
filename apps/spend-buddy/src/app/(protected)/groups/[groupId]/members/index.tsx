@@ -14,7 +14,17 @@ export default function GroupMembersScreen() {
   if (!params.groupId) throw new Error('Huh! Which group?')
 
   const { data: group } = useGroup(params.groupId)
-  const { isPending, data: members, isRefetching, refetch } = useGroupMembers(params.groupId)
+  const {
+    isPending,
+    isError,
+    data: members,
+    isRefetching,
+    refetch,
+  } = useGroupMembers(params.groupId)
+
+  if (isError && !members) {
+    return <Screen.Crash onRetry={refetch} />
+  }
 
   return (
     <Screen
@@ -46,17 +56,20 @@ export default function GroupMembersScreen() {
 
 function MemberListItem(props: ListRenderItemInfo<GroupMemberListItem>) {
   return (
-    <View className='flex-row gap-4 rounded-lg px-4 py-2'>
+    <View className='flex-row items-center gap-4 rounded-lg px-4 py-2'>
       <View className='relative'>
         <UserAvatar url={props.item.avatarUrl} />
         {props.item.id === props.extraData.ownerId && (
           <Icon name='crown' className='color-primary absolute -right-1 bottom-0' size={12} />
         )}
       </View>
-      <Text className='color-foreground font-bold'>{props.item.displayName}</Text>
-      <Text className='color-muted-foreground text-xs'>
-        joined {formatDistanceToNow(props.item.joinedAt)} ago
-      </Text>
+      <View className='flex-1'>
+        <Text className='color-foreground font-bold'>{props.item.displayName}</Text>
+        <Text className='color-muted-foreground text-xs'>
+          joined {formatDistanceToNow(props.item.joinedAt)} ago
+        </Text>
+      </View>
+      <Text className='color-foreground text-xl font-bold'>₹{props.item.spends}</Text>
     </View>
   )
 }

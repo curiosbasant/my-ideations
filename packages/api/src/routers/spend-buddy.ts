@@ -1,4 +1,4 @@
-import { and, countDistinct, desc, eq, schema, sql, type Database } from '@my/db'
+import { and, count, desc, eq, schema, sql, sum, type Database } from '@my/db'
 import {
   groupCreateSchema,
   groupMemberInviteSchema,
@@ -22,32 +22,38 @@ export const spendBuddyRouter = {
           .innerJoin(schema.group, eq(schema.group.id, schema.member.groupId))
           .where(eq(schema.member.userId, authUserId)),
       )
-      const groupData = db.$with('group_data').as(
-        db
-          .with(myGroups)
-          .select({
-            id: myGroups.id,
-            totalSpends: sql<string>`coalesce(sum(${schema.spend.amount}) / 100, 0)`.as(
-              'total_spends',
-            ),
-            memberCount: countDistinct(schema.member.userId).as('member_count'),
-          })
-          .from(schema.member)
-          .innerJoin(myGroups, eq(myGroups.id, schema.member.groupId))
-          .leftJoin(schema.spend, eq(myGroups.id, schema.spend.groupId))
-          .groupBy(myGroups.id),
-      )
+
+      const groupSpends = db
+        .select({
+          id: schema.group.id,
+          spends: sum(schema.spend.amount).as('spends'),
+        })
+        .from(schema.spend)
+        .innerJoin(schema.group, eq(schema.group.id, schema.spend.groupId))
+        .groupBy(schema.group.id)
+        .as('group_spends')
+
+      const groupMemberCount = db
+        .select({
+          id: schema.group.id,
+          count: count().as('member_count'),
+        })
+        .from(schema.member)
+        .innerJoin(schema.group, eq(schema.group.id, schema.member.groupId))
+        .groupBy(schema.group.id)
+        .as('group_member_count')
 
       const rows = await db
-        .with(myGroups, groupData)
+        .with(myGroups)
         .select({
           id: myGroups.id,
           name: myGroups.name,
-          totalSpends: groupData.totalSpends,
-          memberCount: groupData.memberCount,
+          memberCount: groupMemberCount.count,
+          totalSpends: sql<string>`coalesce(${groupSpends.spends} / 100, 0)`.as('total_spends'),
         })
-        .from(groupData)
-        .innerJoin(myGroups, eq(groupData.id, myGroups.id))
+        .from(myGroups)
+        .leftJoin(groupMemberCount, eq(myGroups.id, groupMemberCount.id))
+        .leftJoin(groupSpends, eq(myGroups.id, groupSpends.id))
 
       return rows
     }),
@@ -125,16 +131,28 @@ export const spendBuddyRouter = {
     },
     member: {
       all: protectedProcedure.input(z.string()).query(async ({ ctx: { db }, input }) => {
+        const memberSpends = db
+          .select({
+            id: schema.spend.createdBy,
+            spends: sum(schema.spend.amount).as('spends'),
+          })
+          .from(schema.spend)
+          .where(eq(schema.spend.groupId, input))
+          .groupBy(schema.spend.createdBy)
+          .as('member_spends')
+
         return await db
           .select({
             id: schema.profile.id,
             displayName: userDisplayName,
             avatarUrl: schema.profile.avatarUrl,
             joinedAt: schema.member.joinedAt,
+            spends: sql<string>`coalesce(${memberSpends.spends} / 100, 0)`.as('total_spends'),
           })
           .from(schema.member)
           .innerJoin(schema.group, eq(schema.group.id, schema.member.groupId))
           .innerJoin(schema.profile, eq(schema.profile.id, schema.member.userId))
+          .innerJoin(memberSpends, eq(memberSpends.id, schema.member.userId))
           .where(eq(schema.group.id, input))
           .orderBy(desc(schema.member.joinedAt))
       }),

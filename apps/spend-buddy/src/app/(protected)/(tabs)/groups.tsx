@@ -9,7 +9,7 @@ export default function GroupsScreen() {
   const { isPending, isError, data: groups, isRefetching, refetch } = useGroupList()
 
   if (isError && !groups) {
-    return <Screen.Crash onRetry={() => refetch()} />
+    return <Screen.Crash onRetry={refetch} />
   }
 
   return (

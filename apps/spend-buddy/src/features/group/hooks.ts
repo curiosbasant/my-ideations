@@ -32,9 +32,14 @@ export function useGroupMembers(groupId: string) {
 export function useGroupMemberInvite() {
   const utils = rootApi.useUtils()
   return api.member.invite.useMutation({
-    async onSuccess(_, input) {
-      utils.spendBuddy.group.member.all.invalidate()
-      Toast.show('Member added to the group!')
+    async onSuccess(result, input) {
+      if (result.success) {
+        utils.spendBuddy.group.all.setData(undefined, (prev) =>
+          prev?.map((g) => (g.id === input.groupId ? { ...g, memberCount: g.memberCount + 1 } : g)),
+        )
+        utils.spendBuddy.group.member.all.invalidate()
+        Toast.show('Member added to the group!')
+      }
       router.navigate(`/groups/${input.groupId}/members`)
     },
   })
@@ -44,6 +49,13 @@ export function useGroupSpendAdd() {
   const utils = rootApi.useUtils()
   return api.spend.create.useMutation({
     async onSuccess(_, input) {
+      utils.spendBuddy.group.all.setData(undefined, (prev) =>
+        prev?.map((g) =>
+          g.id === input.groupId
+            ? { ...g, totalSpends: String(+g.totalSpends + +input.amount) }
+            : g,
+        ),
+      )
       utils.spendBuddy.group.get.invalidate()
       Toast.show('Spend added to the group!')
       router.navigate(`/groups/${input.groupId}`)

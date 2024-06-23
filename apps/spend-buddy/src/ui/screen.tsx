@@ -102,9 +102,11 @@ export function CrashScreen(
           {props.message || 'Something went wrong'}
         </Text>
       )}
-      <Button className='mt-8 px-6' variant='outline' onPress={props.onRetry}>
-        Retry
-      </Button>
+      {props.onRetry && (
+        <Button className='mt-8 px-6' variant='outline' onPress={props.onRetry}>
+          Retry
+        </Button>
+      )}
     </View>
   )
 }
