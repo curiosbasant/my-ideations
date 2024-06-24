@@ -62,14 +62,6 @@ function StackScreens() {
       <Stack.Screen name='(protected)/groups/[groupId]/spend' options={{ title: 'Add Spend' }} />
       <Stack.Screen name='(protected)/settings/change-theme' options={{ title: 'Change Theme' }} />
 
-      <Stack.Screen
-        name='loading'
-        options={{
-          animation: 'fade',
-          presentation: 'transparentModal',
-          headerShown: false,
-        }}
-      />
       <Stack.Screen name='+not-found' />
     </Stack>
   )

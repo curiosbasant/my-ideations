@@ -1,7 +1,6 @@
-import { useEffect, type PropsWithChildren } from 'react'
-import { Keyboard, ScrollView, Text, View } from 'react-native'
+import type { PropsWithChildren } from 'react'
+import { Modal, ScrollView, Text, View } from 'react-native'
 import { Image } from 'expo-image'
-import { router, usePathname } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
 import type { NativeStackNavigationOptions } from '@react-navigation/native-stack'
 
@@ -37,7 +36,11 @@ export function Screen({
         <LoadingScreen />
       ) : (
         <>
-          <LoadingScreenManager bool={waiting ?? false} />
+          {waiting && (
+            <Modal animationType='fade' statusBarTranslucent transparent>
+              <LoadingScreen />
+            </Modal>
+          )}
           {children}
         </>
       )}
@@ -45,32 +48,6 @@ export function Screen({
   )
 }
 Screen.displayName = 'ui/Screen'
-
-export function LoadingScreenManager(props: { bool: boolean }) {
-  const pathname = usePathname()
-
-  useEffect(() => {
-    if (props.bool) {
-      showLoadingScreen()
-    } else if (pathname === '/loading') {
-      hideLoadingScreen()
-    }
-
-    return () => {
-      if (pathname === '/loading') {
-        hideLoadingScreen()
-      }
-    }
-  }, [props.bool])
-
-  return null
-}
-
-export const showLoadingScreen = () => {
-  Keyboard.dismiss()
-  router.push('/loading')
-}
-export const hideLoadingScreen = () => router.canGoBack() && router.back()
 
 export function LoadingScreen() {
   return (

@@ -40,7 +40,7 @@ export function useGroupMemberInvite() {
         utils.spendBuddy.group.member.all.invalidate()
         Toast.show('Member added to the group!')
       }
-      router.navigate(`/groups/${input.groupId}/members`)
+      router.back()
     },
   })
 }
@@ -58,7 +58,7 @@ export function useGroupSpendAdd() {
       )
       utils.spendBuddy.group.get.invalidate()
       Toast.show('Spend added to the group!')
-      router.navigate(`/groups/${input.groupId}`)
+      router.back()
     },
   })
 }
