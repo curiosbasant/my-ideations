@@ -21,8 +21,13 @@ export function useGroupList() {
   return api.all.useQuery()
 }
 
-export function useGroup(groupId: string) {
-  return api.get.useQuery(groupId)
+export function useGroupSpends(groupId: string) {
+  return api.spend.all.useInfiniteQuery(
+    { groupId },
+    {
+      getNextPageParam: (lastPage) => lastPage.nextCursor,
+    },
+  )
 }
 
 export function useGroupMembers(groupId: string) {
@@ -56,7 +61,7 @@ export function useGroupSpendAdd() {
             : g,
         ),
       )
-      utils.spendBuddy.group.get.invalidate()
+      utils.spendBuddy.group.spend.all.invalidate()
       Toast.show('Spend added to the group!')
       router.back()
     },

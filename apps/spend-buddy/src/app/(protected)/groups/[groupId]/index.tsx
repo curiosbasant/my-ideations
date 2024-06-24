@@ -6,7 +6,7 @@ import { formatDistanceToNow } from '@my/lib/date'
 
 import { useUser } from '~/features/auth'
 import { HeaderButton, PopupMenu } from '~/features/global'
-import { useGroup, type GroupSpendListItem } from '~/features/group'
+import { useGroupSpends, type GroupSpendListItem } from '~/features/group'
 import { UserAvatar } from '~/features/user'
 import { Icon, Image, Screen } from '~/ui'
 
@@ -15,7 +15,14 @@ export default function GroupViewScreen() {
   if (!params.groupId) throw new Error('Huh! Which group?')
 
   const user = useUser()
-  const { isPending, isError, data: group, isRefetching, refetch } = useGroup(params.groupId)
+  const {
+    isPending,
+    isError,
+    data: group,
+    isRefetching,
+    refetch,
+    fetchNextPage,
+  } = useGroupSpends(params.groupId)
 
   if (isError && !group) {
     return <Screen.Crash onRetry={refetch} />
@@ -24,7 +31,7 @@ export default function GroupViewScreen() {
   return (
     <Screen
       loading={isPending}
-      title={group?.name || params.groupName}
+      title={params.groupName}
       headerRight={(props) => (
         <View className='flex-row gap-2'>
           <HeaderButton
@@ -49,15 +56,16 @@ export default function GroupViewScreen() {
       {group && (
         <FlashList
           contentContainerClassName='py-4'
-          data={group.spends}
+          data={group.pages.flatMap((p) => p.items)}
           extraData={user.id}
           ListEmptyComponent={EmptyListView}
           renderItem={SpendListItem}
-          inverted={!!group.spends.length}
+          inverted={!!group.pages[0].items.length}
           refreshing={isRefetching}
           onRefresh={refetch}
-          keyExtractor={(item) => item.id}
+          onEndReached={fetchNextPage}
           estimatedItemSize={190}
+          keyExtractor={(item) => item.id}
         />
       )}
     </Screen>
@@ -67,6 +75,7 @@ export default function GroupViewScreen() {
 function SpendListItem(props: ListRenderItemInfo<GroupSpendListItem>) {
   const isMine = props.item.user.id === props.extraData
   const textColor = isMine ? 'color-primary-foreground' : 'color-foreground'
+
   return (
     <View
       className={`gap-4 p-4 ${isMine ? 'flex-row-reverse self-end' : 'flex-row self-start'} items-start`}>

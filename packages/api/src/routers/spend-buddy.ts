@@ -1,4 +1,4 @@
-import { and, count, desc, eq, schema, sql, sum, type Database } from '@my/db'
+import { and, count, desc, eq, lt, schema, sql, sum, type Database } from '@my/db'
 import {
   groupCreateSchema,
   groupMemberInviteSchema,
@@ -17,6 +17,7 @@ export const spendBuddyRouter = {
           .select({
             id: schema.group.id,
             name: schema.group.name,
+            ownerId: schema.group.createdBy,
           })
           .from(schema.member)
           .innerJoin(schema.group, eq(schema.group.id, schema.member.groupId))
@@ -48,6 +49,7 @@ export const spendBuddyRouter = {
         .select({
           id: myGroups.id,
           name: myGroups.name,
+          ownerId: myGroups.ownerId,
           memberCount: groupMemberCount.count,
           totalSpends: sql<string>`coalesce(${groupSpends.spends} / 100, 0)`.as('total_spends'),
         })
@@ -79,40 +81,44 @@ export const spendBuddyRouter = {
 
         return data
       }),
-    get: protectedProcedure.input(z.string()).query(async ({ ctx: { db, authUserId }, input }) => {
-      const rows = await db
-        .select({
-          id: schema.group.id,
-          name: schema.group.name,
-          ownerId: schema.group.createdBy,
-          spend: {
-            id: schema.spend.id,
-            amount: sql<number>`${schema.spend.amount} / 100`.as('amount_rupee'),
-            note: schema.spend.note,
-            createdAt: schema.spend.createdAt,
-          },
-          spendUser: {
-            id: schema.profile.id,
-            displayName: userDisplayName,
-            avatarUrl: schema.profile.avatarUrl,
-          },
-        })
-        .from(schema.member)
-        .innerJoin(schema.group, eq(schema.group.id, schema.member.groupId))
-        .leftJoin(schema.spend, eq(schema.group.id, schema.spend.groupId))
-        .leftJoin(schema.profile, eq(schema.spend.createdBy, schema.profile.id))
-        .where(and(eq(schema.member.groupId, input), eq(schema.member.userId, authUserId)))
-        .orderBy(desc(schema.spend.createdAt))
-
-      const { spend, spendUser, ...fg } = rows[0]
-      const group = {
-        ...fg,
-        spends: spend ? rows.map((g) => ({ ...g.spend!, user: g.spendUser! })) : [],
-      }
-
-      return group
-    }),
     spend: {
+      all: protectedProcedure
+        .input(
+          z.object({
+            groupId: z.string(),
+            cursor: z.date().nullish(),
+            limit: z.number().min(1).max(50).default(15),
+          }),
+        )
+        .query(async ({ ctx: { db }, input }) => {
+          const rows = await db
+            .select({
+              id: schema.spend.id,
+              amount: sql<number>`${schema.spend.amount} / 100`.as('amount_rupee'),
+              note: schema.spend.note,
+              createdAt: schema.spend.createdAt,
+              user: {
+                id: schema.profile.id,
+                displayName: userDisplayName,
+                avatarUrl: schema.profile.avatarUrl,
+              },
+            })
+            .from(schema.spend)
+            .innerJoin(schema.profile, eq(schema.profile.id, schema.spend.createdBy))
+            .where(
+              and(
+                eq(schema.spend.groupId, input.groupId),
+                input.cursor ? lt(schema.spend.createdAt, input.cursor) : undefined,
+              ),
+            )
+            .orderBy(desc(schema.spend.createdAt))
+            .limit(input.limit)
+
+          return {
+            items: rows,
+            nextCursor: rows.length === input.limit ? rows.at(-1)?.createdAt : null,
+          }
+        }),
       create: protectedProcedure
         .input(groupSpendCreateSchema)
         .mutation(async ({ ctx: { db, authUserId }, input }) => {
@@ -141,7 +147,7 @@ export const spendBuddyRouter = {
           .groupBy(schema.spend.createdBy)
           .as('member_spends')
 
-        return await db
+        const rows = await db
           .select({
             id: schema.profile.id,
             displayName: userDisplayName,
@@ -150,11 +156,12 @@ export const spendBuddyRouter = {
             spends: sql<string>`coalesce(${memberSpends.spends} / 100, 0)`.as('total_spends'),
           })
           .from(schema.member)
-          .innerJoin(schema.group, eq(schema.group.id, schema.member.groupId))
           .innerJoin(schema.profile, eq(schema.profile.id, schema.member.userId))
           .innerJoin(memberSpends, eq(memberSpends.id, schema.member.userId))
-          .where(eq(schema.group.id, input))
+          .where(eq(schema.member.groupId, input))
           .orderBy(desc(schema.member.joinedAt))
+
+        return rows
       }),
       invite: protectedProcedure
         .input(groupMemberInviteSchema)

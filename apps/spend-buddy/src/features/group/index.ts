@@ -5,4 +5,5 @@ export type GroupListItem = RouterOutputs['spendBuddy']['group']['all'][number]
 
 export type GroupMemberListItem = RouterOutputs['spendBuddy']['group']['member']['all'][number]
 
-export type GroupSpendListItem = RouterOutputs['spendBuddy']['group']['get']['spends'][number]
+export type GroupSpendListItem =
+  RouterOutputs['spendBuddy']['group']['spend']['all']['items'][number]
