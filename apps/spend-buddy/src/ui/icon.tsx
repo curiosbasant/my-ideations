@@ -1,9 +1,9 @@
 import type { TextProps } from 'react-native'
-import type FontAwesomeGlyphMap from '@expo/vector-icons/build/vendor/react-native-vector-icons/glyphmaps/FontAwesome5Free.json'
-import FontAwesome5Icon from '@expo/vector-icons/FontAwesome5'
+import type MaterialCommunityGlyphMap from '@expo/vector-icons/build/vendor/react-native-vector-icons/glyphmaps/MaterialCommunityIcons.json'
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons'
 import { remapProps } from 'nativewind'
 
-export type IconName = keyof typeof FontAwesomeGlyphMap
+export type IconName = keyof typeof MaterialCommunityGlyphMap
 export type IconProps = TextProps & {
   name: IconName
   color?: string
@@ -11,7 +11,7 @@ export type IconProps = TextProps & {
 }
 
 export function Icon(props: IconProps) {
-  return <FontAwesome5Icon {...props} />
+  return <MaterialCommunityIcons {...props} />
 }
 Icon.displayName = 'ui/Icon'
 

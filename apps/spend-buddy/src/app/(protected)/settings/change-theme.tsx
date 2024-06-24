@@ -22,7 +22,7 @@ function ThemeItem(props: {
 }) {
   return (
     <SettingItem
-      iconName={props.currentTheme === props.theme ? 'dot-circle' : 'circle'}
+      icon={props.currentTheme === props.theme ? 'radiobox-marked' : 'radiobox-blank'}
       label={props.theme}
       onPress={() => {
         props.onThemeChange(props.theme)

@@ -33,7 +33,7 @@ export default function GroupViewScreen() {
       loading={isPending}
       title={params.groupName}
       headerRight={(props) => (
-        <View className='flex-row gap-2'>
+        <View className='flex-row gap-3'>
           <HeaderButton
             to={`/groups/${params.groupId}/spend`}
             icon='plus'
@@ -41,12 +41,12 @@ export default function GroupViewScreen() {
           />
           <PopupMenu
             renderTrigger={(_, showPopup) => (
-              <HeaderButton icon='ellipsis-v' color={props.tintColor} onPress={showPopup} />
+              <HeaderButton icon='dots-vertical' color={props.tintColor} onPress={showPopup} />
             )}>
             <PopupMenu.Content>
               <PopupMenu.Item
                 to={`/groups/${params.groupId}/members`}
-                icon='users'
+                icon='account-group'
                 label='Members'
               />
             </PopupMenu.Content>

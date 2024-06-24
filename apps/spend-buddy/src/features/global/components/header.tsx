@@ -15,7 +15,7 @@ export function HeaderButton(
       {...props}
       className='items-center justify-center rounded-full'
       style={{ width: 30, height: 30 }}>
-      <Icon name={props.icon} color={props.color} size={20} />
+      <Icon name={props.icon} color={props.color} size={26} />
     </Pressable>
   )
 

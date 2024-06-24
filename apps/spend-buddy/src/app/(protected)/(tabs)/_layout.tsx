@@ -32,17 +32,17 @@ export default function TabsLayout() {
               <Pressable
                 className='items-center justify-center rounded-full p-1 px-2'
                 android_ripple={{ color: props.pressColor, radius: 30 }}>
-                <Icon name='plus' color={props.tintColor} size={20} />
+                <Icon name='plus' color={props.tintColor} size={26} />
               </Pressable>
             </Link>
           ),
           title: 'Groups',
-          tabBarIcon: getTabIconByName('users'),
+          tabBarIcon: getTabIconByName('account-group-outline', 'account-group'),
         }}
       />
       <Tabs.Screen
         name='settings'
-        options={{ title: 'Settings', tabBarIcon: getTabIconByName('cog') }}
+        options={{ title: 'Settings', tabBarIcon: getTabIconByName('cog-outline', 'cog') }}
       />
     </Tabs>
   )
@@ -54,6 +54,6 @@ const getTabIconByName =
     <Icon
       name={props.focused ? activeIconName : iconName}
       color={props.color}
-      size={props.size * 0.75}
+      size={props.size * 0.9}
     />
   )

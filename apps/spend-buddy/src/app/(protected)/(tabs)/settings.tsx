@@ -9,7 +9,7 @@ import { Screen, Toast } from '~/ui'
 export default function SettingsScreen() {
   return (
     <Screen className='gap-6 py-8' scrollable>
-      <SettingItem iconName='palette' label='Change Theme' to='/settings/change-theme' />
+      <SettingItem icon='palette' label='Change Theme' to='/settings/change-theme' />
       <AppUpdateButton />
       <LogoutButton />
       <AppVersion />
@@ -19,21 +19,21 @@ export default function SettingsScreen() {
 
 function LogoutButton() {
   const { mutate } = useLogout()
-  return <SettingItem iconName='sign-out-alt' label='Logout' onPress={() => mutate()} />
+  return <SettingItem icon='logout' label='Logout' onPress={() => mutate()} />
 }
 
 function AppUpdateButton() {
   const { isChecking, isDownloading, isUpdateAvailable, isUpdatePending } = useUpdates()
 
   return isChecking ? (
-    <SettingItem iconName='download' label='Checking for updates...' disabled />
+    <SettingItem icon='update' label='Checking for updates...' disabled />
   ) : isUpdatePending ? (
-    <SettingItem iconName='download' label='Reload to update' onPress={reloadAsync} />
+    <SettingItem icon='reload' label='Reload to update' onPress={reloadAsync} />
   ) : isDownloading ? (
-    <SettingItem iconName='download' label='Downloading new updates...' disabled />
+    <SettingItem icon='update' label='Downloading new updates...' disabled />
   ) : isUpdateAvailable ? (
     <SettingItem
-      iconName='download'
+      icon='download'
       label='Download Update'
       onPress={async () => {
         const [error, result] = await tuplifyPromise(fetchUpdateAsync())
@@ -43,7 +43,7 @@ function AppUpdateButton() {
     />
   ) : (
     <SettingItem
-      iconName='download'
+      icon='update'
       label='Check for updates'
       onPress={async () => {
         const [error, result] = await tuplifyPromise(checkForUpdateAsync())

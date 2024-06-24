@@ -16,7 +16,7 @@ export function UserAvatar(props: { url?: string | null }) {
           resizeMode='contain'
         />
       ) : (
-        <Icon name='user-alt' className='color-muted-foreground' />
+        <Icon name='account' className='color-muted-foreground opacity-75' size={22} />
       )}
     </View>
   )

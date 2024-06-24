@@ -7,7 +7,7 @@ import { Icon, type IconName } from '../../../ui'
 
 export function SettingItem(
   props: ({ disabled?: boolean; onPress?: () => void } | { to: ExpoRouter.Href }) & {
-    iconName: IconName
+    icon: IconName
     label: string
   },
 ) {
@@ -19,10 +19,10 @@ export function SettingItem(
     },
     children: (
       <>
-        <Icon name={props.iconName} className='color-foreground w-6 opacity-75' size={16} />
+        <Icon name={props.icon} className='color-foreground w-6 opacity-75' size={22} />
         <Text className='color-foreground flex-1 text-lg capitalize'>{props.label}</Text>
         {'to' in props && (
-          <Icon name='chevron-right' className='color-foreground w-6 opacity-75' size={14} />
+          <Icon name='chevron-right' className='color-foreground w-6 opacity-75' size={22} />
         )}
       </>
     ),

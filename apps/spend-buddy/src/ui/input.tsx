@@ -21,7 +21,9 @@ export function Input(props: InputProps) {
         {props.optional && <Text className='text-sm text-muted-foreground'> (Optional)</Text>}
       </Text>
       <View className='h-10 flex-row items-center rounded-md border border-input'>
-        {props.icon && <Icon name={props.icon} className='pl-2.5 text-foreground opacity-75' />}
+        {props.icon && (
+          <Icon name={props.icon} className='pl-2.5 text-foreground opacity-75' size={20} />
+        )}
         {props.children}
       </View>
       {!props.errorMessage || (
@@ -50,7 +52,7 @@ Input.Text = forwardRef<TextInput, Partial<InputProps>>((props, ref) => {
 Input.Email = forwardRef<TextInput, Partial<InputProps>>((props, ref) => {
   const {
     label = 'Email',
-    icon = 'envelope',
+    icon = 'email',
     optional = false,
     errorMessage,
     style,
@@ -73,7 +75,7 @@ Input.Email = forwardRef<TextInput, Partial<InputProps>>((props, ref) => {
 Input.Secure = forwardRef<TextInput, Partial<InputProps>>((props, ref) => {
   const {
     label = 'Secure',
-    icon = 'key',
+    icon = 'form-textbox-password',
     optional = false,
     errorMessage,
     style,
@@ -99,8 +101,9 @@ Input.Secure = forwardRef<TextInput, Partial<InputProps>>((props, ref) => {
         />
       </View>
       <Icon
-        name={isVisible ? 'eye-slash' : 'eye'}
+        name={isVisible ? 'eye-off-outline' : 'eye'}
         className='p-2 text-foreground opacity-75'
+        size={20}
         onPress={toggleIsVisible}
       />
     </Input>

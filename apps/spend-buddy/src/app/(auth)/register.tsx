@@ -43,7 +43,7 @@ function RegisterForm(props: { loading?: boolean; onSubmit(data: signUpSchema): 
             onBlur={field.onBlur}
             label='Full Name'
             errorMessage={fieldState.error?.message}
-            icon='user-tie'
+            icon='account-tie'
             blurOnSubmit={false}
             autoCapitalize='words'
             autoComplete='name'
