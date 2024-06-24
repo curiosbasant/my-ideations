@@ -5,7 +5,7 @@ import { FlashList, type ListRenderItemInfo } from '@shopify/flash-list'
 import { formatDistanceToNow } from '@my/lib/date'
 
 import { useUser } from '~/features/auth'
-import { HeaderButton } from '~/features/global'
+import { HeaderButton, PopupMenu } from '~/features/global'
 import { useGroup, type GroupSpendListItem } from '~/features/group'
 import { UserAvatar } from '~/features/user'
 import { Icon, Image, Screen } from '~/ui'
@@ -32,11 +32,18 @@ export default function GroupViewScreen() {
             icon='plus'
             color={props.tintColor}
           />
-          <HeaderButton
-            to={`/groups/${params.groupId}/members`}
-            icon='users'
-            color={props.tintColor}
-          />
+          <PopupMenu
+            renderTrigger={(_, showPopup) => (
+              <HeaderButton icon='ellipsis-v' color={props.tintColor} onPress={showPopup} />
+            )}>
+            <PopupMenu.Content>
+              <PopupMenu.Item
+                to={`/groups/${params.groupId}/members`}
+                icon='users'
+                label='Members'
+              />
+            </PopupMenu.Content>
+          </PopupMenu>
         </View>
       )}>
       {group && (
