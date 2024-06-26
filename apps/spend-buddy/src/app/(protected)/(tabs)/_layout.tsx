@@ -1,8 +1,9 @@
-import { Pressable } from 'react-native'
+import { Pressable, Text, View } from 'react-native'
 import { Link, Redirect } from 'expo-router'
 import { useColorScheme } from 'nativewind'
 
 import { useSession } from '~/features/auth/hooks'
+import { useNotificationsUnreadCount } from '~/features/notification'
 import { Icon, Tabs, type IconName } from '~/ui'
 
 export default function TabsLayout() {
@@ -46,7 +47,10 @@ export default function TabsLayout() {
       />
       <Tabs.Screen
         name='notifications'
-        options={{ title: 'Notifications', tabBarIcon: getTabIconByName('bell-outline', 'bell') }}
+        options={{
+          title: 'Notifications',
+          tabBarIcon: getNotificationIcon,
+        }}
       />
     </Tabs>
   )
@@ -61,3 +65,22 @@ const getTabIconByName =
       size={props.size * 0.9}
     />
   )
+
+const getNotificationIcon = (props: { focused: boolean; color: string; size: number }) => (
+  <View>
+    {getTabIconByName('bell-outline', 'bell')(props)}
+    <NotificationBadge />
+  </View>
+)
+
+function NotificationBadge() {
+  const { data } = useNotificationsUnreadCount()
+
+  if (!data?.count) return null
+
+  return (
+    <View className='absolute -right-2 -top-1 size-5 items-center justify-center rounded-full bg-destructive'>
+      <Text className='text-sm leading-tight text-destructive-foreground'>{data.count}</Text>
+    </View>
+  )
+}

@@ -10,3 +10,7 @@ export function useNotifications() {
     },
   )
 }
+
+export function useNotificationsUnreadCount() {
+  return api.unread.useQuery()
+}

@@ -298,6 +298,13 @@ export const spendBuddyRouter = {
           })
           .where(eq(schema.notification.id, input.notificationId))
       }),
+    unread: protectedProcedure.query(async ({ ctx: { db, authUserId } }) => {
+      const [row] = await db
+        .select({ count: count().as('unread_notifications_count') })
+        .from(schema.notification)
+        .where(and(eq(schema.notification.userId, authUserId), eq(schema.notification.read, false)))
+      return row
+    }),
   },
 }
 
