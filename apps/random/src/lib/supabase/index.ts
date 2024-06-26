@@ -12,14 +12,11 @@ export function getSupabase() {
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
       cookies: {
-        get(name) {
-          return cookieStore.get(name)?.value
+        getAll() {
+          return cookieStore.getAll()
         },
-        set(name, value, options) {
-          cookieStore.set({ name, value, ...options })
-        },
-        remove(name, options) {
-          cookieStore.set({ name, value: '', ...options })
+        setAll(cookiesToSet) {
+          cookiesToSet.forEach((c) => cookieStore.set(c.name, c.value, c.options))
         },
       },
     },
@@ -32,18 +29,15 @@ export function getSupabaseMiddleware(request: NextRequest, response: NextRespon
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
       cookies: {
-        get(name) {
-          return request.cookies.get(name)?.value
+        getAll() {
+          return request.cookies.getAll()
         },
-        set(name, value, options) {
-          request.cookies.set({ name, value, ...options })
+        setAll(cookiesToSet) {
+          cookiesToSet.forEach((c) => request.cookies.set(c.name, c.value))
           for (const pair of request.headers) {
             response.headers.set(...pair)
           }
-          response.cookies.set({ name, value, ...options })
-        },
-        remove(name, options) {
-          this.set!(name, '', options)
+          cookiesToSet.forEach((c) => response.cookies.set(c.name, c.value, c.options))
         },
       },
     },

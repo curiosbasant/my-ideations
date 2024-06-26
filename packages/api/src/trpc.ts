@@ -9,7 +9,7 @@
 import { initTRPC, TRPCError } from '@trpc/server'
 
 import { db } from '@my/db'
-import type { SupabaseClient } from '@my/lib/supabase'
+import { withThrowOnError, type Session, type SupabaseClient } from '@my/lib/supabase'
 import { SuperJSON } from '@my/lib/superjson'
 import { ZodError } from '@my/lib/zod'
 
@@ -29,18 +29,35 @@ import { ZodError } from '@my/lib/zod'
  * @link https://trpc.io/docs/context
  */
 export async function createTRPCContext(opts: { headers: Headers; supabase: SupabaseClient }) {
-  const { data, error } = await opts.supabase.auth.getSession()
-  if (error) throw error
+  const session = await getSupabaseAuthSession(opts.supabase)
 
   const source = opts.headers.get('x-trpc-source') ?? 'unknown'
-
-  console.log('>>> tRPC Request from', source, 'by', data.session?.user.id || 'someone')
+  console.log('>>> tRPC Request from', source, 'by', session?.user.id || 'someone')
 
   return {
     ...opts,
     origin: opts.headers.get('origin'),
     db,
-    session: data.session,
+    session,
+  }
+}
+
+/**
+ * To prevent supabase warning about `getSession` being insecure.
+ * @link https://github.com/supabase/auth-js/issues/873
+ */
+async function getSupabaseAuthSession(supabase: SupabaseClient) {
+  try {
+    const [{ session }, { user }] = await Promise.all([
+      withThrowOnError(supabase.auth.getSession()),
+      withThrowOnError(supabase.auth.getUser()),
+    ])
+    if (!session) throw void 0
+    // @ts-expect-error
+    delete session.user
+    return { ...session, user } as Session
+  } catch (_) {
+    return null
   }
 }
 
