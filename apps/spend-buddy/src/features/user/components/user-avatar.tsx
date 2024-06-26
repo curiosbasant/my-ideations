@@ -5,7 +5,7 @@ import { Icon } from '~/ui'
 export function UserAvatar(props: { url?: string | null }) {
   return (
     <View
-      className='size-8 items-center justify-center rounded-full bg-secondary'
+      className='size-8 items-center justify-center rounded-full border border-border bg-secondary'
       // weird enough, size-* was not working
       style={{ width: 32, height: 32 }}>
       {props.url ? (

@@ -283,6 +283,21 @@ export const spendBuddyRouter = {
           nextCursor: rows.length === input.limit ? rows.at(-1)?.createdAt : null,
         }
       }),
+    mark: protectedProcedure
+      .input(
+        z.object({
+          notificationId: z.string(),
+          read: z.boolean().default(true),
+        }),
+      )
+      .mutation(async ({ ctx: { db }, input }) => {
+        await db
+          .update(schema.notification)
+          .set({
+            read: input.read,
+          })
+          .where(eq(schema.notification.id, input.notificationId))
+      }),
   },
 }
 

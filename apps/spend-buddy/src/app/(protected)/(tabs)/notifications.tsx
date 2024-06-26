@@ -1,11 +1,13 @@
 import type { ReactElement } from 'react'
-import { Text, View } from 'react-native'
+import { Pressable, Text, View } from 'react-native'
+import { Link } from 'expo-router'
 
 import { formatDistance } from '@my/lib/date'
 
 import { ListView, type ListItemProps } from '~/features/global'
 import { useNotifications, type NotificationListItem } from '~/features/notification'
 import { UserAvatar } from '~/features/user'
+import { caller } from '~/lib/trpc'
 import { Screen } from '~/ui'
 
 export default function NotificationsScreen() {
@@ -31,7 +33,7 @@ export default function NotificationsScreen() {
           refreshing={isRefetching}
           onRefresh={refetch}
           onEndReached={fetchNextPage}
-          estimatedItemSize={190}
+          estimatedItemSize={70}
         />
       )}
     </Screen>
@@ -40,34 +42,46 @@ export default function NotificationsScreen() {
 
 const listItemTypes = {
   group_spend_add: (props) => (
-    <View className='mb-1 flex-row items-center gap-3 bg-primary/10 p-3'>
-      <UserAvatar url={props.item.user.avatarUrl} />
-      <View className='flex-1'>
-        <Text className='color-foreground'>
-          <Text className='font-bold leading-6'>{props.item.user.displayName}</Text> has spent ₹
-          {props.item.spend.amount} in the{' '}
-          <Text className='font-bold leading-6'>{props.item.group.name}</Text> group.{' '}
-          <Text className='color-muted-foreground text-sm'>
-            {formatDistance(props.item.createdAt)}
+    <Link href={`/groups/${props.item.group.id}?groupName=${props.item.group.name}`} asChild>
+      <Pressable
+        className={`flex-row items-center gap-4 border-b-2 ${props.item.read ? 'border-border' : 'border-primary/25 bg-primary/20'} p-3`}
+        onPress={() => {
+          caller.spendBuddy.notification.mark.mutate({ notificationId: props.item.id })
+        }}>
+        <UserAvatar url={props.item.user.avatarUrl} />
+        <View className='flex-1'>
+          <Text className='color-foreground'>
+            <Text className='font-bold leading-6'>{props.item.user.displayName}</Text> has spent ₹
+            {props.item.spend.amount} in the{' '}
+            <Text className='font-bold leading-6'>{props.item.group.name}</Text> group.{' '}
+            <Text className='color-muted-foreground text-sm'>
+              {formatDistance(props.item.createdAt)}
+            </Text>
           </Text>
-        </Text>
-      </View>
-    </View>
+        </View>
+      </Pressable>
+    </Link>
   ),
   group_member_add: (props) => (
-    <View className='mb-1 flex-row items-center gap-3 bg-primary/10 p-3'>
-      <UserAvatar url={props.item.member.avatarUrl} />
-      <View className='flex-1'>
-        <Text className='color-foreground'>
-          A new member <Text className='font-bold leading-6'>{props.item.member.displayName}</Text>{' '}
-          has been added to the <Text className='font-bold leading-6'>{props.item.group.name}</Text>{' '}
-          group.{' '}
-          <Text className='color-muted-foreground text-sm'>
-            {formatDistance(props.item.createdAt)}
+    <Link href={`/groups/${props.item.group.id}/members`} asChild>
+      <Pressable
+        className={`flex-row items-center gap-4 border-b-2 ${props.item.read ? 'border-border' : 'border-primary/25 bg-primary/20'} p-3`}
+        onPress={() => {
+          caller.spendBuddy.notification.mark.mutate({ notificationId: props.item.id })
+        }}>
+        <UserAvatar url={props.item.member.avatarUrl} />
+        <View className='flex-1'>
+          <Text className='color-foreground'>
+            A new member{' '}
+            <Text className='font-bold leading-6'>{props.item.member.displayName}</Text> has been
+            added to the <Text className='font-bold leading-6'>{props.item.group.name}</Text> group.{' '}
+            <Text className='color-muted-foreground text-sm'>
+              {formatDistance(props.item.createdAt)}
+            </Text>
           </Text>
-        </Text>
-      </View>
-    </View>
+        </View>
+      </Pressable>
+    </Link>
   ),
 } satisfies Record<string, (props: ListItemProps<NotificationListItem>) => ReactElement>
 
