@@ -25,6 +25,10 @@ export default function TabsLayout() {
         tabBarButton: (props) => <Pressable {...props} android_ripple={{ color: pressColor }} />,
       }}>
       <Tabs.Screen
+        name='settings'
+        options={{ title: 'Settings', tabBarIcon: getTabIconByName('cog-outline', 'cog') }}
+      />
+      <Tabs.Screen
         name='groups'
         options={{
           headerRight: (props) => (
@@ -41,8 +45,8 @@ export default function TabsLayout() {
         }}
       />
       <Tabs.Screen
-        name='settings'
-        options={{ title: 'Settings', tabBarIcon: getTabIconByName('cog-outline', 'cog') }}
+        name='notifications'
+        options={{ title: 'Notifications', tabBarIcon: getTabIconByName('bell-outline', 'bell') }}
       />
     </Tabs>
   )

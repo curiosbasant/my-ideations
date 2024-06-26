@@ -1,13 +1,20 @@
-import { sql } from 'drizzle-orm'
-import { text, timestamp, uuid } from 'drizzle-orm/pg-core'
+import { sql, type HasDefault, type NotNull } from 'drizzle-orm'
+import { text, timestamp, uuid, type PgUUIDBuilderInitial } from 'drizzle-orm/pg-core'
 
 import { profile } from './profile'
 
-export const getUserIdColumn = (columnName = 'user_id') =>
-  uuid(columnName)
-    .default(sql<string>`auth.uid()`)
+export function getUserIdColumn<T extends string>(
+  columnName: T,
+): NotNull<HasDefault<PgUUIDBuilderInitial<T>>>
+export function getUserIdColumn<T extends string>(
+  columnName: T,
+  setDefault: false,
+): NotNull<PgUUIDBuilderInitial<T>>
+export function getUserIdColumn(columnName = 'user_id', setDefault = true) {
+  return (setDefault ? uuid(columnName).default(sql<string>`auth.uid()`) : uuid(columnName))
     .notNull()
     .references(() => profile.id, CASCADE_ON_DELETE)
+}
 
 export const getCurrentTimestampColumn = (columnName = 'created_at') =>
   timestamp(columnName, { withTimezone: true }).defaultNow().notNull()

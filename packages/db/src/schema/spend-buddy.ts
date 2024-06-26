@@ -1,4 +1,12 @@
-import { index, integer, pgTableCreator, primaryKey, text, varchar } from 'drizzle-orm/pg-core'
+import {
+  boolean,
+  index,
+  integer,
+  pgTableCreator,
+  primaryKey,
+  text,
+  varchar,
+} from 'drizzle-orm/pg-core'
 
 import {
   CASCADE_ON_DELETE,
@@ -20,7 +28,7 @@ export const member = table(
     groupId: text('group_id')
       .notNull()
       .references(() => group.id, CASCADE_ON_DELETE),
-    userId: getUserIdColumn('user_id'),
+    userId: getUserIdColumn('user_id', false),
     joinedAt: getCurrentTimestampColumn('joined_at'),
   },
   (t) => ({
@@ -41,5 +49,20 @@ export const spend = table(
   (t) => ({
     groupIndex: index().on(t.groupId),
     userIndex: index().on(t.createdBy),
+  }),
+)
+
+export const notification = table(
+  'notification',
+  {
+    ...getBaseColumns(),
+    type: varchar('type').notNull().$type<'group_spend_add' | 'group_member_add'>(),
+    read: boolean('read').default(false),
+    resourceId: text('resource_id'),
+    /** The user who receives the notification */
+    userId: getUserIdColumn('user_id', false),
+  },
+  (t) => ({
+    userIndex: index().on(t.userId, t.createdAt).desc(),
   }),
 )
