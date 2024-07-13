@@ -3,7 +3,7 @@ import nativewind from 'nativewind/preset'
 import type { Config } from 'tailwindcss'
 
 export default {
-  content: ['./src/(app|components)/**/*.tsx'],
+  content: ['./src/(app|components|ui)/**/*.tsx', './src/features/*/components/**/*.tsx'],
   presets: [nativewind],
   darkMode: 'class',
   theme: {

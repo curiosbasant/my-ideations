@@ -5,7 +5,7 @@
   "tasks": [
     {
       "label": "Dev Mode",
-      "dependsOn": ["Start Server", "Start Mobile", "Restart DB"],
+      "dependsOn": ["Start Server", "Start Mobile"],
       "group": {
         "kind": "test",
         "isDefault": true
