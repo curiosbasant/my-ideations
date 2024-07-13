@@ -4,7 +4,8 @@ import { Image } from 'expo-image'
 import { StatusBar } from 'expo-status-bar'
 import type { NativeStackNavigationOptions } from '@react-navigation/native-stack'
 
-import { cn } from '~/lib/cva'
+import { cn } from '@my/lib/tw'
+
 import { Button } from './button'
 import { Stack } from './native'
 import { Spinner } from './spinner'

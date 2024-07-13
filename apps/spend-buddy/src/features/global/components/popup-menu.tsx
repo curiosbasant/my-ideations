@@ -12,8 +12,8 @@ import { Link } from 'expo-router'
 import type { ExpoRouter } from 'expo-router/types/expo-router'
 
 import { useToggle } from '@my/core/hooks'
+import { cn } from '@my/lib/tw'
 
-import { cn } from '~/lib/cva'
 import { Icon, type IconName } from '~/ui'
 
 export function PopupMenu(

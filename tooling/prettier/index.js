@@ -23,7 +23,7 @@ const config = {
 
   // Tailwind Config
   tailwindConfig: fileURLToPath(new URL('../../tooling/tailwind/web.js', import.meta.url)),
-  tailwindFunctions: ['cn', 'cva'],
+  tailwindFunctions: ['cn', 'cva', 'tv'],
 
   // Import Config
   importOrder: [

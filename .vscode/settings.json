@@ -29,6 +29,7 @@
   "reactSnippets.settings.importReactOnTop": false,
   "reactSnippets.settings.languageScopes": "typescriptreact,javascriptreact",
   "tailwindCSS.experimental.classRegex": [
+    ["([\"'`][^\"'`]*.*?[\"'`])", "[\"'`]([^\"'`]*).*?[\"'`]"],
     ["Classes ?\\=([^;]*)", "'([^']*)'"],
     ["Classes ?\\=([^;]*)", "\"([^\"]*)\""],
     ["Classes ?\\=([^;]*)", "\\`([^\\`]*)\\`"],

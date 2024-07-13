@@ -1,6 +1,7 @@
 import { Pressable, Text, type PressableProps } from 'react-native'
 
-import { cn, cva, type VariantProps } from '~/lib/cva'
+import { cn, cva, type VariantProps } from '@my/lib/tw'
+
 import { Icon, type IconName } from './icon'
 import { Spinner } from './spinner'
 
