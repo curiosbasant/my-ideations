@@ -1,5 +1,5 @@
+import type { PropsWithChildren } from 'react'
 import Link from 'next/link'
-import { PropsWithChildren } from 'react'
 
 export default function GamesLayout(props: PropsWithChildren) {
   return (

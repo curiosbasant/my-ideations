@@ -11,7 +11,7 @@ import { initTRPC, TRPCError } from '@trpc/server'
 import { db } from '@my/db'
 import { withThrowOnError, type Session, type SupabaseClient } from '@my/lib/supabase'
 import { SuperJSON } from '@my/lib/superjson'
-import { ZodError } from '@my/lib/zod'
+import { z, ZodError } from '@my/lib/zod'
 
 /**
  * 1. CONTEXT
@@ -133,3 +133,31 @@ const enforceUserIsAuthenticated = t.middleware(async ({ ctx, next }) => {
  * @see https://trpc.io/docs/procedures
  */
 export const protectedProcedure = t.procedure.use(enforceUserIsAuthenticated)
+
+export const anonymousProcedure = t.procedure
+  .input(z.object({ fullName: z.string() }))
+  .use(async ({ ctx, input, next }) => {
+    if (!ctx.session?.user) {
+      if (!input.fullName) throw new TRPCError({ code: 'FORBIDDEN' })
+      const metadata = { full_name: input.fullName }
+      const data = await withThrowOnError(
+        ctx.supabase.auth.signInAnonymously({ options: { data: metadata } }),
+      )
+
+      if (!data.session) throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR' })
+
+      return next({
+        ctx: {
+          session: data.session,
+          authUserId: data.session.user.id,
+        },
+      })
+    }
+
+    return next({
+      ctx: {
+        session: ctx.session,
+        authUserId: ctx.session.user.id,
+      },
+    })
+  })

@@ -10,6 +10,7 @@ import {
   userIdentitySchema,
   verifyOtpSchema,
 } from '@my/lib/schema/auth'
+import { withThrowOnError } from '@my/lib/supabase'
 import { hasRecentlySignIn } from '@my/lib/utils'
 import { z } from '@my/lib/zod'
 
@@ -190,6 +191,16 @@ export const authRouter = {
             code: 'verified' as const,
             data: { session: data.session },
           }
+    }),
+  signInAnonymously: publicProcedure
+    .input(z.object({ fullName: z.string() }))
+    .mutation(async ({ ctx: { supabase }, input }) => {
+      const metadata = { full_name: input.fullName }
+      const data = await withThrowOnError(
+        supabase.auth.signInAnonymously({ options: { data: metadata } }),
+      )
+
+      return data.session
     }),
   signInWithPhone: publicProcedure
     .input(signInWithPhoneSchema)
