@@ -1,6 +1,6 @@
 import type { inferRouterInputs, inferRouterOutputs } from '@trpc/server'
 
-import { AppRouter } from '@my/api'
+import type { AppRouter } from '@my/api'
 
 export const api = {} as any
 

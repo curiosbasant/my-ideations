@@ -1,4 +1,4 @@
-import { LiteralNullish } from '~/types/utilities.type'
+import type { LiteralNullish } from '~/types/utilities.type'
 
 type APIResponse<Data> =
   | {
@@ -19,7 +19,7 @@ const apiRequest = {
       | string
       | Record<string, LiteralNullish | LiteralNullish[]>
       | [string, LiteralNullish | LiteralNullish[]][],
-    headers?: Record<string, unknown>
+    headers?: Record<string, unknown>,
   ) {
     const endpointURL = typeof endpoint === 'string' ? new URL(endpoint, location.origin) : endpoint
     if (payload) {

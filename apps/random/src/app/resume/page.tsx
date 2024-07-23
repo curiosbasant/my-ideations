@@ -1,5 +1,5 @@
+import type { PropsWithChildren } from 'react'
 import Image from 'next/image'
-import { PropsWithChildren } from 'react'
 import formatDistanceStrict from 'date-fns/formatDistanceStrict'
 
 export const metadata = {
@@ -47,10 +47,10 @@ const PROFESSIONAL_SKILLS = [
 export default function ResumePage() {
   return (
     <div className='min-h-screen overflow-y-auto bg-slate-100 shadow-lg'>
-      <div className='flex h-full print:hidden lg:hidden'>
+      <div className='flex h-full lg:hidden print:hidden'>
         <p className='m-auto text-center text-2xl text-slate-500'>Please view in Desktop Site</p>
       </div>
-      <div className='mx-auto hidden max-w-7xl border-r bg-white text-lg print:flex print:max-w-none lg:flex'>
+      <div className='mx-auto hidden max-w-7xl border-r bg-white text-lg lg:flex print:flex print:max-w-none'>
         <div className='relative w-96 shrink-0 overflow-hidden border-x border-x-sky-200/75 bg-sky-100'>
           <div className='absolute -m-16 h-48 w-64 rotate-[24deg] skew-x-[45deg] bg-sky-200'></div>
           <aside className='space-y-8 p-8 text-slate-500'>
@@ -146,7 +146,7 @@ export default function ResumePage() {
                 'linear-gradient(to bottom, rgba(0, 0, 0, 1.0) 50%, transparent 100%)',
             }}>
             <div
-              className='h-full '
+              className='h-full'
               style={{
                 backgroundImage:
                   "url(\"data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23cbd5e1' fill-opacity='0.4' fill-rule='evenodd'/%3E%3C/svg%3E\")",

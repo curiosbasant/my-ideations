@@ -1,4 +1,4 @@
-import { PropsWithChildren, createContext, useContext, useEffect, useState } from 'react'
+import { createContext, useContext, useEffect, useState, type PropsWithChildren } from 'react'
 
 import { auth } from '~/utils/firebase.client'
 
@@ -17,10 +17,10 @@ export function Provider(props: PropsWithChildren) {
         setUser(
           user && {
             id: user.uid,
-          }
+          },
         )
       }),
-    []
+    [],
   )
   return <Context.Provider value={user}>{props.children}</Context.Provider>
 }

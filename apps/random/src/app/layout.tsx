@@ -1,5 +1,6 @@
 import '~/globals.css'
-import { PropsWithChildren } from 'react'
+
+import type { PropsWithChildren } from 'react'
 
 import { latoFont, materialIcon } from '~/utils/fonts'
 
