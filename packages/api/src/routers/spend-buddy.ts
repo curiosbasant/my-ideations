@@ -157,7 +157,7 @@ export const spendBuddyRouter = {
           })
           .from(schema.member)
           .innerJoin(schema.profile, eq(schema.profile.id, schema.member.userId))
-          .innerJoin(memberSpends, eq(memberSpends.id, schema.member.userId))
+          .leftJoin(memberSpends, eq(memberSpends.id, schema.member.userId))
           .where(eq(schema.member.groupId, input))
           .orderBy(desc(schema.member.joinedAt))
 

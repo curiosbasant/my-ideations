@@ -50,7 +50,7 @@ export default function GroupMembersScreen() {
         refreshing={isRefetching}
         onRefresh={refetch}
         keyExtractor={(item) => item.id}
-        estimatedItemSize={50}
+        estimatedItemSize={64}
       />
     </Screen>
   )
@@ -58,13 +58,15 @@ export default function GroupMembersScreen() {
 
 function MemberListItem(props: ListRenderItemInfo<GroupMemberListItem>) {
   return (
-    <View className='flex-row items-center gap-4 rounded-lg px-4 py-2'>
-      <View className='relative'>
+    <View className='mb-2 flex-row items-center gap-4 rounded-lg px-3 py-2'>
+      {props.item.id === props.extraData ? (
+        <View>
+          <UserAvatar url={props.item.avatarUrl} />
+          <Icon name='crown' className='color-primary absolute -right-1 bottom-0' size={14} />
+        </View>
+      ) : (
         <UserAvatar url={props.item.avatarUrl} />
-        {props.item.id === props.extraData && (
-          <Icon name='crown' className='color-primary absolute -right-1 bottom-0' size={12} />
-        )}
-      </View>
+      )}
       <View className='flex-1'>
         <Text className='color-foreground font-bold'>{props.item.displayName}</Text>
         <Text className='color-muted-foreground text-xs'>
