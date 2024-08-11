@@ -38,6 +38,7 @@ export default function GroupSpendCreateScreen() {
             label='Spend Amount'
             errorMessage={fieldState.error?.message}
             blurOnSubmit={false}
+            keyboardType='numeric'
             returnKeyType='next'
             onSubmitEditing={() => noteRef.current?.focus()}
           />

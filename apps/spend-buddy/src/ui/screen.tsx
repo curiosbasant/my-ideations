@@ -66,9 +66,9 @@ export function CrashScreen(
   return (
     <View className='items-center gap-2 p-16'>
       <Image
+        className='h-32 w-full'
         source={require('~/assets/icons/snap_error.png')}
         contentFit='contain'
-        style={{ height: 128, width: '100%' }}
       />
       {props.title === null || (
         <Text className='color-foreground mt-8 text-center text-3xl font-bold'>

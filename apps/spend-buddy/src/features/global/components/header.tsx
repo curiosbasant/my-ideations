@@ -11,10 +11,7 @@ export function HeaderButton(
   },
 ) {
   const pressableJsx = (
-    <Pressable
-      {...props}
-      className='items-center justify-center rounded-full'
-      style={{ width: 30, height: 30 }}>
+    <Pressable {...props} className='size-8 items-center justify-center rounded-full'>
       <Icon name={props.icon} color={props.color} size={26} />
     </Pressable>
   )

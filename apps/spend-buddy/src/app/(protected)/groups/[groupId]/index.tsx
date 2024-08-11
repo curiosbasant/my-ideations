@@ -81,11 +81,11 @@ function SpendListItem(props: ListRenderItemInfo<GroupSpendListItem>) {
       className={`gap-4 p-4 ${isMine ? 'flex-row-reverse self-end' : 'flex-row self-start'} items-start`}>
       <UserAvatar url={props.item.user.avatarUrl} />
       <View
-        className={`relative max-w-[50%] flex-1 gap-2 ${isMine ? 'bg-primary' : 'bg-secondary'} rounded-lg px-4 pb-3 pt-2`}>
+        className={`max-w-[50%] flex-1 gap-2 ${isMine ? 'bg-primary' : 'bg-secondary'} rounded-lg px-4 pb-3 pt-2`}>
         <Icon
           name='play'
-          className={`absolute ${isMine ? 'color-primary -right-2' : 'color-secondary -left-2'} -top-0.5 rotate-90`}
-          size={18}
+          className={`absolute ${isMine ? 'color-primary -right-2.5' : 'color-secondary -left-2.5'} -top-[7] rotate-90`}
+          size={20}
         />
         <Text className={`${textColor} font-bold`}>{props.item.user.displayName}</Text>
         <View className='mt-2 flex-row items-end justify-center'>

@@ -4,17 +4,9 @@ import { Icon } from '~/ui'
 
 export function UserAvatar(props: { url?: string | null }) {
   return (
-    <View
-      className='size-8 items-center justify-center rounded-full border border-border bg-secondary'
-      // weird enough, size-* was not working
-      style={{ width: 32, height: 32 }}>
+    <View className='size-10 items-center justify-center rounded-full border border-border bg-secondary'>
       {props.url ? (
-        <Image
-          className='size-8 rounded-full'
-          style={{ width: 32, height: 32 }}
-          src={props.url}
-          resizeMode='contain'
-        />
+        <Image className='size-10 rounded-full' src={props.url} resizeMode='contain' />
       ) : (
         <Icon name='account' className='color-muted-foreground opacity-75' size={22} />
       )}

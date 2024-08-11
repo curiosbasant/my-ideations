@@ -56,7 +56,6 @@ export function PopupMenuContent(props: ViewProps) {
       {...props}
       role='menu'
       className={cn('w-52 rounded-md border border-border bg-secondary shadow-lg', props.className)}
-      style={{ width: 175 }}
     />
   )
 }
