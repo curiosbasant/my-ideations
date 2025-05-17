@@ -45,6 +45,11 @@ export default function GroupViewScreen() {
             )}>
             <PopupMenu.Content>
               <PopupMenu.Item
+                // to={`/groups/${params.groupId}/members`}
+                icon='hand-coin'
+                label='Settlements'
+              />
+              <PopupMenu.Item
                 to={`/groups/${params.groupId}/members`}
                 icon='account-group'
                 label='Members'

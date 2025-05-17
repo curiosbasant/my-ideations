@@ -14,6 +14,7 @@
     "migrate": "supabase migration up --include-all",
     "pull": "supabase db pull",
     "push": "pnpm with-env -- drizzle-kit push",
+    "push:prod": "dotenv -e ../../.env.production.local -- drizzle-kit push",
     "reset": "supabase db reset",
     "seed": "pnpm with-env -v DRY=0 -- tsx seed.ts",
     "seed:dry": "pnpm --silent with-env -v DRY=1 -- tsx seed.ts > ../../supabase/seed.sql",

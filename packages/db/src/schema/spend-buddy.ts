@@ -52,6 +52,19 @@ export const spend = table(
   }),
 )
 
+export const settlement = table(
+  'group_settlement',
+  {
+    groupId: text('group_id')
+      .notNull()
+      .references(() => group.id, CASCADE_ON_DELETE),
+    timestamp: getCurrentTimestampColumn('timestamp'),
+  },
+  (t) => ({
+    pk: primaryKey({ columns: [t.groupId, t.timestamp] }),
+  }),
+)
+
 export const notification = table(
   'notification',
   {

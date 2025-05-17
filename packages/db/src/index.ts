@@ -7,6 +7,7 @@ export { schema }
 
 export * from 'drizzle-orm'
 export { PgDialect, unionAll } from 'drizzle-orm/pg-core'
+export * from './utils'
 
 export const db = drizzle(client, { schema })
 export type DbTransaction = Parameters<Parameters<typeof db.transaction>[0]>[0]

@@ -33,7 +33,11 @@ function GroupListItem(props: ListRenderItemInfo<GroupListItem>) {
       href={`/groups/${props.item.id}?groupName=${props.item.name}`}
       asChild
       key={props.item.id}>
-      <Pressable className='mb-1 gap-1 bg-secondary px-6 py-3'>
+      <Pressable
+        className='mb-1 gap-1 bg-secondary px-6 py-3'
+        onLongPress={() => {
+          console.log('group_id', props.item.id)
+        }}>
         <Text className='color-foreground text-xl font-bold' numberOfLines={1}>
           {props.item.name}
         </Text>
