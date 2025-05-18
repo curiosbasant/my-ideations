@@ -5,6 +5,7 @@
     "build": "pnpm with-env next build",
     "clean": "git clean -xdf .next .turbo node_modules",
     "dev": "pnpm with-env next dev",
+    "flask-dev": "pip3 install -r requirements.txt && python3 -m flask --debug --app api/index run -p 5328",
     "lint": "tsc --noEmit",
     "start": "pnpm with-env next start",
     "format": "prettier -w \"src/**/*.{ts,tsx,md}\" -u --ignore-path .gitignore",
