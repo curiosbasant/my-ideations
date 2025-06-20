@@ -3,10 +3,12 @@
   "conventionalCommits.promptFooter": false,
   "conventionalCommits.promptScopes": false,
   "cSpell.words": [
+    "basant",
     "hookform",
     "ianvs",
     "immer",
     "nativewind",
+    "parinaam",
     "Pressable",
     "signin",
     "snaplet",
@@ -15,6 +17,7 @@
     "tailwindcss",
     "tanstack",
     "trpc",
+    "turbopack",
     "zustand"
   ],
   "editor.codeActionsOnSave": {
@@ -38,9 +41,16 @@
     ["ClassName ?\\=([^;]*)", "\\`([^\\`]*)\\`"],
     ["cva\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"]
   ],
+  "tailwindCSS.classFunctions": ["cva"],
   "tailwindCSS.experimental.configFile": {
     "apps/random/tailwind.config.ts": "apps/random/src/**/*.tsx",
     "apps/spend-buddy/tailwind.config.ts": "apps/spend-buddy/src/**/*.tsx"
+  },
+  "files.associations": {
+    "**/globals.css": "tailwindcss"
+  },
+  "material-icon-theme.files.associations": {
+    "globals.css": "tailwindcss"
   },
   "typescript.enablePromptUseWorkspaceTsdk": true,
   "typescript.preferences.autoImportFileExcludePatterns": [

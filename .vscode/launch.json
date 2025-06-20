@@ -2,28 +2,40 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Debug client-side",
-      "type": "pwa-chrome",
+      "name": "Next.js: debug full-stack",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/node_modules/next/dist/bin/next",
+      "runtimeArgs": ["--inspect"],
+      "skipFiles": [
+        "${workspaceFolder}/node_modules/**",
+        "${workspaceFolder}/.next/**",
+        "<node_internals>/**"
+      ],
+      "serverReadyAction": {
+        "action": "debugWithChrome",
+        "killOnServerStop": true,
+        "pattern": "- Local:.+(https?://.+)",
+        "uriFormat": "%s",
+        "webRoot": "${workspaceFolder}"
+      }
+    },
+    {
+      "name": "Next.js: debug server-side",
+      "type": "node-terminal",
+      "request": "launch",
+      "skipFiles": [
+        "${workspaceFolder}/node_modules/**",
+        "${workspaceFolder}/.next/**",
+        "<node_internals>/**"
+      ],
+      "command": "pnpm run dev"
+    },
+    {
+      "name": "Next.js: debug client-side",
+      "type": "chrome",
       "request": "launch",
       "url": "http://localhost:3000"
-    },
-    {
-      "name": "Debug server-side",
-      "type": "node-terminal",
-      "request": "launch",
-      "command": "yarn dev"
-    },
-    {
-      "name": "Debug full-stack",
-      "type": "node-terminal",
-      "request": "launch",
-      "command": "yarn dev",
-      "console": "integratedTerminal",
-      "serverReadyAction": {
-        "pattern": "started server on .+, url: (https?://.+)",
-        "uriFormat": "%s",
-        "action": "debugWithChrome"
-      }
     }
   ]
 }
