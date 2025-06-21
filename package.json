@@ -5,7 +5,7 @@
   },
   "scripts": {
     "build": "turbo build",
-    "clean": "git clean -xdf .turbo node_modules",
+    "clean": "git clean -xdf .turbo node_modules pnpm-lock.yaml",
     "clean:all": "turbo clean",
     "db:pull": "pnpm -F db pull",
     "db:push": "pnpm -F db push",
@@ -26,9 +26,9 @@
     "@turbo/gen": "^2.0.6",
     "supabase": "^1.178.2",
     "turbo": "^2.0.6",
-    "typescript": "^5.8.3"
+    "typescript": "~5.8.3"
   },
-  "packageManager": "pnpm@9.4.0",
+  "packageManager": "pnpm@10.12.1",
   "prettier": "@my/prettier-config",
   "private": true
 }
