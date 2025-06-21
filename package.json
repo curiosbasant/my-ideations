@@ -26,7 +26,7 @@
     "@turbo/gen": "^2.0.6",
     "supabase": "^1.178.2",
     "turbo": "^2.0.6",
-    "typescript": "^5.4.4"
+    "typescript": "^5.8.3"
   },
   "packageManager": "pnpm@9.4.0",
   "prettier": "@my/prettier-config",

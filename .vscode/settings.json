@@ -27,7 +27,10 @@
   "editor.formatOnSave": true,
   "editor.formatOnSaveMode": "file",
   "files.associations": {
-    "*.css": "tailwindcss"
+    "**/globals.css": "tailwindcss"
+  },
+  "material-icon-theme.files.associations": {
+    "globals.css": "tailwindcss"
   },
   "reactSnippets.settings.importReactOnTop": false,
   "reactSnippets.settings.languageScopes": "typescriptreact,javascriptreact",
@@ -41,16 +44,10 @@
     ["ClassName ?\\=([^;]*)", "\\`([^\\`]*)\\`"],
     ["cva\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"]
   ],
-  "tailwindCSS.classFunctions": ["cva"],
+  "tailwindCSS.classFunctions": ["cva", "cn", "cx"],
   "tailwindCSS.experimental.configFile": {
     "apps/random/tailwind.config.ts": "apps/random/src/**/*.tsx",
     "apps/spend-buddy/tailwind.config.ts": "apps/spend-buddy/src/**/*.tsx"
-  },
-  "files.associations": {
-    "**/globals.css": "tailwindcss"
-  },
-  "material-icon-theme.files.associations": {
-    "globals.css": "tailwindcss"
   },
   "typescript.enablePromptUseWorkspaceTsdk": true,
   "typescript.preferences.autoImportFileExcludePatterns": [
@@ -60,7 +57,7 @@
     "drizzle-orm/sqlite-core/index.d.ts"
   ],
   "typescript.preferences.importModuleSpecifier": "non-relative",
-  "typescript.tsdk": "node_modules\\typescript\\lib",
+  "typescript.tsdk": "node_modules/typescript/lib",
   "typescript.tsserver.experimental.enableProjectDiagnostics": true,
   "workbench.editor.customLabels.enabled": true,
   "workbench.editor.customLabels.patterns": {

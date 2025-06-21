@@ -45,7 +45,7 @@ const config = {
   importOrderMergeDuplicateImports: true,
   importOrderSeparation: false,
   importOrderSortSpecifiers: true,
-  importOrderTypeScriptVersion: '5.4.4',
+  importOrderTypeScriptVersion: '5.8.3',
 
   overrides: [
     {
