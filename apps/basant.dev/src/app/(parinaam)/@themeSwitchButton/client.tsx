@@ -1,7 +1,8 @@
 'use client'
 
-import { MoonStarIcon, SunIcon } from 'lucide-react'
 import { useLayoutEffect, useState } from 'react'
+import { MoonStarIcon, SunIcon } from 'lucide-react'
+
 import { Button } from '~/components/ui/button'
 import { COOKIE_THEME_KEY, type ThemePreference } from '../../shared'
 

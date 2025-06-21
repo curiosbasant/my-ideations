@@ -34,7 +34,7 @@ function GroupListItem(props: ListRenderItemInfo<GroupListItem>) {
       asChild
       key={props.item.id}>
       <Pressable className='mb-1 gap-1 bg-secondary px-6 py-3'>
-        <Text className='color-foreground text-xl font-bold' numberOfLines={1}>
+        <Text className='text-xl font-bold color-foreground' numberOfLines={1}>
           {props.item.name}
         </Text>
         <Text className='color-muted-foreground'>
@@ -49,7 +49,7 @@ function EmptyListView() {
   return (
     <View className='flex-1 items-center justify-center gap-8 p-16'>
       <Image className='size-40' source={require('~/assets/icons/empty_box.png')} />
-      <Text className='color-secondary-foreground text-lg font-bold'>
+      <Text className='text-lg font-bold color-secondary-foreground'>
         You have not joined any groups yet
       </Text>
     </View>

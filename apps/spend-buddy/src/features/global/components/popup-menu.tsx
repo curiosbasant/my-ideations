@@ -72,17 +72,15 @@ export function PopupMenuItem(
       {...props}
       role='menuitem'
       className='flex-row items-center gap-4 px-4 py-3 disabled:opacity-50'>
-      {props.icon && <Icon name={props.icon} className='color-foreground opacity-75' size={18} />}
-      <Text className='color-foreground flex-1 capitalize'>{props.label}</Text>
+      {props.icon && <Icon name={props.icon} className='opacity-75 color-foreground' size={18} />}
+      <Text className='flex-1 capitalize color-foreground'>{props.label}</Text>
     </Pressable>
   )
 
-  return 'to' in props && props.to ? (
-    <Link href={props.to} asChild>
-      {pressableJsx}
-    </Link>
-  ) : (
-    pressableJsx
-  )
+  return 'to' in props && props.to ?
+      <Link href={props.to} asChild>
+        {pressableJsx}
+      </Link>
+    : pressableJsx
 }
 PopupMenu.Item = PopupMenuItem

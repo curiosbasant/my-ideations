@@ -19,20 +19,18 @@ export function SettingItem(
     },
     children: (
       <>
-        <Icon name={props.icon} className='color-foreground w-6 opacity-75' size={22} />
-        <Text className='color-foreground flex-1 text-lg capitalize'>{props.label}</Text>
+        <Icon name={props.icon} className='w-6 opacity-75 color-foreground' size={22} />
+        <Text className='flex-1 text-lg capitalize color-foreground'>{props.label}</Text>
         {'to' in props && (
-          <Icon name='chevron-right' className='color-foreground w-6 opacity-75' size={22} />
+          <Icon name='chevron-right' className='w-6 opacity-75 color-foreground' size={22} />
         )}
       </>
     ),
   }
 
-  return 'to' in props ? (
-    <Link href={props.to} asChild>
-      <Pressable {...pressableProps} />
-    </Link>
-  ) : (
-    <Pressable {...pressableProps} {...props} />
-  )
+  return 'to' in props ?
+      <Link href={props.to} asChild>
+        <Pressable {...pressableProps} />
+      </Link>
+    : <Pressable {...pressableProps} {...props} />
 }

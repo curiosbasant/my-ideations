@@ -17,10 +17,6 @@
       "persistent": true,
       "cache": false
     },
-    "format": {
-      "outputs": ["node_modules/.cache/.prettiercache"],
-      "outputLogs": "new-only"
-    },
     "lint": {
       "outputs": ["node_modules/.cache/tsbuildinfo.json"]
     },

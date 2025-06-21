@@ -1,6 +1,7 @@
-import { HydrationBoundary, dehydrate } from '@tanstack/react-query'
+import { dehydrate, HydrationBoundary } from '@tanstack/react-query'
+
 import { getQueryClient } from '~/lib/query'
-import { type HomeProps, getResultsOptions } from '../shared'
+import { getResultsOptions, type HomeProps } from '../shared'
 
 export default async function PrefetchResults(props: HomeProps) {
   const { year, standard, roll } = await props.searchParams

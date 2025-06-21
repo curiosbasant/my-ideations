@@ -294,7 +294,7 @@ export default function ResumePage() {
 function ProjectItem(props: PropsWithChildren<{ title: string; link?: string }>) {
   return (
     <div className='space-y-2'>
-      {props.link ? (
+      {props.link ?
         <a
           href={props.link}
           className='group inline-flex items-end gap-2 text-slate-500'
@@ -307,9 +307,7 @@ function ProjectItem(props: PropsWithChildren<{ title: string; link?: string }>)
             link
           </span>
         </a>
-      ) : (
-        <h4 className='text-xl font-semibold tracking-wide text-slate-500'>{props.title}</h4>
-      )}
+      : <h4 className='text-xl font-semibold tracking-wide text-slate-500'>{props.title}</h4>}
       <p className=''>{props.children}</p>
     </div>
   )

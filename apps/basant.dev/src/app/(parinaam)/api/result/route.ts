@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+
 import { getResult, type ResultInput } from '../../server'
 
 export function GET(request: NextRequest) {

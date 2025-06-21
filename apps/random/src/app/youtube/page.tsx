@@ -19,10 +19,10 @@ export default function YoutubePage() {
             <div className='text-xs text-blue-500'>#citiesSkylins #ilebay</div>
             <h1 className='text-lg text-white'></h1>
             <div className=''>
-              <span className='text-gray-400 '>42,923 views &bull; 16-Oct-2021</span>
+              <span className='text-gray-400'>42,923 views &bull; 16-Oct-2021</span>
             </div>
           </section>
-          <section id='channel-metada' className='py-4 '>
+          <section id='channel-metada' className='py-4'>
             <div className='flex items-center space-x-4'>
               <div className='h-12 w-12 rounded-full bg-gray-500 shadow-inner'></div>
               <div className='flex-1'>
@@ -30,7 +30,7 @@ export default function YoutubePage() {
                 <span className='text-sm text-gray-400'>1.24 lakh subscribers</span>
               </div>
               <div className=''>
-                <button className='rounded bg-red-600 px-4 py-2 uppercase text-white '>
+                <button className='rounded bg-red-600 px-4 py-2 uppercase text-white'>
                   Subscribe
                 </button>
               </div>

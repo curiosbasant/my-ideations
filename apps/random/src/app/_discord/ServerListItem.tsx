@@ -1,9 +1,9 @@
 'use client'
 
+import type { PropsWithChildren } from 'react'
 import Image from 'next/image'
-import Link, { LinkProps } from 'next/link'
+import Link, { type LinkProps } from 'next/link'
 import { usePathname } from 'next/navigation'
-import { PropsWithChildren } from 'react'
 
 export default function ServerListItem(
   props: PropsWithChildren<{
@@ -12,11 +12,11 @@ export default function ServerListItem(
     iconUrl?: string | null
     name: string
     pingCount?: number
-  }>
+  }>,
 ) {
   const pathname = usePathname()
   const active = pathname?.startsWith(
-    typeof props.href === 'string' ? props.href : props.href.pathname!
+    typeof props.href === 'string' ? props.href : props.href.pathname!,
   )
 
   return (
@@ -27,18 +27,16 @@ export default function ServerListItem(
         } bg-slate-50/20 text-center transition-all duration-300 hover:bg-indigo-500 hover:text-white`}
         title={props.name}
         href={props.href}>
-        {props.children ? (
+        {props.children ?
           props.children
-        ) : props.iconUrl || 1 ? (
+        : props.iconUrl || 1 ?
           <Image
             className='rounded-inherit object-cover object-center'
             src={props.iconUrl || `https://picsum.photos/seed/${props.name}/200`}
             alt={`${props.name}'s icon`}
             fill
           />
-        ) : (
-          <span className='text-xl uppercase leading-12'>{props.name[0]}</span>
-        )}
+        : <span className='text-xl uppercase leading-12'>{props.name[0]}</span>}
         <span className='absolute right-0 top-0 z-10 rounded-full bg-emerald-500 p-0.5 text-center font-icon text-xs text-white'>
           volume_up
         </span>

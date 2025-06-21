@@ -1,8 +1,9 @@
 'use client'
 
-import { Loader2Icon } from 'lucide-react'
 import type { PropsWithChildren } from 'react'
+import { Loader2Icon } from 'lucide-react'
 import { useFormStatus } from 'react-dom'
+
 import { Button } from '../ui/button'
 
 export function FormSubmitButton(props: PropsWithChildren) {

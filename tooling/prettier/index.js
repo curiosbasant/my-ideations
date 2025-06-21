@@ -1,3 +1,4 @@
+import path from 'path'
 import { fileURLToPath } from 'url'
 
 /**
@@ -13,16 +14,17 @@ const config = {
   arrowParens: 'always',
   bracketSameLine: true,
   bracketSpacing: true,
-  endOfLine: 'lf',
+  endOfLine: 'lf', // ensure linux-style line ending i.e \n
   jsxSingleQuote: true,
   printWidth: 100,
   semi: false,
   singleQuote: true,
   tabWidth: 2,
   useTabs: false,
+  experimentalOperatorPosition: 'start',
+  experimentalTernaries: true,
 
   // Tailwind Config
-  tailwindConfig: fileURLToPath(new URL('../../tooling/tailwind/web.js', import.meta.url)),
   tailwindFunctions: ['cn', 'cva', 'tv'],
 
   // Import Config
@@ -41,10 +43,37 @@ const config = {
   importOrderBuiltinModulesToTop: true,
   importOrderCombineTypeAndValueImports: true,
   importOrderMergeDuplicateImports: true,
-  importOrderParserPlugins: ['typescript', 'jsx', 'decorators-legacy'],
   importOrderSeparation: false,
   importOrderSortSpecifiers: true,
   importOrderTypeScriptVersion: '5.4.4',
+
+  overrides: [
+    {
+      files: 'apps/basant.dev/**',
+      options: {
+        tailwindStylesheet: path.join(
+          import.meta.dirname,
+          '../../apps/basant.dev/src/app/globals.css',
+        ),
+      },
+    },
+    {
+      files: 'apps/random/**',
+      options: {
+        tailwindConfig: fileURLToPath(
+          new URL('../../apps/random/tailwind.config.ts', import.meta.url),
+        ),
+      },
+    },
+    {
+      files: 'apps/spend-buddy/**',
+      options: {
+        tailwindConfig: fileURLToPath(
+          new URL('../../apps/spend-buddy/tailwind.config.ts', import.meta.url),
+        ),
+      },
+    },
+  ],
 }
 
 export default config

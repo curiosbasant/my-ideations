@@ -22,7 +22,7 @@ export function useStorage<T>(key: string, defaultValue?: T) {
       const value = await AsyncStorage.getItem(queryKey[1])
       if (!value) return defaultValue ?? null
 
-      return typeof defaultValue === 'undefined' ? value : safeParseJsonText(value) ?? value
+      return typeof defaultValue === 'undefined' ? value : (safeParseJsonText(value) ?? value)
     },
     // @ts-expect-error
     placeholderData: defaultValue,

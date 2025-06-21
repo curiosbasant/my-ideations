@@ -8,13 +8,13 @@ export function AppVersion() {
 
   if ('extra' in manifest && manifest.extra?.expoClient?.version) {
     return (
-      <Text className='color-muted-foreground text-center text-sm' onPress={toggleShowUpdateId}>
+      <Text className='text-center text-sm color-muted-foreground' onPress={toggleShowUpdateId}>
         Version: {manifest.extra.expoClient.version}
-        {Platform.OS === 'android'
-          ? ':' + manifest.extra.expoClient.android?.versionCode
-          : Platform.OS === 'ios'
-            ? ':' + manifest.extra.expoClient.ios?.buildNumber
-            : ''}
+        {Platform.OS === 'android' ?
+          ':' + manifest.extra.expoClient.android?.versionCode
+        : Platform.OS === 'ios' ?
+          ':' + manifest.extra.expoClient.ios?.buildNumber
+        : ''}
         {showUpdateId && '\n' + updateId}
       </Text>
     )

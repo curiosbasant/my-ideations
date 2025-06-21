@@ -172,9 +172,8 @@ export function useDebouncedCallback<T extends (...args: any) => ReturnType<T>>(
 
     const startTimer = (pendingFunc: () => void, wait: number) => {
       if (useRAF) cancelAnimationFrame(timerId.current ?? 0)
-      timerId.current = useRAF
-        ? requestAnimationFrame(pendingFunc)
-        : window.setTimeout(pendingFunc, wait)
+      timerId.current =
+        useRAF ? requestAnimationFrame(pendingFunc) : window.setTimeout(pendingFunc, wait)
     }
 
     const shouldInvoke = (time: number) => {
@@ -187,10 +186,10 @@ export function useDebouncedCallback<T extends (...args: any) => ReturnType<T>>(
       // trailing edge, the system time has gone backwards and we're treating
       // it as the trailing edge, or we've hit the `maxWait` limit.
       return (
-        !lastCallTime.current ||
-        timeSinceLastCall >= wait ||
-        timeSinceLastCall < 0 ||
-        (maxing && timeSinceLastInvoke >= maxWait)
+        !lastCallTime.current
+        || timeSinceLastCall >= wait
+        || timeSinceLastCall < 0
+        || (maxing && timeSinceLastInvoke >= maxWait)
       )
     }
 
@@ -219,9 +218,8 @@ export function useDebouncedCallback<T extends (...args: any) => ReturnType<T>>(
       const timeSinceLastCall = time - lastCallTime.current
       const timeSinceLastInvoke = time - lastInvokeTime.current
       const timeWaiting = wait - timeSinceLastCall
-      const remainingWait = maxing
-        ? Math.min(timeWaiting, maxWait - timeSinceLastInvoke)
-        : timeWaiting
+      const remainingWait =
+        maxing ? Math.min(timeWaiting, maxWait - timeSinceLastInvoke) : timeWaiting
 
       // Restart the timer
       startTimer(timerExpired, remainingWait)

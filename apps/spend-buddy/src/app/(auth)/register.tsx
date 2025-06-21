@@ -14,7 +14,7 @@ export default function RegisterScreen() {
   return (
     <Screen waiting={isPending} className='gap-10 p-8'>
       <RegisterForm loading={isPending} onSubmit={mutate} />
-      <Text className='color-foreground text-center text-sm'>
+      <Text className='text-center text-sm color-foreground'>
         Already have an account?{' '}
         <Link href='/login' className='color-primary'>
           Login now!
@@ -87,9 +87,9 @@ function RegisterForm(props: { loading?: boolean; onSubmit(data: signUpSchema): 
             autoComplete='new-password'
             returnKeyType='done'
             onSubmitEditing={() => {
-              getValues('fullName')?.length
-                ? handleSubmit(props.onSubmit)()
-                : fullNameRef.current?.focus()
+              getValues('fullName')?.length ?
+                handleSubmit(props.onSubmit)()
+              : fullNameRef.current?.focus()
             }}
           />
         )}

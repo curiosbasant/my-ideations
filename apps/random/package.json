@@ -7,7 +7,6 @@
     "dev": "pnpm with-env next dev",
     "lint": "tsc --noEmit",
     "start": "pnpm with-env next start",
-    "format": "prettier -w \"src/**/*.{ts,tsx,md}\" -u --ignore-path .gitignore",
     "emulator": "firebase emulators:start --only=auth,firestore,database --import=./.firebase.archive --export-on-exit=./.firebase.archive",
     "with-env": "dotenv -e ../../.env --"
   },

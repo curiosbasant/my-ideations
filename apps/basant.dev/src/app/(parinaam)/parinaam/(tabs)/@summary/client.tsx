@@ -15,13 +15,14 @@ import {
 } from 'recharts'
 import type { LabelPosition } from 'recharts/types/component/Label'
 import type { BaseAxisProps } from 'recharts/types/util/types'
+
 import {
-  type ChartConfig,
   ChartContainer,
   ChartLegend,
   ChartLegendContent,
   ChartTooltip,
   ChartTooltipContent,
+  type ChartConfig,
 } from '~/components/ui/chart'
 import { useElementSize } from '~/hooks/use-element-size'
 import { useFilteredResults } from '../../query'

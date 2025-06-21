@@ -15,7 +15,7 @@ export default function LoginScreen() {
   return (
     <Screen waiting={isPending} className='gap-10 p-8'>
       <LoginForm loading={isPending} onSubmit={mutate} />
-      <Text className='color-foreground text-center text-sm'>
+      <Text className='text-center text-sm color-foreground'>
         Don't have an account yet?{' '}
         <Link href='/register' className='color-primary'>
           Create one now!
@@ -67,9 +67,9 @@ function LoginForm(props: { loading?: boolean; onSubmit(data: signInSchema): voi
             autoComplete='current-password'
             returnKeyType='done'
             onSubmitEditing={() => {
-              getValues('userIdentity')?.length
-                ? handleSubmit(props.onSubmit)()
-                : emailRef.current?.focus()
+              getValues('userIdentity')?.length ?
+                handleSubmit(props.onSubmit)()
+              : emailRef.current?.focus()
             }}
           />
         )}

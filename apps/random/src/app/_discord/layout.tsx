@@ -1,4 +1,4 @@
-import { LayoutProps } from '~/types/utilities.type'
+import type { LayoutProps } from '~/types/utilities.type'
 import Sidebar from './Sidebar'
 
 export const revalidate = 10

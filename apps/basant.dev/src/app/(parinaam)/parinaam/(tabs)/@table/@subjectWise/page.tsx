@@ -1,6 +1,7 @@
 'use client'
 
 import { createColumnHelper } from '@tanstack/react-table'
+
 import { ScrollArea, ScrollBar } from '~/components/ui/scroll-area'
 import { Table } from '~/components/ui/table'
 import { useFilteredResults } from '../../../query'

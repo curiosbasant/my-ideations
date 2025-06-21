@@ -56,9 +56,9 @@ export function useGroupSpendAdd() {
     async onSuccess(_, input) {
       utils.spendBuddy.group.all.setData(undefined, (prev) =>
         prev?.map((g) =>
-          g.id === input.groupId
-            ? { ...g, totalSpends: String(+g.totalSpends + +input.amount) }
-            : g,
+          g.id === input.groupId ?
+            { ...g, totalSpends: String(+g.totalSpends + +input.amount) }
+          : g,
         ),
       )
       utils.spendBuddy.group.spend.all.invalidate()

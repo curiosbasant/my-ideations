@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
+
 import { ScrollArea } from '~/components/ui/scroll-area'
 import { Providers, ShareResultButton } from './client'
 import icon from './icon.svg'

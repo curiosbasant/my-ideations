@@ -49,7 +49,7 @@ export default router({
         playerName: z.string().nullish(),
         rows: z.number().positive().lte(20).default(7),
         cols: z.number().positive().lte(20).default(10),
-      })
+      }),
     )
     .mutation(async ({ input, ctx }) => {
       const gameId = generateId(4)
@@ -79,7 +79,7 @@ export default router({
         gameId: z.string(),
         playerId: z.string(),
         playerName: z.string().nullish(),
-      })
+      }),
     )
     .mutation(async ({ input, ctx }) => {
       await dotsAndBoxesRef.child(input.gameId).transaction((game: Game) => {
@@ -123,7 +123,7 @@ export default router({
       z.object({
         gameId: z.string(),
         playerId: z.string(),
-      })
+      }),
     )
     .mutation(async ({ input, ctx }) => {
       await dotsAndBoxesRef.child(input.gameId).transaction((game: Game) => {
@@ -163,7 +163,7 @@ export default router({
         gameId: z.string(),
         playerId: z.string(),
         dashName: z.string(),
-      })
+      }),
     )
     .mutation(async ({ input, ctx }) => {
       await dotsAndBoxesRef.child(input.gameId).transaction((game: Game) => {
@@ -188,9 +188,9 @@ export default router({
         // a is always less than b
         const [firstDotPosition, secondDotPosition] = input.dashName.split('_').map(Number)
         if (
-          isNaN(firstDotPosition) ||
-          isNaN(secondDotPosition) ||
-          firstDotPosition >= secondDotPosition
+          isNaN(firstDotPosition)
+          || isNaN(secondDotPosition)
+          || firstDotPosition >= secondDotPosition
         )
           throw new TRPCError({
             code: 'FORBIDDEN',
@@ -222,8 +222,8 @@ export default router({
         }
 
         if (
-          Object.keys(game.dashes).length + 1 ===
-          game.config.rows * game.config.cols * 2 + game.config.rows + game.config.cols
+          Object.keys(game.dashes).length + 1
+          === game.config.rows * game.config.cols * 2 + game.config.rows + game.config.cols
         ) {
           toUpdate.status = 'finished'
         }
@@ -234,14 +234,14 @@ export default router({
 
         // top or left square
         if (
-          `${firstDotPosition - offset}_${firstDotPosition}` in game.dashes &&
-          `${firstDotPosition - offset}_${secondDotPosition - offset}` in game.dashes &&
-          `${secondDotPosition - offset}_${secondDotPosition}` in game.dashes
+          `${firstDotPosition - offset}_${firstDotPosition}` in game.dashes
+          && `${firstDotPosition - offset}_${secondDotPosition - offset}` in game.dashes
+          && `${secondDotPosition - offset}_${secondDotPosition}` in game.dashes
         ) {
           const squarePosition =
-            firstDotPosition -
-            ((firstDotPosition / dotsColumnCount) | 0) -
-            (isHorizontal ? game.config.cols : 1)
+            firstDotPosition
+            - ((firstDotPosition / dotsColumnCount) | 0)
+            - (isHorizontal ? game.config.cols : 1)
 
           toUpdate.boxes[squarePosition] = game.activePlayerIndex
 
@@ -251,9 +251,9 @@ export default router({
 
         // bottom or right square
         if (
-          `${firstDotPosition}_${firstDotPosition + offset}` in game.dashes &&
-          `${firstDotPosition + offset}_${secondDotPosition + offset}` in game.dashes &&
-          `${secondDotPosition}_${secondDotPosition + offset}` in game.dashes
+          `${firstDotPosition}_${firstDotPosition + offset}` in game.dashes
+          && `${firstDotPosition + offset}_${secondDotPosition + offset}` in game.dashes
+          && `${secondDotPosition}_${secondDotPosition + offset}` in game.dashes
         ) {
           const squarePosition = firstDotPosition - ((firstDotPosition / dotsColumnCount) | 0)
           toUpdate.boxes[squarePosition] = game.activePlayerIndex
@@ -276,7 +276,7 @@ export default router({
         gameId: z.string(),
         playerId: z.string(),
         playerName: z.string(),
-      })
+      }),
     )
     .mutation(async ({ input, ctx }) => {
       const p = await dotsAndBoxesRef.child(input.gameId).child('players').get()

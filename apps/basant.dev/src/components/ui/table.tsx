@@ -1,9 +1,9 @@
 import {
-  type ColumnDef,
   flexRender,
   getCoreRowModel,
   getSortedRowModel,
   useReactTable,
+  type ColumnDef,
 } from '@tanstack/react-table'
 
 export function Table<T>(props: { rows: T[]; columns: ColumnDef<T, any>[] }) {

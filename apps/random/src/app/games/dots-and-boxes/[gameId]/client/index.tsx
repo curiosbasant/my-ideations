@@ -79,11 +79,9 @@ export function Arena(props: {
 
             const boxIndex = ((cellRowIndex - 1) * props.cols + cellColIndex - 1) / 2
             const playerIndex = board.boxes[boxIndex]
-            return typeof playerIndex === 'number' ? (
-              <div className={`bg-current ${DASH_COLORS[playerIndex]} text-opacity-75`} key={i} />
-            ) : (
-              <Fragment key={i}>&ensp;</Fragment>
-            )
+            return typeof playerIndex === 'number' ?
+                <div className={`bg-current ${DASH_COLORS[playerIndex]} text-opacity-75`} key={i} />
+              : <Fragment key={i}>&ensp;</Fragment>
           }
 
           const hA = (cellRowIndex * (props.cols + 1) + cellColIndex - 1) / 2
@@ -95,14 +93,14 @@ export function Arena(props: {
             <button
               className={`relative ${
                 // if occupied
-                typeof dashPlayerIndex === 'number'
-                  ? `bg-current ${DASH_COLORS[dashPlayerIndex]}`
-                  : 'bg-slate-300 bg-opacity-40 hover:bg-opacity-100'
+                typeof dashPlayerIndex === 'number' ?
+                  `bg-current ${DASH_COLORS[dashPlayerIndex]}`
+                : 'bg-slate-300 bg-opacity-40 hover:bg-opacity-100'
               } transition ${
                 // if horizontal
-                isRowEven
-                  ? 'before:right-full after:left-full befter:top-0'
-                  : 'before:bottom-full after:top-full befter:left-0'
+                isRowEven ?
+                  'before:right-full after:left-full befter:top-0'
+                : 'before:bottom-full after:top-full befter:left-0'
               } befter:absolute befter:z-10 befter:rounded-full befter:p-1 ${
                 dashName === props.activeDash ? 'befter:ring-2' : 'enabled:hover:befter:ring-2'
               } befter:ring-offset-[5px]`}
@@ -141,14 +139,14 @@ export function PlayerList(props: { gameId: string; userId?: string | null }) {
           />
         ))}
       </ul>
-      {!board.status ||
-        (board.status === 'waiting' && (
+      {!board.status
+        || (board.status === 'waiting' && (
           <div className='flex flex-col items-center'>
             <p className=''>
               <span className='inline-block animate-spin rounded-full border-2 border-x-transparent border-y-slate-500 p-1.5 align-middle' />
               &ensp;Waiting for players to join...
             </p>
-            {isOP ? (
+            {isOP ?
               <form className='contents' action={startAction}>
                 <input name='gameId' value={props.gameId} type='hidden' />
                 <button
@@ -157,8 +155,7 @@ export function PlayerList(props: { gameId: string; userId?: string | null }) {
                   Start Game
                 </button>
               </form>
-            ) : (
-              board.players.length < 4 && (
+            : board.players.length < 4 && (
                 // Remove if already joined
                 <form className='' action={joinAction}>
                   <input name='gameId' value={props.gameId} type='hidden' />
@@ -170,20 +167,19 @@ export function PlayerList(props: { gameId: string; userId?: string | null }) {
                       type='text'
                     />
                   )}
-                  {props.userId && board.players.some((p) => p.id === props.userId) ? (
+                  {props.userId && board.players.some((p) => p.id === props.userId) ?
                     <button
                       className='mt-4 rounded-md bg-emerald-500 px-4 py-2 text-slate-50 transition-colors hover:bg-emerald-400 disabled:bg-slate-500'
                       disabled>
                       Game Joined
                     </button>
-                  ) : (
-                    <button className='mt-4 rounded-md bg-emerald-500 px-4 py-2 text-slate-50 transition-colors hover:bg-emerald-400 disabled:bg-slate-500'>
+                  : <button className='mt-4 rounded-md bg-emerald-500 px-4 py-2 text-slate-50 transition-colors hover:bg-emerald-400 disabled:bg-slate-500'>
                       Join Game
                     </button>
-                  )}
+                  }
                 </form>
               )
-            )}
+            }
             {/* {errorText && <p className='text-sm text-rose-500'>{errorText}</p>} */}
           </div>
         ))}

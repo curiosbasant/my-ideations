@@ -8,7 +8,10 @@ class Puzzle {
   position: number[]
   status!: 'start' | 'complete'
 
-  constructor(readonly rows = 4, readonly cols = rows) {
+  constructor(
+    readonly rows = 4,
+    readonly cols = rows,
+  ) {
     this.position = Array.from(Array(rows * cols), (_, i) => i)
     this.restart()
   }
@@ -155,7 +158,7 @@ export default function PuzzleGamePage() {
                 key={i}
               />
             )
-          }
+          },
         )}
       </div>
       <div className='mt-4 space-y-4'>

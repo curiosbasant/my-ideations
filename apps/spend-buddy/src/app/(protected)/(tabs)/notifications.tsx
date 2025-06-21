@@ -22,10 +22,9 @@ export default function NotificationsScreen() {
 
   return (
     <Screen loading={isPending}>
-      {isError && !notification ? (
+      {isError && !notification ?
         <Screen.Crash onRetry={refetch} />
-      ) : (
-        <ListView
+      : <ListView
           contentContainerClassName='py-3'
           data={notification?.pages.flatMap((p) => p.items)}
           getItemType={(item) => item.type}
@@ -35,7 +34,7 @@ export default function NotificationsScreen() {
           onEndReached={fetchNextPage}
           estimatedItemSize={70}
         />
-      )}
+      }
     </Screen>
   )
 }
@@ -54,7 +53,7 @@ const listItemTypes = {
             <Text className='font-bold leading-6'>{props.item.user.displayName}</Text> has spent ₹
             {props.item.spend.amount} in the{' '}
             <Text className='font-bold leading-6'>{props.item.group.name}</Text> group.{' '}
-            <Text className='color-muted-foreground text-sm'>
+            <Text className='text-sm color-muted-foreground'>
               {formatDistance(props.item.createdAt)}
             </Text>
           </Text>
@@ -75,7 +74,7 @@ const listItemTypes = {
             A new member{' '}
             <Text className='font-bold leading-6'>{props.item.member.displayName}</Text> has been
             added to the <Text className='font-bold leading-6'>{props.item.group.name}</Text> group.{' '}
-            <Text className='color-muted-foreground text-sm'>
+            <Text className='text-sm color-muted-foreground'>
               {formatDistance(props.item.createdAt)}
             </Text>
           </Text>

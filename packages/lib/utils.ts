@@ -45,8 +45,8 @@ export function removeFalsy<const T extends Record<string, unknown>>(obj: T) {
     if (!obj[key]) delete obj[key]
   }
 
-  return Object.keys(obj).length > 0
-    ? (obj as { [P in keyof T as T[P] extends Falsy ? never : P]: Exclude<T[P], Falsy> })
+  return Object.keys(obj).length > 0 ?
+      (obj as { [P in keyof T as T[P] extends Falsy ? never : P]: Exclude<T[P], Falsy> })
     : null
 }
 
@@ -82,7 +82,9 @@ export function formatBytes(bytes: number | null, decimals = 2) {
  * Clamps a number to a specified range.
  */
 export const clamp = (num: number, min: number, max: number) =>
-  num < min ? min : num > max ? max : num
+  num < min ? min
+  : num > max ? max
+  : num
 
 /**
  * Generates a random ID string.

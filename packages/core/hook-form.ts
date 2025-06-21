@@ -36,8 +36,7 @@ export function getDirtyFields<T extends Record<string, any>>(
   )
 }
 
-type Convert<T> = T extends (infer R)[]
-  ? Convert<R>[]
-  : T extends Record<string, any>
-    ? { [P in keyof T]?: Convert<T[P]> }
-    : boolean
+type Convert<T> =
+  T extends (infer R)[] ? Convert<R>[]
+  : T extends Record<string, any> ? { [P in keyof T]?: Convert<T[P]> }
+  : boolean

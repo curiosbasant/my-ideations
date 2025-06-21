@@ -16,11 +16,9 @@ export function HeaderButton(
     </Pressable>
   )
 
-  return 'to' in props && props.to ? (
-    <Link href={props.to} asChild>
-      {pressableJsx}
-    </Link>
-  ) : (
-    pressableJsx
-  )
+  return 'to' in props && props.to ?
+      <Link href={props.to} asChild>
+        {pressableJsx}
+      </Link>
+    : pressableJsx
 }

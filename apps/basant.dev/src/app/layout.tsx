@@ -1,6 +1,7 @@
 import './globals.css'
 
 import type { ComponentProps } from 'react'
+
 import { geistMono, geistSans } from '~/lib/fonts'
 import { getThemePreference } from './server'
 

@@ -1,7 +1,8 @@
 'use client'
 
-import { useQuery } from '@tanstack/react-query'
 import { useSearchParams } from 'next/navigation'
+import { useQuery } from '@tanstack/react-query'
+
 import { getResultsOptions } from './shared'
 
 export function useResultsQuery() {

@@ -24,22 +24,22 @@ export const authRouter = {
     const metadata = { full_name: input.fullName }
 
     const { data, error } = await supabase.auth.signUp(
-      input.mobileOrEmail.includes('@')
-        ? {
-            email: input.mobileOrEmail,
-            password: input.password,
-            options: {
-              data: metadata,
-            },
-          }
-        : {
-            phone: input.mobileOrEmail,
-            password: input.password,
-            options: {
-              data: metadata,
-              channel: 'sms',
-            },
+      input.mobileOrEmail.includes('@') ?
+        {
+          email: input.mobileOrEmail,
+          password: input.password,
+          options: {
+            data: metadata,
           },
+        }
+      : {
+          phone: input.mobileOrEmail,
+          password: input.password,
+          options: {
+            data: metadata,
+            channel: 'sms',
+          },
+        },
     )
 
     if (error) {
@@ -68,17 +68,17 @@ export const authRouter = {
   sendPasswordRecoveryOtp: publicProcedure
     .input(z.object({ userIdentity: userIdentitySchema }))
     .mutation(async ({ ctx: { origin, supabase }, input }) => {
-      await (input.userIdentity.includes('@')
-        ? supabase.auth.resetPasswordForEmail(input.userIdentity, {
-            redirectTo: origin + '/reset-password',
-          })
-        : supabase.auth.signInWithOtp({
-            phone: input.userIdentity,
-            options: {
-              shouldCreateUser: false,
-              channel: 'sms',
-            },
-          }))
+      await (input.userIdentity.includes('@') ?
+        supabase.auth.resetPasswordForEmail(input.userIdentity, {
+          redirectTo: origin + '/reset-password',
+        })
+      : supabase.auth.signInWithOtp({
+          phone: input.userIdentity,
+          options: {
+            shouldCreateUser: false,
+            channel: 'sms',
+          },
+        }))
 
       return {
         success: true,
@@ -91,17 +91,17 @@ export const authRouter = {
     .input(verifyOtpSchema)
     .mutation(async ({ ctx: { supabase }, input: { mobileOrEmail, otpCode } }) => {
       const { data, error } = await supabase.auth.verifyOtp(
-        mobileOrEmail.includes('@')
-          ? {
-              email: mobileOrEmail,
-              token: otpCode,
-              type: 'email',
-            }
-          : {
-              phone: mobileOrEmail,
-              token: otpCode,
-              type: 'sms',
-            },
+        mobileOrEmail.includes('@') ?
+          {
+            email: mobileOrEmail,
+            token: otpCode,
+            type: 'email',
+          }
+        : {
+            phone: mobileOrEmail,
+            token: otpCode,
+            type: 'sms',
+          },
       )
       if (error) throw error
 
@@ -111,15 +111,15 @@ export const authRouter = {
     .input(z.object({ mobileOrEmail: userIdentitySchema }))
     .mutation(async ({ ctx: { supabase }, input: { mobileOrEmail } }) => {
       const { data, error } = await supabase.auth.resend(
-        mobileOrEmail.includes('@')
-          ? {
-              email: mobileOrEmail,
-              type: 'signup',
-            }
-          : {
-              phone: mobileOrEmail,
-              type: 'sms',
-            },
+        mobileOrEmail.includes('@') ?
+          {
+            email: mobileOrEmail,
+            type: 'signup',
+          }
+        : {
+            phone: mobileOrEmail,
+            type: 'sms',
+          },
       )
       if (error) throw error
 
@@ -151,22 +151,22 @@ export const authRouter = {
     .input(signInSchema)
     .mutation(async ({ ctx: { supabase }, input: { userIdentity, password } }) => {
       const { data, error } = await supabase.auth.signInWithPassword(
-        userIdentity.includes('@')
-          ? { email: userIdentity, password }
-          : { phone: userIdentity, password },
+        userIdentity.includes('@') ?
+          { email: userIdentity, password }
+        : { phone: userIdentity, password },
       )
 
       if (error?.message.endsWith('not confirmed')) {
         const { error } = await supabase.auth.signInWithOtp(
-          userIdentity.includes('@')
-            ? {
-                email: userIdentity,
-                options: { shouldCreateUser: false },
-              }
-            : {
-                phone: userIdentity,
-                options: { channel: 'sms', shouldCreateUser: false },
-              },
+          userIdentity.includes('@') ?
+            {
+              email: userIdentity,
+              options: { shouldCreateUser: false },
+            }
+          : {
+              phone: userIdentity,
+              options: { channel: 'sms', shouldCreateUser: false },
+            },
         )
 
         if (!error)
@@ -179,8 +179,8 @@ export const authRouter = {
           }
       }
 
-      return error
-        ? {
+      return error ?
+          {
             success: false,
             code: 'invalid_credentials' as const,
             message: 'Invalid id or password',

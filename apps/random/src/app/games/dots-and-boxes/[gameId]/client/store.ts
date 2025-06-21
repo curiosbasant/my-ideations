@@ -25,8 +25,9 @@ export const createStore = (initState: Partial<State>) =>
       ...initState,
 
       setBoard(board) {
-        const playerBoxMap = board.boxes
-          ? Object.values(board.boxes).reduce(
+        const playerBoxMap =
+          board.boxes ?
+            Object.values(board.boxes).reduce(
               (playerMap, playerIndex) => {
                 playerMap[playerIndex] ??= 0
                 playerMap[playerIndex]++

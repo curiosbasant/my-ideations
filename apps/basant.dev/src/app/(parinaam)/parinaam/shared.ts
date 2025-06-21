@@ -1,11 +1,14 @@
 import {
-  type QueryFunctionContext,
   queryOptions,
   experimental_streamedQuery as streamedQuery,
+  type QueryFunctionContext,
 } from '@tanstack/react-query'
+
 import type { ResultOutput } from '../server'
 
-export type HomeProps = PageProps<{ searchParams: 'year' | 'standard' | 'roll' | 'tab' | 'stream' }>
+export type HomeProps = PageProps<{
+  searchParams: 'year' | 'standard' | 'roll' | 'tab' | 'stream'
+}>
 
 export type ResultQueryInput = {
   year?: string | null

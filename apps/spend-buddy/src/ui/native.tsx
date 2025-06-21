@@ -16,8 +16,8 @@ function CustomTabs({
   tabBarActiveStyle,
   tabBarLabelStyle,
   ...props
-}: ExpoTabProps &
-  Partial<{
+}: ExpoTabProps
+  & Partial<{
     headerStyle: ViewStyle & TextStyle
     headerRightContainerStyle: ViewStyle & TextStyle
     tabBarStyle: ViewStyle & TextStyle
@@ -91,8 +91,8 @@ function CustomStack({
   headerStyle,
   headerRightContainerStyle,
   ...props
-}: ExpoStackProps &
-  Partial<{
+}: ExpoStackProps
+  & Partial<{
     headerStyle: ViewStyle & TextStyle
     headerRightContainerStyle: ViewStyle & TextStyle
   }>) {

@@ -18,7 +18,7 @@ export function EmptyListView() {
   return (
     <View className='items-center justify-center gap-8 px-16 py-32'>
       <Image className='size-40' source={require('~/assets/icons/empty_box.png')} />
-      <Text className='color-muted-foreground text-lg font-bold'>There's nothing to see here!</Text>
+      <Text className='text-lg font-bold color-muted-foreground'>There's nothing to see here!</Text>
     </View>
   )
 }

@@ -33,10 +33,9 @@ export function Screen({
     <Container className={cn('flex-1 bg-background', className)}>
       <StatusBar style='light' animated translucent />
       <Stack.Screen options={screenOptions} />
-      {loading ? (
+      {loading ?
         <LoadingScreen />
-      ) : (
-        <>
+      : <>
           {waiting && (
             <Modal animationType='fade' statusBarTranslucent transparent>
               <LoadingScreen />
@@ -44,7 +43,7 @@ export function Screen({
           )}
           {children}
         </>
-      )}
+      }
     </Container>
   )
 }
@@ -54,7 +53,7 @@ export function LoadingScreen() {
   return (
     <View className='flex-1 items-center justify-center gap-4 bg-background/85'>
       <Spinner className='color-primary' size={64} />
-      <Text className='color-foreground text-lg font-bold'>Please wait...</Text>
+      <Text className='text-lg font-bold color-foreground'>Please wait...</Text>
     </View>
   )
 }
@@ -71,12 +70,12 @@ export function CrashScreen(
         contentFit='contain'
       />
       {props.title === null || (
-        <Text className='color-foreground mt-8 text-center text-3xl font-bold'>
+        <Text className='mt-8 text-center text-3xl font-bold color-foreground'>
           {props.title || 'Oops!'}
         </Text>
       )}
       {props.message === null || (
-        <Text className='color-foreground text-center'>
+        <Text className='text-center color-foreground'>
           {props.message || 'Something went wrong'}
         </Text>
       )}

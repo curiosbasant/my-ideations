@@ -1,5 +1,5 @@
-import { ThemeSwitchButton } from './client'
 import { getThemePreference } from '../../server'
+import { ThemeSwitchButton } from './client'
 
 export default async function ThemeButton() {
   const themePreference = await getThemePreference()

@@ -1,7 +1,7 @@
 import Image from 'next/image'
 
 import { firestore } from '~/utils/firebase.server'
-import { serverGroupSchema, ServerGroupType, serverSchema, ServerType } from './schemas'
+import { serverGroupSchema, serverSchema, type ServerGroupType, type ServerType } from './schemas'
 import ServerCreateButton from './ServerCreateButton'
 import ServerListItem from './ServerListItem'
 
@@ -33,7 +33,11 @@ async function fetchServers() {
       obj[s.group.id].servers.push(s)
       obj[s.group.id].pingCount += s.pingCount
     } else if (groupDataCache.has(s.group.id)) {
-      obj[s.group.id] = { ...groupDataCache.get(s.group.id)!, pingCount: s.pingCount, servers: [s] }
+      obj[s.group.id] = {
+        ...groupDataCache.get(s.group.id)!,
+        pingCount: s.pingCount,
+        servers: [s],
+      }
     } else {
       obj[s.id] = s
     }
@@ -68,11 +72,9 @@ export default async function Sidebar() {
           {/* <ServerListItem data={{}} /> */}
           <div className='mx-5 h-0.5 rounded-full bg-slate-50/10 peer-empty:hidden' />
           {servers.map((server) =>
-            'servers' in server ? (
+            'servers' in server ?
               <ServerGroupListItem {...server} key={server.id} />
-            ) : (
-              <ServerListItem {...server} href={`/discord/${server.id}`} key={server.id} />
-            ),
+            : <ServerListItem {...server} href={`/discord/${server.id}`} key={server.id} />,
           )}
           <ServerGroupListItem name='wow' servers={[]} />
 
@@ -94,19 +96,18 @@ function ServerGroupListItem(props: {
   return (
     <li className='relative'>
       <ul className='group relative isolate'>
-        <div className='rounded-b-5xl absolute inset-0 -z-10 mx-3 rounded-t-3xl bg-slate-50/10 opacity-0 transition-all duration-500 group-[:has([data-toggle-folder]:checked)]:opacity-100' />
+        <div className='absolute inset-0 -z-10 mx-3 rounded-b-5xl rounded-t-3xl bg-slate-50/10 opacity-0 transition-all duration-500 group-[:has([data-toggle-folder]:checked)]:opacity-100' />
 
         <li className='relative z-10'>
           <span className='absolute left-0 top-1/2 h-2 w-1 -translate-y-1/2 rounded-r-full transition-all duration-300 group-[:has([data-toggle-folder]:not(:checked))]:bg-slate-50 peer-[:has(:first-child:hover)]:h-6' />
           <div className='relative mx-3'>
-            {props.servers.length === 0 ? (
+            {props.servers.length === 0 ?
               <button
                 className='aspect-square w-full rounded-2xl font-icon text-white/80 hover:bg-slate-50/10'
                 style={props.color ? { color: props.color } : undefined}>
                 folder
               </button>
-            ) : (
-              <label
+            : <label
                 className='group relative block aspect-square cursor-pointer overflow-hidden rounded-2xl bg-slate-50 bg-opacity-0 transition-all duration-300 pointer-events-box-only hover:bg-opacity-10 group-[:has([data-toggle-folder]:not(:checked))]:bg-opacity-20'
                 title={props.name}
                 role='button'>
@@ -131,7 +132,7 @@ function ServerGroupListItem(props: {
                   {3 in props.servers && <span className='relative rounded-full bg-slate-900' />}
                 </span>
               </label>
-            )}
+            }
             {props.pingCount! > 0 && (
               <span className='absolute bottom-0 right-0 z-10 rounded-full bg-rose-500 p-0.5 px-1 text-center text-xs leading-none text-slate-50 group-[:has([data-toggle-folder]:checked)]:opacity-0'>
                 {props.pingCount}

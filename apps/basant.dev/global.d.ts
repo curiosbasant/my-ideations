@@ -1,13 +1,13 @@
 import type { PropsWithChildren, ReactNode } from 'react'
 
-type ParseParamKey<T extends string> = T extends `${infer P}[]`
-  ? P extends `?${infer P}`
-    ? P
+type ParseParamKey<T extends string> =
+  T extends `${infer P}[]` ?
+    P extends `?${infer P}` ?
+      P
     : P
   : T
-type ParseParam<T extends string> = T extends `${infer K}[]`
-  ? string[] | (K extends `?${string}` ? null : never)
-  : string
+type ParseParam<T extends string> =
+  T extends `${infer K}[]` ? string[] | (K extends `?${string}` ? null : never) : string
 
 declare global {
   type LayoutProps<T extends { params?: string; slots?: string } = {}> = PropsWithChildren<

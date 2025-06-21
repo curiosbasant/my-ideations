@@ -63,14 +63,13 @@ export function Button(props: ButtonProps) {
       // Disable while loading spinner, override if explicitly passed
       disabled={loading}
       {...restProps}>
-      {loading ? (
+      {loading ?
         <Spinner className={childrenClassName} />
-      ) : (
-        <>
+      : <>
           {icon && <Icon name={icon} className={childrenClassName} size={14} />}
           <Text className={childrenClassName}>{children}</Text>
         </>
-      )}
+      }
     </Pressable>
   )
 }

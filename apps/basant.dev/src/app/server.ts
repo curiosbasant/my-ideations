@@ -1,5 +1,6 @@
-import { cookies } from 'next/headers'
 import { cache } from 'react'
+import { cookies } from 'next/headers'
+
 import { COOKIE_THEME_KEY, type ThemePreference } from './shared'
 
 export const getThemePreference = cache(async () => {

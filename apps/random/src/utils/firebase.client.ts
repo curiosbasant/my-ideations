@@ -3,7 +3,7 @@ import { connectAuthEmulator, getAuth } from 'firebase/auth'
 import { connectDatabaseEmulator, getDatabase } from 'firebase/database'
 import { connectFirestoreEmulator, getFirestore } from 'firebase/firestore'
 
-import { USE_FIREBASE_EMULATORS, __DEV__ } from '~/constants'
+import { __DEV__, USE_FIREBASE_EMULATORS } from '~/constants'
 
 if (!getApps().length) {
   const projectId = 'my-ideations'

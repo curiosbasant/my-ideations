@@ -59,21 +59,19 @@ export default function GroupMembersScreen() {
 function MemberListItem(props: ListRenderItemInfo<GroupMemberListItem>) {
   return (
     <View className='mb-2 flex-row items-center gap-4 rounded-lg px-3 py-2'>
-      {props.item.id === props.extraData ? (
+      {props.item.id === props.extraData ?
         <View>
           <UserAvatar url={props.item.avatarUrl} />
-          <Icon name='crown' className='color-primary absolute -right-1 bottom-0' size={14} />
+          <Icon name='crown' className='absolute -right-1 bottom-0 color-primary' size={14} />
         </View>
-      ) : (
-        <UserAvatar url={props.item.avatarUrl} />
-      )}
+      : <UserAvatar url={props.item.avatarUrl} />}
       <View className='flex-1'>
-        <Text className='color-foreground font-bold'>{props.item.displayName}</Text>
-        <Text className='color-muted-foreground text-xs'>
+        <Text className='font-bold color-foreground'>{props.item.displayName}</Text>
+        <Text className='text-xs color-muted-foreground'>
           joined {formatDistanceToNow(props.item.joinedAt)} ago
         </Text>
       </View>
-      <Text className='color-foreground text-xl font-bold'>₹{props.item.spends}</Text>
+      <Text className='text-xl font-bold color-foreground'>₹{props.item.spends}</Text>
     </View>
   )
 }
@@ -82,7 +80,7 @@ function EmptyListView() {
   return (
     <View className='flex-1 items-center justify-center gap-8 p-16'>
       <Image className='size-40' source={require('~/assets/icons/empty_box.png')} />
-      <Text className='color-secondary-foreground text-lg font-bold'>No members in this group</Text>
+      <Text className='text-lg font-bold color-secondary-foreground'>No members in this group</Text>
     </View>
   )
 }
