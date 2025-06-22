@@ -46,6 +46,7 @@
   ],
   "tailwindCSS.classFunctions": ["cva", "cn", "cx"],
   "tailwindCSS.experimental.configFile": {
+    "apps/basant.dev/src/app/globals.css": "apps/basant.dev/src/**/*.tsx",
     "apps/random/tailwind.config.ts": "apps/random/src/**/*.tsx",
     "apps/spend-buddy/tailwind.config.ts": "apps/spend-buddy/src/**/*.tsx"
   },

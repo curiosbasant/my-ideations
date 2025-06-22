@@ -1,6 +1,16 @@
-import type { PropsWithChildren } from 'react'
+import type { ComponentType, PropsWithChildren } from 'react'
 import Image from 'next/image'
-import formatDistanceStrict from 'date-fns/formatDistanceStrict'
+import { formatDistanceStrict } from 'date-fns/formatDistanceStrict'
+import {
+  GlobeIcon,
+  GraduationCapIcon,
+  MailIcon,
+  MapPinHouseIcon,
+  PhoneIcon,
+  UserIcon,
+  WaypointsIcon,
+  type LucideProps,
+} from 'lucide-react'
 
 export const metadata = {
   title: "Basant's Resume",
@@ -26,22 +36,21 @@ const WORK_EXPERIENCE = [
 ]
 
 const PROFESSIONAL_SKILLS = [
-  { logo: 'nextjs', label: 'NextJS', value: 85 },
-  { logo: 'react', label: 'React', value: 88 },
+  { logo: 'nextjs', label: 'NextJS', value: 90 },
+  { logo: 'react', label: 'React', value: 95 },
   { logo: 'react', label: 'React Native', value: 75 },
   { logo: 'typescript', label: 'Typescript', value: 85 },
   { logo: 'javascript', label: 'Javascript', value: 95 },
   { logo: 'css', label: 'HTML/CSS', value: 97 },
   { logo: 'tailwindcss', label: 'TailwindCSS', value: 99 },
   { logo: 'nodejs', label: 'NodeJS', value: 70 },
-  { logo: 'firebase', label: 'Firebase', value: 75 },
-  { logo: 'mysql_full', label: 'MySQL', value: 55 },
+  { logo: 'supabase', label: 'Supabase', value: 70 },
+  { logo: 'firebase', label: 'Firebase', value: 70 },
   { logo: 'mongodb', label: 'MongoDB', value: 65 },
-  { logo: 'git', label: 'Git/Github', value: 60 },
-  { logo: 'python', label: 'Python', value: 70 },
-  { logo: 'discord', label: 'Discord API', value: 85 },
+  { logo: 'git', label: 'Git/Github', value: 75 },
   { logo: 'wordpress', label: 'Wordpress', value: 65 },
   { logo: 'c', label: 'C/C++', value: 75 },
+  { logo: 'python', label: 'Python', value: 70 },
 ]
 
 export default function ResumePage() {
@@ -57,14 +66,14 @@ export default function ResumePage() {
             <section className='py-8'>
               <div className='relative mx-auto h-64 w-64 overflow-hidden rounded-full border-8 border-sky-400 bg-slate-200 shadow-inner'>
                 <Image
-                  className='object-cover object-[center_-8px]'
-                  src='/assets/passport_photo.jpg'
+                  className='object-cover object-center'
+                  src='/assets/display-photo.jpeg'
                   alt="Basant's Picture"
                   fill
                 />
               </div>
             </section>
-            <Asides icon='person' label='About Me'>
+            <Asides Icon={UserIcon} label='About Me'>
               <p>
                 I'm a Software Developer, continually enhancing my skills in the field of web and
                 mobile app development. I'm highly motivated and eager to learn new technologies.
@@ -73,25 +82,30 @@ export default function ResumePage() {
               </p>
             </Asides>
             <Asides label='Contact'>
-              <div className='flex gap-8'>
-                <div className='-ml-20 w-12 space-y-4 rounded-full bg-sky-500 px-2.5 py-3 text-white'>
-                  <span className='font-icon text-3xl'>phone</span>
-                  <span className='font-icon text-3xl'>mail</span>
-                  <span className='font-icon text-3xl'>home</span>
+              <div className='-ms-20 grid grid-cols-[auto_1fr] grid-rows-3 items-center gap-8 gap-y-4'>
+                <div className='row-span-full grid w-12 shrink-0 basis-12 grid-rows-subgrid rounded-full bg-sky-500 px-2.5 py-3 text-white'>
+                  <PhoneIcon className='aspect-square w-full' />
+                  <MailIcon className='aspect-square w-full' />
+                  <MapPinHouseIcon className='aspect-square w-full' />
                 </div>
-                <div className='flex flex-col gap-y-4 pt-4'>
-                  <span className='block'>+917023367365</span>
-                  <span className='block'>
+                <div className='row-span-full grid grid-rows-subgrid py-3'>
+                  <p className='leading-none'>+917023367365</p>
+                  <p className='leading-none'>
                     <a href='mailto:basantbrpl@gmail.com'>basantbrpl@gmail.com</a>
-                  </span>
-                  <span className='block'>
+                  </p>
+                  <p className='leading-none'>
                     Jodhpur, Rajasthan <small>(342027)</small>
-                  </span>
+                  </p>
                 </div>
               </div>
             </Asides>
-            <Asides icon='school' label='Education'>
+            <Asides Icon={GraduationCapIcon} label='Education'>
               <ul className='space-y-6'>
+                <li className='space-y-2'>
+                  <strong className='text-base text-slate-400'>2024 - Present</strong>
+                  <p className='leading-6'>MSc Computer Science</p>
+                  <p className='leading-6'>VMOU, Kota</p>
+                </li>
                 <li className='space-y-2'>
                   <strong className='text-base text-slate-400'>2017 - 2020</strong>
                   <p className='leading-6'>Bachelor of Computer Application</p>
@@ -106,14 +120,14 @@ export default function ResumePage() {
                 </li>
               </ul>
             </Asides>
-            <Asides icon='language' label='Languages'>
+            <Asides Icon={GlobeIcon} label='Languages'>
               <ul className='space-y-2'>
                 <LanguageItem language='Hindi' level={5} />
                 <LanguageItem language='English' level={4} />
                 <LanguageItem language='Marwari' level={4} />
               </ul>
             </Asides>
-            <Asides icon='share' label='Social Handles'>
+            <Asides Icon={WaypointsIcon} label='Social Handles'>
               <a
                 href='https://github.com/CuriosBasant'
                 className='inline-block h-8 w-8'
@@ -260,7 +274,6 @@ export default function ResumePage() {
                   I'm also quite familiar with
                   <span className='ml-1 rounded bg-slate-100 p-1'>JAVA</span>,{' '}
                   <span className='ml-1 rounded bg-slate-100 p-1'>PHP</span>,{' '}
-                  <span className='ml-1 rounded bg-slate-100 p-1'>Rust</span>,{' '}
                   <span className='ml-1 rounded bg-slate-100 p-1'>Flutter</span>,{' '}
                   <span className='ml-1 rounded bg-slate-100 p-1'>Unity</span>,{' '}
                   <span className='ml-1 rounded bg-slate-100 p-1'>Blender</span>{' '}
@@ -313,15 +326,15 @@ function ProjectItem(props: PropsWithChildren<{ title: string; link?: string }>)
   )
 }
 
-function Asides(props: PropsWithChildren<{ icon?: string; label: string }>) {
+function Asides(props: PropsWithChildren<{ Icon?: ComponentType<LucideProps>; label: string }>) {
   return (
     <section className='space-y-4'>
       <div className='flex items-center gap-8'>
         <div
-          className={`aspect-square shrink-0 basis-12 rounded-full p-2 text-center text-white ${
-            props.icon ? 'bg-sky-500' : ''
+          className={`aspect-square shrink-0 basis-12 rounded-full p-2.5 text-center text-white ${
+            props.Icon ? 'bg-sky-500' : ''
           } `}>
-          <span className='m-auto font-icon text-3xl'>{props.icon}</span>
+          {props.Icon && <props.Icon className='size-full' />}
         </div>
         <h3 className='text-3xl font-bold text-sky-500'>{props.label}</h3>
       </div>
