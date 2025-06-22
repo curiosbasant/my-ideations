@@ -1,4 +1,4 @@
-import { getThemePreference } from '../../server'
+import { getThemePreference } from '~/app/server'
 import { ThemeSwitchButton } from './client'
 
 export default async function ThemeButton() {
