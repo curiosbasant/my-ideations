@@ -55,16 +55,16 @@ const PROFESSIONAL_SKILLS = [
 
 export default function ResumePage() {
   return (
-    <div className='min-h-screen overflow-y-auto bg-slate-100 shadow-lg'>
+    <div className='h-full overflow-y-auto bg-slate-100 shadow-lg'>
       <div className='flex h-full lg:hidden print:hidden'>
         <p className='m-auto text-center text-2xl text-slate-500'>Please view in Desktop Site</p>
       </div>
-      <div className='mx-auto hidden max-w-7xl border-r bg-white text-lg lg:flex print:flex print:max-w-none'>
+      <div className='mx-auto hidden max-w-7xl border-e bg-white text-lg lg:flex print:flex print:max-w-none'>
         <div className='relative w-96 shrink-0 overflow-hidden border-x border-x-sky-200/75 bg-sky-100'>
-          <div className='absolute -m-16 h-48 w-64 rotate-[24deg] skew-x-[45deg] bg-sky-200'></div>
+          <div className='rotate-24 skew-x-45 absolute -m-16 h-48 w-64 bg-sky-200'></div>
           <aside className='space-y-8 p-8 text-slate-500'>
             <section className='py-8'>
-              <div className='relative mx-auto h-64 w-64 overflow-hidden rounded-full border-8 border-sky-400 bg-slate-200 shadow-inner'>
+              <div className='relative mx-auto size-64 overflow-hidden rounded-full border-8 border-sky-400 bg-slate-200 shadow-inner'>
                 <Image
                   className='object-cover object-center'
                   src='/assets/display-photo.jpeg'
@@ -130,19 +130,19 @@ export default function ResumePage() {
             <Asides Icon={WaypointsIcon} label='Social Handles'>
               <a
                 href='https://github.com/CuriosBasant'
-                className='inline-block h-8 w-8'
+                className='inline-block size-8'
                 target='_blank'>
                 <GithubLogo />
               </a>
               <a
                 href='https://www.linkedin.com/in/basant-barupal'
-                className='ml-4 inline-block h-8 w-8'
+                className='ms-4 inline-block size-8'
                 target='_blank'>
                 <LinkedInLogo />
               </a>
               <a
                 href='https://angel.co/u/basant-barupal'
-                className='ml-4 inline-block h-8 w-8'
+                className='ms-4 inline-block size-8'
                 target='_blank'>
                 <img
                   src='https://angel.co/assets/icons/angellist-e1decb2fb69dc221e2dd4ad5f749797e28b3e9e92957e0f161b8e64d5a8a74c8.ico'
@@ -153,12 +153,7 @@ export default function ResumePage() {
           </aside>
         </div>
         <div className='relative flex-1'>
-          <div
-            className='absolute h-96 w-full'
-            style={{
-              WebkitMaskImage:
-                'linear-gradient(to bottom, rgba(0, 0, 0, 1.0) 50%, transparent 100%)',
-            }}>
+          <div className='mask-b-to-75% absolute h-96 w-full'>
             <div
               className='h-full'
               style={{
@@ -175,7 +170,7 @@ export default function ResumePage() {
                 </h1>
                 <h2 className='text-5xl text-slate-400'>Full Stack Developer</h2>
               </div>
-              <div className='-mr-16 h-64 w-12 rounded-full bg-sky-400 before:ml-auto before:mt-8 before:block before:h-10 before:w-4 before:bg-[image:repeating-linear-gradient(white,white_.5rem,transparent_.5rem,transparent_1rem)]'></div>
+              <div className='-me-16 h-64 w-12 rounded-full bg-sky-400 before:ms-auto before:mt-8 before:block before:h-10 before:w-4 before:bg-[image:repeating-linear-gradient(white,white_.5rem,transparent_.5rem,transparent_1rem)]'></div>
             </section>
             <section className='space-y-8'>
               <h3 className='text-3xl font-bold text-sky-500'>Work Experience</h3>
@@ -186,7 +181,7 @@ export default function ResumePage() {
                     <div className='rounded-lg border p-1'>
                       <a
                         href={company.link}
-                        className='block h-12 w-12 rounded-md bg-[#0067f9] fill-white'>
+                        className='block size-12 rounded-md bg-[#0067f9] fill-white'>
                         <HootBoardLogo />
                       </a>
                     </div>
@@ -196,7 +191,7 @@ export default function ResumePage() {
                       </a>
                       <div className=''>
                         <strong className=''>{company.position}</strong>
-                        <small className='ml-4 text-slate-500'>
+                        <small className='ms-4 text-slate-500'>
                           {company.joinedOn.getFullYear()} -{' '}
                           {company.leftOn?.getFullYear() ?? 'Present'} (
                           {formatDistanceStrict(company.joinedOn, company.leftOn ?? Date.now())})
@@ -211,7 +206,7 @@ export default function ResumePage() {
                           </li>
                         ))}
                       </ul>
-                      <ul className='-ml-2 mt-4'>
+                      <ul className='-ms-2 mt-4'>
                         {company.points.map((point, i) => (
                           <li className='list-disc pl-2' key={i}>
                             <p className=''>{point}</p>
@@ -272,11 +267,11 @@ export default function ResumePage() {
                 </ul>
                 <p className='mt-8 text-base'>
                   I'm also quite familiar with
-                  <span className='ml-1 rounded bg-slate-100 p-1'>JAVA</span>,{' '}
-                  <span className='ml-1 rounded bg-slate-100 p-1'>PHP</span>,{' '}
-                  <span className='ml-1 rounded bg-slate-100 p-1'>Flutter</span>,{' '}
-                  <span className='ml-1 rounded bg-slate-100 p-1'>Unity</span>,{' '}
-                  <span className='ml-1 rounded bg-slate-100 p-1'>Blender</span>{' '}
+                  <span className='ms-1 rounded bg-slate-100 p-1'>JAVA</span>,{' '}
+                  <span className='ms-1 rounded bg-slate-100 p-1'>PHP</span>,{' '}
+                  <span className='ms-1 rounded bg-slate-100 p-1'>Flutter</span>,{' '}
+                  <span className='ms-1 rounded bg-slate-100 p-1'>Unity</span>,{' '}
+                  <span className='ms-1 rounded bg-slate-100 p-1'>Blender</span>{' '}
                 </p>
               </div>
             </section>
@@ -338,7 +333,7 @@ function Asides(props: PropsWithChildren<{ Icon?: ComponentType<LucideProps>; la
         </div>
         <h3 className='text-3xl font-bold text-sky-500'>{props.label}</h3>
       </div>
-      <div className='pl-20'>{props.children}</div>
+      <div className='ps-20'>{props.children}</div>
     </section>
   )
 }
@@ -349,7 +344,7 @@ function Range(props: { value?: string | number }) {
       <div
         className='relative h-full rounded-full bg-sky-400 shadow shadow-sky-200'
         style={{ width: (props.value ?? 50) + '%' }}>
-        <span className='absolute right-0 top-1/2 h-5 w-5 -translate-y-1/2 translate-x-1/2 rounded-full border bg-white shadow'></span>
+        <span className='absolute right-0 top-1/2 size-5 -translate-y-1/2 translate-x-1/2 rounded-full border bg-white shadow'></span>
       </div>
     </div>
   )

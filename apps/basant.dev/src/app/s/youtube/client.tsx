@@ -1,8 +1,9 @@
 'use client'
 
 import { useRef, useState } from 'react'
+import { PlayIcon, SettingsIcon, Volume2Icon, VolumeXIcon } from 'lucide-react'
 
-export default function VideoDisplay() {
+export function VideoDisplay() {
   const [state, setState] = useState({
     isCinemaMode: false,
     isMuted: false,
@@ -17,7 +18,7 @@ export default function VideoDisplay() {
   return (
     <main
       className={`relative ${
-        state.isCinemaMode ? 'col-span-2 -m-6 mb-0 aspect-[15/7]' : 'aspect-video'
+        state.isCinemaMode ? 'aspect-15/7 col-span-2 -m-6 mb-0' : 'aspect-video'
       } bg-black`}>
       <video
         ref={videoRef}
@@ -31,7 +32,7 @@ export default function VideoDisplay() {
         onTimeUpdate={({ currentTarget: video }) => {
           setState((prev) => ({ ...prev, time: video.currentTime }))
         }}
-        onPlaying={(ev) => {
+        onPlaying={() => {
           // console.log("object")
         }}
         onLoadedMetadata={({ currentTarget: video }) => {
@@ -61,22 +62,23 @@ export default function VideoDisplay() {
           </div>
           <div className='flex items-center gap-3 py-3 text-white'>
             <button
-              className='font-icon text-4xl leading-none'
               onClick={() => {
                 const video = videoRef.current!
                 video.paused ? video.play() : video.pause()
               }}>
-              play_arrow
+              <PlayIcon />
             </button>
             <div className='group contents'>
               <button
-                className='ml-3 font-icon text-2xl group-hover:mr-2'
+                className='ms-3 group-hover:me-2'
                 onClick={() => {
                   if (videoRef.current) {
                     videoRef.current.muted = !videoRef.current.muted
                   }
                 }}>
-                {state.isMuted ? 'volume_off' : 'volume_up'}
+                {state.isMuted ?
+                  <VolumeXIcon />
+                : <Volume2Icon />}
               </button>
               <div
                 className='h-5 w-0 bg-gray-400/75 bg-clip-content opacity-0 transition-all group-hover:w-20 group-hover:py-2 group-hover:opacity-100'
@@ -99,11 +101,10 @@ export default function VideoDisplay() {
 
             <span className='!ml-auto'></span>
             <button
-              className='font-icon text-2xl'
               onClick={() => {
                 setState((prev) => ({ ...prev, isCinemaMode: !prev.isCinemaMode }))
               }}>
-              settings
+              <SettingsIcon />
             </button>
           </div>
         </div>
