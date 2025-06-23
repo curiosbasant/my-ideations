@@ -19,7 +19,7 @@ export default function ParinaamRootLayout(props: LayoutProps<{ slots: 'themeSwi
           style={{ background: 'url(/bg-pattern.jpg) top / 600px' }}
         />
       </div>
-      <ScrollArea className='light:bg-secondary size-full'>
+      <ScrollArea className='light:bg-secondary selection:bg-primary/25 size-full'>
         <div className='isolate flex min-h-full w-full flex-col divide-y [--page-padding:--spacing(2)] [--page-size:var(--container-7xl)] sm:[--page-padding:--spacing(4)] md:[--page-padding:--spacing(8)]'>
           <header className='bg-background/80 px-(--page-padding) sticky top-0 z-10 backdrop-blur-sm'>
             <div className='max-w-(--page-size) m-auto flex items-center gap-4 py-3'>

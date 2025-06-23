@@ -12,8 +12,8 @@ export const metadata = {
 
 export default function RootLayout(props: LayoutProps) {
   return (
-    <Html className='size-full selection:bg-primary/25' lang='en'>
-      <body className={`${geistSans.variable} ${geistMono.variable} isolate size-full antialiased`}>
+    <Html className='size-full antialiased' lang='en'>
+      <body className={`${geistSans.variable} ${geistMono.variable} isolate size-full`}>
         {props.children}
       </body>
     </Html>
