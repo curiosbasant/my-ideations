@@ -1,5 +1,6 @@
 import { createElement, type ElementType, type ReactNode } from 'react'
 import { cx, type CxOptions } from 'class-variance-authority'
+import Zip from 'jszip'
 import { twMerge } from 'tailwind-merge'
 
 export function cn(...inputs: CxOptions) {
@@ -18,4 +19,14 @@ export function styled<
 
 export function prettifyText(text: string) {
   return text.replace(/\b\(/g, ' (').replace(/(\.|\,)\b/g, '$1 ')
+}
+
+export async function zipFiles(files: File[]) {
+  const zip = new Zip()
+  for (const file of files) {
+    zip.file(file.name, file)
+  }
+
+  const zipBlob = await zip.generateAsync({ type: 'blob', compressionOptions: { level: 6 } })
+  return new File([zipBlob], `combined-${Date.now()}.zip`)
 }

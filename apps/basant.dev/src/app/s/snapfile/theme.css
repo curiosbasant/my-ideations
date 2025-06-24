@@ -1,0 +1,17 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  .font-icon,
+  .font-icon-outline {
+    width: 1ch;
+    line-height: 1 !important;
+    @apply box-content block aspect-square text-2xl;
+  }
+
+  .woosh {
+    left: -99999px;
+    @apply absolute appearance-none;
+  }
+}
