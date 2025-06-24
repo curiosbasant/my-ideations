@@ -7,6 +7,9 @@ export async function middleware(request: NextRequest) {
   const subdomain = extractSubdomain(request)
 
   if (subdomain) {
+    if (pathname === '/favicon.ico') {
+      return NextResponse.rewrite(new URL(`/icons/${subdomain}.ico`, request.url))
+    }
     // For the root path on a subdomain, rewrite to the subdomain page
     return NextResponse.rewrite(
       new URL(`/s/${pathname === '/' ? subdomain : subdomain + pathname}${search}`, request.url),
@@ -31,9 +34,10 @@ export const config = {
      * Match all paths except for:
      * 1. /api routes
      * 2. /_next (Next.js internals)
-     * 3. all root files inside /public (e.g. /favicon.ico)
+     * 3. all files inside /public
      */
-    '/((?!api|_next|[\\w-]+\\.\\w+).*)',
+    '/((?!api|_next|.*\\..*).*)',
+    '/favicon.ico',
   ],
 }
 

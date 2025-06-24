@@ -1,4 +1,4 @@
-import type { ComponentType, PropsWithChildren } from 'react'
+import type { PropsWithChildren } from 'react'
 import Image from 'next/image'
 import { formatDistanceStrict } from 'date-fns/formatDistanceStrict'
 import {
@@ -27,7 +27,7 @@ const WORK_EXPERIENCE = [
     link: 'https://www.hootboard.com',
     joinedOn: new Date('06/06/2022'),
     leftOn: new Date('04/20/2023'),
-    skills: ['React', 'React Native', 'TypeScript', 'TailwindCSS', 'Redux', 'Nodejs', 'Express'],
+    skills: ['React', 'Expo', 'TypeScript', 'TailwindCSS', 'Redux', 'Nodejs', 'Express'],
     points: [
       'Created an entire production ready, mobile application from scratch.',
       'Worked and developed RSS Feed Reader App from scratch.',
@@ -243,7 +243,7 @@ export default function ResumePage() {
                     profile, reflecting the breadth of my learning and development journey.
                   </p>
                   <ProjectItem title='Pariksha Parinaam' link='https://parinaam.basant.dev'>
-                    An online board result checking tool for the whole class in one go.
+                    An online board result checking platform for the whole class in one go.
                   </ProjectItem>
                   <ProjectItem title='shadyantra' link='https://shadyantra.vercel.app/editor'>
                     A real indian ancient online multiplayer 10x10 chess board game, built using the
@@ -258,7 +258,7 @@ export default function ResumePage() {
                     interest, play quizzes, purchase courses, etc (still in alpha), built using the
                     tools - nextjs, tailwindcss, nodejs, typescript and firebase
                   </ProjectItem>
-                  <ProjectItem title='OwnlyOne' link='https://github.com/CuriosBasant/ownly-one'>
+                  <ProjectItem title='OwnlyOne' link='https://github.com/curiosbasant/ownly-one'>
                     A discord bot built using nodejs and typescript
                   </ProjectItem>
                 </MainSection>

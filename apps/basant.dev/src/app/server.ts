@@ -1,7 +1,7 @@
 import { cache } from 'react'
 import { cookies } from 'next/headers'
 
-import { COOKIE_THEME_KEY, type ThemePreference } from './shared'
+import { COOKIE_THEME_KEY, type ThemePreference } from '~/app/shared'
 
 export const getThemePreference = cache(async () => {
   const cookieStore = await cookies()

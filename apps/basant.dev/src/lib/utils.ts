@@ -13,10 +13,6 @@ export function styled<
   return (props: Props) => {
     const resolvedClassName = props.className ? cn(className, props.className) : className
     return createElement(Comp, { ...props, className: resolvedClassName }, props.children)
-    // return (
-    //   // @ts-expect-error
-    //   <Comp {...props} className={resolvedClassName} />
-    // )
   }
 }
 
