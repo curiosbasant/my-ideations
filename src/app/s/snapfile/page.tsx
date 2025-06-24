@@ -3,10 +3,10 @@
 import { useState } from 'react'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 
-import { QRCodePreview, QRCodeScanner } from '~/components/qr-code'
-import Spinner from '~/components/spinner'
-import { zipFiles } from '~/lib/file'
 import { Database } from '~/lib/supabase'
+import { zipFiles } from '~/lib/utils'
+import { QRCodePreview, QRCodeScanner } from './client.component'
+import { Spinner } from './shared.component'
 
 export default function HomePage() {
   const [activeView, setActiveView] = useState<'initial' | 'scanning' | 'uploading' | 'uploaded'>(

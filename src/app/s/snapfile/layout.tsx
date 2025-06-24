@@ -1,6 +1,6 @@
-import './globals.css'
+import './theme.css'
 
-import { latoFont, materialIcon } from '~/lib/fonts'
+import { latoFont, materialIcon } from '~/app/shared'
 
 export const metadata = {
   title: 'SnapFile',
@@ -9,9 +9,9 @@ export const metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang='en' className='h-full w-full'>
+    <html lang='en' className='size-full'>
       <body
-        className={`h-full w-full bg-slate-100 text-slate-500 ${latoFont.className} ${materialIcon.variable}`}>
+        className={`size-full bg-slate-100 text-slate-500 ${latoFont.className} ${materialIcon.variable}`}>
         {children}
       </body>
     </html>

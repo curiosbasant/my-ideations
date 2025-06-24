@@ -5,7 +5,7 @@ import Image from 'next/image'
 import QRScanner from 'qr-scanner'
 import QRCode from 'qrcode'
 
-import Spinner from './spinner'
+import { Spinner } from './shared.component'
 
 export function QRCodeScanner(props: { onDecode(text: string): void }) {
   const videoRef = useRef<HTMLVideoElement>(null)
