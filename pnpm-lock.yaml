@@ -26,6 +26,9 @@ importers:
 
   apps/basant.dev:
     dependencies:
+      '@my/core':
+        specifier: workspace:*
+        version: link:../../packages/core
       '@my/lib':
         specifier: workspace:*
         version: link:../../packages/lib

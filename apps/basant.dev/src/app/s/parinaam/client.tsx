@@ -5,7 +5,8 @@ import { QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { Share2Icon } from 'lucide-react'
 
-import { ClientOnly } from '~/components/client-only'
+import { ClientOnly } from '@my/core/elements'
+
 import { Button } from '~/components/ui/button'
 import { getQueryClient } from '~/lib/query'
 

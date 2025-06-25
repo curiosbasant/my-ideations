@@ -10,6 +10,7 @@
     "with-env": "dotenv -e ../../.env.local --"
   },
   "dependencies": {
+    "@my/core": "workspace:*",
     "@my/lib": "workspace:*",
     "@radix-ui/react-label": "^2.1.7",
     "@radix-ui/react-scroll-area": "^1.2.9",
