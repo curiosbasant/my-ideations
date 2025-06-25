@@ -1,51 +1,30 @@
-import { createClient } from '@supabase/supabase-js'
+import { cookies } from 'next/headers'
 
-export const supabase = createClient<Database>(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-  {
-    auth: { persistSession: true },
-  }
-)
+import { createServerClient } from '@my/lib/supabase'
 
-export type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[]
+export async function getSupabase() {
+  const cookieStore = await cookies()
 
-export interface Database {
-  public: {
-    Tables: {
-      short_url: {
-        Row: {
-          created_at: string
-          id: number
-          code: string
-          url: string
-        }
-        Insert: {
-          created_at?: string
-          id?: number
-          code: string
-          url: string
-        }
-        Update: {
-          created_at?: string
-          id?: number
-          code?: string
-          url?: string
-        }
-        Relationships: []
-      }
-    }
-    Views: {
-      [_ in never]: never
-    }
-    Functions: {
-      [_ in never]: never
-    }
-    Enums: {
-      [_ in never]: never
-    }
-    CompositeTypes: {
-      [_ in never]: never
-    }
-  }
+  return createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        getAll() {
+          return cookieStore.getAll()
+        },
+        setAll(cookiesToSet) {
+          try {
+            cookiesToSet.forEach(({ name, value, options }) =>
+              cookieStore.set(name, value, options),
+            )
+          } catch {
+            // The `setAll` method was called from a Server Component.
+            // This can be ignored if you have middleware refreshing
+            // user sessions.
+          }
+        },
+      },
+    },
+  )
 }

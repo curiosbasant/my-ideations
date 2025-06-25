@@ -79,19 +79,3 @@ function extractSubdomain(request: NextRequest) {
 
   return isSubdomain ? hostname.replace(`.${rootDomainFormatted}`, '') : null
 }
-
-/*
-export const snapfileMiddleware: NextMiddleware = async (req) => {
-  const probablyShortCode = req.nextUrl.pathname.split('/')[1]
-  const supabase = createMiddlewareClient<Database>({ req, res: new NextResponse() })
-  const { error, data: shortUrl } = await supabase
-    .from('short_url')
-    .select('url')
-    .eq('code', probablyShortCode)
-    .single()
-
-  if (error) return NextResponse.next()
-
-  return NextResponse.rewrite(shortUrl.url)
-}
-*/

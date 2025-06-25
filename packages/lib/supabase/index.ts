@@ -1,6 +1,7 @@
 import type { AuthError, Session } from '@supabase/supabase-js'
 
 export * from '@supabase/supabase-js'
+export * from '@supabase/ssr'
 
 declare module '@supabase/auth-js' {
   interface GoTrueClient {
@@ -9,12 +10,4 @@ declare module '@supabase/auth-js' {
       | { data: { session: null }; error: AuthError }
     >
   }
-}
-
-export async function withThrowOnError<T>(
-  promise: Promise<{ data: T; error: null } | { data: unknown; error: Error }>,
-): Promise<T> {
-  const { data, error } = await promise
-  if (error) throw error
-  return data
 }
