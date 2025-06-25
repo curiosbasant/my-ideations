@@ -2,6 +2,7 @@ import type { AuthError, Session } from '@supabase/supabase-js'
 
 export * from '@supabase/supabase-js'
 export * from '@supabase/ssr'
+export type { Database } from './types.gen'
 
 declare module '@supabase/auth-js' {
   interface GoTrueClient {
