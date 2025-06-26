@@ -2,37 +2,34 @@
 
 import { Suspense, use } from 'react'
 import Image from 'next/image'
-import Link from 'next/link'
-import { ChevronLeftIcon, CopyIcon } from 'lucide-react'
+import { CopyIcon } from 'lucide-react'
 import QRCode from 'qrcode'
 
 import { ClientOnly } from '@my/core/elements'
 
 import { Spinner } from '~/app/s/snapfile/shared.component'
-import { Button } from '~/components/ui/button'
 
 export default function SnapFileQrCodePage(props: PageProps<{ params: 'shortcode' }>) {
   const { shortcode } = use(props.params)
 
   return (
-    <div className='flex h-full flex-col items-center justify-center gap-6'>
-      <p className='text-balance text-center'>
-        Ask your friend to scan this QR Code to get access to the uploaded file on their device.
-      </p>
-      <div className='inline-flex size-80 items-center justify-center'>
-        <Suspense fallback={<Spinner />}>
-          <ClientOnly fallback={<Spinner />}>
-            {() => <QrImage qrPromise={QRCode.toDataURL(`${location.origin}/${shortcode}`)} />}
-          </ClientOnly>
-        </Suspense>
-      </div>
+    <>
+      <QrPreview shortcode={shortcode} />
       <small className='text-sm'>or copy and share this url.</small>
       <CopyShortLink shortcode={shortcode} />
-      <Button asChild>
-        <Link href='/'>
-          <ChevronLeftIcon className='size-5' /> Go Back
-        </Link>
-      </Button>
+    </>
+  )
+}
+
+function QrPreview(props: { shortcode: string }) {
+  const spinner = <Spinner />
+  return (
+    <div className='inline-flex size-80 items-center justify-center'>
+      <Suspense fallback={spinner}>
+        <ClientOnly fallback={spinner}>
+          {() => <QrImage qrPromise={QRCode.toDataURL(`${location.origin}/${props.shortcode}`)} />}
+        </ClientOnly>
+      </Suspense>
     </div>
   )
 }

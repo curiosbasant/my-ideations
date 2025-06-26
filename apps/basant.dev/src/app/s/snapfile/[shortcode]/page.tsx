@@ -1,6 +1,10 @@
 import { getPublicUrlFromShortcode } from '../server'
 import { FileDownloadButton, FileDownloadingText } from './client.component'
 
+export const metadata = {
+  title: 'Download',
+}
+
 export default async function SnapFileDownloadPage(props: PageProps<{ params: 'shortcode' }>) {
   const { shortcode } = await props.params
   const publicUrl = await getPublicUrlFromShortcode(shortcode)
