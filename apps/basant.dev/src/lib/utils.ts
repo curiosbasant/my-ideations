@@ -28,5 +28,15 @@ export async function zipFiles(files: File[]) {
   }
 
   const zipBlob = await zip.generateAsync({ type: 'blob', compressionOptions: { level: 6 } })
-  return new File([zipBlob], `combined-${Date.now()}.zip`)
+  return new File([zipBlob], `combined-${Date.now()}.zip`, { type: 'application/zip' })
+}
+
+export function downloadFileFromUrl(url: string, fileName = '') {
+  const aTag = document.createElement('a')
+  aTag.setAttribute('href', url)
+  aTag.setAttribute('download', fileName)
+  aTag.style.visibility = 'hidden'
+  document.body.appendChild(aTag)
+  aTag.click()
+  document.body.removeChild(aTag)
 }

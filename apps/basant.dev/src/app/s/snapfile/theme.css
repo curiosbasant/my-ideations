@@ -6,6 +6,12 @@
 }
 
 :root {
+  --background: white;
+  --foreground: var(--color-gray-800);
+  --primary: var(--color-blue-500);
+  --primary-foreground: white;
+  --secondary: var(--color-gray-100);
+  --accent: var(--secondary);
   --border: var(--color-gray-200);
   --radius: 0.625rem;
 }

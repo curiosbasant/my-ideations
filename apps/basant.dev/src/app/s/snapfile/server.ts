@@ -1,14 +1,14 @@
-import { unstable_cache as cache } from 'next/cache'
+import { notFound } from 'next/navigation'
 
 import { getSupabase } from '~/lib/supabase'
 
-export const getPublicUrlFromShortcode = cache(async (shortcode: string) => {
+export const getPublicUrlFromShortcode = async (shortcode: string) => {
   const supabase = await getSupabase()
-  const { data } = await supabase
+  const { data, error } = await supabase
     .from('snapfile__short_url')
     .select('url')
     .eq('code', shortcode)
     .single()
-    .throwOnError()
+  if (error) notFound()
   return data.url
-})
+}
