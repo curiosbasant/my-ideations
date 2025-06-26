@@ -55,6 +55,11 @@
     @apply border-border outline-ring/50;
   }
 
+  .lucide {
+    width: calc(var(--spacing) * 5);
+    height: calc(var(--spacing) * 5);
+  }
+
   :where(:root, [data-theme]) {
     background-color: var(--background);
     color: var(--foreground);
