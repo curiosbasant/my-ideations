@@ -2,7 +2,7 @@ import './theme.css'
 
 import Link from 'next/link'
 import {
-  CodeIcon,
+  CodeXmlIcon,
   DatabaseIcon,
   ExternalLinkIcon,
   GithubIcon,
@@ -43,10 +43,10 @@ export default function PortfolioPage() {
       <div className='isolate flex min-h-full w-full flex-col divide-y [--page-padding:--spacing(4)] [--page-size:var(--container-7xl)] sm:[--page-padding:--spacing(6)] md:[--page-padding:--spacing(8)]'>
         <header className='bg-background/80 group sticky top-0 z-10 backdrop-blur-sm'>
           <div className='px-(--page-padding)'>
-          <div className='max-w-(--page-size) mx-auto flex items-center justify-between gap-4 py-3'>
-            <Link href='/' className='inline-flex items-center gap-4'>
-              <CodeIcon className='size-6' />
-              <span className='@2xs:text-2xl text-xl font-extrabold'>basant.dev</span>
+            <div className='max-w-(--page-size) mx-auto flex items-center justify-between gap-4 py-3'>
+              <Link href='/' className='inline-flex items-center gap-3'>
+                <CodeXmlIcon className='text-primary stroke-3 size-7' />
+                <span className='@2xs:text-2xl text-xl font-extrabold'>basant.dev</span>
               </Link>
               <nav className='flex items-center max-sm:hidden'>
                 {navLinks.map((link) => (
@@ -77,7 +77,7 @@ export default function PortfolioPage() {
                     <Link href={link.url}>{link.label}</Link>
                   </Button>
                 ))}
-            </nav>
+              </nav>
             </div>
           </div>
         </header>
@@ -88,7 +88,7 @@ export default function PortfolioPage() {
               <div className='space-y-6'>
                 <h1 className='text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl'>
                   Hi 👋, I'm{' '}
-                  <span className='bg-linear-to-tr from-primary to-primary-foreground from-15% bg-clip-text font-bold text-transparent'>
+                  <span className='bg-linear-to-tr from-primary from-15% to-violet-800 bg-clip-text font-bold text-transparent'>
                     Basant Barupal
                   </span>
                 </h1>
