@@ -195,7 +195,7 @@ export default function PortfolioPage() {
                   Some of my recent work that I'm proud of
                 </p>
               </div>
-              <div className='grid grid-cols-[repeat(auto-fill,minmax(24rem,1fr))] gap-8'>
+              <div className='grid grid-cols-1 gap-8 sm:grid-cols-[repeat(auto-fill,minmax(24rem,1fr))]'>
                 {[
                   {
                     name: 'Pariksha Parinaam',
@@ -249,7 +249,13 @@ export default function PortfolioPage() {
                       <CardDescription>{project.description}</CardDescription>
                     </CardHeader>
                     <div className='pointer-events-none relative aspect-video'>
-                      <iframe src={project.link} className='size-full [zoom:0.25]' loading='lazy' />
+                      <iframe
+                        src={project.link}
+                        className='size-full [zoom:0.25]'
+                        loading='lazy' // load iframe when visible
+                        sandbox='allow-same-origin' // only allow same-origin resources
+                        allowFullScreen={false}
+                      />
                     </div>
                     <CardContent className='row-span-2 grid grid-rows-subgrid items-start gap-4'>
                       <div className='flex flex-wrap gap-2'>
