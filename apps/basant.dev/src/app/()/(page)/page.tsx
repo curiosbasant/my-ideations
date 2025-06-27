@@ -9,9 +9,11 @@ import {
   GlobeIcon,
   LinkedinIcon,
   MailIcon,
+  MenuIcon,
   MonitorIcon,
   PaletteIcon,
   TwitterIcon,
+  XIcon,
 } from 'lucide-react'
 
 import { Badge } from '~/components/ui/badge'
@@ -27,30 +29,56 @@ const socialLinks = {
   x: 'https://x.com/curiosbasant',
 }
 
+const navLinks = [
+  { url: '/resume', label: 'Resume' },
+  { url: '#about', label: 'About' },
+  { url: '#skills', label: 'Skills' },
+  { url: '#projects', label: 'Projects' },
+  { url: '#contact', label: 'Contact' },
+]
+
 export default function PortfolioPage() {
   return (
-    <ScrollArea className='size-full'>
+    <ScrollArea className='size-full scroll-smooth'>
       <div className='isolate flex min-h-full w-full flex-col divide-y [--page-padding:--spacing(4)] [--page-size:var(--container-7xl)] sm:[--page-padding:--spacing(6)] md:[--page-padding:--spacing(8)]'>
-        <header className='bg-background/80 px-(--page-padding) sticky top-0 z-10 backdrop-blur-sm'>
+        <header className='bg-background/80 group sticky top-0 z-10 backdrop-blur-sm'>
+          <div className='px-(--page-padding)'>
           <div className='max-w-(--page-size) mx-auto flex items-center justify-between gap-4 py-3'>
             <Link href='/' className='inline-flex items-center gap-4'>
               <CodeIcon className='size-6' />
               <span className='@2xs:text-2xl text-xl font-extrabold'>basant.dev</span>
-            </Link>
-            <nav className='flex items-center gap-6 text-sm font-medium'>
-              <Link href='#about' className='hover:text-foreground/80 transition-colors'>
-                About
               </Link>
-              <Link href='#skills' className='hover:text-foreground/80 transition-colors'>
-                Skills
-              </Link>
-              <Link href='#projects' className='hover:text-foreground/80 transition-colors'>
-                Projects
-              </Link>
-              <Link href='#contact' className='hover:text-foreground/80 transition-colors'>
-                Contact
-              </Link>
+              <nav className='flex items-center max-sm:hidden'>
+                {navLinks.map((link) => (
+                  <Button className='cursor-pointer' variant='ghost' key={link.label}>
+                    <Link href={link.url}>{link.label}</Link>
+                  </Button>
+                ))}
+              </nav>
+              <Button
+                className='grid *:col-start-1 *:row-start-1 sm:hidden'
+                variant='ghost'
+                size='icon'
+                aria-label='Toggle mobile menu'
+                asChild>
+                <label>
+                  <XIcon className='opacity-0 transition group-has-[input:checked]:opacity-100' />
+                  <MenuIcon className='transition group-has-[input:checked]:opacity-0' />
+                  <input className='swoosh' type='checkbox' />
+                </label>
+              </Button>
+            </div>
+          </div>
+          <div className='px-(--page-padding) not-sm:group-has-[input:checked]:block hidden border-t'>
+            <div className='max-w-(--page-size) mx-auto'>
+              <nav className='flex flex-col gap-2 py-4 text-sm font-medium'>
+                {navLinks.map((link) => (
+                  <Button className='cursor-pointer justify-start' variant='ghost' key={link.label}>
+                    <Link href={link.url}>{link.label}</Link>
+                  </Button>
+                ))}
             </nav>
+            </div>
           </div>
         </header>
         <main className='flex-1'>
@@ -112,13 +140,17 @@ export default function PortfolioPage() {
               <h2 className='text-3xl font-bold tracking-tighter md:text-4xl'>About Me</h2>
               <div className='text-muted-foreground space-y-6 text-balance text-lg'>
                 <p>
-                  I'm a passionate full-stack developer with over 5 years of experience building web
-                  applications. I love turning complex problems into simple, beautiful designs and
-                  bringing ideas to life through code.
+                  I'm a passionate full-stack developer building web applications since 2018. I love
+                  turning complex problems into simple, beautiful designs and bringing ideas to life
+                  through code.
                 </p>
                 <p>
-                  When I'm not coding, you can find me exploring new technologies, contributing to
-                  open source projects, or sharing my knowledge through blog posts and mentoring.
+                  I'm very proficient in Nextjs/React and TypeScript ecosystem for web and
+                  Expo/React Native for mobile, with a keen eye for clean, readable code and best
+                  practices.
+                </p>
+                <p>
+                  I thrive in dynamic environments and embrace new technologies with enthusiasm.
                 </p>
               </div>
             </div>
