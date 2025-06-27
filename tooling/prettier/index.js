@@ -25,7 +25,7 @@ const config = {
   experimentalTernaries: true,
 
   // Tailwind Config
-  tailwindFunctions: ['cn', 'cva', 'tv'],
+  tailwindFunctions: ['cn', 'cva', 'styled', 'tv'],
 
   // Import Config
   importOrder: [

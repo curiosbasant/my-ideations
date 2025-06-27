@@ -39,16 +39,14 @@
   "reactSnippets.settings.importReactOnTop": false,
   "reactSnippets.settings.languageScopes": "typescriptreact,javascriptreact",
   "tailwindCSS.experimental.classRegex": [
-    ["([\"'`][^\"'`]*.*?[\"'`])", "[\"'`]([^\"'`]*).*?[\"'`]"],
     ["Classes ?\\=([^;]*)", "'([^']*)'"],
     ["Classes ?\\=([^;]*)", "\"([^\"]*)\""],
     ["Classes ?\\=([^;]*)", "\\`([^\\`]*)\\`"],
     ["ClassName ?\\=([^;]*)", "'([^']*)'"],
     ["ClassName ?\\=([^;]*)", "\"([^\"]*)\""],
-    ["ClassName ?\\=([^;]*)", "\\`([^\\`]*)\\`"],
-    ["cva\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"]
+    ["ClassName ?\\=([^;]*)", "\\`([^\\`]*)\\`"]
   ],
-  "tailwindCSS.classFunctions": ["cva", "cn", "cx"],
+  "tailwindCSS.classFunctions": ["cva", "cn", "cx", "styled"],
   "tailwindCSS.experimental.configFile": {
     "apps/basant.dev/src/app/tailwind.css": "apps/basant.dev/src/**/*.tsx",
     "apps/random/tailwind.config.ts": "apps/random/src/**/*.tsx",

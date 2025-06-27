@@ -1,4 +1,4 @@
-import { createElement, type ElementType, type ReactNode } from 'react'
+import { createElement, type ComponentProps, type ElementType, type ReactNode } from 'react'
 import { cx, type CxOptions } from 'class-variance-authority'
 import Zip from 'jszip'
 import { twMerge } from 'tailwind-merge'
@@ -8,8 +8,8 @@ export function cn(...inputs: CxOptions) {
 }
 
 export function styled<
-  Props extends { className?: string; children?: ReactNode },
   Tag extends keyof JSX.IntrinsicElements = keyof JSX.IntrinsicElements,
+  Props extends { className?: string; children?: ReactNode } = ComponentProps<Tag>,
 >(Comp: ElementType<Props, Tag>, className: string) {
   return (props: Props) => {
     const resolvedClassName = props.className ? cn(className, props.className) : className

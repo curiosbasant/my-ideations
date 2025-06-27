@@ -1,15 +1,15 @@
 'use client'
 
-import * as React from 'react'
+import type { ComponentProps } from 'react'
 import * as ScrollAreaPrimitive from '@radix-ui/react-scroll-area'
 
 import { cn } from '~/lib/utils'
 
-function ScrollArea({
-  className,
-  children,
-  ...props
-}: React.ComponentProps<typeof ScrollAreaPrimitive.Root>) {
+type ScrollAreaProps = ComponentProps<typeof ScrollAreaPrimitive.Root> & {
+  viewportClassName?: string
+}
+
+export function ScrollArea({ className, children, viewportClassName, ...props }: ScrollAreaProps) {
   return (
     <ScrollAreaPrimitive.Root
       data-slot='scroll-area'
@@ -17,7 +17,10 @@ function ScrollArea({
       {...props}>
       <ScrollAreaPrimitive.Viewport
         data-slot='scroll-area-viewport'
-        className='rounded-inherit focus-visible:ring-3 focus-visible:ring-ring/50 relative size-full outline-none transition-[color,box-shadow] *:h-full focus-visible:outline-1'>
+        className={cn(
+          'rounded-inherit focus-visible:ring-3 focus-visible:ring-ring/50 size-full outline-none transition-[color,box-shadow] *:h-full focus-visible:outline-1',
+          viewportClassName,
+        )}>
         {children}
       </ScrollAreaPrimitive.Viewport>
       <ScrollBar />
@@ -26,11 +29,11 @@ function ScrollArea({
   )
 }
 
-function ScrollBar({
+export function ScrollBar({
   className,
   orientation = 'vertical',
   ...props
-}: React.ComponentProps<typeof ScrollAreaPrimitive.ScrollAreaScrollbar>) {
+}: ComponentProps<typeof ScrollAreaPrimitive.ScrollAreaScrollbar>) {
   return (
     <ScrollAreaPrimitive.ScrollAreaScrollbar
       data-slot='scroll-area-scrollbar'
@@ -49,5 +52,3 @@ function ScrollBar({
     </ScrollAreaPrimitive.ScrollAreaScrollbar>
   )
 }
-
-export { ScrollArea, ScrollBar }
