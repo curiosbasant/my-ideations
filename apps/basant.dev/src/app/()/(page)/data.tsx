@@ -94,11 +94,25 @@ export const projects = [
     githubUrl: 'https://github.com/curiosbasant/my-ideations',
   },
   {
+    name: 'ShalaDarpan Quick',
+    description:
+      'A browser extension to add utility functions and increase usability of the government portal "ShalaDarpan".',
+    tech: ['TypeScript', 'Vite', 'WXT', 'React', 'TailwindCSS', 'Semantic Releases'],
+    githubUrl: 'https://github.com/curiosbasant/sd-quick',
+  },
+  {
     name: 'Snap File',
     description:
-      'A tool to quickly share a file by generating short urls and sharing via QR Codes.',
+      'A convenient tool that enables users to share files quickly by generating short URLs and corresponding QR codes for easy access and distribution.',
     tech: ['TypeScript', 'Nextjs', 'TailwindCSS', 'Supabase', 'QR Code'],
     link: 'https://snapfile.basant.dev',
+    githubUrl: 'https://github.com/curiosbasant/my-ideations',
+  },
+  {
+    name: 'Spend Buddy',
+    description:
+      'A mobile application designed to track group expenses and allow members to settle balances at any time.',
+    tech: ['TypeScript', 'Expo', 'React Native', 'NativeWind', 'Supabase', 'QR Code'],
     githubUrl: 'https://github.com/curiosbasant/my-ideations',
   },
   {

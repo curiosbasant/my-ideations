@@ -193,14 +193,16 @@ export default function PortfolioPage() {
                       <CardTitle>{project.name}</CardTitle>
                       <CardDescription>{project.description}</CardDescription>
                     </CardHeader>
-                    <div className='pointer-events-none relative aspect-video'>
-                      <iframe
-                        src={project.link}
-                        className='size-full [zoom:0.25]'
-                        loading='lazy' // load iframe when visible
-                        sandbox='allow-same-origin' // only allow same-origin resources
-                        allowFullScreen={false}
-                      />
+                    <div className='relative aspect-video'>
+                      {project.link ?
+                        <iframe
+                          src={project.link}
+                          className='pointer-events-none size-full [zoom:0.25]'
+                          loading='lazy' // load iframe when visible
+                          sandbox='allow-same-origin' // only allow same-origin resources
+                          allowFullScreen={false}
+                        />
+                      : <img src='/placeholder.svg' className='size-full object-cover' />}
                     </div>
                     <CardContent className='row-span-2 grid grid-rows-subgrid items-start gap-4'>
                       <div className='flex flex-wrap gap-2'>
@@ -211,11 +213,13 @@ export default function PortfolioPage() {
                         ))}
                       </div>
                       <div className='flex gap-2'>
-                        <Button size='sm' asChild>
-                          <a href={project.link} target='_blank'>
-                            <ExternalLinkIcon className='size-4' /> Live Demo
-                          </a>
-                        </Button>
+                        {project.link && (
+                          <Button size='sm' asChild>
+                            <a href={project.link} target='_blank'>
+                              <ExternalLinkIcon className='size-4' /> Live Demo
+                            </a>
+                          </Button>
+                        )}
                         {project.githubUrl && (
                           <Button variant='outline' size='sm' asChild>
                             <a href={project.githubUrl} target='_blank'>
