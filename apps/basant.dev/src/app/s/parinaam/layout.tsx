@@ -23,7 +23,7 @@ export default function ParinaamRootLayout(props: LayoutProps<{ slots: 'themeSwi
           <div className='mask-b-from-50% pointer-events-none absolute top-0 -z-10 h-2/3 w-full'>
             <div
               className='h-full opacity-[0.05] dark:invert'
-              style={{ background: 'url(/bg-pattern.jpg) top / 600px' }}
+              style={{ background: 'url(/bg-doodles-school.jpg) top / 600px' }}
             />
           </div>
           <ScrollArea className='size-full'>

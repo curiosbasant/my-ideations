@@ -68,7 +68,12 @@ export default function PortfolioPage() {
         </header>
         <main className='flex-1'>
           {/* Hero Section */}
-          <Section className='md:py-32'>
+          <Section className='relative md:py-32'>
+            <div className='mask-b-from-0 pointer-events-none absolute start-0 top-0 -z-10 h-full w-full opacity-25 mix-blend-color-burn'>
+              <div
+                className='h-full'
+                style={{ background: 'url(/bg-polygon-pattern.jpg) top / 600px' }}></div>
+            </div>
             <div className='mx-auto flex w-full max-w-3xl flex-col items-center gap-8 text-center'>
               <div className='space-y-6'>
                 <h1 className='text-balance text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl'>
@@ -179,7 +184,7 @@ export default function PortfolioPage() {
                   Some of my recent work that I'm proud of
                 </p>
               </div>
-              <div className='grid grid-cols-1 gap-8 sm:grid-cols-[repeat(auto-fill,minmax(24rem,1fr))]'>
+              <div className='grid grid-cols-1 gap-8 sm:grid-cols-[repeat(auto-fill,minmax(20rem,1fr))]'>
                 {projects.map((project) => (
                   <Card
                     className='row-span-4 grid grid-rows-subgrid items-start overflow-clip'
@@ -226,7 +231,12 @@ export default function PortfolioPage() {
             </div>
           </Section>
 
-          <Section id='contact'>
+          <Section id='contact' className='relative'>
+            <div
+              className='pointer-events-none absolute bottom-0 end-0 aspect-square h-full opacity-20 mix-blend-color-burn'
+              style={{
+                background: 'url(/illustration-neural-network.jpg) center / contain no-repeat',
+              }}></div>
             <div className='mx-auto w-full max-w-2xl space-y-8 text-center'>
               <div className='space-y-4'>
                 <SectionTitle>Get In Touch</SectionTitle>
