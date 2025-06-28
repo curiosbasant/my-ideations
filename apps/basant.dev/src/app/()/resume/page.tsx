@@ -67,7 +67,7 @@ export default function ResumePage() {
                 <div className='border-12 m-auto overflow-clip rounded-full border-sky-400 bg-slate-200 shadow-inner'>
                   <Image
                     className='size-64 object-cover object-center'
-                    src='/assets/display-photo.jpeg'
+                    src='/display-photo.jpeg'
                     alt="Basant's Picture"
                     height={898}
                     width={898}
@@ -186,7 +186,7 @@ export default function ResumePage() {
                             className='block size-12 rounded-md bg-[#0067f9] fill-white'>
                             <img
                               className='aspect-square'
-                              src='/assets/logos/hootboard.svg'
+                              src='/logos/hootboard.svg'
                               alt='HootBoard Logo'
                               width='48'
                               height='48'
@@ -269,7 +269,7 @@ export default function ResumePage() {
                       <li className='col-span-full grid grid-cols-subgrid items-center' key={label}>
                         <img
                           className='aspect-square rounded'
-                          src={`/assets/logos/${logo}.svg`}
+                          src={`/logos/${logo}.svg`}
                           alt={label + "'s logo"}
                           width='28'
                           height='28'
@@ -314,7 +314,7 @@ function SocialHandleLink(props: { link: string; logo: string }) {
     <a href={props.link} className='inline-block size-8' target='_blank'>
       <img
         className='size-full'
-        src={`/assets/logos/${props.logo}.svg`}
+        src={`/logos/${props.logo}.svg`}
         alt={`${props.logo} Logo`}
         title={props.logo}
         width='32'

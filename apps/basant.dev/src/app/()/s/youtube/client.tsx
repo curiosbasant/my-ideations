@@ -23,7 +23,7 @@ export function VideoDisplay() {
       <video
         ref={videoRef}
         className='mx-auto h-full'
-        src='/assets/videos/discord_tut.mp4'
+        src='/videos/discord_tut.mp4'
         // onPlay
         onVolumeChange={({ currentTarget: video }) => {
           console.log(`video.volume`, video.volume)
