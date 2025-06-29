@@ -1,7 +1,7 @@
 {
   "conventionalCommits.promptBody": false,
   "conventionalCommits.promptFooter": false,
-  "conventionalCommits.scopes": ["snapfile", "parinaam", "youtube"],
+  "conventionalCommits.scopes": ["games", "parinaam", "snapfile", "youtube"],
   "cSpell.words": [
     "basant",
     "hookform",
