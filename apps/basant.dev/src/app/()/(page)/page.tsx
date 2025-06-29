@@ -40,14 +40,14 @@ export default function PortfolioPage() {
                 ))}
               </nav>
               <Button
-                className='grid *:col-start-1 *:row-start-1 sm:hidden'
+                className='grid sm:hidden'
                 variant='ghost'
                 size='icon'
                 aria-label='Toggle mobile menu'
                 asChild>
                 <label>
-                  <XIcon className='opacity-0 transition group-has-[input:checked]:opacity-100' />
-                  <MenuIcon className='transition group-has-[input:checked]:opacity-0' />
+                  <XIcon className='col-start-1 row-start-1 opacity-0 transition group-has-[input:checked]:rotate-180 group-has-[input:checked]:opacity-100' />
+                  <MenuIcon className='col-start-1 row-start-1 transition group-has-[input:checked]:rotate-180 group-has-[input:checked]:opacity-0' />
                   <input className='swoosh' type='checkbox' />
                 </label>
               </Button>
