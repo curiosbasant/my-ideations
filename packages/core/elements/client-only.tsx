@@ -1,14 +1,10 @@
 'use client'
 
-import { useSyncExternalStore, type ReactNode } from 'react'
+import type { ReactNode } from 'react'
 
-const emptySubscribe = () => () => void 0
+import { useIsClient } from '../hooks/use-is-client'
 
 export function ClientOnly(props: { fallback?: ReactNode; children: () => ReactNode }) {
-  const isServer = useSyncExternalStore(
-    emptySubscribe,
-    () => false,
-    () => true,
-  )
-  return isServer ? props.fallback : props.children()
+  const isClient = useIsClient()
+  return isClient ? props.children() : props.fallback
 }
