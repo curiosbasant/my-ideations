@@ -2,6 +2,9 @@
 
 import type { FormEvent } from 'react'
 import Form from 'next/form'
+import { CloudUploadIcon } from 'lucide-react'
+
+import { Button } from '~/components/ui/button'
 
 function debounce<T extends any[]>(cb: (...args: T) => void, delay: number) {
   let timeout = 0
@@ -20,7 +23,7 @@ const debouncedSearch = debounce((form: HTMLFormElement) => {
 export const handleChange = (ev: FormEvent<HTMLFormElement>) => {
   debouncedSearch(ev.currentTarget)
 }
-export function SearchForm(props: { query?: string }) {
+function SearchForm(props: { query?: string }) {
   return (
     <Form className='' action='' onChange={handleChange}>
       <input
@@ -31,5 +34,39 @@ export function SearchForm(props: { query?: string }) {
         type='search'
       />
     </Form>
+  )
+}
+
+export function DropContainer(props: { onDrop: (files: File[]) => void }) {
+  const handleDrop = (ev: React.DragEvent<HTMLDivElement>) => {
+    ev.preventDefault()
+    if (ev.dataTransfer.files) {
+      props.onDrop(Array.from(ev.dataTransfer.files))
+    }
+  }
+
+  return (
+    <div
+      className='grid h-96 place-items-center rounded-2xl border-2 border-dashed'
+      onDragOver={(e) => e.preventDefault()}
+      onDrop={handleDrop}>
+      <CloudUploadIcon className='size-12 text-gray-400' />
+      <p className='text-gray-500'>Drag and drop your file here</p>
+      <p className='text-gray-500'>or click to select a file</p>
+      <Button variant='outline' className='mt-4' asChild>
+        <label>
+          Select File
+          <input
+            type='file'
+            className='hidden'
+            onChange={(e) => {
+              if (e.target.files) {
+                props.onDrop(Array.from(e.target.files))
+              }
+            }}
+          />
+        </label>
+      </Button>
+    </div>
   )
 }

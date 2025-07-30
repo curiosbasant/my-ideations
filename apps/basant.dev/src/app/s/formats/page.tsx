@@ -3,7 +3,7 @@ import { DownloadIcon } from 'lucide-react'
 
 import { Button } from '~/components/ui/button'
 import { Input } from '~/components/ui/input'
-import { handleChange, SearchForm } from './client'
+import { handleChange } from './client'
 
 const formats = [
   {
@@ -95,6 +95,13 @@ const formats = [
 export default async function FormatsPage(props: PageProps<{ searchParams: 'query' }>) {
   const searchParams = await props.searchParams
 
+  const filteredFormats =
+    searchParams.query ?
+      formats.filter((format) =>
+        format.name.toLowerCase().includes(searchParams.query!.toLowerCase()),
+      )
+    : formats
+
   return (
     <div className='flex flex-1 flex-col gap-8'>
       {/* <SearchForm query={searchParams.query} /> */}
@@ -109,7 +116,7 @@ export default async function FormatsPage(props: PageProps<{ searchParams: 'quer
       </Form>
       <h2 className='text-2xl font-bold'>Recent Formats</h2>
       <ul className='grid grid-cols-[1fr_auto] gap-4'>
-        {formats.map((format) => (
+        {filteredFormats.map((format) => (
           <FormatListItem format={format} key={format.id} />
         ))}
       </ul>
