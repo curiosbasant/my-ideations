@@ -6,8 +6,8 @@ import { UploadIcon } from 'lucide-react'
 import { useAction } from '~/app/client'
 import { Button } from '~/components/ui/button'
 import { zipFiles } from '~/lib/utils'
+import { Spinner } from '../../../components/elements/spinner'
 import { uploadFileAction } from './client.action'
-import { Spinner } from './shared.component'
 
 export default function SnapFileHomePage() {
   const router = useRouter()
