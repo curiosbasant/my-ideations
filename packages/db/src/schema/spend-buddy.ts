@@ -63,6 +63,6 @@ export const notification = table(
     userId: getUserIdColumn('user_id', false),
   },
   (t) => ({
-    userIndex: index().on(t.userId, t.createdAt).desc(),
+    userIndex: index().on(t.userId.desc(), t.createdAt),
   }),
 )
