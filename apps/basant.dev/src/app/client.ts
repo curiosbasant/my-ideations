@@ -7,7 +7,7 @@ export function useAction<TData, Payload>(params: {
   onSuccess?: (data: TData) => void
   onError?: (message: string) => void
 }) {
-  const [state, uploadFile, isPending] = useActionState(
+  const [state, actionFn, isPending] = useActionState(
     async (state: Awaited<ActionState<TData>>, payload: Payload) => {
       const result = await params.actionFn(state, payload)
       if (result?.success) {
@@ -24,7 +24,7 @@ export function useAction<TData, Payload>(params: {
     isPending,
     state,
     actionTransition(b: Payload) {
-      startTransition(() => uploadFile(b))
+      startTransition(() => actionFn(b))
     },
   }
 }

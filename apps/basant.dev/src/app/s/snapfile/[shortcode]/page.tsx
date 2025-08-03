@@ -1,5 +1,6 @@
+import { FileDownloadButton } from '~/app/client.component'
 import { getPublicUrlFromShortcode } from '../server'
-import { FileDownloadButton, FileDownloadingText } from './client.component'
+import { FileDownloadingText } from './client.component'
 
 export const metadata = {
   title: 'Download',
@@ -15,7 +16,9 @@ export default async function SnapFileDownloadPage(props: PageProps<{ params: 's
         <FileDownloadingText />
       </h2>
       <p className='text-sm'>if not, try using the button below</p>
-      <FileDownloadButton url={publicUrl} />
+      <FileDownloadButton url={publicUrl} autoDownload>
+        Download File
+      </FileDownloadButton>
     </div>
   )
 }

@@ -7,7 +7,7 @@ import QRCode from 'qrcode'
 
 import { ClientOnly } from '@my/core/elements'
 
-import { Spinner } from '~/app/s/snapfile/shared.component'
+import { Spinner } from '~/components/elements/spinner'
 
 export default function SnapFileQrCodePage(props: PageProps<{ params: 'shortcode' }>) {
   const { shortcode } = use(props.params)
