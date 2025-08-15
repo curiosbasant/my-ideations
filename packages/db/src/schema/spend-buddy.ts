@@ -8,61 +8,45 @@ import {
   varchar,
 } from 'drizzle-orm/pg-core'
 
-import {
-  CASCADE_ON_DELETE,
-  getBaseColumns,
-  getCurrentTimestampColumn,
-  getUserIdColumn,
-} from './base'
+import { baseColumns, takeForeignId } from './base'
 
 const table = pgTableCreator((tableName) => `sb__${tableName}`)
 
 export const group = table('group', {
-  ...getBaseColumns(),
-  name: varchar('name').notNull(),
+  ...baseColumns,
+  name: varchar().notNull(),
 })
 
 export const member = table(
   'group_member',
   {
-    groupId: text('group_id')
-      .notNull()
-      .references(() => group.id, CASCADE_ON_DELETE),
-    userId: getUserIdColumn('user_id', false),
-    joinedAt: getCurrentTimestampColumn('joined_at'),
+    groupId: takeForeignId(() => group.id).notNull(),
+    userId: baseColumns.createdBy,
+    joinedAt: baseColumns.createdAt,
   },
-  (t) => ({
-    pk: primaryKey({ columns: [t.groupId, t.userId] }),
-  }),
+  (t) => [primaryKey({ columns: [t.groupId, t.userId] })],
 )
 
 export const spend = table(
   'group_spend',
   {
-    ...getBaseColumns(),
-    groupId: text('group_id')
-      .notNull()
-      .references(() => group.id, CASCADE_ON_DELETE),
-    amount: integer('amount').notNull(),
-    note: text('note'),
+    ...baseColumns,
+    groupId: takeForeignId(() => group.id).notNull(),
+    amount: integer().notNull(),
+    note: text(),
   },
-  (t) => ({
-    groupIndex: index().on(t.groupId),
-    userIndex: index().on(t.createdBy),
-  }),
+  (t) => [index().on(t.createdAt.desc(), t.groupId)],
 )
 
 export const notification = table(
   'notification',
   {
-    ...getBaseColumns(),
-    type: varchar('type').notNull().$type<'group_spend_add' | 'group_member_add'>(),
-    read: boolean('read').default(false),
-    resourceId: text('resource_id'),
+    ...baseColumns,
+    type: varchar({ enum: ['group_spend_add', 'group_member_add'] }).notNull(),
+    read: boolean().default(false),
+    resourceId: text(),
     /** The user who receives the notification */
-    userId: getUserIdColumn('user_id', false),
+    userId: baseColumns.createdBy,
   },
-  (t) => ({
-    userIndex: index().on(t.userId.desc(), t.createdAt),
-  }),
+  (t) => [index().on(t.userId.desc(), t.createdAt)],
 )
