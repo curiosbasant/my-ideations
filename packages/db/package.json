@@ -7,16 +7,10 @@
   "scripts": {
     "clean": "rm -rf .turbo node_modules",
     "lint": "tsc -P tsconfig.lint.json",
-    "degenerate": "drizzle-kit drop",
-    "generate": "drizzle-kit generate",
-    "generate:blank": "drizzle-kit generate --custom",
-    "list": "supabase migration list --local",
-    "migrate": "supabase migration up --include-all",
-    "pull": "supabase db pull",
     "push": "pnpm with-env -- drizzle-kit push",
-    "reset": "supabase db reset",
+    "reset": "supabase db reset && pnpm push && pnpm with-env -- tsx src/migrate.ts",
     "seed": "pnpm with-env -- tsx src/seed.ts",
-    "start": "supabase start -x edge-runtime,imgproxy,migra,pgadmin-schema-diff,realtime,storage-api,logflare,vector",
+    "start": "supabase start",
     "stop": "supabase stop",
     "studio": "drizzle-kit studio",
     "with-env": "dotenv -e ../../.env"
