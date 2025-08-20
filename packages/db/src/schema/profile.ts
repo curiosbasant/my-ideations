@@ -1,16 +1,20 @@
 // Note: Don't import anything from './base', as to avoid circular imports
 
-import { bigint, pgTable, timestamp, uuid, varchar } from 'drizzle-orm/pg-core'
+import { index, pgTable } from 'drizzle-orm/pg-core'
 import { authUsers } from 'drizzle-orm/supabase'
 
-export const profile = pgTable('profile', {
-  id: bigint({ mode: 'number' }).generatedByDefaultAsIdentity().primaryKey(),
-  username: varchar({ length: 32 }).unique(),
-  firstName: varchar({ length: 256 }),
-  lastName: varchar({ length: 256 }),
-  email: varchar({ length: 320 }).unique(),
-  avatarUrl: varchar({ length: 256 }),
-  createdAt: timestamp({ withTimezone: true }).defaultNow().notNull(),
-  createdBy: uuid().references(() => authUsers.id),
-  updatedAt: timestamp({ withTimezone: true }),
-})
+export const profile = pgTable(
+  'profile',
+  (c) => ({
+    id: c.bigint({ mode: 'number' }).generatedByDefaultAsIdentity().primaryKey(),
+    username: c.varchar({ length: 32 }).unique(),
+    firstName: c.varchar({ length: 256 }),
+    lastName: c.varchar({ length: 256 }),
+    email: c.varchar({ length: 320 }).unique(),
+    avatarUrl: c.varchar({ length: 256 }),
+    createdBy: c.uuid().references(() => authUsers.id),
+    createdAt: c.timestamp({ withTimezone: true }).defaultNow().notNull(),
+    updatedAt: c.timestamp({ withTimezone: true }),
+  }),
+  (t) => [index().on(t.createdBy)],
+)

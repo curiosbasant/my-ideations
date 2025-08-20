@@ -8,12 +8,12 @@ export const CASCADE_ON_DELETE = { onDelete: 'cascade' as const }
 export const takeForeignId = (columnRef: () => PgColumn) =>
   id().references(columnRef, CASCADE_ON_DELETE)
 
-export const timestampColumns = {
+export const getTimestampColumns = () => ({
   createdAt: timestamp({ withTimezone: true }).notNull().defaultNow(),
   updatedAt: timestamp({ withTimezone: true }),
-}
-export const baseColumns = {
+})
+export const getBaseColumns = () => ({
   id: id().generatedByDefaultAsIdentity().primaryKey(),
-  createdBy: takeForeignId(() => profile.id),
-  ...timestampColumns,
-}
+  createdBy: takeForeignId(() => profile.id).notNull(),
+  ...getTimestampColumns(),
+})

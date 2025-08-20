@@ -1,11 +1,11 @@
 import { json, pgTableCreator, smallint, uuid, varchar } from 'drizzle-orm/pg-core'
 
-import { baseColumns } from './base'
+import { getBaseColumns } from './base'
 
 const table = pgTableCreator((tableName) => `gdb__${tableName}`)
 
 export const board = table('board', {
-  ...baseColumns,
+  ...getBaseColumns(),
   rows: smallint().notNull(),
   cols: smallint().notNull(),
   boxes: json().default({}).$type<Record<string, number>>(),
