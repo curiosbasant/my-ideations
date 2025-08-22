@@ -12,33 +12,33 @@ import { getBaseColumns, takeForeignId } from './base'
 
 const table = pgTableCreator((tableName) => `sb__${tableName}`)
 
-export const group = table('group', {
+export const sb__group = table('group', {
   ...getBaseColumns(),
   name: varchar().notNull(),
 })
 
-export const member = table(
+export const sb__member = table(
   'group_member',
   {
-    groupId: takeForeignId(() => group.id).notNull(),
+    groupId: takeForeignId(() => sb__group.id).notNull(),
     userId: getBaseColumns().createdBy,
     joinedAt: getBaseColumns().createdAt,
   },
   (t) => [primaryKey({ columns: [t.groupId, t.userId] })],
 )
 
-export const spend = table(
+export const sb__spend = table(
   'group_spend',
   {
     ...getBaseColumns(),
-    groupId: takeForeignId(() => group.id).notNull(),
+    groupId: takeForeignId(() => sb__group.id).notNull(),
     amount: integer().notNull(),
     note: text(),
   },
   (t) => [index().on(t.createdAt.desc(), t.groupId)],
 )
 
-export const notification = table(
+export const sb__notification = table(
   'notification',
   {
     ...getBaseColumns(),

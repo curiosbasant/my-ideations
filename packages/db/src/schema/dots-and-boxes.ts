@@ -4,7 +4,7 @@ import { getBaseColumns } from './base'
 
 const table = pgTableCreator((tableName) => `gdb__${tableName}`)
 
-export const board = table('board', {
+export const gdb__board = table('board', {
   ...getBaseColumns(),
   rows: smallint().notNull(),
   cols: smallint().notNull(),
