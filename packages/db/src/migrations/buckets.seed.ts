@@ -19,9 +19,7 @@ const query = sql`
 `
 
 export default () =>
-  db.transaction(async (tx) => {
-    await Promise.all([
-      tx.insert(buckets).values(bucketConfigs).onConflictDoNothing(),
-      tx.execute(query).catch(() => void 0),
-    ])
-  })
+  Promise.all([
+    db.insert(buckets).values(bucketConfigs).onConflictDoNothing(),
+    db.execute(query).catch(() => void 0),
+  ])

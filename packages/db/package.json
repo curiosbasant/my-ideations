@@ -7,13 +7,16 @@
   "scripts": {
     "clean": "rm -rf .turbo node_modules",
     "lint": "tsc -P tsconfig.lint.json",
-    "push": "pnpm with-env -- drizzle-kit push",
-    "reset": "supabase db reset && pnpm push && pnpm with-env -- tsx src/migrate.ts",
+    "push": "pnpm with-env -- drizzle-kit push && pnpm with-env -- tsx src/migrate.ts",
+    "push:prod": "pnpm with-env:prod -- drizzle-kit push && pnpm with-env:prod -- tsx src/migrate.ts",
+    "reset": "supabase db reset && pnpm push",
     "seed": "pnpm with-env -- tsx src/seed.ts",
     "start": "supabase start",
+    "status": "supabase status",
     "stop": "supabase stop",
     "studio": "drizzle-kit studio",
-    "with-env": "dotenv -e ../../.env"
+    "with-env": "dotenv -e ../../.env.local",
+    "with-env:prod": "dotenv -e ../../.env.production.local"
   },
   "dependencies": {
     "@my/lib": "workspace:*",

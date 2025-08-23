@@ -15,8 +15,8 @@
     "gen": "turbo gen",
     "lint": "turbo lint",
     "sb:restart": "supabase stop && supabase start",
-    "sb:types": "pnpm --silent with-env supabase gen types typescript --project-id=$SUPABASE_PROJECT_ID > packages/lib/supabase/types.gen.ts && prettier packages/lib/supabase/types.gen.ts -w",
-    "with-env": "dotenv -e .env.local --",
+    "sb:types": "pnpm --silent with-env supabase gen types typescript > packages/lib/supabase/types.gen.ts && prettier packages/lib/supabase/types.gen.ts -w",
+    "with-env": "dotenv -e .env.production.local --",
     "": "add-scripts-above-this-line"
   },
   "devDependencies": {
