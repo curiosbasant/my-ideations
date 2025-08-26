@@ -8,7 +8,7 @@ export const uploadFileAction = actionWrapper(async (file: File) => {
   const filePath = `${fileShortCode}-${file.name}`
 
   const supabase = getSupabaseClient()
-  const filesBucket = supabase.storage.from('snapfile--files')
+  const filesBucket = supabase.storage.from('sf__files')
   const filePublicUrl = filesBucket.getPublicUrl(filePath, {
     download: `snapfile__${file.name}`,
   }).data.publicUrl
@@ -18,7 +18,7 @@ export const uploadFileAction = actionWrapper(async (file: File) => {
       filesBucket.upload(filePath, file).then(throwOnError),
       // Create a short-code for the url
       supabase
-        .from('snapfile__short_url')
+        .from('sf__short_url')
         .insert({ code: fileShortCode, url: filePublicUrl })
         .then(throwOnError),
     ])

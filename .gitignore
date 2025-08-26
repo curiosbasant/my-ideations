@@ -41,6 +41,7 @@ coverage/
 archive/
 *.archive
 *.archive.*
+archive.*
 
 # Certificates and keys
 *.pem

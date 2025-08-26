@@ -1,7 +1,7 @@
 export type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[]
 
 export type Database = {
-  // Allows to automatically instanciate createClient with right options
+  // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
     PostgrestVersion: '12.2.3 (519615d)'
@@ -32,7 +32,251 @@ export type Database = {
         }
         Relationships: []
       }
-      snapfile__short_url: {
+      gdb__board: {
+        Row: {
+          active_player_index: number | null
+          boxes: Json | null
+          cols: number
+          created_at: string
+          created_by: number
+          dashes: Json | null
+          id: number
+          players: string[]
+          rows: number
+          status: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          active_player_index?: number | null
+          boxes?: Json | null
+          cols: number
+          created_at?: string
+          created_by: number
+          dashes?: Json | null
+          id?: number
+          players: string[]
+          rows: number
+          status?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          active_player_index?: number | null
+          boxes?: Json | null
+          cols?: number
+          created_at?: string
+          created_by?: number
+          dashes?: Json | null
+          id?: number
+          players?: string[]
+          rows?: number
+          status?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'gdb__board_created_by_profile_id_fk'
+            columns: ['created_by']
+            isOneToOne: false
+            referencedRelation: 'profile'
+            referencedColumns: ['id']
+          },
+        ]
+      }
+      profile: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          created_by: string | null
+          email: string | null
+          first_name: string | null
+          id: number
+          last_name: string | null
+          updated_at: string | null
+          username: string | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          created_by?: string | null
+          email?: string | null
+          first_name?: string | null
+          id?: number
+          last_name?: string | null
+          updated_at?: string | null
+          username?: string | null
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          created_by?: string | null
+          email?: string | null
+          first_name?: string | null
+          id?: number
+          last_name?: string | null
+          updated_at?: string | null
+          username?: string | null
+        }
+        Relationships: []
+      }
+      sb__group: {
+        Row: {
+          created_at: string
+          created_by: number
+          id: number
+          name: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string
+          created_by: number
+          id?: number
+          name: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string
+          created_by?: number
+          id?: number
+          name?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'sb__group_created_by_profile_id_fk'
+            columns: ['created_by']
+            isOneToOne: false
+            referencedRelation: 'profile'
+            referencedColumns: ['id']
+          },
+        ]
+      }
+      sb__group_member: {
+        Row: {
+          group_id: number
+          joined_at: string
+          user_id: number
+        }
+        Insert: {
+          group_id: number
+          joined_at?: string
+          user_id: number
+        }
+        Update: {
+          group_id?: number
+          joined_at?: string
+          user_id?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'sb__group_member_group_id_sb__group_id_fk'
+            columns: ['group_id']
+            isOneToOne: false
+            referencedRelation: 'sb__group'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'sb__group_member_user_id_profile_id_fk'
+            columns: ['user_id']
+            isOneToOne: false
+            referencedRelation: 'profile'
+            referencedColumns: ['id']
+          },
+        ]
+      }
+      sb__group_spend: {
+        Row: {
+          amount: number
+          created_at: string
+          created_by: number
+          group_id: number
+          id: number
+          note: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          created_by: number
+          group_id: number
+          id?: number
+          note?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          created_by?: number
+          group_id?: number
+          id?: number
+          note?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'sb__group_spend_created_by_profile_id_fk'
+            columns: ['created_by']
+            isOneToOne: false
+            referencedRelation: 'profile'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'sb__group_spend_group_id_sb__group_id_fk'
+            columns: ['group_id']
+            isOneToOne: false
+            referencedRelation: 'sb__group'
+            referencedColumns: ['id']
+          },
+        ]
+      }
+      sb__notification: {
+        Row: {
+          created_at: string
+          created_by: number
+          id: number
+          read: boolean | null
+          resource_id: string | null
+          type: string
+          updated_at: string | null
+          user_id: number
+        }
+        Insert: {
+          created_at?: string
+          created_by: number
+          id?: number
+          read?: boolean | null
+          resource_id?: string | null
+          type: string
+          updated_at?: string | null
+          user_id: number
+        }
+        Update: {
+          created_at?: string
+          created_by?: number
+          id?: number
+          read?: boolean | null
+          resource_id?: string | null
+          type?: string
+          updated_at?: string | null
+          user_id?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'sb__notification_created_by_profile_id_fk'
+            columns: ['created_by']
+            isOneToOne: false
+            referencedRelation: 'profile'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'sb__notification_user_id_profile_id_fk'
+            columns: ['user_id']
+            isOneToOne: false
+            referencedRelation: 'profile'
+            referencedColumns: ['id']
+          },
+        ]
+      }
+      sf__short_url: {
         Row: {
           code: string
           created_at: string

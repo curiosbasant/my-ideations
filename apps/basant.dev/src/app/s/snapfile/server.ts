@@ -5,7 +5,7 @@ import { getSupabase } from '~/lib/supabase'
 export const getPublicUrlFromShortcode = async (shortcode: string) => {
   const supabase = await getSupabase()
   const { data, error } = await supabase
-    .from('snapfile__short_url')
+    .from('sf__short_url')
     .select('url')
     .eq('code', shortcode)
     .single()
