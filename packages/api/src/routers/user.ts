@@ -6,7 +6,7 @@ import { publicProcedure } from '../trpc'
 
 export const userRouter = {
   get: publicProcedure
-    .input(z.object({ userId: z.string() }))
+    .input(z.object({ userId: z.coerce.number() }))
     .query(async ({ ctx: { db }, input }) => {
       const [user] = await db
         .select({ id: schema.profile.id, displayName: userDisplayName })

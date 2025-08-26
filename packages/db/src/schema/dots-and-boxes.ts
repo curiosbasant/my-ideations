@@ -1,4 +1,4 @@
-import { json, pgTableCreator, smallint, uuid, varchar } from 'drizzle-orm/pg-core'
+import { json, pgTableCreator, smallint, varchar } from 'drizzle-orm/pg-core'
 
 import { getBaseColumns } from './base'
 
@@ -11,6 +11,6 @@ export const gdb__board = table('board', {
   boxes: json().default({}).$type<Record<string, number>>(),
   dashes: json().default({}).$type<Record<string, number>>(),
   activePlayerIndex: smallint(),
-  players: uuid().array(4).notNull(),
+  players: getBaseColumns().createdBy.array(4).notNull(),
   status: varchar(),
 })

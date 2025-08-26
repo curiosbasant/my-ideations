@@ -2,7 +2,7 @@ import { bigint, PgColumn, timestamp } from 'drizzle-orm/pg-core'
 
 import { profile } from './profile'
 
-const id = () => bigint({ mode: 'number' })
+export const id = () => bigint({ mode: 'number' })
 export const CASCADE_ON_DELETE = { onDelete: 'cascade' as const }
 
 export const takeForeignId = (columnRef: () => PgColumn) =>

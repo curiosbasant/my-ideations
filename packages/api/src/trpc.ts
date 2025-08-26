@@ -118,7 +118,8 @@ const enforceUserIsAuthenticated = t.middleware(async ({ ctx, next }) => {
   return next({
     ctx: {
       session: ctx.session,
-      authUserId: ctx.session.user.id,
+      // TODO: temporarily cast to number, to resolve ts errors
+      authUserId: Number(ctx.session.user.id) || 0,
     },
   })
 })
@@ -149,7 +150,8 @@ export const anonymousProcedure = t.procedure
       return next({
         ctx: {
           session: data.session,
-          authUserId: data.session.user.id,
+          // TODO: temporarily cast to number, to resolve ts errors
+          authUserId: Number(data.session.user.id) || 0,
         },
       })
     }

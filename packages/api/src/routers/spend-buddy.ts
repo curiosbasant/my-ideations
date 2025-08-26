@@ -11,37 +11,37 @@ import { protectedProcedure } from '../trpc'
 
 export const spendBuddyRouter = {
   group: {
-    all: protectedProcedure.query(async ({ ctx: { db, authUserId }, input }) => {
+    all: protectedProcedure.query(async ({ ctx: { db, authUserId } }) => {
       const myGroups = db.$with('my_groups').as(
         db
           .select({
-            id: schema.group.id,
-            name: schema.group.name,
-            ownerId: schema.group.createdBy,
+            id: schema.sb__group.id,
+            name: schema.sb__group.name,
+            ownerId: schema.sb__group.createdBy,
           })
-          .from(schema.member)
-          .innerJoin(schema.group, eq(schema.group.id, schema.member.groupId))
-          .where(eq(schema.member.userId, authUserId)),
+          .from(schema.sb__member)
+          .innerJoin(schema.sb__group, eq(schema.sb__group.id, schema.sb__member.groupId))
+          .where(eq(schema.sb__member.userId, authUserId)),
       )
 
       const groupSpends = db
         .select({
-          id: schema.group.id,
-          spends: sum(schema.spend.amount).as('spends'),
+          id: schema.sb__group.id,
+          spends: sum(schema.sb__spend.amount).as('spends'),
         })
-        .from(schema.spend)
-        .innerJoin(schema.group, eq(schema.group.id, schema.spend.groupId))
-        .groupBy(schema.group.id)
+        .from(schema.sb__spend)
+        .innerJoin(schema.sb__group, eq(schema.sb__group.id, schema.sb__spend.groupId))
+        .groupBy(schema.sb__group.id)
         .as('group_spends')
 
       const groupMemberCount = db
         .select({
-          id: schema.group.id,
+          id: schema.sb__group.id,
           count: count().as('member_count'),
         })
-        .from(schema.member)
-        .innerJoin(schema.group, eq(schema.group.id, schema.member.groupId))
-        .groupBy(schema.group.id)
+        .from(schema.sb__member)
+        .innerJoin(schema.sb__group, eq(schema.sb__group.id, schema.sb__member.groupId))
+        .groupBy(schema.sb__group.id)
         .as('group_member_count')
 
       const rows = await db
@@ -64,14 +64,14 @@ export const spendBuddyRouter = {
       .mutation(async ({ ctx: { db, authUserId }, input }) => {
         const data = await db.transaction(async (tx) => {
           const [group] = await tx
-            .insert(schema.group)
+            .insert(schema.sb__group)
             .values({
               name: input.name,
               createdBy: authUserId,
             })
-            .returning({ id: schema.group.id, name: schema.group.name })
+            .returning({ id: schema.sb__group.id, name: schema.sb__group.name })
 
-          await tx.insert(schema.member).values({
+          await tx.insert(schema.sb__member).values({
             groupId: group.id,
             userId: authUserId,
           })
@@ -85,7 +85,7 @@ export const spendBuddyRouter = {
       all: protectedProcedure
         .input(
           z.object({
-            groupId: z.string(),
+            groupId: z.coerce.number(),
             cursor: z.date().nullish(),
             limit: z.number().min(1).max(50).default(15),
           }),
@@ -93,25 +93,25 @@ export const spendBuddyRouter = {
         .query(async ({ ctx: { db }, input }) => {
           const rows = await db
             .select({
-              id: schema.spend.id,
-              amount: sql<number>`${schema.spend.amount} / 100`.as('amount_rupee'),
-              note: schema.spend.note,
-              createdAt: schema.spend.createdAt,
+              id: schema.sb__spend.id,
+              amount: sql<number>`${schema.sb__spend.amount} / 100`.as('amount_rupee'),
+              note: schema.sb__spend.note,
+              createdAt: schema.sb__spend.createdAt,
               user: {
                 id: schema.profile.id,
                 displayName: userDisplayName,
                 avatarUrl: schema.profile.avatarUrl,
               },
             })
-            .from(schema.spend)
-            .innerJoin(schema.profile, eq(schema.profile.id, schema.spend.createdBy))
+            .from(schema.sb__spend)
+            .innerJoin(schema.profile, eq(schema.profile.id, schema.sb__spend.createdBy))
             .where(
               and(
-                eq(schema.spend.groupId, input.groupId),
-                input.cursor ? lt(schema.spend.createdAt, input.cursor) : undefined,
+                eq(schema.sb__spend.groupId, input.groupId),
+                input.cursor ? lt(schema.sb__spend.createdAt, input.cursor) : undefined,
               ),
             )
-            .orderBy(desc(schema.spend.createdAt))
+            .orderBy(desc(schema.sb__spend.createdAt))
             .limit(input.limit)
 
           return {
@@ -123,28 +123,28 @@ export const spendBuddyRouter = {
         .input(groupSpendCreateSchema)
         .mutation(async ({ ctx: { db, authUserId }, input }) => {
           const [spend] = await db
-            .insert(schema.spend)
+            .insert(schema.sb__spend)
             .values({
               groupId: input.groupId,
               amount: input.amount * 100,
               note: input.note,
               createdBy: authUserId,
             })
-            .returning({ id: schema.spend.id })
+            .returning({ id: schema.sb__spend.id })
 
           return spend
         }),
     },
     member: {
-      all: protectedProcedure.input(z.string()).query(async ({ ctx: { db }, input }) => {
+      all: protectedProcedure.input(z.coerce.number()).query(async ({ ctx: { db }, input }) => {
         const memberSpends = db
           .select({
-            id: schema.spend.createdBy,
-            spends: sum(schema.spend.amount).as('spends'),
+            id: schema.sb__spend.createdBy,
+            spends: sum(schema.sb__spend.amount).as('spends'),
           })
-          .from(schema.spend)
-          .where(eq(schema.spend.groupId, input))
-          .groupBy(schema.spend.createdBy)
+          .from(schema.sb__spend)
+          .where(eq(schema.sb__spend.groupId, input))
+          .groupBy(schema.sb__spend.createdBy)
           .as('member_spends')
 
         const rows = await db
@@ -152,14 +152,14 @@ export const spendBuddyRouter = {
             id: schema.profile.id,
             displayName: userDisplayName,
             avatarUrl: schema.profile.avatarUrl,
-            joinedAt: schema.member.joinedAt,
+            joinedAt: schema.sb__member.joinedAt,
             spends: sql<string>`coalesce(${memberSpends.spends} / 100, 0)`.as('total_spends'),
           })
-          .from(schema.member)
-          .innerJoin(schema.profile, eq(schema.profile.id, schema.member.userId))
-          .leftJoin(memberSpends, eq(memberSpends.id, schema.member.userId))
-          .where(eq(schema.member.groupId, input))
-          .orderBy(desc(schema.member.joinedAt))
+          .from(schema.sb__member)
+          .innerJoin(schema.profile, eq(schema.profile.id, schema.sb__member.userId))
+          .leftJoin(memberSpends, eq(memberSpends.id, schema.sb__member.userId))
+          .where(eq(schema.sb__member.groupId, input))
+          .orderBy(desc(schema.sb__member.joinedAt))
 
         return rows
       }),
@@ -172,9 +172,9 @@ export const spendBuddyRouter = {
               success: false,
             }
           }
-          await db.insert(schema.member).values({
+          await db.insert(schema.sb__member).values({
             groupId: input.groupId,
-            userId,
+            userId: Number(userId),
           })
 
           return {
@@ -194,19 +194,19 @@ export const spendBuddyRouter = {
       .query(async ({ ctx: { db, authUserId }, input }) => {
         const query = db
           .select({
-            id: schema.notification.id,
-            type: schema.notification.type,
-            read: schema.notification.read,
-            resourceId: schema.notification.resourceId,
-            createdAt: schema.notification.createdAt,
+            id: schema.sb__notification.id,
+            type: schema.sb__notification.type,
+            read: schema.sb__notification.read,
+            resourceId: schema.sb__notification.resourceId,
+            createdAt: schema.sb__notification.createdAt,
             user: {
               displayName: userDisplayName,
               avatarUrl: schema.profile.avatarUrl,
             },
           })
-          .from(schema.notification)
-          .innerJoin(schema.profile, eq(schema.profile.id, schema.notification.createdBy))
-          .where(eq(schema.notification.userId, authUserId))
+          .from(schema.sb__notification)
+          .innerJoin(schema.profile, eq(schema.profile.id, schema.sb__notification.createdBy))
+          .where(eq(schema.sb__notification.userId, authUserId))
           .as('user_notifications')
 
         const rows = await unionAll(
@@ -222,22 +222,22 @@ export const spendBuddyRouter = {
                 avatarUrl: query.user.avatarUrl,
               },
               spend: {
-                id: schema.spend.id,
-                amount: sql<number>`${schema.spend.amount} / 100`.as('amount_rupee'),
+                id: schema.sb__spend.id,
+                amount: sql<number>`${schema.sb__spend.amount} / 100`.as('amount_rupee'),
               },
               member: {
-                id: sql<string>`${null}`,
+                id: sql<number>`${null}`,
                 displayName: sql<string>`${null}`,
                 avatarUrl: sql<string | null>`${null}`,
               },
               group: {
-                id: schema.group.id,
-                name: schema.group.name,
+                id: schema.sb__group.id,
+                name: schema.sb__group.name,
               },
             })
             .from(query)
-            .innerJoin(schema.spend, eq(schema.spend.id, query.resourceId))
-            .innerJoin(schema.group, eq(schema.group.id, schema.spend.groupId))
+            .innerJoin(schema.sb__spend, eq(schema.sb__spend.id, query.resourceId))
+            .innerJoin(schema.sb__group, eq(schema.sb__group.id, schema.sb__spend.groupId))
             .where(eq(query.type, 'group_spend_add')),
           db
             .select({
@@ -251,7 +251,7 @@ export const spendBuddyRouter = {
                 avatarUrl: query.user.avatarUrl,
               },
               spend: {
-                id: sql<string>`${null}`,
+                id: sql<number>`${null}`,
                 amount: sql<number>`${null}`,
               },
               member: {
@@ -260,18 +260,18 @@ export const spendBuddyRouter = {
                 avatarUrl: schema.profile.avatarUrl,
               },
               group: {
-                id: schema.group.id,
-                name: schema.group.name,
+                id: schema.sb__group.id,
+                name: schema.sb__group.name,
               },
             })
             .from(query)
-            .innerJoin(schema.member, eq(schema.member.userId, sql`${query.resourceId}::uuid`))
-            .innerJoin(schema.profile, eq(schema.profile.id, schema.member.userId))
-            .innerJoin(schema.group, eq(schema.group.id, schema.member.groupId))
+            .innerJoin(schema.sb__member, eq(schema.sb__member.userId, query.resourceId))
+            .innerJoin(schema.profile, eq(schema.profile.id, schema.sb__member.userId))
+            .innerJoin(schema.sb__group, eq(schema.sb__group.id, schema.sb__member.groupId))
             .where(
               and(
                 lt(query.createdAt, input.cursor!).if(input.cursor),
-                eq(query.type, 'group_member_add'),
+                eq(query.type, 'group_member_join'),
               ),
             ),
         )
@@ -286,23 +286,28 @@ export const spendBuddyRouter = {
     mark: protectedProcedure
       .input(
         z.object({
-          notificationId: z.string(),
+          notificationId: z.coerce.number(),
           read: z.boolean().default(true),
         }),
       )
       .mutation(async ({ ctx: { db }, input }) => {
         await db
-          .update(schema.notification)
+          .update(schema.sb__notification)
           .set({
             read: input.read,
           })
-          .where(eq(schema.notification.id, input.notificationId))
+          .where(eq(schema.sb__notification.id, input.notificationId))
       }),
     unread: protectedProcedure.query(async ({ ctx: { db, authUserId } }) => {
       const [row] = await db
         .select({ count: count().as('unread_notifications_count') })
-        .from(schema.notification)
-        .where(and(eq(schema.notification.userId, authUserId), eq(schema.notification.read, false)))
+        .from(schema.sb__notification)
+        .where(
+          and(
+            eq(schema.sb__notification.userId, authUserId),
+            eq(schema.sb__notification.read, false),
+          ),
+        )
       return row
     }),
   },

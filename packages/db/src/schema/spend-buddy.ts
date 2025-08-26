@@ -8,7 +8,7 @@ import {
   varchar,
 } from 'drizzle-orm/pg-core'
 
-import { getBaseColumns, takeForeignId } from './base'
+import { getBaseColumns, id, takeForeignId } from './base'
 
 const table = pgTableCreator((tableName) => `sb__${tableName}`)
 
@@ -44,7 +44,7 @@ export const sb__notification = table(
     ...getBaseColumns(),
     type: varchar({ enum: ['group_spend_add', 'group_member_join'] }).notNull(),
     read: boolean().default(false),
-    resourceId: text(),
+    resourceId: id(),
     /** The user who receives the notification */
     userId: getBaseColumns().createdBy,
   },
