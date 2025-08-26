@@ -1,4 +1,5 @@
 import { cookies } from 'next/headers'
+import { NextResponse, type NextRequest } from 'next/server'
 
 import { createServerClient, type Database } from '@my/lib/supabase'
 
@@ -9,6 +10,9 @@ export async function getSupabase() {
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
+      auth: {
+        flowType: 'pkce',
+      },
       cookies: {
         getAll() {
           return cookieStore.getAll()
@@ -23,6 +27,27 @@ export async function getSupabase() {
             // This can be ignored if you have middleware refreshing
             // user sessions.
           }
+        },
+      },
+    },
+  )
+}
+
+export function getSupabaseMiddleware(request: NextRequest, response: NextResponse) {
+  return createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        getAll() {
+          return request.cookies.getAll()
+        },
+        setAll(cookiesToSet) {
+          cookiesToSet.forEach((c) => request.cookies.set(c))
+          for (const pair of request.headers) {
+            response.headers.set(...pair)
+          }
+          cookiesToSet.forEach((c) => response.cookies.set(c))
         },
       },
     },

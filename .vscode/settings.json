@@ -1,7 +1,15 @@
 {
   "conventionalCommits.promptBody": false,
   "conventionalCommits.promptFooter": false,
-  "conventionalCommits.scopes": ["api", "db", "games", "parinaam", "snapfile", "youtube"],
+  "conventionalCommits.scopes": [
+    "api",
+    "db",
+    "games",
+    "parinaam",
+    "priyasthan",
+    "snapfile",
+    "youtube"
+  ],
   "cSpell.words": [
     "basant",
     "hookform",
@@ -10,12 +18,12 @@
     "nativewind",
     "parinaam",
     "Pressable",
+    "priyasthan",
     "qrcode",
     "shortcode",
     "signin",
     "snapfile",
     "snaplet",
-    "supabase",
     "supabase",
     "superjson",
     "tailwindcss",

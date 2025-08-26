@@ -38,7 +38,9 @@ export function actionWrapper<Payload, TData>(action: ActionHandler<Payload, TDa
       const data = await action(payload, state)
       return { success: true, data }
     } catch (error) {
-      return { success: false, message: String(error) }
+      const message = String(error)
+      if (message === 'Error: NEXT_REDIRECT') throw error
+      return { success: false, message }
     }
   }
 }

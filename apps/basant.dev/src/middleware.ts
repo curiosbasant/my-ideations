@@ -1,6 +1,8 @@
 import { NextResponse, type NextRequest } from 'next/server'
 
 import { ROOT_DOMAIN } from '~/lib/env'
+import { getSupabaseMiddleware } from '~/lib/supabase'
+import { extractSubdomain } from '~/lib/utils/domain'
 
 export async function middleware(request: NextRequest) {
   const { pathname, search } = request.nextUrl
@@ -10,17 +12,28 @@ export async function middleware(request: NextRequest) {
     if (pathname === '/favicon.ico') {
       return NextResponse.rewrite(new URL(`/icons/${subdomain}.ico`, request.url))
     }
-    // For the root path on a subdomain, rewrite to the subdomain page
-    return NextResponse.rewrite(
-      new URL(`/s/${pathname === '/' ? subdomain : subdomain + pathname}${search}`, request.url),
+
+    const response = NextResponse.rewrite(
+      // For the root path on a subdomain, rewrite to the subdomain page
+      new URL(`/s/${subdomain + (pathname === '/' ? '' : pathname) + search}`, request.url),
+      { headers: request.headers },
     )
+
+    if (subdomain === 'priyasthan') {
+      const supabase = getSupabaseMiddleware(request, response)
+      await supabase.auth.getUser()
+    }
+
+    return response
   }
 
   if (pathname.startsWith('/s/')) {
     const { subdomain, restPath } =
       pathname.match(/\/s\/(?<subdomain>[^\/]+)(?<restPath>.*)/)?.groups ?? {}
+
     return NextResponse.redirect(
       new URL(`${request.nextUrl.protocol}//${subdomain}.${ROOT_DOMAIN + restPath + search}`),
+      { headers: request.headers },
     )
   }
 
@@ -39,43 +52,4 @@ export const config = {
     '/((?!api|_next|.*\\..*).*)',
     '/favicon.ico',
   ],
-}
-
-function extractSubdomain(request: NextRequest) {
-  const url = request.url
-  const host = request.headers.get('host') || ''
-  const hostname = host.split(':')[0]
-
-  // Local development environment
-  if (url.includes('localhost') || url.includes('127.0.0.1')) {
-    // Try to extract subdomain from the full URL
-    const fullUrlMatch = url.match(/http:\/\/([^.]+)\.localhost/)
-    if (fullUrlMatch?.[1]) {
-      return fullUrlMatch[1]
-    }
-
-    // Fallback to host header approach
-    if (hostname.includes('.localhost')) {
-      return hostname.split('.')[0]
-    }
-
-    return null
-  }
-
-  // Handle preview deployment URLs (tenant---branch-name.vercel.app)
-  if (hostname.includes('---') && hostname.endsWith('.vercel.app')) {
-    const parts = hostname.split('---')
-    return parts.length > 0 ? parts[0] : null
-  }
-
-  // Production environment
-  const rootDomainFormatted = ROOT_DOMAIN.split(':')[0]
-
-  // Regular subdomain detection
-  const isSubdomain =
-    hostname !== rootDomainFormatted
-    && hostname !== `www.${rootDomainFormatted}`
-    && hostname.endsWith(`.${rootDomainFormatted}`)
-
-  return isSubdomain ? hostname.replace(`.${rootDomainFormatted}`, '') : null
 }
