@@ -3,6 +3,7 @@
 import { useMemo, type ChangeEvent } from 'react'
 import { LoaderCircleIcon, MapPinIcon, SearchIcon } from 'lucide-react'
 
+import { useToggle } from '@my/core/hooks'
 import { debounce } from '@my/lib/utils'
 
 import { useAction } from '~/app/client'
@@ -94,6 +95,38 @@ export function CurrentWorkplaceSearch() {
           </div>
         </ScrollArea>
       )}
+    </div>
+  )
+}
+
+export function UserLocationDetails(props: {
+  addressText: string
+  addressSecondaryText: string | null
+}) {
+  const [isEditing, toggleEditing] = useToggle()
+
+  if (isEditing) {
+    return (
+      <div className='space-y-2'>
+        <CurrentWorkplaceSearch />
+        <div className='flex justify-end'>
+          <Button variant='outline' onClick={toggleEditing}>
+            Cancel
+          </Button>
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div className='bg-background flex space-y-1 rounded-md border p-4'>
+      <div className='flex-1'>
+        <div className='font-medium'>{props.addressText}</div>
+        {props.addressSecondaryText && (
+          <p className='text-muted-foreground text-sm'>{props.addressSecondaryText}</p>
+        )}
+      </div>
+      <Button onClick={toggleEditing}>Edit</Button>
     </div>
   )
 }

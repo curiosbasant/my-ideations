@@ -1,4 +1,4 @@
-import { eq, schema } from '@my/db'
+import { desc, eq, schema } from '@my/db'
 import { placeIdToLocation } from '@my/lib/maps'
 import { z } from '@my/lib/zod'
 
@@ -29,6 +29,7 @@ export const userRouter = {
         .leftJoin(schema.profileAddress, eq(schema.profileAddress.profileId, schema.profile.id))
         .innerJoin(schema.address, eq(schema.address.id, schema.profileAddress.addressId))
         .where(eq(schema.profile.createdBy, authUserId))
+        .orderBy(desc(schema.profileAddress.updatedAt)) // only take the latest address
         .limit(1)
 
       return address || null

@@ -1,5 +1,9 @@
 import { getAuthUser, getUserLocation } from '~/features/auth/dal'
-import { CurrentWorkplaceSearch, SignInWithGoogleButton } from './client.component'
+import {
+  CurrentWorkplaceSearch,
+  SignInWithGoogleButton,
+  UserLocationDetails,
+} from './client.component'
 
 export default async function PriyasthanPage() {
   const authUser = await getAuthUser()
@@ -23,12 +27,5 @@ async function CurrentWorkplaceLocation() {
     return <CurrentWorkplaceSearch />
   }
 
-  return (
-    <div className='bg-background space-y-1 rounded-md border p-4'>
-      <div className='font-medium'>{location.addressText}</div>
-      {location.addressSecondaryText && (
-        <p className='text-muted-foreground text-sm'>{location.addressSecondaryText}</p>
-      )}
-    </div>
-  )
+  return <UserLocationDetails {...location} />
 }
