@@ -1,4 +1,4 @@
-import { NextResponse, type NextRequest } from 'next/server'
+import { NextResponse, type MiddlewareConfig, type NextRequest } from 'next/server'
 
 import { ROOT_DOMAIN } from '~/lib/env'
 import { getSupabaseMiddleware } from '~/lib/supabase'
@@ -10,7 +10,9 @@ export async function middleware(request: NextRequest) {
 
   if (subdomain) {
     if (pathname === '/favicon.ico') {
-      return NextResponse.rewrite(new URL(`/icons/${subdomain}.ico`, request.url))
+      return NextResponse.rewrite(new URL(`/icons/${subdomain}.ico`, request.url), {
+        headers: request.headers,
+      })
     }
 
     const response = NextResponse.rewrite(
@@ -41,15 +43,22 @@ export async function middleware(request: NextRequest) {
   return NextResponse.next()
 }
 
-export const config = {
+export const config: MiddlewareConfig = {
   matcher: [
-    /*
-     * Match all paths except for:
-     * 1. /api routes
-     * 2. /_next (Next.js internals)
-     * 3. all files inside /public
-     */
-    '/((?!api|_next|.*\\..*).*)',
     '/favicon.ico',
+    {
+      /*
+       * Match all paths except for:
+       * 1. /api routes
+       * 2. /_next (Next.js internals)
+       * 3. all files inside /public
+       */
+      source: '/((?!api|_next|.*\\..*).*)',
+      missing: [
+        { type: 'header', key: 'next-router-prefetch' },
+        { type: 'header', key: 'next-action' },
+        { type: 'header', key: 'purpose', value: 'prefetch' },
+      ],
+    },
   ],
 }
