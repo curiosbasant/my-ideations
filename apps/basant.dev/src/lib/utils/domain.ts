@@ -3,7 +3,7 @@ import type { NextRequest } from 'next/server'
 import { ROOT_DOMAIN } from '~/lib/env'
 
 export function extractSubdomain(request: NextRequest) {
-    const host = request.headers.get('host') || ''
+  const host = request.headers.get('host') || ''
   const hostname = host.split(':')[0]
 
   // Local development environment
@@ -22,10 +22,18 @@ export function extractSubdomain(request: NextRequest) {
     return null
   }
 
-  // Handle preview deployment URLs (tenant---branch-name.vercel.app)
-  if (hostname.includes('---') && hostname.endsWith('.vercel.app')) {
-    const parts = hostname.split('---')
-    return parts.length > 0 ? parts[0] : null
+  if (hostname.endsWith('.vercel.app')) {
+    // <project-name>-git-<branch-name>-<scope-slug>.vercel.app
+    if (hostname.includes('-git-app-')) {
+      // if a vercel branch url and the branch starts with `app`
+      return process.env.VERCEL_GIT_COMMIT_REF?.slice(4) || null // remove the 'app/' from branch name
+    }
+
+    if (hostname.includes('---')) {
+      // Handle preview deployment URLs (tenant---branch-name.vercel.app)
+      const parts = hostname.split('---')
+      return parts.length > 0 ? parts[0] : null
+    }
   }
 
   // Production environment
