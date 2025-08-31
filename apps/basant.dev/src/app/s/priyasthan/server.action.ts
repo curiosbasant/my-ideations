@@ -3,8 +3,11 @@
 import { headers } from 'next/headers'
 import { redirect } from 'next/navigation'
 
+import { autocompletePlaces } from '@my/lib/maps'
+
 import { actionWrapper } from '~/app/shared'
 import { getSupabase } from '~/lib/supabase'
+import { api } from '~/lib/trpc'
 
 export const signInWithProviderAction = actionWrapper(async (payload: { redirectTo?: string }) => {
   const [supabase, heads] = await Promise.all([getSupabase(), headers()])
@@ -24,3 +27,16 @@ export const signInWithProviderAction = actionWrapper(async (payload: { redirect
 
   redirect(data.url)
 })
+
+export const autocompletePlacesAction = actionWrapper(async (payload: { search: string }) => {
+  return autocompletePlaces(payload.search)
+})
+
+export const saveUserLocation = async (payload: {
+  placeId: string
+  text: string
+  secondaryText?: string | null
+}) => {
+  await api.user.address.update(payload)
+  redirect('/') // revalidatePath isn't working
+}

@@ -10,6 +10,7 @@
     "with-env": "dotenv -e ../../.env.local --"
   },
   "dependencies": {
+    "@my/api": "workspace:*",
     "@my/core": "workspace:*",
     "@my/lib": "workspace:*",
     "@radix-ui/react-dialog": "^1.1.14",
