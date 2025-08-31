@@ -11,7 +11,7 @@ import { Button } from '~/components/ui/button'
 import { ScrollArea } from '~/components/ui/scroll-area'
 import {
   autocompletePlacesAction,
-  saveUserLocation,
+  saveCurrentWorkplace,
   signInWithProviderAction,
 } from './server.action'
 
@@ -32,7 +32,10 @@ export function SignInWithGoogleButton() {
   )
 }
 
-export function CurrentWorkplaceSearch() {
+export function AutocompletePlaceSearch(props: {
+  placeholder: string
+  onPlaceSelect: (place: { placeId: string; text: string; secondaryText?: string | null }) => void
+}) {
   const { isPending, state, actionTransition } = useAction({
     actionFn: autocompletePlacesAction,
     onError(message) {
@@ -61,7 +64,7 @@ export function CurrentWorkplaceSearch() {
         <input
           className='placeholder:text-muted-foreground outline-hidden flex h-10 w-full rounded-md bg-transparent py-3 text-sm disabled:cursor-not-allowed disabled:opacity-50'
           onChange={handleChange}
-          placeholder='Search for your current workplace...'
+          placeholder={props.placeholder}
           type='search'
         />
       </div>
@@ -74,7 +77,7 @@ export function CurrentWorkplaceSearch() {
                 <button
                   className='outline-hidden hover:bg-accent relative flex w-full cursor-default select-none items-start gap-2 rounded-sm px-2 py-1.5 text-start text-sm'
                   onClick={() => {
-                    saveUserLocation({
+                    props.onPlaceSelect({
                       placeId: place.placeId,
                       text: place.mainText,
                       secondaryText: place.secondaryText,
@@ -108,7 +111,10 @@ export function UserLocationDetails(props: {
   if (isEditing) {
     return (
       <div className='space-y-2'>
-        <CurrentWorkplaceSearch />
+        <AutocompletePlaceSearch
+          placeholder='Search for your current workplace...'
+          onPlaceSelect={saveCurrentWorkplace}
+        />
         <div className='flex justify-end'>
           <Button variant='outline' onClick={toggleEditing}>
             Cancel

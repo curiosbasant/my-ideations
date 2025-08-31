@@ -32,11 +32,20 @@ export const autocompletePlacesAction = actionWrapper(async (payload: { search: 
   return autocompletePlaces(payload.search)
 })
 
-export const saveUserLocation = async (payload: {
+export const saveCurrentWorkplace = async (payload: {
   placeId: string
   text: string
   secondaryText?: string | null
 }) => {
-  await api.user.address.update(payload)
+  await api.user.address.upsert(payload)
+  redirect('/') // revalidatePath isn't working
+}
+
+export const savePreferredWorkplace = async (payload: {
+  placeId: string
+  text: string
+  secondaryText?: string | null
+}) => {
+  await api.priyasthan.workplace.savePreferred(payload)
   redirect('/') // revalidatePath isn't working
 }

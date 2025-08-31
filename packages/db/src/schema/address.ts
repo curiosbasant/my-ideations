@@ -36,11 +36,13 @@ export const profileAddress = pgTable(
         .text()
         .references(() => address.id)
         .notNull(),
+      type: c.varchar({ enum: ['current-workplace', 'preferred-workplace'] }),
       updatedAt: createdAt,
     }
   },
   (t) => [
     primaryKey({ columns: [t.profileId, t.addressId] }),
+    index().on(t.type),
     index().on(t.updatedAt.desc()),
     selectOnlyPolicy,
   ],

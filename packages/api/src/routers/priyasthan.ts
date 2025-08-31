@@ -2,22 +2,12 @@ import { and, desc, eq, schema, sql } from '@my/db'
 import { placeIdToLocation } from '@my/lib/maps'
 import { z } from '@my/lib/zod'
 
-import { userDisplayName } from '../lib/utils'
-import { protectedProcedure, publicProcedure } from '../trpc'
+import { protectedProcedure } from '../trpc'
 
-export const userRouter = {
-  get: publicProcedure
-    .input(z.object({ userId: z.coerce.number() }))
-    .query(async ({ ctx: { db }, input }) => {
-      const [user] = await db
-        .select({ id: schema.profile.id, displayName: userDisplayName })
-        .from(schema.profile)
-        .where(eq(schema.profile.id, input.userId))
-      return user
-    }),
-  address: {
-    get: protectedProcedure.query(async ({ ctx: { db, authUserId } }) => {
-      const [address] = await db
+export const priyasthanRouter = {
+  workplace: {
+    getPreferred: protectedProcedure.query(async ({ ctx: { db, authUserId } }) => {
+      const addresses = await db
         .select({
           placeId: schema.address.id,
           addressText: schema.address.text,
@@ -28,16 +18,15 @@ export const userRouter = {
         .innerJoin(schema.address, eq(schema.address.id, schema.profileAddress.addressId))
         .where(
           and(
-            eq(schema.profileAddress.type, 'current-workplace'),
+            eq(schema.profileAddress.type, 'preferred-workplace'),
             eq(schema.profile.createdBy, authUserId),
           ),
         )
         .orderBy(desc(schema.profileAddress.updatedAt)) // only take the latest address
-        .limit(1)
 
-      return address || null
+      return addresses
     }),
-    upsert: protectedProcedure
+    savePreferred: protectedProcedure
       .input(
         z.object({
           placeId: z.string(),
@@ -75,7 +64,7 @@ export const userRouter = {
             .values({
               profileId: id,
               addressId: input.placeId,
-              type: 'current-workplace',
+              type: 'preferred-workplace',
             })
             .onConflictDoUpdate({
               target: [schema.profileAddress.profileId, schema.profileAddress.addressId],
