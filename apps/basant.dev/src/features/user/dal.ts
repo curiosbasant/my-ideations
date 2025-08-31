@@ -1,5 +1,4 @@
 import { cache } from 'react'
-import { notFound } from 'next/navigation'
 import { TRPCError } from '@trpc/server'
 
 import { api } from '~/lib/trpc'
@@ -7,11 +6,11 @@ import { api } from '~/lib/trpc'
 export const getProfileDetails = cache(async () => {
   try {
     const user = await api.user.get()
-    if (!user) notFound()
+    if (!user) return null
     return user
   } catch (error) {
     if (error instanceof TRPCError && error.code === 'UNAUTHORIZED') {
-      // redirect(LOGIN_PAGE)
+      return null
     }
     throw error
   }
