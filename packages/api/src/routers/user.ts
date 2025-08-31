@@ -3,18 +3,20 @@ import { placeIdToLocation } from '@my/lib/maps'
 import { z } from '@my/lib/zod'
 
 import { userDisplayName } from '../lib/utils'
-import { protectedProcedure, publicProcedure } from '../trpc'
+import { protectedProcedure } from '../trpc'
 
 export const userRouter = {
-  get: publicProcedure
-    .input(z.object({ userId: z.coerce.number() }))
-    .query(async ({ ctx: { db }, input }) => {
-      const [user] = await db
-        .select({ id: schema.profile.id, displayName: userDisplayName })
-        .from(schema.profile)
-        .where(eq(schema.profile.id, input.userId))
-      return user
-    }),
+  get: protectedProcedure.query(async ({ ctx: { db, authUserId } }) => {
+    const [user] = await db
+      .select({
+        id: schema.profile.id,
+        displayName: userDisplayName,
+        avatarUrl: schema.profile.avatarUrl,
+      })
+      .from(schema.profile)
+      .where(eq(schema.profile.createdBy, authUserId))
+    return user
+  }),
   address: {
     get: protectedProcedure.query(async ({ ctx: { db, authUserId } }) => {
       const [address] = await db

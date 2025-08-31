@@ -1,7 +1,6 @@
 import '~/app/tailwind.css'
 import './theme.css'
 
-import type { PropsWithChildren } from 'react'
 import Link from 'next/link'
 
 import { latoFont } from '~/app/shared'
@@ -15,7 +14,7 @@ export const metadata = {
   description: 'Instantly share files by scanning and generating QRCodes!',
 }
 
-export default function SnapFileRootLayout(props: PropsWithChildren) {
+export default function SnapFileRootLayout(props: LayoutProps<{ slots: 'headerProfile' }>) {
   return (
     <html lang='en' className='size-full antialiased'>
       <body className={`size-full ${latoFont.className}`}>
@@ -27,6 +26,7 @@ export default function SnapFileRootLayout(props: PropsWithChildren) {
                   <div className='bg-secondary size-8 rounded-md' />
                   <span className='@2xs:text-2xl text-xl font-extrabold'>Priyasthan</span>
                 </Link>
+                {props.headerProfile}
               </div>
             </header>
             <div className='px-(--page-padding) bg-secondary flex flex-1'>
