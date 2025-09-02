@@ -1,7 +1,7 @@
 import { PlacesClient } from '@googlemaps/places'
 
 export const placesClient = new PlacesClient({
-  apiKey: process.env['NEXT_PUBLIC_GOOGLE_MAPS_API_KEY'],
+  apiKey: process.env['GOOGLE_MAPS_API_KEY'],
 })
 
 export async function autocompletePlaces(search: string) {
