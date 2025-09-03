@@ -1,5 +1,6 @@
 'use server'
 
+import { revalidatePath } from 'next/cache'
 import { headers } from 'next/headers'
 import { redirect } from 'next/navigation'
 
@@ -32,20 +33,16 @@ export const autocompletePlacesAction = actionWrapper(async (payload: { search: 
   return autocompletePlaces(payload.search)
 })
 
-export const saveCurrentWorkplace = async (payload: {
-  placeId: string
-  text: string
-  secondaryText?: string | null
-}) => {
+export const saveCurrentWorkplace = actionWrapper(
+  async (payload: { placeId: string; text: string; secondaryText?: string | null }) => {
   await api.user.address.upsert(payload)
-  redirect('/') // revalidatePath isn't working
-}
+    revalidatePath('/')
+  },
+)
 
-export const savePreferredWorkplace = async (payload: {
-  placeId: string
-  text: string
-  secondaryText?: string | null
-}) => {
+export const savePreferredWorkplace = actionWrapper(
+  async (payload: { placeId: string; text: string; secondaryText?: string | null }) => {
   await api.priyasthan.workplace.savePreferred(payload)
-  redirect('/') // revalidatePath isn't working
-}
+    revalidatePath('/')
+  },
+)

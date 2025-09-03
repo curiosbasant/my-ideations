@@ -1,11 +1,12 @@
-import { MapPinIcon } from 'lucide-react'
+import { MapPinIcon, MapPinnedIcon } from 'lucide-react'
 
+import { Button } from '~/components/ui/button'
 import { getAuthUser, getUserLocation } from '~/features/auth/dal'
 import { api } from '~/lib/trpc'
 import {
-  AutocompletePlaceSearch,
+  SetCurrentLocationDialog,
+  SetPreferredLocationDialog,
   SignInWithGoogleButton,
-  UserLocationDetails,
 } from './client.component'
 import { saveCurrentWorkplace, savePreferredWorkplace } from './server.action'
 
@@ -24,10 +25,7 @@ export default async function PriyasthanPage() {
       </section>
       <section className='space-y-4'>
         <h2 className='text-xl font-bold'>My Preferred Work Locations</h2>
-        <AutocompletePlaceSearch
-          placeholder='Search for your preferred workplaces...'
-          onPlaceSelect={savePreferredWorkplace}
-        />
+        <SetPreferredLocationDialog />
         <PreferredWorkplacesList />
       </section>
     </div>
@@ -39,14 +37,29 @@ async function CurrentWorkplaceLocation() {
 
   if (!location) {
     return (
-      <AutocompletePlaceSearch
-        placeholder='Search for your current workplace...'
-        onPlaceSelect={saveCurrentWorkplace}
-      />
+      <SetCurrentLocationDialog>
+        <Button>
+          <MapPinnedIcon /> Set Your Location
+        </Button>
+      </SetCurrentLocationDialog>
     )
   }
 
-  return <UserLocationDetails {...location} />
+  return (
+    <div className='bg-background flex space-y-1 rounded-md border p-4'>
+      <div className='flex-1'>
+        <div className='font-medium'>{location.addressText}</div>
+        {location.addressSecondaryText && (
+          <p className='text-muted-foreground text-sm'>{location.addressSecondaryText}</p>
+        )}
+      </div>
+      <SetCurrentLocationDialog>
+        <Button>
+          <MapPinnedIcon /> Edit
+        </Button>
+      </SetCurrentLocationDialog>
+    </div>
+  )
 }
 
 async function PreferredWorkplacesList() {
