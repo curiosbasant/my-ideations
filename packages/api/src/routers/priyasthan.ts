@@ -2,6 +2,7 @@ import { and, desc, eq, schema, sql } from '@my/db'
 import { placeIdToLocation } from '@my/lib/maps'
 import { z } from '@my/lib/zod'
 
+import { userDisplayName } from '../lib/utils'
 import { protectedProcedure } from '../trpc'
 
 export const priyasthanRouter = {
@@ -74,5 +75,26 @@ export const priyasthanRouter = {
 
         return { message: 'done' }
       }),
+    recent: protectedProcedure.query(({ ctx: { db } }) => {
+      return db
+        .select({
+          profile: {
+            id: schema.profileAddress.profileId,
+            displayName: userDisplayName,
+            avatarUrl: schema.profile.avatarUrl,
+          },
+          address: {
+            id: schema.profileAddress.addressId,
+            text: schema.address.text,
+          },
+          createdAt: schema.profileAddress.updatedAt,
+        })
+        .from(schema.profileAddress)
+        .innerJoin(schema.profile, eq(schema.profile.id, schema.profileAddress.profileId))
+        .innerJoin(schema.address, eq(schema.address.id, schema.profileAddress.addressId))
+        .where(eq(schema.profileAddress.type, 'preferred-workplace'))
+        .orderBy(desc(schema.profileAddress.updatedAt))
+        .limit(10)
+    }),
   },
 }

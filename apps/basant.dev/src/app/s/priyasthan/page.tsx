@@ -1,5 +1,7 @@
 import { MapPinIcon, MapPinnedIcon } from 'lucide-react'
 
+import { formatDistance } from '@my/lib/date'
+
 import { Button } from '~/components/ui/button'
 import { getAuthUser, getUserLocation } from '~/features/auth/dal'
 import { api } from '~/lib/trpc'
@@ -8,7 +10,6 @@ import {
   SetPreferredLocationDialog,
   SignInWithGoogleButton,
 } from './client.component'
-import { saveCurrentWorkplace, savePreferredWorkplace } from './server.action'
 
 export default async function PriyasthanPage() {
   const authUser = await getAuthUser()
@@ -18,7 +19,7 @@ export default async function PriyasthanPage() {
   }
 
   return (
-    <div className='space-y-12'>
+    <div className='grid auto-rows-auto gap-12 md:grid-flow-col md:grid-cols-[2fr_1fr] md:grid-rows-[auto_1fr]'>
       <section className='space-y-4'>
         <h2 className='text-xl font-bold'>My Current Workplace Location</h2>
         <CurrentWorkplaceLocation />
@@ -28,6 +29,12 @@ export default async function PriyasthanPage() {
         <SetPreferredLocationDialog />
         <PreferredWorkplacesList />
       </section>
+      <aside className='row-span-2 space-y-4'>
+        <header className=''>
+          <h2 className='text-xl font-bold'>Latest Preferred Locations</h2>
+        </header>
+        <RecentLocations />
+      </aside>
     </div>
   )
 }
@@ -75,6 +82,33 @@ async function PreferredWorkplacesList() {
               <span className='text-muted-foreground'>{place.addressSecondaryText}</span>
             )}
           </div>
+        </li>
+      ))}
+    </ul>
+  )
+}
+
+async function RecentLocations() {
+  const recentPlaces = await api.priyasthan.workplace.recent()
+
+  return (
+    <ul className='grid grid-cols-[auto_1fr] gap-2'>
+      {recentPlaces.map(({ profile, address, createdAt }) => (
+        <li
+          className='bg-background col-span-full row-span-3 grid grid-cols-subgrid rounded-md border p-3'
+          key={profile.id + address.id}>
+          <div className='size-8 overflow-clip rounded-full'>
+            {profile.avatarUrl && <img src={profile.avatarUrl} className='size-full' />}
+          </div>
+          <p>
+            <strong>{profile.displayName}</strong> has set their preferred work place at{' '}
+            <strong>{address.text}</strong>.
+          </p>
+          <time
+            dateTime={createdAt.toString()}
+            className='text-muted-foreground col-start-2 justify-self-end text-sm'>
+            {formatDistance(createdAt)}
+          </time>
         </li>
       ))}
     </ul>
