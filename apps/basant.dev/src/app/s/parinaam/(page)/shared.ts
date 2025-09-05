@@ -28,7 +28,7 @@ export const getResultsOptions = (data: ResultQueryInput) =>
 async function queryFn<QKey extends [string, ResultQueryInput]>(ctx: QueryFunctionContext<QKey>) {
   const results = await streamedQuery<ResultQueryOutput, QKey>({
     async queryFn({ queryKey }) {
-      const response = await fetch('/api/result?' + new URLSearchParams(queryKey[1] as string))
+      const response = await fetch('/result?' + new URLSearchParams(queryKey[1] as string))
       const reader = response.body?.getReader()
       const decoder = new TextDecoder()
 
