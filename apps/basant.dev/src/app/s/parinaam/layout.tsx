@@ -23,7 +23,7 @@ export default function ParinaamRootLayout(props: LayoutProps<{ slots: 'themeSwi
           <div className='mask-b-from-50% pointer-events-none absolute top-0 -z-10 h-2/3 w-full'>
             <div
               className='h-full opacity-[0.05] dark:invert'
-              style={{ background: 'url(/bg-doodles-school.jpg) top / 600px' }}
+              style={{ background: 'url(/public/bg-doodles-school.jpg) top / 600px' }}
             />
           </div>
           <ScrollArea className='size-full'>
@@ -32,7 +32,7 @@ export default function ParinaamRootLayout(props: LayoutProps<{ slots: 'themeSwi
                 <div className='max-w-(--page-size) m-auto flex items-center gap-4 py-3'>
                   <div className='@container flex-1'>
                     <Link href='/' className='inline-flex items-center gap-4'>
-                      <img src='/icons/parinaam.svg' width={26} height={26} alt='Logo' />
+                      <img src='/public/icons/parinaam.svg' width={26} height={26} alt='Logo' />
                       <span className='@2xs:text-2xl text-xl font-extrabold'>
                         Pariksha Parinaam
                       </span>

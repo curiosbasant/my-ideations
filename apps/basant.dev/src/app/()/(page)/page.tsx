@@ -202,7 +202,7 @@ export default function PortfolioPage() {
                           sandbox='allow-same-origin' // only allow same-origin resources
                           allowFullScreen={false}
                         />
-                      : <img src='/placeholder.svg' className='size-full object-cover' />}
+                      : <img src='/public/placeholder.svg' className='size-full object-cover' />}
                     </div>
                     <CardContent className='row-span-2 grid grid-rows-subgrid items-start gap-4'>
                       <div className='flex flex-wrap gap-2'>

@@ -26,7 +26,7 @@ export default function SnapFileRootLayout(props: PropsWithChildren) {
             <header className='bg-background/80 px-(--page-padding) sticky top-0 z-10 backdrop-blur-sm'>
               <div className='max-w-(--page-size) m-auto flex items-center gap-4 py-3'>
                 <Link href='/' className='inline-flex items-center gap-4'>
-                  <Image src='/icons/snapfile.png' width={32} height={32} alt='Logo' />
+                  <Image src='/public/icons/snapfile.png' width={32} height={32} alt='Logo' />
                   <span className='@2xs:text-2xl text-xl font-extrabold'>Snap File</span>
                 </Link>
                 <Button className='text-base' variant='ghost' asChild>

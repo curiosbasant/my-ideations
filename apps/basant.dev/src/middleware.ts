@@ -9,9 +9,7 @@ export async function middleware(request: NextRequest) {
 
   if (subdomain) {
     if (pathname === '/favicon.ico') {
-      return NextResponse.rewrite(new URL(`/icons/${subdomain}.ico`, request.url), {
-        headers: request.headers,
-      })
+      return NextResponse.rewrite(new URL(`/public/icons/${subdomain}.ico`, request.url))
     }
 
     const response = NextResponse.rewrite(
@@ -37,13 +35,12 @@ export async function middleware(request: NextRequest) {
 
 export const config: MiddlewareConfig = {
   matcher: [
-    '/favicon.ico',
-      /*
-       * Match all paths except for:
-       * 1. /api routes
-       * 2. /_next (Next.js internals)
-       * 3. all files inside /public
-       */
-    '/((?!api|_next|.*\\..*).*)',
+    /*
+     * Match all paths except for:
+     * 1. /api routes
+     * 2. /_next (Next.js internals)
+     * 3. all files inside /public
+     */
+    '/((?!api|_next|public).*)',
   ],
 }
