@@ -1,14 +1,10 @@
-import { index, pgPolicy, pgTable, primaryKey } from 'drizzle-orm/pg-core'
+import { index, primaryKey } from 'drizzle-orm/pg-core'
 import { SQL, sql } from 'drizzle-orm/sql'
 
+import { __table, selectOnlyPolicy } from './_shared'
 import { getBaseColumns, getTimestampColumns } from './base'
 
-const selectOnlyPolicy = pgPolicy('allow_select_to_all', {
-  for: 'select',
-  withCheck: sql`true`,
-})
-
-export const address = pgTable(
+export const address = __table(
   'address',
   (c) => ({
     ...getTimestampColumns(),
@@ -26,7 +22,7 @@ export const address = pgTable(
   (t) => [index().using('gist', t.geom), selectOnlyPolicy],
 )
 
-export const profileAddress = pgTable(
+export const profileAddress = __table(
   'profile_has_addresses',
   (c) => {
     const { createdBy, createdAt } = getBaseColumns()
