@@ -1,13 +1,28 @@
 'use client'
 
-import { useMemo, useState, type ChangeEvent, type PropsWithChildren } from 'react'
-import { LoaderCircleIcon, MapPinIcon, MapPinPlusIcon, SearchIcon } from 'lucide-react'
+import { use, useMemo, useState, type ChangeEvent, type PropsWithChildren } from 'react'
+import {
+  Check,
+  ChevronsUpDownIcon,
+  LoaderCircleIcon,
+  MapPinIcon,
+  MapPinPlusIcon,
+  SearchIcon,
+} from 'lucide-react'
 
 import { debounce } from '@my/lib/utils'
 
 import { useAction } from '~/app/client'
 import { Spinner } from '~/components/elements/spinner'
 import { Button } from '~/components/ui/button'
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from '~/components/ui/command'
 import {
   Dialog,
   DialogClose,
@@ -17,6 +32,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '~/components/ui/dialog'
+import { Popover, PopoverContent, PopoverTrigger } from '~/components/ui/popover'
 import { ScrollArea } from '~/components/ui/scroll-area'
 import {
   autocompletePlacesAction,
@@ -39,6 +55,57 @@ export function SignInWithGoogleButton() {
         {isPending ? 'Please wait...' : 'Login with Google'}
       </Button>
     </form>
+  )
+}
+
+export function SelectDepartment(props: {
+  currentDepartment: number
+  departments: Promise<{ id: number; name: string }[]>
+}) {
+  const departments = use(props.departments)
+  const [open, setOpen] = useState(false)
+  const [departmentId, setDepartmentId] = useState(props.currentDepartment)
+
+  return (
+    <Popover open={open} onOpenChange={setOpen}>
+      <input name='department' value={departmentId} type='hidden' />
+      <PopoverTrigger asChild>
+        <Button
+          variant='outline'
+          role='combobox'
+          aria-expanded={open}
+          className='w-full justify-between'>
+          {departmentId ?
+            departments.find(({ id }) => id === departmentId)?.name
+          : 'Select your department...'}
+          <ChevronsUpDownIcon className='size-4 opacity-50' />
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className='w-(--radix-popper-anchor-width) min-w-xs p-0' align='start'>
+        <Command>
+          <CommandInput placeholder='Search for your department...' className='h-9' />
+          <CommandList>
+            <CommandEmpty>No framework found.</CommandEmpty>
+            <CommandGroup>
+              {departments.map((department) => (
+                <CommandItem
+                  value={department.name}
+                  onSelect={() => {
+                    setDepartmentId((prev) => (department.id === prev ? 0 : department.id))
+                    setOpen(false)
+                  }}
+                  key={department.id}>
+                  {department.name}
+                  <Check
+                    className={`me-auto ${departmentId === department.id ? 'opacity-100' : 'opacity-0'}`}
+                  />
+                </CommandItem>
+              ))}
+            </CommandGroup>
+          </CommandList>
+        </Command>
+      </PopoverContent>
+    </Popover>
   )
 }
 

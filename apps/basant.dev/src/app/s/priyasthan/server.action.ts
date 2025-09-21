@@ -46,3 +46,11 @@ export const savePreferredWorkplace = actionWrapper(
     revalidatePath('/')
   },
 )
+
+export const saveDesignation = async (payload: { departmentId: string; designation: string }) => {
+  await api.user.department.update({
+    departmentId: Number(payload.departmentId),
+    designation: payload.designation,
+  })
+  revalidatePath('/')
+}

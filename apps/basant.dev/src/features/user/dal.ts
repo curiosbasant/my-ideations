@@ -15,3 +15,7 @@ export const getProfileDetails = cache(async () => {
     throw error
   }
 })
+
+export const getDepartments = cache(() => {
+  return api.user.department.list()
+})

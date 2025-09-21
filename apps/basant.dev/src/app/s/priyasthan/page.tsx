@@ -2,10 +2,16 @@ import { MapPinIcon, MapPinnedIcon } from 'lucide-react'
 
 import { formatDistance } from '@my/lib/date'
 
+import { SubmitButton } from '~/app/client.component'
 import { Button } from '~/components/ui/button'
+import { Input } from '~/components/ui/input'
+import { Label } from '~/components/ui/label'
 import { getAuthUser, getUserLocation } from '~/features/auth/dal'
+import { getDepartments, getProfileDetails } from '~/features/user/dal'
 import { api } from '~/lib/trpc'
+import { handleDesignationUpdate } from './client.action'
 import {
+  SelectDepartment,
   SetCurrentLocationDialog,
   SetPreferredLocationDialog,
   SignInWithGoogleButton,
@@ -20,9 +26,9 @@ export default async function PriyasthanPage() {
 
   return (
     <div className='grid auto-rows-auto gap-12 md:grid-flow-col md:grid-cols-[2fr_1fr] md:grid-rows-[auto_1fr]'>
-      <section className='space-y-4'>
-        <h2 className='text-xl font-bold'>My Current Workplace Location</h2>
-        <CurrentWorkplaceLocation />
+      <section className='@container space-y-4'>
+        <h2 className='text-xl font-bold'>My Details</h2>
+        <MyDetailsForm />
       </section>
       <section className='space-y-4'>
         <h2 className='text-xl font-bold'>My Preferred Work Locations</h2>
@@ -36,6 +42,38 @@ export default async function PriyasthanPage() {
         <RecentLocations />
       </aside>
     </div>
+  )
+}
+
+async function MyDetailsForm() {
+  const profile = await getProfileDetails()
+
+  return (
+    <form className='@xl:grid-cols-2 grid gap-8' action={handleDesignationUpdate}>
+      <div className='space-y-2'>
+        <Label>Department</Label>
+        <SelectDepartment
+          currentDepartment={profile?.designation?.departmentId ?? 0}
+          departments={getDepartments()}
+        />
+      </div>
+      <div className='space-y-2'>
+        <Label>Designation</Label>
+        <Input
+          className='bg-background'
+          name='designation'
+          defaultValue={profile?.designation?.name}
+        />
+      </div>
+      <div className='col-span-full space-y-2'>
+        <Label>Workplace Location</Label>
+        <CurrentWorkplaceLocation />
+      </div>
+      <div className='col-span-full justify-self-end'>
+        <SubmitButton>Save</SubmitButton>
+      </div>
+      <pre>{JSON.stringify(profile, null, 2)}</pre>
+    </form>
   )
 }
 
@@ -61,7 +99,7 @@ async function CurrentWorkplaceLocation() {
         )}
       </div>
       <SetCurrentLocationDialog>
-        <Button>
+        <Button variant='secondary'>
           <MapPinnedIcon /> Edit
         </Button>
       </SetCurrentLocationDialog>

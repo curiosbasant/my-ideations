@@ -3,7 +3,7 @@ import { placeIdToLocation } from '@my/lib/maps'
 import { z } from '@my/lib/zod'
 
 import { userDisplayName } from '../lib/utils'
-import { protectedProcedure } from '../trpc'
+import { protectedProcedure, publicProcedure } from '../trpc'
 
 export const userRouter = {
   get: protectedProcedure.query(async ({ ctx: { db, authUserId } }) => {
@@ -12,11 +12,53 @@ export const userRouter = {
         id: schema.profile.id,
         displayName: userDisplayName,
         avatarUrl: schema.profile.avatarUrl,
+        designation: schema.designation,
       })
       .from(schema.profile)
+      .leftJoin(schema.designation, eq(schema.designation.id, schema.profile.postId))
       .where(eq(schema.profile.createdBy, authUserId))
+
     return user
   }),
+
+  department: {
+    list: publicProcedure.query(async ({ ctx: { db } }) => {
+      return db.select().from(schema.department)
+    }),
+    update: protectedProcedure
+      .input(z.object({ departmentId: z.coerce.number(), designation: z.string() }))
+      .mutation(async ({ ctx: { db, authUserId }, input }) => {
+        db.transaction(async (tx) => {
+          const [insertedRow] = await tx
+            .insert(schema.designation)
+            .values({
+              departmentId: input.departmentId,
+              name: input.designation,
+            })
+            .returning({ postId: schema.designation.id })
+            .onConflictDoNothing()
+
+          if (insertedRow?.postId) {
+            await tx
+              .update(schema.profile)
+              .set({ postId: insertedRow.postId })
+              .where(eq(schema.profile.createdBy, authUserId))
+          } else {
+            await tx
+              .update(schema.profile)
+              .set({ postId: schema.designation.id })
+              .from(schema.designation)
+              .where(
+                and(
+                  eq(schema.profile.createdBy, authUserId),
+                  eq(schema.designation.departmentId, input.departmentId),
+                  eq(schema.designation.name, input.designation),
+                ),
+              )
+          }
+        })
+      }),
+  },
   address: {
     get: protectedProcedure.query(async ({ ctx: { db, authUserId } }) => {
       const [address] = await db
