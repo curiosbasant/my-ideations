@@ -58,6 +58,21 @@ export const userRouter = {
           }
         })
       }),
+
+    designation: {
+      list: publicProcedure
+        .input(z.object({ departmentId: z.coerce.number() }))
+        .query(async ({ ctx: { db }, input }) => {
+          return db
+            .select({
+              id: schema.designation.id,
+              name: schema.designation.name,
+              count: db.$count(schema.profile, eq(schema.profile.postId, schema.designation.id)),
+            })
+            .from(schema.designation)
+            .where(eq(schema.designation.departmentId, input.departmentId))
+        }),
+    },
   },
   address: {
     get: protectedProcedure.query(async ({ ctx: { db, authUserId } }) => {

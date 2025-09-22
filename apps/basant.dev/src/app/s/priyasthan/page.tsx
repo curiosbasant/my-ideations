@@ -4,14 +4,13 @@ import { formatDistance } from '@my/lib/date'
 
 import { SubmitButton } from '~/app/client.component'
 import { Button } from '~/components/ui/button'
-import { Input } from '~/components/ui/input'
 import { Label } from '~/components/ui/label'
 import { getAuthUser, getUserLocation } from '~/features/auth/dal'
 import { getDepartments, getProfileDetails } from '~/features/user/dal'
 import { api } from '~/lib/trpc'
 import { handleDesignationUpdate } from './client.action'
 import {
-  SelectDepartment,
+  DepartmentDesignation,
   SetCurrentLocationDialog,
   SetPreferredLocationDialog,
   SignInWithGoogleButton,
@@ -50,21 +49,11 @@ async function MyDetailsForm() {
 
   return (
     <form className='@xl:grid-cols-2 grid gap-8' action={handleDesignationUpdate}>
-      <div className='space-y-2'>
-        <Label>Department</Label>
-        <SelectDepartment
-          currentDepartment={profile?.designation?.departmentId ?? 0}
-          departments={getDepartments()}
-        />
-      </div>
-      <div className='space-y-2'>
-        <Label>Designation</Label>
-        <Input
-          className='bg-background'
-          name='designation'
-          defaultValue={profile?.designation?.name}
-        />
-      </div>
+      <DepartmentDesignation
+        departments={getDepartments()}
+        defaultDepartmentId={profile?.designation?.departmentId}
+        defaultDesignation={profile?.designation?.name}
+      />
       <div className='col-span-full space-y-2'>
         <Label>Workplace Location</Label>
         <CurrentWorkplaceLocation />
@@ -72,7 +61,6 @@ async function MyDetailsForm() {
       <div className='col-span-full justify-self-end'>
         <SubmitButton>Save</SubmitButton>
       </div>
-      <pre>{JSON.stringify(profile, null, 2)}</pre>
     </form>
   )
 }

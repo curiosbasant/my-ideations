@@ -20,7 +20,7 @@ export const designation = __table(
     id: c.smallint().generatedByDefaultAsIdentity().primaryKey(),
     departmentId: c
       .smallint()
-      .references(() => department.id)
+      .references(() => department.id, { onDelete: 'cascade' })
       .notNull(),
     name: c.text().notNull(),
   }),
@@ -36,7 +36,7 @@ export const profile = __table(
     lastName: c.varchar({ length: 256 }),
     email: c.varchar({ length: 320 }).unique(),
     avatarUrl: c.varchar({ length: 256 }),
-    postId: c.smallint().references(() => designation.id),
+    postId: c.smallint().references(() => designation.id, { onDelete: 'set null' }),
     createdBy: c.uuid().references(() => authUsers.id),
     createdAt: c.timestamp({ withTimezone: true }).defaultNow().notNull(),
     updatedAt: c.timestamp({ withTimezone: true }),

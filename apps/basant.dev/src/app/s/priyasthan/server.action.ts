@@ -54,3 +54,9 @@ export const saveDesignation = async (payload: { departmentId: string; designati
   })
   revalidatePath('/')
 }
+
+export const getDepartmentDesignations = actionWrapper(
+  async (payload: { departmentId: number }) => {
+    return api.user.department.designation.list({ departmentId: payload.departmentId })
+  },
+)
