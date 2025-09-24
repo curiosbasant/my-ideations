@@ -11,7 +11,7 @@ export const metadata = {
     default: 'Priyasthan',
     template: '%s | Priyasthan',
   },
-  description: 'Instantly share files by scanning and generating QRCodes!',
+  description: 'A platform to find your mutual transfer buddy!',
 }
 
 export default function SnapFileRootLayout(props: LayoutProps<{ slots: 'headerProfile' }>) {
@@ -22,8 +22,8 @@ export default function SnapFileRootLayout(props: LayoutProps<{ slots: 'headerPr
           <div className='isolate flex min-h-full w-full flex-col divide-y [--page-padding:--spacing(2)] [--page-size:var(--container-7xl)] sm:[--page-padding:--spacing(4)] md:[--page-padding:--spacing(8)]'>
             <header className='bg-background/80 px-(--page-padding) sticky top-0 z-10 backdrop-blur-sm'>
               <div className='max-w-(--page-size) m-auto flex items-center gap-4 py-3'>
-                <Link href='/' className='inline-flex items-center gap-4'>
-                  <div className='bg-secondary size-8 rounded-md' />
+                <Link href='/' className='inline-flex items-center gap-3'>
+                  <img src='/public/icons/priyasthan.png' width={26} height={26} alt='Logo' />
                   <span className='@2xs:text-2xl text-xl font-extrabold'>Priyasthan</span>
                 </Link>
                 {props.headerProfile}
