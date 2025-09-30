@@ -1,6 +1,16 @@
+import { Suspense } from 'react'
+
 import { getProfileDetails } from '~/features/user/dal'
 
 export default async function HeaderProfileSlot() {
+  return (
+    <Suspense fallback={<div className='bg-secondary ms-auto h-6 w-40 animate-pulse rounded-sm' />}>
+      <HeaderProfile />
+    </Suspense>
+  )
+}
+
+async function HeaderProfile() {
   const profile = await getProfileDetails()
   if (!profile) return null
   return (
