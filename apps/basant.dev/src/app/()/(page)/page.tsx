@@ -1,5 +1,3 @@
-import './theme.css'
-
 import Link from 'next/link'
 import {
   CodeXmlIcon,

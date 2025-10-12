@@ -1,4 +1,25 @@
 :root {
-  --border: var(--color-gray-200);
   --radius: 0.625rem;
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.141 0.005 285.823);
+
+  --primary: var(--color-indigo-500);
+  --primary-foreground: var(--color-indigo-50);
+
+  --secondary: oklch(0.967 0.001 286.375);
+  --secondary-foreground: oklch(0.21 0.006 285.885);
+  --accent: var(--secondary);
+  --accent-foreground: oklch(0.21 0.006 285.885);
+  --muted: var(--secondary);
+  --muted-foreground: oklch(0.552 0.016 285.938);
+  --destructive: oklch(0.577 0.245 27.325);
+
+  --card: var(--background);
+  --card-foreground: var(--foreground);
+  --popover: var(--background);
+  --popover-foreground: var(--foreground);
+
+  --border: oklch(0.92 0.004 286.32);
+  --input: oklch(86.946% 0.00514 47.938 / 0.75);
+  --ring: var(--primary);
 }
