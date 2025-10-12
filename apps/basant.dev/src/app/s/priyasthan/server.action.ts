@@ -30,19 +30,60 @@ export const signInWithProviderAction = actionWrapper(async (payload: { redirect
 })
 
 export const autocompletePlacesAction = actionWrapper(async (payload: { search: string }) => {
+  return [
+    {
+      placeId: 'ChIJibsL2XvdPzkRa4FkdhoS40w',
+      text: 'Bikaner, Rajasthan, India',
+      mainText: 'Bikaner',
+      secondaryText: 'Rajasthan, India',
+    },
+    {
+      placeId: 'ChIJBdvdhFbnPzkRpzN7foDWSfg',
+      text: 'Bikaner Railway Station, Railway Station Link Road, Rani Bazar, Bikaner, Rajasthan, India',
+      mainText: 'Bikaner Railway Station',
+      secondaryText: 'Railway Station Link Road, Rani Bazar, Bikaner, Rajasthan, India',
+    },
+    {
+      placeId: 'ChIJad1vlHLjDDkRtt7_x7ZV4ss',
+      text: 'Bikaner House, Shahjahan Road, Pandara Flats, India Gate, New Delhi, Delhi, India',
+      mainText: 'Bikaner House',
+      secondaryText: 'Shahjahan Road, Pandara Flats, India Gate, New Delhi, Delhi, India',
+    },
+    {
+      placeId: 'ChIJByrppRFbDTkRBWs59HQYfUQ',
+      text: 'Bikaner, Haryana, India',
+      mainText: 'Bikaner',
+      secondaryText: 'Haryana, India',
+    },
+    {
+      placeId: 'ChIJlw3tcFHBj4AR4Kb9-cgnxY0',
+      text: 'Bikanervala Fremont, Mowry Avenue, Fremont, CA, USA',
+      mainText: 'Bikanervala Fremont',
+      secondaryText: 'Mowry Avenue, Fremont, CA, USA',
+    },
+  ]
   return autocompletePlaces(payload.search)
 })
 
+export const saveWorkplace = async (payload: {
+  text: string
+  latitude: number
+  longitude: number
+  type: 'current-workplace' | 'preferred-workplace'
+}) => {
+  await api.user.workplace.create(payload)
+}
+
 export const saveCurrentWorkplace = actionWrapper(
   async (payload: { placeId: string; text: string; secondaryText?: string | null }) => {
-  await api.user.address.upsert(payload)
+    await api.user.address.upsert(payload)
     revalidatePath('/')
   },
 )
 
 export const savePreferredWorkplace = actionWrapper(
   async (payload: { placeId: string; text: string; secondaryText?: string | null }) => {
-  await api.priyasthan.workplace.savePreferred(payload)
+    await api.priyasthan.workplace.savePreferred(payload)
     revalidatePath('/')
   },
 )

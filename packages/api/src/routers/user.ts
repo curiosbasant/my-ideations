@@ -74,6 +74,45 @@ export const userRouter = {
         }),
     },
   },
+  workplace: {
+    list: protectedProcedure.query(async ({ ctx: { db, authUserId } }) => {
+      db
+    }),
+    create: protectedProcedure
+      .input(
+        z.object({
+          text: z.string(),
+          latitude: z.number(),
+          longitude: z.number(),
+          type: z.enum(['current-workplace', 'preferred-workplace']),
+        }),
+      )
+      .mutation(async ({ ctx: { db, authUserId }, input }) => {
+        return db.transaction(async (tx) => {
+          const [[{ profileId }], [{ addressId }]] = await Promise.all([
+            // exchange authId with profileId
+            tx
+              .select({ profileId: schema.profile.id })
+              .from(schema.profile)
+              .where(eq(schema.profile.createdBy, authUserId)),
+            tx
+              .insert(schema.address)
+              .values({
+                text: input.text,
+                latitude: input.latitude,
+                longitude: input.longitude,
+              })
+              .returning({ addressId: schema.address.id }),
+          ])
+          await tx.insert(schema.profileAddress).values({
+            profileId,
+            addressId,
+            type: input.type,
+          })
+        })
+      }),
+    current: {},
+  },
   address: {
     get: protectedProcedure.query(async ({ ctx: { db, authUserId } }) => {
       const [address] = await db
@@ -106,34 +145,52 @@ export const userRouter = {
       )
       .mutation(async ({ ctx: { db, authUserId }, input }) => {
         await db.transaction(async (tx) => {
-          const [[{ id }], [exists]] = await Promise.all([
+          const [[{ profileId }], [{ addressId }]] = await Promise.all([
             // exchange authId with profileId
             tx
-              .select({ id: schema.profile.id })
+              .select({ profileId: schema.profile.id })
               .from(schema.profile)
               .where(eq(schema.profile.createdBy, authUserId)),
-            // check if address already exists
-            tx.select().from(schema.address).where(eq(schema.address.id, input.placeId)),
+            // ensure address exists
+            tx
+              .select({ addressId: schema.address.id })
+              .from(schema.address)
+              .where(eq(schema.address.placeId, input.placeId))
+              .then(async (rows) => {
+                if (rows.length) return rows
+                // create address if not exists
+                const location = await placeIdToLocation(input.placeId)
+                return tx
+                  .insert(schema.address)
+                  .values({
+                    placeId: input.placeId,
+                    text: input.text,
+                    secondaryText: input.secondaryText,
+                    latitude: location.latitude,
+                    longitude: location.longitude,
+                  })
+                  .returning({ addressId: schema.address.id })
+              }),
           ])
 
-          if (!exists) {
-            // create address if not exists
-            const location = await placeIdToLocation(input.placeId)
-            await tx.insert(schema.address).values({
-              id: input.placeId,
-              text: input.text,
-              secondaryText: input.secondaryText,
-              latitude: location.latitude,
-              longitude: location.longitude,
-            })
-          }
+          // if (!exists) {
+          //   // create address if not exists
+          //   const location = await placeIdToLocation(input.placeId)
+          //   await tx.insert(schema.address).values({
+          //     placeId: input.placeId,
+          //     text: input.text,
+          //     secondaryText: input.secondaryText,
+          //     latitude: location.latitude,
+          //     longitude: location.longitude,
+          //   })
+          // }
 
           // link profile with address
           await tx
             .insert(schema.profileAddress)
             .values({
-              profileId: id,
-              addressId: input.placeId,
+              profileId,
+              addressId,
               type: 'current-workplace',
             })
             .onConflictDoUpdate({

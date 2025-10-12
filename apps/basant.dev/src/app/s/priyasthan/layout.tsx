@@ -29,10 +29,8 @@ export default function SnapFileRootLayout(props: LayoutProps<{ slots: 'headerPr
                 {props.headerProfile}
               </div>
             </header>
-            <div className='px-(--page-padding) bg-secondary flex flex-1'>
-              <main className='max-w-(--page-size) mx-auto w-full pb-16 pt-8'>
-                {props.children}
-              </main>
+            <div className='bg-secondary flex flex-1'>
+              <main className='flex-1'>{props.children}</main>
             </div>
           </div>
         </ScrollArea>

@@ -1,6 +1,18 @@
 'use client'
 
-import { use, useMemo, useState, type ChangeEvent, type PropsWithChildren } from 'react'
+import 'maplibre-gl/dist/maplibre-gl.css'
+
+import {
+  startTransition,
+  use,
+  useActionState,
+  useMemo,
+  useOptimistic,
+  useState,
+  type ChangeEvent,
+  type PropsWithChildren,
+} from 'react'
+import { Map, Marker } from '@vis.gl/react-maplibre'
 import {
   Check,
   ChevronsUpDownIcon,
@@ -41,8 +53,88 @@ import {
   getDepartmentDesignations,
   saveCurrentWorkplace,
   savePreferredWorkplace,
+  saveWorkplace,
   signInWithProviderAction,
 } from './server.action'
+
+type Location = {
+  text: string
+  latitude: number
+  longitude: number
+  type: 'current-workplace' | 'preferred-workplace'
+}
+
+export function MapWork(props: { locations: Location[] }) {
+  const [state, dispatch, isPending] = useActionState<Location[], Location>(
+    async (prev, payload) => {
+      await saveWorkplace(payload)
+      return prev.concat(payload)
+    },
+    props.locations,
+  )
+  const [markers, setMarkers] = useOptimistic(
+    state,
+    (prev, payload: { lat: number; lng: number; index?: number }) => {
+      if (typeof payload.index === 'number') {
+        return prev.with(payload.index, {
+          ...prev[payload.index],
+          latitude: payload.lat,
+          longitude: payload.lng,
+        })
+      }
+      return prev.concat({
+        text: 'My Location',
+        type: prev.length ? 'preferred-workplace' : 'current-workplace',
+        latitude: payload.lat,
+        longitude: payload.lng,
+      })
+    },
+  )
+
+  const his: typeof setMarkers = (...args) => {
+    startTransition(() => {
+      setMarkers(...args)
+      startTransition(async () => {
+        // await new Promise((r) => setTimeout(r, 1000))
+        dispatch({
+          text: 'My Location',
+          latitude: args[0].lat,
+          longitude: args[0].lng,
+          type: args[0].index ? 'preferred-workplace' : 'current-workplace',
+        })
+      })
+    })
+  }
+
+  return (
+    <Map
+      initialViewState={{
+        latitude: 27.391277,
+        longitude: 73.432617,
+        zoom: 6,
+      }}
+      mapStyle='https://tiles.openfreemap.org/styles/bright'
+      onClick={(ev) => {
+        his(ev.lngLat)
+        console.log(ev)
+      }}>
+      {markers.map((loc, index) => (
+        <Marker
+          longitude={loc.longitude}
+          latitude={loc.latitude}
+          // popup={loc.toString()}
+          color={loc.type === 'current-workplace' ? 'red' : 'blue'}
+          draggable
+          onDragEnd={(ev) => {
+            his({ lat: ev.lngLat.lat, lng: ev.lngLat.lng, index })
+            console.log('UPDATED', ev)
+          }}
+          key={index}
+        />
+      ))}
+    </Map>
+  )
+}
 
 export function SignInWithGoogleButton() {
   const { isPending, actionTransition } = useAction({
@@ -117,7 +209,7 @@ function SelectDesignation(props: {
           variant='outline'
           role='combobox'
           aria-expanded={!props.loading && open}
-          className='w-full justify-between'>
+          className='w-full justify-between text-start'>
           <span className='line-clamp-1 flex-1'>{value || 'Select your designation...'}</span>
           {props.loading ?
             <LoaderCircleIcon className='size-4 animate-spin opacity-50' />
@@ -167,7 +259,7 @@ function SelectDepartment(props: {
           variant='outline'
           role='combobox'
           aria-expanded={open}
-          className='w-full justify-between'>
+          className='w-full justify-between text-start'>
           <span className='line-clamp-1 flex-1'>
             {departmentId ?
               departments.find(({ id }) => id === departmentId)?.name

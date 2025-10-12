@@ -2,6 +2,7 @@ import { readdir } from 'node:fs/promises'
 import path from 'node:path'
 
 async function runMigrations() {
+  await new Promise((res) => setTimeout(res, 2000))
   const files = await readdir(path.join(import.meta.dirname, 'migrations'))
 
   for (const file of files) {
