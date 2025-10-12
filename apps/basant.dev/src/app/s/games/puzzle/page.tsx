@@ -91,6 +91,12 @@ class Puzzle {
 }
 
 export default function PuzzleGamePage() {
+  return (
+    <div className='grid grid-cols-[2fr_1fr]'>
+      <section className=''></section>
+      <section className=''></section>
+    </div>
+  )
   const [rows, setRows] = useState(4)
   const [cols, setCols] = useState(4)
   const puzzle = useMemo(() => new Puzzle(rows, cols), [rows, cols])
@@ -141,7 +147,7 @@ export default function PuzzleGamePage() {
         </button>
       </div>
       <div
-        className='grid rounded-md border bg-slate-50 p-px shadow-inner'
+        className='grid rounded-sm border bg-slate-50 p-px shadow-inner'
         style={{ gridTemplateColumns: `repeat(${cols}, 1fr)` }}>
         {(puzzle.status == 'complete' ? puzzle.position : puzzle.position.slice(0, -1)).map(
           (p, i) => {
@@ -235,7 +241,7 @@ function PuzzleTile({ coords, ic, bg, colCount = 1, onInteract }: any) {
       className='relative aspect-square p-px transition duration-300 ease-out'
       style={{ transform: `translate(${coords.c}00%, ${coords.r}00%)` }}>
       <button
-        className='flex h-full w-full items-center justify-center rounded-md border bg-white text-5xl font-semibold transition-colors hover:bg-slate-100'
+        className='inset-ring inset-ring-border flex size-full items-center justify-center rounded-sm bg-white text-5xl font-semibold transition-colors'
         style={{
           backgroundImage: `url(${bg.src || '/spiral.jpg'})`,
           backgroundPosition: `${-ic.c * 100 + bg.x}% ${-ic.r * 100 + bg.y}%`,
