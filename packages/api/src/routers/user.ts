@@ -1,4 +1,4 @@
-import { and, desc, eq, schema, sql } from '@my/db'
+import { and, desc, eq, schema, sql, unionAll } from '@my/db'
 import { placeIdToLocation } from '@my/lib/maps'
 import { z } from '@my/lib/zod'
 
@@ -76,7 +76,29 @@ export const userRouter = {
   },
   workplace: {
     list: protectedProcedure.query(async ({ ctx: { db, authUserId } }) => {
-      db
+      const places = unionAll(
+        db
+          .selectDistinctOn([schema.profileAddress.profileId])
+          .from(schema.profileAddress)
+          .where(eq(schema.profileAddress.type, 'current-workplace'))
+          .orderBy(desc(schema.profileAddress.updatedAt)),
+        db
+          .select()
+          .from(schema.profileAddress)
+          .where(eq(schema.profileAddress.type, 'preferred-workplace')),
+      ).as('wp')
+
+      return db
+        .select({
+          profileId: schema.profile.id,
+          addressId: schema.address.id,
+          latitude: schema.address.latitude,
+          longitude: schema.address.longitude,
+        })
+        .from(places)
+        .innerJoin(schema.profile, eq(schema.profile.id, places.profileId))
+        .innerJoin(schema.address, eq(schema.address.id, places.addressId))
+        .where(eq(schema.profile.createdBy, authUserId))
     }),
     create: protectedProcedure
       .input(
