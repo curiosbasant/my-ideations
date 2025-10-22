@@ -32,6 +32,9 @@ export default function SnapFileRootLayout(props: PropsWithChildren) {
                 <Button className='text-base' variant='ghost' asChild>
                   <Link href='/scan'>Scan QR</Link>
                 </Button>
+                <Button className='text-base' variant='ghost' asChild>
+                  <Link href='/recent'>Recent</Link>
+                </Button>
               </div>
             </header>
             <div className='px-(--page-padding) bg-secondary flex flex-1'>

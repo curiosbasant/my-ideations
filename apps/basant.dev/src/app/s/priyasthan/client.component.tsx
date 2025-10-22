@@ -58,22 +58,16 @@ import {
 } from './server.action'
 
 type Location = {
-  text: string
+  profileId?: number
+  addressId: number
   latitude: number
   longitude: number
-  type: 'current-workplace' | 'preferred-workplace'
+  type: `${'current' | 'preferred'}-workplace`
 }
 
 export function MapWork(props: { locations: Location[] }) {
-  const [state, dispatch, isPending] = useActionState<Location[], Location>(
-    async (prev, payload) => {
-      await saveWorkplace(payload)
-      return prev.concat(payload)
-    },
+  const [optimisticMarkers, setOptimisticMarker] = useOptimistic(
     props.locations,
-  )
-  const [markers, setMarkers] = useOptimistic(
-    state,
     (prev, payload: { lat: number; lng: number; index?: number }) => {
       if (typeof payload.index === 'number') {
         return prev.with(payload.index, {
@@ -83,7 +77,7 @@ export function MapWork(props: { locations: Location[] }) {
         })
       }
       return prev.concat({
-        text: 'My Location',
+        addressId: 0,
         type: prev.length ? 'preferred-workplace' : 'current-workplace',
         latitude: payload.lat,
         longitude: payload.lng,
@@ -91,17 +85,23 @@ export function MapWork(props: { locations: Location[] }) {
     },
   )
 
-  const his: typeof setMarkers = (...args) => {
+  const setMarker: typeof setOptimisticMarker = (...args) => {
     startTransition(() => {
-      setMarkers(...args)
+      setOptimisticMarker(...args)
       startTransition(async () => {
-        // await new Promise((r) => setTimeout(r, 1000))
-        dispatch({
-          text: 'My Location',
-          latitude: args[0].lat,
-          longitude: args[0].lng,
-          type: args[0].index ? 'preferred-workplace' : 'current-workplace',
-        })
+        await saveWorkplace(
+          typeof args[0].index === 'number' ?
+            {
+              addressId: optimisticMarkers[args[0].index].addressId,
+              latitude: args[0].lat,
+              longitude: args[0].lng,
+            }
+          : {
+              latitude: args[0].lat,
+              longitude: args[0].lng,
+              type: optimisticMarkers.length ? 'preferred-workplace' : 'current-workplace',
+            },
+        )
       })
     })
   }
@@ -111,25 +111,22 @@ export function MapWork(props: { locations: Location[] }) {
       initialViewState={{
         latitude: 27.391277,
         longitude: 73.432617,
-        zoom: 6,
+        zoom: 6.25,
       }}
       mapStyle='https://tiles.openfreemap.org/styles/bright'
       onClick={(ev) => {
-        his(ev.lngLat)
-        console.log(ev)
+        setMarker(ev.lngLat)
       }}>
-      {markers.map((loc, index) => (
+      {optimisticMarkers.map((loc, index) => (
         <Marker
           longitude={loc.longitude}
           latitude={loc.latitude}
-          // popup={loc.toString()}
           color={loc.type === 'current-workplace' ? 'red' : 'blue'}
           draggable
           onDragEnd={(ev) => {
-            his({ lat: ev.lngLat.lat, lng: ev.lngLat.lng, index })
-            console.log('UPDATED', ev)
+            setMarker({ lat: ev.lngLat.lat, lng: ev.lngLat.lng, index })
           }}
-          key={index}
+          key={`${loc.addressId} ${loc.profileId}`}
         />
       ))}
     </Map>

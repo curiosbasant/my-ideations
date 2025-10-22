@@ -23,8 +23,9 @@ export default async function PriyasthanPage() {
   if (!authUser) {
     return <SignInWithGoogleButton />
   }
+  const l = await api.user.workplace.list()
 
-  return <MapWork locations={[]} />
+  return <MapWork locations={l} />
 
   return (
     <div className='grid auto-rows-auto gap-12 md:grid-flow-col md:grid-cols-[2fr_1fr] md:grid-rows-[auto_1fr]'>

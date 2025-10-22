@@ -1,8 +1,8 @@
-import { and, desc, eq, schema, sql, unionAll } from '@my/db'
+import { and, desc, eq, isNotNull, numNonnulls, schema, sql, unionAll } from '@my/db'
 import { placeIdToLocation } from '@my/lib/maps'
 import { z } from '@my/lib/zod'
 
-import { userDisplayName } from '../lib/utils'
+import { isAllNotNull, userDisplayName } from '../lib/utils'
 import { protectedProcedure, publicProcedure } from '../trpc'
 
 export const userRouter = {
@@ -81,24 +81,37 @@ export const userRouter = {
           .selectDistinctOn([schema.profileAddress.profileId])
           .from(schema.profileAddress)
           .where(eq(schema.profileAddress.type, 'current-workplace'))
-          .orderBy(desc(schema.profileAddress.updatedAt)),
+          .orderBy(schema.profileAddress.profileId, desc(schema.profileAddress.updatedAt)),
         db
           .select()
           .from(schema.profileAddress)
           .where(eq(schema.profileAddress.type, 'preferred-workplace')),
       ).as('wp')
 
-      return db
+      const locations = await db
         .select({
           profileId: schema.profile.id,
           addressId: schema.address.id,
+          text: schema.address.text,
           latitude: schema.address.latitude,
           longitude: schema.address.longitude,
+          type: places.type,
         })
         .from(places)
         .innerJoin(schema.profile, eq(schema.profile.id, places.profileId))
         .innerJoin(schema.address, eq(schema.address.id, places.addressId))
-        .where(eq(schema.profile.createdBy, authUserId))
+        .where(
+          and(
+            isAllNotNull(schema.address.latitude, schema.address.longitude),
+            eq(schema.profile.createdBy, authUserId),
+          ),
+        )
+      return locations.map((l) => ({
+        ...l,
+        latitude: l.latitude!,
+        longitude: l.longitude!,
+        type: l.type!,
+      }))
     }),
     create: protectedProcedure
       .input(
@@ -126,12 +139,28 @@ export const userRouter = {
               })
               .returning({ addressId: schema.address.id }),
           ])
-          await tx.insert(schema.profileAddress).values({
-            profileId,
-            addressId,
-            type: input.type,
-          })
+          await tx.insert(schema.profileAddress).values({ profileId, addressId, type: input.type })
+          return addressId
         })
+      }),
+    update: protectedProcedure
+      .input(
+        z.object({
+          addressId: z.number(),
+          text: z.string().optional(),
+          latitude: z.number(),
+          longitude: z.number(),
+        }),
+      )
+      .mutation(async ({ ctx: { db }, input }) => {
+        return db
+          .update(schema.address)
+          .set({
+            text: input.text,
+            latitude: input.latitude,
+            longitude: input.longitude,
+          })
+          .where(eq(schema.address.id, input.addressId))
       }),
     current: {},
   },
