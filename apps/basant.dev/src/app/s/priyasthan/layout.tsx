@@ -14,7 +14,9 @@ export const metadata = {
   description: 'A platform to find your mutual transfer buddy!',
 }
 
-export default function SnapFileRootLayout(props: LayoutProps<{ slots: 'headerProfile' }>) {
+export default function SnapFileRootLayout(
+  props: LayoutProps<{ slots: 'layoutFixed' | 'layoutFluid' | 'headerProfile' }>,
+) {
   return (
     <html lang='en' className='size-full antialiased'>
       <body className={`size-full ${latoFont.className}`}>
@@ -29,9 +31,9 @@ export default function SnapFileRootLayout(props: LayoutProps<{ slots: 'headerPr
                 {props.headerProfile}
               </div>
             </header>
-            <div className='bg-secondary flex flex-1'>
-              <main className='flex-1'>{props.children}</main>
-            </div>
+            {/* {props.layoutFixed}
+            {props.layoutFluid} */}
+            {props.children}
           </div>
         </ScrollArea>
       </body>
