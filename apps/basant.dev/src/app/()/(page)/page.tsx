@@ -72,7 +72,7 @@ export default function PortfolioPage() {
             <div className='mask-b-from-0 pointer-events-none absolute start-0 top-0 -z-10 h-full w-full opacity-25 mix-blend-color-burn'>
               <div
                 className='h-full'
-                style={{ background: 'url(/bg-polygon-pattern.jpg) top / 600px' }}></div>
+                style={{ background: 'url(/public/bg-polygon-pattern.jpg) top / 600px' }}></div>
             </div>
             <div className='mx-auto flex w-full max-w-3xl flex-col items-center gap-8 text-center'>
               <div className='space-y-6'>
@@ -239,7 +239,8 @@ export default function PortfolioPage() {
             <div
               className='pointer-events-none absolute bottom-0 end-0 aspect-square h-full opacity-20 mix-blend-color-burn'
               style={{
-                background: 'url(/illustration-neural-network.jpg) center / contain no-repeat',
+                background:
+                  'url(/public/illustration-neural-network.jpg) center / contain no-repeat',
               }}></div>
             <div className='mx-auto w-full max-w-2xl space-y-8 text-center'>
               <div className='space-y-4'>
