@@ -10,7 +10,7 @@ export const priyasthanRouter = {
     getPreferred: protectedProcedure.query(async ({ ctx: { db, authUserId } }) => {
       const addresses = await db
         .select({
-          placeId: schema.address.id,
+          placeId: schema.address.placeId,
           addressText: schema.address.text,
           addressSecondaryText: schema.address.secondaryText,
         })
@@ -23,7 +23,7 @@ export const priyasthanRouter = {
             eq(schema.profile.createdBy, authUserId),
           ),
         )
-        .orderBy(desc(schema.profileAddress.updatedAt)) // only take the latest address
+        .orderBy(desc(schema.profileAddress.updatedAt))
 
       return addresses
     }),
@@ -44,14 +44,14 @@ export const priyasthanRouter = {
               .from(schema.profile)
               .where(eq(schema.profile.createdBy, authUserId)),
             // check if address already exists
-            tx.select().from(schema.address).where(eq(schema.address.id, input.placeId)),
+            tx.select().from(schema.address).where(eq(schema.address.placeId, input.placeId)),
           ])
 
           if (!exists) {
             // create address if not exists
             const location = await placeIdToLocation(input.placeId)
             await tx.insert(schema.address).values({
-              id: input.placeId,
+              placeId: input.placeId,
               text: input.text,
               secondaryText: input.secondaryText,
               latitude: location.latitude,
@@ -64,7 +64,7 @@ export const priyasthanRouter = {
             .insert(schema.profileAddress)
             .values({
               profileId: id,
-              addressId: input.placeId,
+              addressId: 0,
               type: 'preferred-workplace',
             })
             .onConflictDoUpdate({

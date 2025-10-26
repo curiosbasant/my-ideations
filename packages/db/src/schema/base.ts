@@ -12,8 +12,11 @@ export const getTimestampColumns = () => ({
   createdAt: timestamp({ withTimezone: true }).notNull().defaultNow(),
   updatedAt: timestamp({ withTimezone: true }),
 })
+
+export const getPrimaryColumn = () => id().generatedByDefaultAsIdentity().primaryKey()
+
 export const getBaseColumns = () => ({
-  id: id().generatedByDefaultAsIdentity().primaryKey(),
+  id: getPrimaryColumn(),
   createdBy: takeForeignId(() => profile.id).notNull(),
   ...getTimestampColumns(),
 })
