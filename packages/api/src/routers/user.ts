@@ -119,17 +119,17 @@ export const userRouter = {
               .where(eq(schema.address.placeId, input.placeId))
               .then(async (rows) => {
                 if (rows.length) return rows
-            // create address if not exists
-            const location = await placeIdToLocation(input.placeId)
+                // create address if not exists
+                const location = await placeIdToLocation(input.placeId)
                 return tx
                   .insert(schema.address)
                   .values({
                     placeId: input.placeId,
-              text: input.text,
-              secondaryText: input.secondaryText,
-              latitude: location.latitude,
-              longitude: location.longitude,
-            })
+                    text: input.text,
+                    secondaryText: input.secondaryText,
+                    latitude: location.latitude,
+                    longitude: location.longitude,
+                  })
                   .returning({ addressId: schema.address.id })
               }),
           ])
