@@ -1,16 +1,19 @@
 import { SubmitButton } from '~/app/client.component'
 import { PageLayoutFixed, PageLayoutFluid } from '~/components/layout'
 import { getDepartments, getProfileDetails } from '~/features/user/dal'
+import { api } from '~/lib/trpc'
 import { handleDesignationUpdate } from './client.action'
-import { DepartmentDesignation } from './client.component'
+import { DepartmentDesignation, MapWorkPlaces } from './client.component'
 
 export default async function DashboardPage() {
   const profile = await getProfileDetails()
 
   if (profile?.designation?.departmentId && profile.designation?.name) {
+    const workplaces = await api.priyasthan.workplace.list()
+
     return (
       <PageLayoutFluid>
-        Here you would be able to see and manage your workplace locations on the map.
+        <MapWorkPlaces locations={workplaces} />
       </PageLayoutFluid>
     )
   }
