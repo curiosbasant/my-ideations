@@ -44,3 +44,5 @@ export function actionWrapper<Payload, TData>(action: ActionHandler<Payload, TDa
     }
   }
 }
+
+export const returnNull = () => null

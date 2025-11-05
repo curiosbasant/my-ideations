@@ -73,8 +73,8 @@ export function MapWorkPlaces(props: { locations: Location[] }) {
   return (
     <Map
       initialViewState={{
-        latitude: 27.391277,
-        longitude: 73.432617,
+        latitude: 26.5,
+        longitude: 74.25,
         zoom: 6.25,
       }}
       mapStyle='https://tiles.openfreemap.org/styles/bright'
@@ -85,7 +85,12 @@ export function MapWorkPlaces(props: { locations: Location[] }) {
         <Marker
           longitude={loc.longitude}
           latitude={loc.latitude}
-          color={loc.type === 'current-workplace' ? 'red' : 'blue'}
+          color={
+            loc.type === 'current-workplace' ? 'red'
+            : loc.type === 'preferred-workplace' ?
+              'deepskyblue'
+            : 'blueviolet'
+          }
           draggable
           onDragEnd={(ev) => {
             setMarker({ lat: ev.lngLat.lat, lng: ev.lngLat.lng, index })
