@@ -259,67 +259,62 @@ function getMatch(authUserId: string) {
 */
 
 function x(authUserId: string) {
-  const currentWorkplaces = db
-    .selectDistinctOn([schema.profileAddress.profileId], {
-      profileId: schema.profileAddress.profileId,
-      addressId: schema.profileAddress.addressId,
-      geom: schema.address.geom,
-    })
-    .from(schema.profileAddress)
-    .innerJoin(schema.address, eq(schema.address.id, schema.profileAddress.addressId))
-    .where(eq(schema.profileAddress.type, 'current-workplace'))
-    .orderBy(schema.profileAddress.profileId, desc(schema.profileAddress.updatedAt))
-    .as('cws')
-  return db
-    .select({
-      c: {
-        profileId: currentWorkplaces.profileId,
-        addressId: currentWorkplaces.addressId,
-        geom: currentWorkplaces.geom,
-      },
-      p: {
-        profileId: schema.profileAddress.profileId,
-        addressId: schema.profileAddress.addressId,
-        geom: schema.address.geom,
-      },
-    })
-    .from(schema.profileAddress)
-    .innerJoin(schema.address, eq(schema.address.id, schema.profileAddress.addressId))
-    .innerJoin(
-      currentWorkplaces,
-      sql`ST_DWithin(${currentWorkplaces.geom}::geography, ${schema.address.geom}::geography, 100000)`,
-    )
-    .where(eq(schema.profileAddress.type, 'preferred-workplace'))
+  // const allCurrentWorkplaces = db.as('cws')
+  // db.select({
+  //   c: {
+  //     profileId: currentWorkplaces.profileId,
+  //     addressId: currentWorkplaces.addressId,
+  //     geom: currentWorkplaces.geom,
+  //   },
+  //   p: {
+  //     profileId: schema.profileAddress.profileId,
+  //     addressId: schema.profileAddress.addressId,
+  //     geom: schema.address.geom,
+  //   },
+  // })
+  //   .from(schema.profileAddress)
+  //   .innerJoin(schema.address, eq(schema.address.id, schema.profileAddress.addressId))
+  //   .innerJoin(
+  //     currentWorkplaces,
+  //     sql`ST_DWithin(${currentWorkplaces.geom}::geography, ${schema.address.geom}::geography, 100000)`,
+  //   )
+  //   .where(eq(schema.profileAddress.type, 'preferred-workplace'))
 
   // others preferred workplaces within 100km of my current workplace
   // others current workplaces within 100km of my preferred locations
   // take those workplaces whose profileAddress.profileId is common in both the above
 
-  // db.$with('').as((qb) => {
+  const allCurrentWorkplaces = db.$with('acw').as((qb) =>
+    qb
+      .selectDistinctOn([schema.profileAddress.profileId], {
+        profileId: schema.profileAddress.profileId,
+        addressId: schema.profileAddress.addressId,
+        geom: schema.address.geom,
+      })
+      .from(schema.profileAddress)
+      .innerJoin(schema.address, eq(schema.address.id, schema.profileAddress.addressId))
+      .where(eq(schema.profileAddress.type, 'current-workplace'))
+      .orderBy(schema.profileAddress.profileId, desc(schema.profileAddress.updatedAt)),
+  )
 
-  //   // .as('pws')
-  // })
+  const myCurrentWorkplace = db
+    .with(allCurrentWorkplaces)
+    .select({
+      profileId: allCurrentWorkplaces.profileId,
+      addressId: allCurrentWorkplaces.addressId,
+      geom: allCurrentWorkplaces.geom,
+    })
+    .from(allCurrentWorkplaces)
+    .innerJoin(schema.profile, eq(schema.profile.id, allCurrentWorkplaces.profileId))
+    .where(eq(schema.profile.createdBy, authUserId))
+    .as('mcw')
 
-  const myWorkplace = db
-    .selectDistinctOn([schema.profileAddress.profileId], {
+  const myPreferredLocations = db
+    .select({
       profileId: schema.profileAddress.profileId,
       addressId: schema.profileAddress.addressId,
       geom: schema.address.geom,
     })
-    .from(schema.profileAddress)
-    .innerJoin(schema.profile, eq(schema.profile.id, schema.profileAddress.profileId))
-    .innerJoin(schema.address, eq(schema.address.id, schema.profileAddress.addressId))
-    .where(
-      and(
-        eq(schema.profileAddress.type, 'current-workplace'),
-        eq(schema.profile.createdBy, authUserId),
-      ),
-    )
-    .orderBy(schema.profileAddress.profileId, desc(schema.profileAddress.updatedAt))
-    .as('mcw')
-
-  const myPreferredLocations = db
-    .select({ profileId: schema.profileAddress.profileId, geom: schema.address.geom })
     .from(schema.profileAddress)
     .innerJoin(schema.profile, eq(schema.profile.id, schema.profileAddress.profileId))
     .innerJoin(schema.address, eq(schema.address.id, schema.profileAddress.addressId))
@@ -341,21 +336,22 @@ function x(authUserId: string) {
     .from(schema.profileAddress)
     .innerJoin(schema.address, eq(schema.address.id, schema.profileAddress.addressId))
     .innerJoin(
-      myWorkplace,
+      myCurrentWorkplace,
       and(
-        ne(myWorkplace.profileId, schema.profileAddress.profileId),
-        sql`ST_DWithin(${myWorkplace.geom}::geography, ${schema.address.geom}::geography, 100000)`,
+        ne(myCurrentWorkplace.profileId, schema.profileAddress.profileId),
+        sql`ST_DWithin(${myCurrentWorkplace.geom}::geography, ${schema.address.geom}::geography, 100000)`,
       ),
     )
     .where(eq(schema.profileAddress.type, 'preferred-workplace'))
     .as('others_preferred_near_my_current')
 
-  db.selectDistinctOn([schema.profileAddress.profileId], {
-    profileId: schema.profileAddress.profileId,
-    addressId: schema.profileAddress.addressId,
-    latitude: schema.address.latitude,
-    longitude: schema.address.longitude,
-  })
+  const othersCurrentNearMyPreferred = db
+    .selectDistinctOn([schema.profileAddress.profileId], {
+      profileId: schema.profileAddress.profileId,
+      addressId: schema.profileAddress.addressId,
+      latitude: schema.address.latitude,
+      longitude: schema.address.longitude,
+    })
     .from(schema.profileAddress)
     .innerJoin(schema.address, eq(schema.address.id, schema.profileAddress.addressId))
     .innerJoin(
@@ -369,25 +365,7 @@ function x(authUserId: string) {
     .orderBy(schema.profileAddress.profileId, desc(schema.profileAddress.updatedAt))
     .as('others_current_near_my_preferred')
 
-  const othersCurrentNearMyPreferred = db
-    .selectDistinct({
-      profileId: schema.profileAddress.profileId,
-    })
-    .from(schema.address)
-    .innerJoin(schema.profileAddress, eq(schema.profileAddress.addressId, schema.address.id))
-    .innerJoin(
-      myPreferredLocations,
-      sql`ST_DWithin(${schema.address.geom}::geography, ${myPreferredLocations.geom}::geography, 100000)`,
-    )
-    .innerJoin(schema.profile, eq(schema.profile.id, schema.profileAddress.profileId))
-    .where(
-      and(
-        eq(schema.profileAddress.type, 'current-workplace'),
-        // exclude my own profiles
-        sql`NOT (${schema.profile.createdBy} = ${authUserId})`,
-      ),
-    )
-    .as('others_current_near_my_preferred')
+  //
 
   const intersectionProfiles = db
     .selectDistinct({
@@ -404,7 +382,6 @@ function x(authUserId: string) {
     .select({
       profileId: othersPreferredNearMyCurrent.profileId,
       addressId: othersPreferredNearMyCurrent.addressId,
-      text: othersPreferredNearMyCurrent.text,
       latitude: othersPreferredNearMyCurrent.latitude,
       longitude: othersPreferredNearMyCurrent.longitude,
       type: sql<'current-workplace'>`'match'`.as('type'),
