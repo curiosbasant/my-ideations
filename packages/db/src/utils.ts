@@ -22,3 +22,6 @@ export const aliasedColumn = <T extends AnyColumn>(
 ): SQL.Aliased<GetColumnData<T>> => {
   return column.getSQL().mapWith(column.mapFromDriverValue).as(alias)
 }
+
+export const ST_DWithin = (column: AnyColumn, otherColumn: AnyColumn, distance: number) =>
+  sql`ST_DWithin(${column}::geography, ${otherColumn}::geography, ${distance})`
