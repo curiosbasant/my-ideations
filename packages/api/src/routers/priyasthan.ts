@@ -1,4 +1,4 @@
-import { and, db, desc, eq, ne, or, schema, sql, ST_DWithin, unionAll } from '@my/db'
+import { and, db, desc, eq, inArray, ne, or, schema, sql, ST_DWithin, unionAll } from '@my/db'
 import { z } from '@my/lib/zod'
 
 import { isAllNotNull, userDisplayName } from '../lib/utils'
@@ -17,6 +17,10 @@ const cw = db
 export const priyasthanRouter = {
   workplace: {
     list: protectedProcedure.query(async ({ ctx: { db, authUserId } }) => {
+      // const r = await y(authUserId)
+      // console.log(r)
+      // return r
+
       const places = unionAll(
         db
           .selectDistinctOn([schema.profileAddress.profileId])
@@ -44,10 +48,10 @@ export const priyasthanRouter = {
         .where(
           and(
             isAllNotNull(schema.address.latitude, schema.address.longitude),
-            eq(schema.profile.createdBy, authUserId),
+            // eq(schema.profile.createdBy, authUserId),
           ),
         )
-        .unionAll(getMatch(authUserId))
+      // .unionAll(getMatch(authUserId))
       return locations.map((l) => ({
         ...l,
         latitude: l.latitude!,
@@ -249,15 +253,6 @@ function getMatch(authUserId: string) {
     )
 }
 
-/*
-  profileId: schema.profile.id,
-          addressId: schema.address.id,
-          text: schema.address.text,
-          latitude: schema.address.latitude,
-          longitude: schema.address.longitude,
-          type: places.type,
-*/
-
 async function x(authUserId: string) {
   // others preferred workplaces within 100km of my current workplace
   // others current workplaces within 100km of my preferred locations
@@ -392,24 +387,38 @@ async function x(authUserId: string) {
       )
       .where(eq(schema.profileAddress.type, 'preferred-workplace')),
   )
-  const [{ userId }] = await db
-    .select({ userId: schema.profile.id })
-    .from(schema.profile)
-    .where(eq(schema.profile.createdBy, authUserId))
-  db.select({
-    current: {
-      profileId: allCurrentWorkplaces.profileId,
-      addressId: allCurrentWorkplaces.addressId,
-      latitude: allCurrentWorkplaces.latitude,
-      longitude: allCurrentWorkplaces.longitude,
-    },
-    preferred: {
-      profileId: schema.profileAddress.profileId,
-      addressId: schema.profileAddress.addressId,
-      latitude: schema.address.latitude,
-      longitude: schema.address.longitude,
-    },
-  })
+}
+async function y(authUserId: string) {
+  const allCurrentWorkplaces = db.$with('acw').as((qb) =>
+    qb
+      .selectDistinctOn([schema.profileAddress.profileId], {
+        profileId: schema.profileAddress.profileId,
+        addressId: schema.profileAddress.addressId,
+        geom: schema.address.geom,
+        latitude: schema.address.latitude,
+        longitude: schema.address.longitude,
+      })
+      .from(schema.profileAddress)
+      .innerJoin(schema.address, eq(schema.address.id, schema.profileAddress.addressId))
+      .where(eq(schema.profileAddress.type, 'current-workplace'))
+      .orderBy(schema.profileAddress.profileId, desc(schema.profileAddress.updatedAt)),
+  )
+  const a = await db
+    .with(allCurrentWorkplaces)
+    .select({
+      current: {
+        profileId: allCurrentWorkplaces.profileId,
+        addressId: allCurrentWorkplaces.addressId,
+        latitude: allCurrentWorkplaces.latitude,
+        longitude: allCurrentWorkplaces.longitude,
+      },
+      preferred: {
+        profileId: schema.profileAddress.profileId,
+        addressId: schema.profileAddress.addressId,
+        latitude: schema.address.latitude,
+        longitude: schema.address.longitude,
+      },
+    })
     .from(schema.profileAddress)
     .innerJoin(schema.address, eq(schema.address.id, schema.profileAddress.addressId))
     .innerJoin(
@@ -419,10 +428,22 @@ async function x(authUserId: string) {
         ST_DWithin(allCurrentWorkplaces.geom, schema.address.geom, 100000),
       ),
     )
+    // .innerJoin(
+    //   schema.profile,
+    //   or(
+    //     eq(schema.profile.id, schema.profileAddress.profileId),
+    //     eq(schema.profile.id, allCurrentWorkplaces.profileId),
+    //   ),
+    // )
     .where(
       and(
         eq(schema.profileAddress.type, 'preferred-workplace'),
-        or(eq(allCurrentWorkplaces.profileId, userId), eq(schema.profileAddress.profileId, userId)),
+        // eq(schema.profile.createdBy, authUserId),
       ),
     )
+
+  return a.flatMap(({ current, preferred }) => [
+    { ...current, type: 'current-workplace' as const },
+    { ...preferred, type: 'preferred-workplace' as const },
+  ])
 }

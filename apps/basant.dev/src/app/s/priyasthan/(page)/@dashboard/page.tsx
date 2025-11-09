@@ -11,7 +11,7 @@ export default async function DashboardPage() {
   if (profile?.designation?.departmentId && profile.designation?.name) {
     const workplaces = await api.priyasthan.workplace.list()
     // api.priyasthan.workplace.match().then(console.log)
-    console.log({ workplaces })
+    // console.log({ workplaces })
 
     return (
       <PageLayoutFluid>
