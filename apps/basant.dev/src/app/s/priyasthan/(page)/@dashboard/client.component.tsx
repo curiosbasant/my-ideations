@@ -85,7 +85,7 @@ export function MapWorkPlaces(props: { locations: Location[] }) {
       }}
       mapStyle='https://tiles.openfreemap.org/styles/bright'
       onClick={(ev) => {
-        setMarker(ev.lngLat)
+        // setMarker(ev.lngLat)
       }}>
       <Popup longitude={74} latitude={26}>
         Tooltip
@@ -106,7 +106,7 @@ export function MapWorkPlaces(props: { locations: Location[] }) {
             setMarker({ lat: ev.lngLat.lat, lng: ev.lngLat.lng, index })
           }}
           key={`${loc.addressId} ${loc.profileId}`}>
-          <div className='bg-cover' style={loc.type === 'current-workplace' ? c : p} />
+          <div className='bg-cover opacity-50' style={loc.type === 'current-workplace' ? c : p} />
           <span className='text-lg'>{loc.profileId}</span>
         </Marker>
       ))}

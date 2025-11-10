@@ -1,3 +1,5 @@
+import { union } from 'drizzle-orm/pg-core'
+
 import { and, db, desc, eq, inArray, ne, or, schema, sql, ST_DWithin, unionAll } from '@my/db'
 import { z } from '@my/lib/zod'
 
@@ -17,7 +19,7 @@ const cw = db
 export const priyasthanRouter = {
   workplace: {
     list: protectedProcedure.query(async ({ ctx: { db, authUserId } }) => {
-      // const r = await y(authUserId)
+      const r = await y(authUserId)
       // console.log(r)
       // return r
 
@@ -52,7 +54,7 @@ export const priyasthanRouter = {
           ),
         )
       // .unionAll(getMatch(authUserId))
-      return locations.map((l) => ({
+      return locations.concat(r).map((l) => ({
         ...l,
         latitude: l.latitude!,
         longitude: l.longitude!,
@@ -403,44 +405,49 @@ async function y(authUserId: string) {
       .where(eq(schema.profileAddress.type, 'current-workplace'))
       .orderBy(schema.profileAddress.profileId, desc(schema.profileAddress.updatedAt)),
   )
-  const a = await db
-    .with(allCurrentWorkplaces)
-    .select({
-      current: {
-        profileId: allCurrentWorkplaces.profileId,
-        addressId: allCurrentWorkplaces.addressId,
-        latitude: allCurrentWorkplaces.latitude,
-        longitude: allCurrentWorkplaces.longitude,
-      },
-      preferred: {
-        profileId: schema.profileAddress.profileId,
-        addressId: schema.profileAddress.addressId,
-        latitude: schema.address.latitude,
-        longitude: schema.address.longitude,
-      },
-    })
-    .from(schema.profileAddress)
-    .innerJoin(schema.address, eq(schema.address.id, schema.profileAddress.addressId))
-    .innerJoin(
-      allCurrentWorkplaces,
-      and(
-        ne(allCurrentWorkplaces.profileId, schema.profileAddress.profileId),
-        ST_DWithin(allCurrentWorkplaces.geom, schema.address.geom, 100000),
+  const a = db.$with('circle').as((qb) =>
+    qb
+      .with(allCurrentWorkplaces)
+      .select({
+        current: {
+          profileId: allCurrentWorkplaces.profileId,
+          addressId: allCurrentWorkplaces.addressId,
+          latitude: allCurrentWorkplaces.latitude,
+          longitude: allCurrentWorkplaces.longitude,
+        },
+        preferred: {
+          profileId: schema.profileAddress.profileId,
+          addressId: schema.profileAddress.addressId,
+          latitude: schema.address.latitude,
+          longitude: schema.address.longitude,
+        },
+      })
+      .from(schema.profileAddress)
+      .innerJoin(schema.address, eq(schema.address.id, schema.profileAddress.addressId))
+      .innerJoin(
+        allCurrentWorkplaces,
+        and(
+          ne(allCurrentWorkplaces.profileId, schema.profileAddress.profileId),
+          ST_DWithin(allCurrentWorkplaces.geom, schema.address.geom, 100000),
+        ),
+      )
+      .innerJoin(
+        schema.profile,
+        or(
+          eq(schema.profile.id, schema.profileAddress.profileId),
+          eq(schema.profile.id, allCurrentWorkplaces.profileId),
+        ),
+      )
+      .where(
+        and(
+          eq(schema.profileAddress.type, 'preferred-workplace'),
+          eq(schema.profile.createdBy, authUserId),
+        ),
       ),
-    )
-    // .innerJoin(
-    //   schema.profile,
-    //   or(
-    //     eq(schema.profile.id, schema.profileAddress.profileId),
-    //     eq(schema.profile.id, allCurrentWorkplaces.profileId),
-    //   ),
-    // )
-    .where(
-      and(
-        eq(schema.profileAddress.type, 'preferred-workplace'),
-        // eq(schema.profile.createdBy, authUserId),
-      ),
-    )
+  )
+
+  return union(db.with(a).select(a.current).from(a), db.with(a).select(a.preferred).from(a))
+  console.log(a)
 
   return a.flatMap(({ current, preferred }) => [
     { ...current, type: 'current-workplace' as const },
