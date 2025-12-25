@@ -1,3 +1,4 @@
+export * from './address'
 export * from './dots-and-boxes'
 export * from './profile'
 export * from './snapfile'

@@ -118,8 +118,7 @@ const enforceUserIsAuthenticated = t.middleware(async ({ ctx, next }) => {
   return next({
     ctx: {
       session: ctx.session,
-      // TODO: temporarily cast to number, to resolve ts errors
-      authUserId: Number(ctx.session.user.id) || 0,
+      authUserId: ctx.session.user.id,
     },
   })
 })

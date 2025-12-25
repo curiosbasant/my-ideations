@@ -67,7 +67,7 @@ export default function ResumePage() {
                 <div className='border-12 m-auto overflow-clip rounded-full border-sky-400 bg-slate-200 shadow-inner'>
                   <Image
                     className='size-64 object-cover object-center'
-                    src='/display-photo.jpeg'
+                    src='/public/display-photo.jpeg'
                     alt="Basant's Picture"
                     height={898}
                     width={898}
@@ -186,7 +186,7 @@ export default function ResumePage() {
                             className='block size-12 rounded-md bg-[#0067f9] fill-white'>
                             <img
                               className='aspect-square'
-                              src='/logos/hootboard.svg'
+                              src='/public/logos/hootboard.svg'
                               alt='HootBoard Logo'
                               width='48'
                               height='48'
