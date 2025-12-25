@@ -13,7 +13,16 @@ export default function SnapFileHomePage() {
   const router = useRouter()
   const { isPending, actionTransition: uploadFile } = useAction({
     actionFn: uploadFileAction,
-    onSuccess(data) {
+    onSuccess(data, payload) {
+      const recentFiles: {}[] = JSON.parse(localStorage.getItem('sf__recent_files') ?? '[]')
+      const l = recentFiles.unshift({
+        fileName: payload.name,
+        fileSize: payload.size,
+        fileUrl: data.publicUrl,
+        fileShortCode: data.shortcode,
+      })
+      if (l > 5) recentFiles.pop()
+      localStorage.setItem('sf__recent_files', JSON.stringify(recentFiles))
       router.push(`/${data.shortcode}/qrcode`)
     },
   })

@@ -14,18 +14,21 @@ export const uploadFileAction = actionWrapper(async (file: File) => {
   }).data.publicUrl
 
   try {
-    await Promise.all([
+    const [, row] = await Promise.all([
       filesBucket.upload(filePath, file).then(throwOnError),
       // Create a short-code for the url
       supabase
         .from('sf__short_url')
         .insert({ code: fileShortCode, url: filePublicUrl })
+        .select('created_at')
+        .single()
         .then(throwOnError),
     ])
 
     return {
       shortcode: fileShortCode,
       publicUrl: filePublicUrl,
+      createdAt: row!.created_at,
     }
   } catch {
     throw new Error('There seems to some problem uploading your file!')
