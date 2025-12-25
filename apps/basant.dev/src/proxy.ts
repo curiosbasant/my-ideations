@@ -1,9 +1,9 @@
-import { NextResponse, type MiddlewareConfig, type NextRequest } from 'next/server'
+import { NextResponse, type ProxyConfig, type NextRequest } from 'next/server'
 
 import { getSupabaseMiddleware } from '~/lib/supabase'
 import { extractSubdomain } from '~/lib/utils/domain'
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { pathname, search } = request.nextUrl
   const subdomain = extractSubdomain(request)
 
@@ -33,7 +33,7 @@ export async function middleware(request: NextRequest) {
   return NextResponse.next()
 }
 
-export const config: MiddlewareConfig = {
+export const config: ProxyConfig = {
   matcher: [
     /*
      * Match all paths except for:
