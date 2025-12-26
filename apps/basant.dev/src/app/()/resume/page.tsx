@@ -1,4 +1,5 @@
 import type { PropsWithChildren } from 'react'
+import type { Metadata } from 'next'
 import Image from 'next/image'
 import { formatDistanceStrict } from 'date-fns/formatDistanceStrict'
 import {
@@ -15,7 +16,7 @@ import {
 import { ScrollArea } from '~/components/ui/scroll-area'
 import { AsideIcon, AsideSection, H3, MainSection } from './elements'
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "Basant's Resume",
   keywords: ['basant resume', 'basant barupal', 'curiosbasant'],
 }

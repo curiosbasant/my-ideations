@@ -1,8 +1,9 @@
+import type { Metadata } from 'next'
 import { BadgeCheckIcon, EllipsisVerticalIcon } from 'lucide-react'
 
 import { VideoDisplay } from './client'
 
-export const metadata = {
+export const metadata: Metadata = {
   title: 'YouTube Clone',
 }
 

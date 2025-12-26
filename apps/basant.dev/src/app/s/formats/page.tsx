@@ -3,6 +3,7 @@ import { format } from 'date-fns/format'
 import { DownloadIcon } from 'lucide-react'
 
 import { formatDistance } from '@my/lib/date'
+import { resolveStringParam } from '@my/lib/utils'
 
 import { FileDownloadButton } from '~/app/client.component'
 import { Input } from '~/components/ui/input'
@@ -10,9 +11,10 @@ import { handleChange } from './client.action'
 import { FormatTime } from './client.component'
 import { getRecentFormats, type Format } from './server.dal'
 
-export default async function FormatsPage(props: PageProps<{ searchParams: 'query' }>) {
+export default async function FormatsPage(props: PageProps<'/s/formats'>) {
   const searchParams = await props.searchParams
-  const recentFormats = await getRecentFormats({ query: searchParams.query })
+  const query = resolveStringParam(searchParams.query)
+  const recentFormats = await getRecentFormats({ query })
 
   return (
     <div className='flex flex-1 flex-col gap-8'>
@@ -20,7 +22,7 @@ export default async function FormatsPage(props: PageProps<{ searchParams: 'quer
         <Input
           className='h-auto px-4 py-3 text-lg md:text-xl'
           name='query'
-          defaultValue={searchParams.query ?? undefined}
+          defaultValue={query ?? undefined}
           placeholder='Search for a format'
           type='search'
         />

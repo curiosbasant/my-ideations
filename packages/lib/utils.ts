@@ -250,3 +250,16 @@ export function isDarkColor(color: string) {
   // Using the HSP value, determine whether the color is light or dark
   return hsp < 145
 }
+
+function resolveStringParam(param: string | string[]): string
+function resolveStringParam(param?: string | string[]): string | null
+function resolveStringParam(param?: string | string[]) {
+  return Array.isArray(param) ? param[0] : (param ?? null)
+}
+function resolveArrayParam(param: string | string[]): string[]
+function resolveArrayParam(param?: string | string[]): string[] | null
+function resolveArrayParam(param?: string | string[]) {
+  if (typeof param === 'string') return [param]
+  return Array.isArray(param) ? param : null
+}
+export { resolveStringParam, resolveArrayParam }

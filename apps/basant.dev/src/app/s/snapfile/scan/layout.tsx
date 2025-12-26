@@ -3,6 +3,6 @@ export const metadata = {
   description: 'Download file by scanning the QR Code',
 }
 
-export default function SnapFileScanQrCodeLayout(props: LayoutProps) {
+export default function SnapFileScanQrCodeLayout(props: LayoutProps<'/s/snapfile/scan'>) {
   return props.children
 }

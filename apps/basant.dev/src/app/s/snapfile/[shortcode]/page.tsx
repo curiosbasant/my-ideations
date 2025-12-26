@@ -1,12 +1,14 @@
+import type { Metadata } from 'next'
+
 import { FileDownloadButton } from '~/app/client.component'
 import { getPublicUrlFromShortcode } from '../server'
 import { FileDownloadingText } from './client.component'
 
-export const metadata = {
+export const metadata: Metadata = {
   title: 'Download',
 }
 
-export default async function SnapFileDownloadPage(props: PageProps<{ params: 'shortcode' }>) {
+export default async function SnapFileDownloadPage(props: PageProps<'/s/snapfile/[shortcode]'>) {
   const { shortcode } = await props.params
   const publicUrl = await getPublicUrlFromShortcode(shortcode)
 

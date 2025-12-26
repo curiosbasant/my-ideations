@@ -9,7 +9,7 @@ import { ClientOnly } from '@my/core/elements'
 
 import { Spinner } from '~/components/elements/spinner'
 
-export default function SnapFileQrCodePage(props: PageProps<{ params: 'shortcode' }>) {
+export default function SnapFileQrCodePage(props: PageProps<'/s/snapfile/[shortcode]/qrcode'>) {
   const { shortcode } = use(props.params)
 
   return (

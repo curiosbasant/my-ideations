@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   description: 'See the result of whole class in a minute',
 }
 
-export default function ParinaamRootLayout(props: LayoutProps<{ slots: 'themeSwitchButton' }>) {
+export default function ParinaamRootLayout(props: LayoutProps<'/s/parinaam'>) {
   return (
     <Html className='size-full antialiased' lang='en'>
       <body className={`${geistSans.variable} ${geistMono.variable} isolate size-full`}>
