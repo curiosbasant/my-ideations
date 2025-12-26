@@ -6,10 +6,6 @@ import {
 
 import type { ResultOutput } from '../server'
 
-export type HomeProps = PageProps<{
-  searchParams: 'year' | 'standard' | 'roll' | 'tab' | 'stream'
-}>
-
 export type ResultQueryInput = {
   year?: string | null
   standard?: string | null

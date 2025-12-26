@@ -1,12 +1,13 @@
 import '~/app/tailwind.css'
 import './theme.css'
 
+import type { Metadata } from 'next'
 import Link from 'next/link'
 
 import { latoFont } from '~/app/shared'
 import { ScrollArea } from '~/components/ui/scroll-area'
 
-export const metadata = {
+export const metadata: Metadata = {
   title: {
     default: 'Priyasthan',
     template: '%s | Priyasthan',
@@ -14,7 +15,7 @@ export const metadata = {
   description: 'A platform to find your mutual transfer buddy!',
 }
 
-export default function SnapFileRootLayout(props: LayoutProps<{ slots: 'headerProfile' }>) {
+export default function SnapFileRootLayout(props: LayoutProps<'/s/priyasthan'>) {
   return (
     <html lang='en' className='size-full antialiased'>
       <body className={`size-full ${latoFont.className}`}>

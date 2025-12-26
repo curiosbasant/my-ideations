@@ -1,13 +1,14 @@
+import type { Metadata } from 'next'
 import Link from 'next/link'
 import { ChevronLeftIcon } from 'lucide-react'
 
 import { Button } from '~/components/ui/button'
 
-export const metadata = {
+export const metadata: Metadata = {
   title: 'QR Code',
 }
 
-export default function SnapFileQrCodeLayout(props: LayoutProps) {
+export default function SnapFileQrCodeLayout(props: LayoutProps<'/s/snapfile/[shortcode]/qrcode'>) {
   return (
     <div className='flex h-full flex-col items-center justify-center gap-6'>
       <p className='text-balance text-center'>

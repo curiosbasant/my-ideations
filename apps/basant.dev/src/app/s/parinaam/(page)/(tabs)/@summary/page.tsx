@@ -1,7 +1,6 @@
-import type { HomeProps } from '../../shared'
 import { ClassResultPieChart, ResponsiveClassToppersBarChart } from './client'
 
-export default function ResultSummary(props: HomeProps) {
+export default function ResultSummary() {
   return (
     <>
       <section className='flex flex-col gap-8'>

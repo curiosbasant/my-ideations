@@ -1,6 +1,4 @@
-export default function ParinaamPageLayout(
-  props: LayoutProps<{ slots: 'form' | 'prefetchResults' }>,
-) {
+export default function ParinaamPageLayout(props: LayoutProps<'/s/parinaam'>) {
   return (
     <div className='space-y-16'>
       {props.form}

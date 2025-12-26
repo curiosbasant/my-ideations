@@ -2,6 +2,7 @@ import '~/app/tailwind.css'
 import './theme.css'
 
 import type { PropsWithChildren } from 'react'
+import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
 
@@ -9,7 +10,7 @@ import { latoFont } from '~/app/shared'
 import { Button } from '~/components/ui/button'
 import { ScrollArea } from '~/components/ui/scroll-area'
 
-export const metadata = {
+export const metadata: Metadata = {
   title: {
     default: 'Snap File',
     template: '%s | Snap File',

@@ -13,13 +13,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '~/components/ui/tabs'
 import { useNativeSearchParam } from '~/hooks/use-search-params'
 import { useResults, useResultsQuery } from '../query'
 
-export default function ResultLayout(props: LayoutProps<{ slots: 'table' | 'summary' }>) {
+export default function ResultLayout(props: LayoutProps<'/s/parinaam'>) {
   const { isLoading, data, error } = useResultsQuery()
 
   if (isLoading) {
     return (
       <div className='flex h-96'>
-        <div className='m-auto animate-spin rounded-full border-4 border-primary border-s-transparent p-4' />
+        <div className='border-primary m-auto animate-spin rounded-full border-4 border-s-transparent p-4' />
       </div>
     )
   }
@@ -27,7 +27,7 @@ export default function ResultLayout(props: LayoutProps<{ slots: 'table' | 'summ
   if (data && data.length > 0) {
     return (
       <>
-        <h2 className='px-8 text-center text-2xl font-bold text-balance'>{data[0].school}</h2>
+        <h2 className='text-balance px-8 text-center text-2xl font-bold'>{data[0].school}</h2>
         <ResultTabs>
           <div className='flex items-center justify-between gap-4'>
             <TabsList>
