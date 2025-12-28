@@ -270,7 +270,7 @@ export default function ResumePage() {
                       <li className='col-span-full grid grid-cols-subgrid items-center' key={label}>
                         <img
                           className='aspect-square rounded'
-                          src={`/logos/${logo}.svg`}
+                          src={`/public/logos/${logo}.svg`}
                           alt={label + "'s logo"}
                           width='28'
                           height='28'
@@ -315,7 +315,7 @@ function SocialHandleLink(props: { link: string; logo: string }) {
     <a href={props.link} className='inline-block size-8' target='_blank'>
       <img
         className='size-full'
-        src={`/logos/${props.logo}.svg`}
+        src={`/public/logos/${props.logo}.svg`}
         alt={`${props.logo} Logo`}
         title={props.logo}
         width='32'
