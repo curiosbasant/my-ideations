@@ -18,29 +18,3 @@ export const latoFont = Lato({
 
 export type ThemePreference = 'light' | 'dark'
 export const COOKIE_THEME_KEY = 'theme-preference'
-
-type ActionSuccessState<TData> = {
-  success: true
-  message?: string
-  data: TData
-}
-type ActionFailedState = {
-  success: false
-  message: string
-  data?: null
-}
-export type ActionState<TData> = ActionSuccessState<TData> | ActionFailedState | null
-type ActionHandler<Payload, TData> = (payload: Payload, state: ActionState<TData>) => Promise<TData>
-
-export function actionWrapper<Payload, TData>(action: ActionHandler<Payload, TData>) {
-  return async (state: ActionState<TData>, payload: Payload): Promise<ActionState<TData>> => {
-    try {
-      const data = await action(payload, state)
-      return { success: true, data }
-    } catch (error) {
-      const message = String(error)
-      if (message === 'Error: NEXT_REDIRECT') throw error
-      return { success: false, message }
-    }
-  }
-}

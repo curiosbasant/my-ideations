@@ -3,10 +3,10 @@
 import { headers } from 'next/headers'
 import { redirect } from 'next/navigation'
 
-import { actionWrapper } from '~/app/shared'
 import { getSupabase } from '~/lib/supabase'
+import { createAction } from '~/lib/utils/helper-action/shared'
 
-export const signInWithProviderAction = actionWrapper(async (payload: { redirectTo?: string }) => {
+export const signInWithProviderAction = createAction(async (payload: { redirectTo?: string }) => {
   const [supabase, heads] = await Promise.all([getSupabase(), headers()])
   const origin = heads.get('origin')
   if (!origin) throw new Error('No origin header found')

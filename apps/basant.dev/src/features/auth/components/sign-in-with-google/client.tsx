@@ -1,8 +1,8 @@
 'use client'
 
-import { useAction } from '~/app/client'
 import { Button } from '~/components/ui/button'
-import { signInWithProviderAction } from './server.action'
+import { useAction } from '~/lib/utils/helper-action/client'
+import { signInWithProviderAction } from './action'
 
 export function SignInWithGoogleButton() {
   const { isPending, actionTransition } = useAction({

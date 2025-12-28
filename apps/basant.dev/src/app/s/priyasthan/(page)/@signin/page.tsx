@@ -1,5 +1,5 @@
 import { PageLayoutFixed } from '~/components/layout'
-import { SignInWithGoogleButton } from './client.component'
+import { SignInWithGoogleButton } from '~/features/auth/components/sign-in-with-google/client'
 
 export default function Page() {
   return (

@@ -1,9 +1,9 @@
 import { getSupabaseClient } from '@my/lib/supabase/client'
 import { throwOnError } from '@my/lib/supabase/shared'
 
-import { actionWrapper } from '~/app/shared'
+import { createAction } from '~/lib/utils/helper-action/shared'
 
-export const uploadFileAction = actionWrapper(async (file: File) => {
+export const uploadFileAction = createAction(async (file: File) => {
   const fileShortCode = crypto.randomUUID().slice(-6)
   const filePath = `${fileShortCode}-${file.name}`
 

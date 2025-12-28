@@ -6,13 +6,13 @@ import { CloudUploadIcon } from 'lucide-react'
 import { useToggle } from '@my/core/hooks'
 import { formatBytes } from '@my/lib/utils'
 
-import { useAction } from '~/app/client'
 import { DropArea } from '~/components/elements/drop-area'
 import { Spinner } from '~/components/elements/spinner'
 import { Button } from '~/components/ui/button'
 import { DialogClose, DialogFooter } from '~/components/ui/dialog'
 import { Input } from '~/components/ui/input'
 import { Label } from '~/components/ui/label'
+import { useAction } from '~/lib/utils/helper-action/client'
 import { uploadFileAction } from './client.action'
 
 export function FileUploadModalViews() {

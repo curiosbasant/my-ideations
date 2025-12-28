@@ -1,14 +1,19 @@
 import { startTransition, useActionState } from 'react'
 
-import type { ActionState } from '~/app/shared'
+import type { ActionState } from './shared'
 
-export function useAction<TData, Payload>(params: {
-  actionFn: (state: Awaited<ActionState<TData>>, payload: Payload) => Promise<ActionState<TData>>
-  onSuccess?: (data: TData) => void
+export type ActionFn<Input, Output> = (
+  state: Awaited<ActionState<Output>>,
+  payload: Input,
+) => Promise<ActionState<Output>>
+
+export function useAction<Input, Output>(params: {
+  actionFn: ActionFn<Input, Output>
+  onSuccess?: (data: Output) => void
   onError?: (message: string) => void
 }) {
   const [state, actionFn, isPending] = useActionState(
-    async (state: Awaited<ActionState<TData>>, payload: Payload) => {
+    async (state: Awaited<ActionState<Output>>, payload: Input) => {
       const result = await params.actionFn(state, payload)
       if (result?.success) {
         params.onSuccess?.(result.data)
@@ -23,7 +28,7 @@ export function useAction<TData, Payload>(params: {
   return {
     isPending,
     state,
-    actionTransition(b: Payload) {
+    actionTransition(b: Input) {
       startTransition(() => actionFn(b))
     },
   }

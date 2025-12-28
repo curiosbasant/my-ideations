@@ -5,7 +5,7 @@ import type { FormEvent } from 'react'
 import { getSupabaseClient } from '@my/lib/supabase/client'
 import { throwOnError } from '@my/lib/supabase/shared'
 
-import { actionWrapper } from '~/app/shared'
+import { createAction } from '~/lib/utils/helper-action/shared'
 
 function debounce<T extends any[]>(cb: (...args: T) => void, delay: number) {
   let timeout = 0
@@ -23,7 +23,7 @@ export const handleChange = (ev: FormEvent<HTMLFormElement>) => {
   debouncedSearch(ev.currentTarget)
 }
 
-export const uploadFileAction = actionWrapper(
+export const uploadFileAction = createAction(
   async (p: { file: File; fileName: string; fileDescription?: string }) => {
     const fileShortCode = crypto.randomUUID().slice(-6)
     const filePath = `${fileShortCode}-${p.fileName}`

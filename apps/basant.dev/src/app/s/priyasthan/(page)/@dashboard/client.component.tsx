@@ -6,7 +6,6 @@ import { startTransition, use, useOptimistic, useRef, useState } from 'react'
 import { Map, Marker } from '@vis.gl/react-maplibre'
 import { Check, ChevronsUpDownIcon, LoaderCircleIcon } from 'lucide-react'
 
-import { useAction } from '~/app/client'
 import { Button } from '~/components/ui/button'
 import {
   Command,
@@ -19,6 +18,7 @@ import {
 import { Input } from '~/components/ui/input'
 import { Label } from '~/components/ui/label'
 import { Popover, PopoverContent, PopoverTrigger } from '~/components/ui/popover'
+import { useAction } from '~/lib/utils/helper-action/client'
 import { getDepartmentDesignations, saveWorkplace } from './server.action'
 
 type Location = {
