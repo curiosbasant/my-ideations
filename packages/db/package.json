@@ -14,7 +14,7 @@
     "start": "supabase start",
     "status": "supabase status",
     "stop": "supabase stop",
-    "studio": "drizzle-kit studio",
+    "studio": "pnpm with-env -- drizzle-kit studio",
     "with-env": "dotenv -e ../../.env.local",
     "with-env:prod": "dotenv -e ../../.env.production.local"
   },
