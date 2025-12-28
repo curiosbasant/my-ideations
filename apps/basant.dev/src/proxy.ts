@@ -14,8 +14,11 @@ export async function proxy(request: NextRequest) {
       return rewriteTo(`/public/icons/${subdomain}.ico`)
     }
 
-    // For the root path on a subdomain, rewrite to the subdomain page
-    const response = rewriteTo(`/s/${subdomain + (pathname === '/' ? '' : pathname) + search}`)
+    const response =
+      pathname === '/auth/callback' ?
+        NextResponse.next() // ignore subdomain
+        // For the root path on a subdomain, rewrite to the subdomain page
+      : rewriteTo(`/s/${subdomain + (pathname === '/' ? '' : pathname) + search}`)
 
     if (subdomain === 'priyasthan') {
       const supabase = getSupabaseMiddleware(request, response)
