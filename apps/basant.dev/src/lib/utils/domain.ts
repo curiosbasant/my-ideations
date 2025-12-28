@@ -1,25 +1,13 @@
-import type { NextRequest } from 'next/server'
-
 import { ROOT_DOMAIN } from '~/lib/env'
 
-export function extractSubdomain(request: NextRequest) {
-  const host = request.headers.get('host') || ''
-  const hostname = host.split(':')[0]
+export function extractSubdomain(host: string | null) {
+  if (!host) return null
+  const [hostname] = host.split(':', 1)
+  if (!hostname) return null
 
   // Local development environment
-  if (request.url.includes('localhost') || request.url.includes('127.0.0.1')) {
-    // Try to extract subdomain from the full URL
-    const fullUrlMatch = request.url.match(/http:\/\/([^.]+)\.localhost/)
-    if (fullUrlMatch?.[1]) {
-      return fullUrlMatch[1]
-    }
-
-    // Fallback to host header approach
-    if (hostname.includes('.localhost')) {
-      return hostname.split('.')[0]
-    }
-
-    return null
+  if (hostname.endsWith('.localhost')) {
+    return hostname.slice(0, -10)
   }
 
   if (hostname.endsWith('.vercel.app')) {
@@ -31,13 +19,12 @@ export function extractSubdomain(request: NextRequest) {
 
     if (hostname.includes('---')) {
       // Handle preview deployment URLs (tenant---branch-name.vercel.app)
-      const parts = hostname.split('---')
-      return parts.length > 0 ? parts[0] : null
+      return hostname.split('---', 1)[0]
     }
   }
 
   // Production environment
-  const rootDomainFormatted = ROOT_DOMAIN.split(':')[0]
+  const [rootDomainFormatted] = ROOT_DOMAIN.split(':', 1)
 
   // Regular subdomain detection
   const isSubdomain =

@@ -1,21 +1,21 @@
-import { NextResponse, type ProxyConfig, type NextRequest } from 'next/server'
+import { NextResponse, type NextRequest, type ProxyConfig } from 'next/server'
 
 import { getSupabaseMiddleware } from '~/lib/supabase'
 import { extractSubdomain } from '~/lib/utils/domain'
 
 export async function proxy(request: NextRequest) {
   const { pathname, search } = request.nextUrl
-  const subdomain = extractSubdomain(request)
+  const subdomain = extractSubdomain(request.headers.get('host'))
+
+  const rewriteTo = (url: string) => NextResponse.rewrite(new URL(url, request.url))
 
   if (subdomain) {
     if (pathname === '/favicon.ico') {
-      return NextResponse.rewrite(new URL(`/public/icons/${subdomain}.ico`, request.url))
+      return rewriteTo(`/public/icons/${subdomain}.ico`)
     }
 
-    const response = NextResponse.rewrite(
-      // For the root path on a subdomain, rewrite to the subdomain page
-      new URL(`/s/${subdomain + (pathname === '/' ? '' : pathname) + search}`, request.url),
-    )
+    // For the root path on a subdomain, rewrite to the subdomain page
+    const response = rewriteTo(`/s/${subdomain + (pathname === '/' ? '' : pathname) + search}`)
 
     if (subdomain === 'priyasthan') {
       const supabase = getSupabaseMiddleware(request, response)
@@ -26,7 +26,7 @@ export async function proxy(request: NextRequest) {
   }
 
   if (pathname.startsWith('/s/')) {
-    return NextResponse.redirect(new URL('/not-found', request.url), { headers: request.headers })
+    return rewriteTo('/not-found')
   }
 
   // On the root domain, allow normal access
