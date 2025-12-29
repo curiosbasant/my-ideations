@@ -1,14 +1,13 @@
-// Note: Don't import anything from './base', as to avoid circular imports
-
 import { index, uniqueIndex } from 'drizzle-orm/pg-core'
 import { authUsers } from 'drizzle-orm/supabase'
 
+import { id, smallId } from '../utils/pg-column-helpers/helpers'
 import { pgTable, selectOnlyPolicy } from '../utils/pg-table-helpers'
 
 export const department = pgTable(
   'department',
   (c) => ({
-    id: c.smallint().primaryKey(),
+    id: smallId().primaryKey(),
     name: c.text().notNull(),
   }),
   () => [selectOnlyPolicy],
@@ -17,11 +16,8 @@ export const department = pgTable(
 export const designation = pgTable(
   'designation',
   (c) => ({
-    id: c.smallint().generatedByDefaultAsIdentity().primaryKey(),
-    departmentId: c
-      .smallint()
-      .references(() => department.id, { onDelete: 'cascade' })
-      .notNull(),
+    id: smallId.primaryKey(),
+    departmentId: smallId.references(() => department.id).notNull(),
     name: c.text().notNull(),
   }),
   (t) => [uniqueIndex().on(t.departmentId, t.name), selectOnlyPolicy],
@@ -30,13 +26,13 @@ export const designation = pgTable(
 export const profile = pgTable(
   'profile',
   (c) => ({
-    id: c.bigint({ mode: 'number' }).generatedByDefaultAsIdentity().primaryKey(),
+    id: id.primaryKey(),
     username: c.varchar({ length: 32 }).unique(),
     firstName: c.varchar({ length: 256 }),
     lastName: c.varchar({ length: 256 }),
     email: c.varchar({ length: 320 }).unique(),
     avatarUrl: c.varchar({ length: 256 }),
-    postId: c.smallint().references(() => designation.id, { onDelete: 'set null' }),
+    postId: smallId.references(() => designation.id, { onDelete: 'set null' }),
     createdBy: c.uuid().references(() => authUsers.id),
     createdAt: c.timestamp({ withTimezone: true }).defaultNow().notNull(),
     updatedAt: c.timestamp({ withTimezone: true }),

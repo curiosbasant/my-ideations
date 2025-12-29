@@ -1,16 +1,18 @@
-import { json, pgTableCreator, smallint, varchar } from 'drizzle-orm/pg-core'
+import { pgTableCreator } from 'drizzle-orm/pg-core'
 
-import { getBaseColumns } from '../utils/pg-column-helpers'
+import { getProfileRef, withCommonColumns } from '../utils/pg-column-helpers'
 
-const table = pgTableCreator((tableName) => `gdb__${tableName}`)
+const pgTable = pgTableCreator((tableName) => `gdb__${tableName}`)
 
-export const gdb__board = table('board', {
-  ...getBaseColumns(),
-  rows: smallint().notNull(),
-  cols: smallint().notNull(),
-  boxes: json().default({}).$type<Record<string, number>>(),
-  dashes: json().default({}).$type<Record<string, number>>(),
-  activePlayerIndex: smallint(),
-  players: getBaseColumns().createdBy.array(4).notNull(),
-  status: varchar(),
-})
+export const gdb__board = pgTable(
+  'board',
+  withCommonColumns((c) => ({
+    rows: c.smallint().notNull(),
+    cols: c.smallint().notNull(),
+    boxes: c.json().default({}).$type<Record<string, number>>(),
+    dashes: c.json().default({}).$type<Record<string, number>>(),
+    activePlayerIndex: c.smallint(),
+    players: getProfileRef().array(4).notNull(),
+    status: c.varchar(),
+  })),
+)
