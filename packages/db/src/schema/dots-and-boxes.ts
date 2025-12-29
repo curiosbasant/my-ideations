@@ -1,6 +1,6 @@
 import { json, pgTableCreator, smallint, varchar } from 'drizzle-orm/pg-core'
 
-import { getBaseColumns } from './base'
+import { getBaseColumns } from '../utils/pg-column-helpers'
 
 const table = pgTableCreator((tableName) => `gdb__${tableName}`)
 

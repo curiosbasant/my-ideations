@@ -1,10 +1,15 @@
 import { index, primaryKey } from 'drizzle-orm/pg-core'
 import { SQL, sql } from 'drizzle-orm/sql'
 
-import { __table, selectOnlyPolicy } from './_shared'
-import { getBaseColumns, getPrimaryColumn, getTimestampColumns, takeForeignId } from './base'
+import {
+  getBaseColumns,
+  getPrimaryColumn,
+  getTimestampColumns,
+  takeForeignId,
+} from '../utils/pg-column-helpers'
+import { pgTable, selectOnlyPolicy } from '../utils/pg-table-helpers'
 
-export const address = __table(
+export const address = pgTable(
   'address',
   (c) => ({
     id: getPrimaryColumn(),
@@ -23,7 +28,7 @@ export const address = __table(
   (t) => [index().using('gist', t.geom), selectOnlyPolicy],
 )
 
-export const profileAddress = __table(
+export const profileAddress = pgTable(
   'profile_has_addresses',
   (c) => {
     const { createdBy, createdAt } = getBaseColumns()

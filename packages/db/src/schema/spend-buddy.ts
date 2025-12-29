@@ -8,7 +8,7 @@ import {
   varchar,
 } from 'drizzle-orm/pg-core'
 
-import { getBaseColumns, id, takeForeignId } from './base'
+import { getBaseColumns, id, takeForeignId } from '../utils/pg-column-helpers'
 
 const table = pgTableCreator((tableName) => `sb__${tableName}`)
 

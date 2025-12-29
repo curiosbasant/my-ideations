@@ -1,7 +1,7 @@
 import { sql } from 'drizzle-orm'
 
 import { db } from '../client'
-import { buckets, objects } from '../schema/buckets'
+import { buckets, objects } from '../utils/supabase-helpers'
 
 const snapfileFilesBucketName = 'sf__files'
 

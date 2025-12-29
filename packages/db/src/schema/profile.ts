@@ -3,9 +3,9 @@
 import { index, uniqueIndex } from 'drizzle-orm/pg-core'
 import { authUsers } from 'drizzle-orm/supabase'
 
-import { __table, selectOnlyPolicy } from './_shared'
+import { pgTable, selectOnlyPolicy } from '../utils/pg-table-helpers'
 
-export const department = __table(
+export const department = pgTable(
   'department',
   (c) => ({
     id: c.smallint().primaryKey(),
@@ -14,7 +14,7 @@ export const department = __table(
   () => [selectOnlyPolicy],
 )
 
-export const designation = __table(
+export const designation = pgTable(
   'designation',
   (c) => ({
     id: c.smallint().generatedByDefaultAsIdentity().primaryKey(),
@@ -27,7 +27,7 @@ export const designation = __table(
   (t) => [uniqueIndex().on(t.departmentId, t.name), selectOnlyPolicy],
 )
 
-export const profile = __table(
+export const profile = pgTable(
   'profile',
   (c) => ({
     id: c.bigint({ mode: 'number' }).generatedByDefaultAsIdentity().primaryKey(),

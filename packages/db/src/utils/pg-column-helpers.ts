@@ -1,6 +1,6 @@
 import { bigint, PgColumn, timestamp } from 'drizzle-orm/pg-core'
 
-import { profile } from './profile'
+import { profile } from '../schema/profile'
 
 export const id = () => bigint({ mode: 'number' })
 export const CASCADE_ON_DELETE = { onDelete: 'cascade' as const }

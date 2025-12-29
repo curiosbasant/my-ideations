@@ -1,7 +1,7 @@
 import { sql } from 'drizzle-orm'
 import { index, pgPolicy, pgTableCreator } from 'drizzle-orm/pg-core'
 
-import { getBaseColumns } from './base'
+import { getBaseColumns } from '../utils/pg-column-helpers'
 
 const pgTable = pgTableCreator((tableName) => `sf__${tableName}`)
 
