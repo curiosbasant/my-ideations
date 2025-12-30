@@ -70,7 +70,6 @@
     "drizzle-orm/mysql-core/index.d.ts",
     "drizzle-orm/sqlite-core/index.d.ts"
   ],
-  "typescript.preferences.importModuleSpecifier": "non-relative",
   "typescript.tsdk": "node_modules/typescript/lib",
   "typescript.tsserver.experimental.enableProjectDiagnostics": true,
   "workbench.editor.customLabels.enabled": true,

@@ -15,6 +15,3 @@ export const latoFont = Lato({
   variable: '--font-lato',
   subsets: ['latin'],
 })
-
-export type ThemePreference = 'light' | 'dark'
-export const COOKIE_THEME_KEY = 'theme-preference'
