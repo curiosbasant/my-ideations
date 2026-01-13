@@ -8,7 +8,7 @@
     "dev": "expo run:android",
     "ios": "expo run:ios",
     "web": "pnpm with-env expo start --web",
-    "lint": "expo lint",
+    "lint": "tsc --noEmit",
     "eas:build": "eas build --profile preview --platform android",
     "eas:update": "eas update --branch preview --platform android",
     "with-env": "dotenv -e ../../.env --"

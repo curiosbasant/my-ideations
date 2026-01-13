@@ -5,6 +5,7 @@ settings:
   excludeLinksFromLockfile: false
 
 overrides:
+  minimatch@10.0.2: 10.0.1
   '@types/react': 19.2.7
   '@types/react-dom': 19.2.3
 
@@ -17,7 +18,7 @@ importers:
         version: link:tooling/prettier
       '@turbo/gen':
         specifier: ^2.5.6
-        version: 2.7.4(@types/node@20.19.28)(typescript@5.8.3)
+        version: 2.7.4(@types/node@24.10.8)(typescript@5.8.3)
       supabase:
         specifier: ^2.72.6
         version: 2.72.6
@@ -116,8 +117,8 @@ importers:
         specifier: ^5.79.0
         version: 5.91.2(@tanstack/react-query@5.90.16(react@19.2.3))(react@19.2.3)
       '@types/node':
-        specifier: ^20.11
-        version: 20.19.28
+        specifier: ^24.1
+        version: 24.10.8
       '@types/qrcode':
         specifier: ^1.5.5
         version: 1.5.6
@@ -392,7 +393,7 @@ importers:
         version: 7.4.4
       eas-cli:
         specifier: ^10.0.2
-        version: 10.2.4(@types/node@20.19.28)(expo-modules-autolinking@1.11.3)(typescript@5.8.3)
+        version: 10.2.4(@types/node@24.10.8)(expo-modules-autolinking@1.11.3)(typescript@5.8.3)
       typescript:
         specifier: ~5.8.3
         version: 5.8.3
@@ -4157,6 +4158,9 @@ packages:
   '@types/node@20.19.28':
     resolution: {integrity: sha512-VyKBr25BuFDzBFCK5sUM6ZXiWfqgCTwTAOK8qzGV/m9FCirXYDlmczJ+d5dXBAQALGCdRRdbteKYfJ84NGEusw==}
 
+  '@types/node@24.10.8':
+    resolution: {integrity: sha512-r0bBaXu5Swb05doFYO2kTWHMovJnNVbCsII0fhesM8bNRlLhXIuckley4a2DaD+vOdmm5G+zGkQZAPZsF80+YQ==}
+
   '@types/offscreencanvas@2019.7.3':
     resolution: {integrity: sha512-ieXiYmgSRXUDeOntE1InxjWyvEelZGP63M+cGuquuRLuIKKT1osnkXjxev9B7d1nXSug5vpunx+gNlbVxMlC9A==}
 
@@ -7211,6 +7215,10 @@ packages:
     resolution: {integrity: sha512-r9deDe9p5FJUPZAk3A59wGH7Ii9YrjjWw0jmw/liSbHl2CHiyXj6FcDXDu2K3TjVAXqiJdaw3xxwlZZr9E6nHg==}
     hasBin: true
 
+  minimatch@10.0.1:
+    resolution: {integrity: sha512-ethXTt3SGGR+95gudmqJ1eNhRO7eGEGIgYA9vnPatK4/etz2MEVDno5GMCibdMTuBMyElzIlgxMna3K94XDIDQ==}
+    engines: {node: 20 || >=22}
+
   minimatch@10.1.1:
     resolution: {integrity: sha512-enIvLvRAFZYXJzkCYG5RKmPfrFArdLv+R+lbQ53BmIMLIry74bjKzX6iHAm8WYamJkhSSEabrWN5D97XnKObjQ==}
     engines: {node: 20 || >=22}
@@ -9207,6 +9215,9 @@ packages:
   undici-types@6.21.0:
     resolution: {integrity: sha512-iwDZqg0QAGrg9Rav5H4n0M64c3mkR59cJ6wQp+7C4nI0gsmExaedaYLNO44eT4AtBBwjbTiGPMlt2Md0T9H9JQ==}
 
+  undici-types@7.16.0:
+    resolution: {integrity: sha512-Zz+aZWSj8LE6zoxD+xrjh4VfkIG8Ya6LvYkZqtUQGJPZjYl53ypCaUwWqo7eI0x66KBGeRo+mlBEkMSeSZ38Nw==}
+
   undici@6.23.0:
     resolution: {integrity: sha512-VfQPToRA5FZs/qJxLIinmU59u0r7LXqoJkCzinq3ckNJp3vKEh7jTWN589YQ5+aoAC/TGRLyJLCPKcLQbM8r9g==}
     engines: {node: '>=18.17'}
@@ -11175,18 +11186,18 @@ snapshots:
       base64-js: 1.5.1
       xmlbuilder: 14.0.0
 
-  '@expo/plugin-help@5.1.23(@types/node@20.19.28)(typescript@5.8.3)':
+  '@expo/plugin-help@5.1.23(@types/node@24.10.8)(typescript@5.8.3)':
     dependencies:
-      '@oclif/core': 2.16.0(@types/node@20.19.28)(typescript@5.8.3)
+      '@oclif/core': 2.16.0(@types/node@24.10.8)(typescript@5.8.3)
     transitivePeerDependencies:
       - '@swc/core'
       - '@swc/wasm'
       - '@types/node'
       - typescript
 
-  '@expo/plugin-warn-if-update-available@2.5.1(@types/node@20.19.28)(typescript@5.8.3)':
+  '@expo/plugin-warn-if-update-available@2.5.1(@types/node@24.10.8)(typescript@5.8.3)':
     dependencies:
-      '@oclif/core': 2.16.0(@types/node@20.19.28)(typescript@5.8.3)
+      '@oclif/core': 2.16.0(@types/node@24.10.8)(typescript@5.8.3)
       chalk: 4.1.2
       debug: 4.4.3(supports-color@8.1.1)
       ejs: 3.1.10
@@ -12136,7 +12147,7 @@ snapshots:
       widest-line: 3.1.0
       wrap-ansi: 7.0.0
 
-  '@oclif/core@2.16.0(@types/node@20.19.28)(typescript@5.8.3)':
+  '@oclif/core@2.16.0(@types/node@24.10.8)(typescript@5.8.3)':
     dependencies:
       '@types/cli-progress': 3.11.6
       ansi-escapes: 4.3.2
@@ -12161,7 +12172,7 @@ snapshots:
       strip-ansi: 6.0.1
       supports-color: 8.1.1
       supports-hyperlinks: 2.3.0
-      ts-node: 10.9.2(@types/node@20.19.28)(typescript@5.8.3)
+      ts-node: 10.9.2(@types/node@24.10.8)(typescript@5.8.3)
       tslib: 2.6.2
       widest-line: 3.1.0
       wordwrap: 1.0.0
@@ -12174,9 +12185,9 @@ snapshots:
 
   '@oclif/linewrap@1.0.0': {}
 
-  '@oclif/plugin-autocomplete@2.3.10(@types/node@20.19.28)(typescript@5.8.3)':
+  '@oclif/plugin-autocomplete@2.3.10(@types/node@24.10.8)(typescript@5.8.3)':
     dependencies:
-      '@oclif/core': 2.16.0(@types/node@20.19.28)(typescript@5.8.3)
+      '@oclif/core': 2.16.0(@types/node@24.10.8)(typescript@5.8.3)
       chalk: 4.1.2
       debug: 4.4.3(supports-color@8.1.1)
     transitivePeerDependencies:
@@ -13839,7 +13850,7 @@ snapshots:
 
   '@tsconfig/node16@1.0.4': {}
 
-  '@turbo/gen@2.7.4(@types/node@20.19.28)(typescript@5.8.3)':
+  '@turbo/gen@2.7.4(@types/node@24.10.8)(typescript@5.8.3)':
     dependencies:
       '@turbo/workspaces': 2.7.4
       commander: 10.0.0
@@ -13849,7 +13860,7 @@ snapshots:
       node-plop: 0.26.3
       picocolors: 1.0.1
       proxy-agent: 6.5.0
-      ts-node: 10.9.2(@types/node@20.19.28)(typescript@5.8.3)
+      ts-node: 10.9.2(@types/node@24.10.8)(typescript@5.8.3)
       update-check: 1.5.4
       validate-npm-package-name: 5.0.0
     transitivePeerDependencies:
@@ -14020,7 +14031,7 @@ snapshots:
 
   '@types/minimatch@6.0.0':
     dependencies:
-      minimatch: 9.0.0
+      minimatch: 10.0.1
 
   '@types/ms@2.1.0': {}
 
@@ -14036,13 +14047,17 @@ snapshots:
     dependencies:
       undici-types: 6.21.0
 
+  '@types/node@24.10.8':
+    dependencies:
+      undici-types: 7.16.0
+
   '@types/offscreencanvas@2019.7.3': {}
 
   '@types/phoenix@1.6.7': {}
 
   '@types/qrcode@1.5.6':
     dependencies:
-      '@types/node': 20.19.28
+      '@types/node': 24.10.8
 
   '@types/qs@6.14.0': {}
 
@@ -15150,7 +15165,7 @@ snapshots:
 
   earcut@3.0.2: {}
 
-  eas-cli@10.2.4(@types/node@20.19.28)(expo-modules-autolinking@1.11.3)(typescript@5.8.3):
+  eas-cli@10.2.4(@types/node@24.10.8)(expo-modules-autolinking@1.11.3)(typescript@5.8.3):
     dependencies:
       '@expo/apple-utils': 1.7.1
       '@expo/code-signing-certificates': 0.0.5
@@ -15166,8 +15181,8 @@ snapshots:
       '@expo/package-manager': 1.1.2
       '@expo/pkcs12': 0.0.8
       '@expo/plist': 0.0.20
-      '@expo/plugin-help': 5.1.23(@types/node@20.19.28)(typescript@5.8.3)
-      '@expo/plugin-warn-if-update-available': 2.5.1(@types/node@20.19.28)(typescript@5.8.3)
+      '@expo/plugin-help': 5.1.23(@types/node@24.10.8)(typescript@5.8.3)
+      '@expo/plugin-warn-if-update-available': 2.5.1(@types/node@24.10.8)(typescript@5.8.3)
       '@expo/prebuild-config': 6.7.3(expo-modules-autolinking@1.11.3)
       '@expo/results': 1.0.0
       '@expo/rudder-sdk-node': 1.1.1
@@ -15175,7 +15190,7 @@ snapshots:
       '@expo/steps': 1.0.130
       '@expo/timeago.js': 1.0.0
       '@oclif/core': 1.26.2
-      '@oclif/plugin-autocomplete': 2.3.10(@types/node@20.19.28)(typescript@5.8.3)
+      '@oclif/plugin-autocomplete': 2.3.10(@types/node@24.10.8)(typescript@5.8.3)
       '@segment/ajv-human-errors': 2.15.0(ajv@8.11.0)
       '@urql/core': 4.0.11(graphql@16.8.1)
       '@urql/exchange-retry': 1.2.0(graphql@16.8.1)
@@ -17611,6 +17626,10 @@ snapshots:
 
   mini-svg-data-uri@1.4.4: {}
 
+  minimatch@10.0.1:
+    dependencies:
+      brace-expansion: 2.0.2
+
   minimatch@10.1.1:
     dependencies:
       '@isaacs/brace-expansion': 5.0.0
@@ -19616,14 +19635,14 @@ snapshots:
 
   ts-interface-checker@0.1.13: {}
 
-  ts-node@10.9.2(@types/node@20.19.28)(typescript@5.8.3):
+  ts-node@10.9.2(@types/node@24.10.8)(typescript@5.8.3):
     dependencies:
       '@cspotcode/source-map-support': 0.8.1
       '@tsconfig/node10': 1.0.12
       '@tsconfig/node12': 1.0.11
       '@tsconfig/node14': 1.0.3
       '@tsconfig/node16': 1.0.4
-      '@types/node': 20.19.28
+      '@types/node': 24.10.8
       acorn: 8.15.0
       acorn-walk: 8.3.4
       arg: 4.1.3
@@ -19773,6 +19792,8 @@ snapshots:
   undici-types@5.26.5: {}
 
   undici-types@6.21.0: {}
+
+  undici-types@7.16.0: {}
 
   undici@6.23.0: {}
 

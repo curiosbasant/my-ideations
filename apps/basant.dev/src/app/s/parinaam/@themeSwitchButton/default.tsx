@@ -6,7 +6,7 @@ import { MoonStarIcon, SunIcon } from 'lucide-react'
 import { Button } from '~/components/ui/button'
 import { ThemeContext } from '~/features/theme/provider'
 
-export function ThemeSwitchButton() {
+export default function ThemeSwitchButton() {
   const { themeResolved, setTheme } = use(ThemeContext)
 
   return (
