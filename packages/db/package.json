@@ -7,7 +7,7 @@
   "scripts": {
     "clean": "rm -rf .turbo node_modules",
     "lint": "tsc -P tsconfig.lint.json",
-    "push": "pnpm with-env -- drizzle-kit push && pnpm with-env -- tsx src/migrate.ts",
+    "push": "(pnpm with-env -- drizzle-kit push | tee /dev/stderr | grep -q \"error\" && exit 1) && pnpm with-env -- tsx src/migrate.ts",
     "push:prod": "pnpm with-env:prod -- drizzle-kit push && pnpm with-env:prod -- tsx src/migrate.ts",
     "reset": "supabase db reset && pnpm push",
     "seed": "pnpm with-env -- tsx src/seed.ts",

@@ -1,4 +1,10 @@
-import { createElement, type ComponentProps, type ElementType, type ReactNode } from 'react'
+import {
+  createElement,
+  type ComponentProps,
+  type ElementType,
+  type JSX,
+  type ReactNode,
+} from 'react'
 import { cx, type CxOptions } from 'class-variance-authority'
 import Zip from 'jszip'
 import { twMerge } from 'tailwind-merge'

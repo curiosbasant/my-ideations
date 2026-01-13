@@ -8,7 +8,7 @@ const pgTable = pgTableCreator((tableName) => `sf__${tableName}`)
 export const sf__shortUrl = pgTable(
   'short_url',
   (c) => ({
-    id: id(),
+    id: id.primaryKey(),
     code: c.varchar().notNull().unique(),
     url: c.text().notNull(),
     createdAt: getDefaultTimezone(),

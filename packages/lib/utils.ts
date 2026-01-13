@@ -252,12 +252,12 @@ export function isDarkColor(color: string) {
 }
 
 function resolveStringParam(param: string | string[]): string
-function resolveStringParam(param?: string | string[]): string | null
+function resolveStringParam(param?: string | string[] | undefined): string | null
 function resolveStringParam(param?: string | string[]) {
   return Array.isArray(param) ? param[0] : (param ?? null)
 }
 function resolveArrayParam(param: string | string[]): string[]
-function resolveArrayParam(param?: string | string[]): string[] | null
+function resolveArrayParam(param?: string | string[] | undefined): string[] | null
 function resolveArrayParam(param?: string | string[]) {
   if (typeof param === 'string') return [param]
   return Array.isArray(param) ? param : null
