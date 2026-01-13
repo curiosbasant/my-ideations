@@ -86,6 +86,8 @@ enable_anonymous_sign_ins = true
 enable_signup = true
 # Allow/disallow testing manual linking of accounts
 enable_manual_linking = false
+# generate one using `npx supabase gen signing-key --algorithm ES256`
+signing_keys_path = "./signing-keys.json"
 
 # This hook runs before a token is issued and allows you to add additional claims based on the authentication method used.
 [auth.hook.custom_access_token]

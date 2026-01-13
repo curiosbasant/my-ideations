@@ -7,6 +7,6 @@ declare namespace NodeJS {
     readonly APP_SLASH_IMAGE?: string
     readonly EXPO_PUBLIC_SITE_URL?: string
     readonly EXPO_PUBLIC_SUPABASE_URL?: string
-    readonly EXPO_PUBLIC_SUPABASE_ANON_KEY?: string
+    readonly EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY?: string
   }
 }

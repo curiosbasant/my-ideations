@@ -1,14 +1,14 @@
 import { cookies } from 'next/headers'
 import { NextResponse, type NextRequest } from 'next/server'
 
-import { createServerClient, type Database } from '@my/lib/supabase'
+import { createServerClient, type CookieMethodsServer, type Database } from '@my/lib/supabase'
 
 export async function getSupabase() {
   const cookieStore = await cookies()
 
   return createServerClient<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!,
     {
       auth: {
         flowType: 'pkce',
@@ -28,7 +28,7 @@ export async function getSupabase() {
             // user sessions.
           }
         },
-      },
+      } satisfies CookieMethodsServer,
     },
   )
 }
@@ -36,7 +36,7 @@ export async function getSupabase() {
 export function getSupabaseMiddleware(request: NextRequest, response: NextResponse) {
   return createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!,
     {
       cookies: {
         getAll() {
@@ -49,7 +49,7 @@ export function getSupabaseMiddleware(request: NextRequest, response: NextRespon
           }
           cookiesToSet.forEach((c) => response.cookies.set(c))
         },
-      },
+      } satisfies CookieMethodsServer,
     },
   )
 }
