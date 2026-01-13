@@ -9,9 +9,11 @@
 import { initTRPC, TRPCError } from '@trpc/server'
 
 import { db } from '@my/db'
-import { withThrowOnError, type Session, type SupabaseClient } from '@my/lib/supabase'
+import { withThrowOnError, type SupabaseClient } from '@my/lib/supabase'
 import { SuperJSON } from '@my/lib/superjson'
 import { z, ZodError } from '@my/lib/zod'
+
+import { rlsCreator } from './lib/rls'
 
 /**
  * 1. CONTEXT
@@ -29,35 +31,18 @@ import { z, ZodError } from '@my/lib/zod'
  * @link https://trpc.io/docs/context
  */
 export async function createTRPCContext(opts: { headers: Headers; supabase: SupabaseClient }) {
-  const session = await getSupabaseAuthSession(opts.supabase)
+  const { data } = await opts.supabase.auth.getClaims()
+  const rls = data ? rlsCreator(db, data.claims) : db.transaction
 
   const source = opts.headers.get('x-trpc-source') ?? 'unknown'
-  console.log('>>> tRPC Request from', source, 'by', session?.user.id || 'someone')
+  console.log('>>> tRPC Request from', source, 'by', data?.claims.sub || 'someone')
 
   return {
     ...opts,
     origin: opts.headers.get('origin'),
     db,
-    session,
-  }
-}
-
-/**
- * To prevent supabase warning about `getSession` being insecure.
- * @link https://github.com/supabase/auth-js/issues/873
- */
-async function getSupabaseAuthSession(supabase: SupabaseClient) {
-  try {
-    const [{ session }, { user }] = await Promise.all([
-      withThrowOnError(supabase.auth.getSession()),
-      withThrowOnError(supabase.auth.getUser()),
-    ])
-    if (!session) throw void 0
-    // @ts-expect-error
-    delete session.user
-    return { ...session, user } as Session
-  } catch (_) {
-    return null
+    rls,
+    claims: data?.claims,
   }
 }
 
@@ -111,14 +96,13 @@ export const publicProcedure = t.procedure
  * Reusable middleware that enforces users are logged in before running the procedure
  */
 const enforceUserIsAuthenticated = t.middleware(async ({ ctx, next }) => {
-  if (!ctx.session?.user) {
+  if (!ctx.claims) {
     throw new TRPCError({ code: 'UNAUTHORIZED' })
   }
 
   return next({
     ctx: {
-      session: ctx.session,
-      authUserId: ctx.session.user.id,
+      authUserId: ctx.claims.sub,
     },
   })
 })
@@ -137,7 +121,7 @@ export const protectedProcedure = t.procedure.use(enforceUserIsAuthenticated)
 export const anonymousProcedure = t.procedure
   .input(z.object({ fullName: z.string() }))
   .use(async ({ ctx, input, next }) => {
-    if (!ctx.session?.user) {
+    if (!ctx.claims) {
       if (!input.fullName) throw new TRPCError({ code: 'FORBIDDEN' })
       const metadata = { full_name: input.fullName }
       const data = await withThrowOnError(
@@ -157,8 +141,7 @@ export const anonymousProcedure = t.procedure
 
     return next({
       ctx: {
-        session: ctx.session,
-        authUserId: ctx.session.user.id,
+        authUserId: ctx.claims.sub,
       },
     })
   })

@@ -17,8 +17,9 @@ import { z } from '@my/lib/zod'
 import { protectedProcedure, publicProcedure } from '../trpc'
 
 export const authRouter = {
-  getSession: publicProcedure.query(({ ctx }) => {
-    return ctx.session
+  getSession: publicProcedure.query(async ({ ctx: { supabase } }) => {
+    const { data } = await supabase.auth.getSession()
+    return data.session
   }),
   signUp: publicProcedure.input(signUpSchema).mutation(async ({ ctx: { supabase }, input }) => {
     const metadata = { full_name: input.fullName }
@@ -225,9 +226,10 @@ export const authRouter = {
     }),
   changePassword: protectedProcedure
     .input(changePasswordSchema)
-    .mutation(async ({ ctx: { supabase, session }, input: { currentPassword, newPassword } }) => {
+    .mutation(async ({ ctx: { supabase }, input: { currentPassword, newPassword } }) => {
+      const { data } = await supabase.auth.getUser()
       // Authenticate user if not recently signin
-      if (session.user.last_sign_in_at && !hasRecentlySignIn(session.user.last_sign_in_at)) {
+      if (data.user && data.user.last_sign_in_at && !hasRecentlySignIn(data.user.last_sign_in_at)) {
         if (!currentPassword) {
           throw new TRPCError({
             code: 'BAD_REQUEST',
@@ -235,7 +237,7 @@ export const authRouter = {
           })
         }
         const { error } = await supabase.auth.signInWithPassword({
-          phone: session.user.phone!,
+          phone: data.user.phone!,
           password: currentPassword,
         })
         if (error) throw error
