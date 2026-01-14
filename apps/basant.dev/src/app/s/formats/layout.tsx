@@ -14,6 +14,7 @@ import {
   DialogTrigger,
 } from '~/components/ui/dialog'
 import { ScrollArea } from '~/components/ui/scroll-area'
+import { CurrentYear } from '~/features/shared/components/client'
 import { FileUploadModalViews } from './client.component'
 
 export default function GamesLayout(props: PropsWithChildren) {
@@ -47,7 +48,9 @@ export default function GamesLayout(props: PropsWithChildren) {
                       Basant (Computer Instructor)
                     </a>
                   </p>
-                  <span>©{new Date().getFullYear()}</span>
+                  <span>
+                    ©<CurrentYear />
+                  </span>
                 </div>
               </div>
             </footer>

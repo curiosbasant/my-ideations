@@ -6,7 +6,7 @@ import Link from 'next/link'
 
 import { geistMono, geistSans } from '~/app/shared'
 import { ScrollArea } from '~/components/ui/scroll-area'
-import { HtmlThemed } from '~/features/shared/components/client'
+import { CurrentYear, HtmlThemed } from '~/features/shared/components/client'
 import { ThemeProvider } from '~/features/theme/server'
 import { Providers, ShareResultButton } from './client'
 
@@ -60,7 +60,9 @@ export default function ParinaamRootLayout(props: LayoutProps<'/s/parinaam'>) {
                           Basant (Computer Instructor)
                         </a>
                       </p>
-                      <span>©{new Date().getFullYear()}</span>
+                      <span>
+                        ©<CurrentYear />
+                      </span>
                       <p>
                         Thanks to{' '}
                         <a
