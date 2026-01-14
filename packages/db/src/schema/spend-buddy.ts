@@ -19,8 +19,8 @@ export const sb__group = pgTable(
 export const sb__member = pgTable(
   'group_member',
   {
-    groupId: id.references(() => sb__group.id),
-    userId: getProfileRef(),
+    groupId: id.references(() => sb__group.id).notNull(),
+    userId: getProfileRef().notNull(),
     joinedAt: getDefaultTimezone(),
   },
   (t) => [primaryKey({ columns: [t.groupId, t.userId] })],

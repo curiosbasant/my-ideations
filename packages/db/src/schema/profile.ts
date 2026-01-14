@@ -1,4 +1,5 @@
 import { index, uniqueIndex } from 'drizzle-orm/pg-core'
+import { sql } from 'drizzle-orm/sql'
 import { authUsers } from 'drizzle-orm/supabase'
 
 import { id, smallId } from '../utils/pg-column-helpers/helpers'
@@ -33,7 +34,10 @@ export const profile = pgTable(
     email: c.varchar({ length: 320 }).unique(),
     avatarUrl: c.varchar({ length: 256 }),
     postId: smallId.references(() => designation.id, { onDelete: 'set null' }),
-    createdBy: c.uuid().references(() => authUsers.id),
+    createdBy: c
+      .uuid()
+      .references(() => authUsers.id, { onDelete: 'set null' })
+      .default(sql`auth.uid()`),
     createdAt: c.timestamp({ withTimezone: true }).defaultNow().notNull(),
     updatedAt: c.timestamp({ withTimezone: true }),
   }),

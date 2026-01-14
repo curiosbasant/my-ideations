@@ -25,7 +25,7 @@ export function rlsCreator<
       } finally {
         await tx.execute(`
           -- reset
-          select set_config('request.jwt.claims', NULL, TRUE);
+          select set_config('request.jwt.claims', '{}', TRUE);
           select set_config('request.jwt.claim.sub', NULL, TRUE);
           reset role;
         `)
