@@ -1,5 +1,7 @@
 export * from './address'
 export * from './dots-and-boxes'
+export * from './person'
 export * from './profile'
+export * from './sdbms'
 export * from './snapfile'
 export * from './spend-buddy'

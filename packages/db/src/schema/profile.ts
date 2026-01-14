@@ -4,6 +4,7 @@ import { authUsers } from 'drizzle-orm/supabase'
 
 import { id, smallId } from '../utils/pg-column-helpers/helpers'
 import { pgTable, selectOnlyPolicy } from '../utils/pg-table-helpers'
+import { person } from './person'
 
 export const department = pgTable(
   'department',
@@ -34,6 +35,7 @@ export const profile = pgTable(
     email: c.varchar({ length: 320 }).unique(),
     avatarUrl: c.varchar({ length: 256 }),
     postId: smallId.references(() => designation.id, { onDelete: 'set null' }),
+    personId: id.references(() => person.id, { onDelete: 'set null' }),
     createdBy: c
       .uuid()
       .references(() => authUsers.id, { onDelete: 'set null' })

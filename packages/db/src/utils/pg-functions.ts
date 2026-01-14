@@ -11,3 +11,6 @@ function pgFn<N extends number, T = unknown>(fnName: string) {
 export const coalesce = pgFn<2>('coalesce')
 export const concat = pgFn<2, string>('concat')
 export const numNonnulls = pgFn<1, number>('num_nonnulls')
+
+export const length = (column: AnyColumn | SQLWrapper) => sql<number>`length(${column})`
+
