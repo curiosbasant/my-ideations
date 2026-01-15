@@ -9,10 +9,13 @@ import {
   type SQLWrapper,
 } from '@my/db'
 
-export function splitFullName(name: string): [string, string?] {
-  name = name.trim().replace(/ +/, ' ')
-  const li = name.lastIndexOf(' ')
-  return li === -1 ? [name] : [name.slice(0, li), name.slice(li + 1)]
+export function splitFullName(fullName: string): { firstName: string; lastName: string | null } {
+  const parts = fullName.split(/ +/)
+  if (parts.length === 1) return { firstName: fullName, lastName: null }
+  if (parts.length === 2) return { firstName: parts[0], lastName: parts[1] }
+
+  const lastName = parts.pop() ?? null
+  return { firstName: parts.join(' '), lastName }
 }
 
 export const userDisplayName = coalesce<string>(

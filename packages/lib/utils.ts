@@ -136,18 +136,17 @@ export function safeParseJsonText(text: string) {
 }
 
 /**
- * Groups an array of items by a specified key.
- * Return `null` to skip the current iteration.
+ * Groups an array of objects by a specific key or callback logic
  */
-export function groupBy<T extends unknown, U extends PropertyKey>(
-  arr: T[],
-  fn: (item: T, index: number) => U | null,
+export function groupBy<T extends Record<PropertyKey, any>, K extends keyof T>(
+  array: T[],
+  cbOrKey: K | ((arg: T, index: number) => K),
 ) {
-  return arr.reduce<Partial<Record<U, T[]>>>((acc, item, index) => {
-    const key = fn(item, index)
-    if (key !== null) {
-      key in acc ? acc[key]!.push(item) : (acc[key] = [item])
-    }
+  const callback = typeof cbOrKey === 'function' ? cbOrKey : () => cbOrKey
+  return array.reduce<Partial<Record<K, T[]>>>((acc, item, index) => {
+    const key = item[callback(item, index)]
+    acc[key] ??= []
+    acc[key].push(item)
     return acc
   }, {})
 }

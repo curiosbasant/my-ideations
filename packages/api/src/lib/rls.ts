@@ -22,6 +22,9 @@ export function rlsCreator<
           set local role ${jwtPayload.role ?? 'anon'};
         `)
         return await txCallback(tx)
+      } catch (err) {
+        console.error(err)
+        throw err
       } finally {
         await tx.execute(`
           -- reset
