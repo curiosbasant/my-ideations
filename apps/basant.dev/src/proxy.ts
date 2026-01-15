@@ -20,7 +20,7 @@ export async function proxy(request: NextRequest) {
         // For the root path on a subdomain, rewrite to the subdomain page
       : rewriteTo(`/s/${subdomain + (pathname === '/' ? '' : pathname) + search}`)
 
-    if (subdomain === 'priyasthan') {
+    if (subdomain === 'priyasthan' || subdomain === 'sdbms') {
       const supabase = getSupabaseMiddleware(request, response)
       await supabase.auth.getClaims()
     }
