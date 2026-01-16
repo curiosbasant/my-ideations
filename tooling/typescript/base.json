@@ -2,6 +2,8 @@
   "$schema": "https://json.schemastore.org/tsconfig",
   "display": "Default",
   "compilerOptions": {
+    "types": ["node"],
+
     /* LANGUAGE COMPILATION OPTIONS */
     "target": "ES2020",
     "composite": false,
@@ -52,6 +54,7 @@
     "skipLibCheck": true,
     "useDefineForClassFields": true
   },
+
   // Remember to also copy these, if overriding
   "exclude": ["node_modules", "archive", "*.archive", "*.archive.*"]
 }
