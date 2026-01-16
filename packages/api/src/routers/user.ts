@@ -13,6 +13,7 @@ export const userRouter = {
         displayName: userDisplayName,
         avatarUrl: schema.profile.avatarUrl,
         designation: schema.designation,
+        personId: schema.profile.personId,
       })
       .from(schema.profile)
       .leftJoin(schema.designation, eq(schema.designation.id, schema.profile.postId))
