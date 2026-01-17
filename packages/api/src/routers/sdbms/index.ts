@@ -5,9 +5,49 @@ import { protectedProcedure, publicProcedure } from '../../trpc'
 import { importFileProcedure } from './procedure-import-file'
 
 export const sdbmsRouter = {
+  institute: {
+    list: publicProcedure.query(({ ctx: { db } }) => {
+      return db
+        .select({
+          id: schema.sd__institute.id,
+          name: schema.sd__institute.name,
+        })
+        .from(schema.sd__institute)
+    }),
+  },
   session: {
     list: publicProcedure.query(({ ctx: { db } }) => {
       return db.select().from(schema.sd__session)
+    }),
+  },
+  teacher: {
+    create: publicProcedure
+      .input(
+        z.object({
+          instituteId: z.number(),
+          firstName: z.string(),
+          lastName: z.string().nullable(),
+          gender: z.number(),
+        }),
+      )
+      .mutation(async ({ input, ctx: { rls } }) => {
+        return rls(async (tx) => {
+          const [person] = await tx
+            .insert(schema.person)
+            .values({ firstName: input.firstName, lastName: input.lastName, gender: input.gender })
+            .returning({ id: schema.person.id })
+          const [[teacher]] = await Promise.all([
+            tx
+              .insert(schema.sd__teacher)
+              .values({ personId: person.id, instituteId: input.instituteId })
+              .returning({ id: schema.sd__teacher.id }),
+            tx
+              .update(schema.profile)
+              .set({ personId: person.id })
+              .where(eq(schema.profile.createdBy, authUid)),
+          ])
+          return teacher.id
+        })
     }),
   },
   student: {

@@ -20,6 +20,15 @@ export const sd__institute = pgTable(
   (t) => [index().on(t.createdAt.desc())],
 )
 
+export const sd__teacher = pgTable(
+  'teacher',
+  withCommonColumns(() => ({
+    personId: id.references(() => person.id).notNull(),
+    instituteId: id.references(() => sd__institute.id).notNull(),
+  })),
+  (t) => [uniqueIndex().on(t.personId), index().on(t.instituteId), index().on(t.createdAt.desc())],
+)
+
 export const sd__student = pgTable(
   'student',
   withCommonColumns((c) => ({

@@ -9,7 +9,19 @@ export const importFileAction = createAction(async (payload: { sessionId: number
   await api.sdbms.student.importFile(payload)
 })
 
-export const connectProfileAction = createAction(async (payload: { srNo: string; dob: string }) => {
+export const actionConnectStudent = createAction(async (payload: { srNo: string; dob: string }) => {
   await api.sdbms.student.connectProfile(payload)
   revalidatePath('/')
 })
+
+export const actionCreateTeacher = createAction(
+  async (payload: {
+    instituteId: number
+    firstName: string
+    lastName: string | null
+    gender: number
+  }) => {
+    await api.sdbms.teacher.create(payload)
+    revalidatePath('/')
+  },
+)
