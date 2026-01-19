@@ -1,15 +1,10 @@
 import { index, pgTableCreator, uniqueIndex } from 'drizzle-orm/pg-core'
 
-import { id, smallId, withCommonColumns } from '../utils/pg-column-helpers'
+import { CASCADE_ON_UPDATE, id, smallId, withCommonColumns } from '../utils/pg-column-helpers'
 import { address } from './address'
 import { person } from './person'
 
 const pgTable = pgTableCreator((tableName) => `sd__${tableName}`)
-
-export const sd__session = pgTable('session', (c) => ({
-  id: smallId.primaryKey(),
-  name: c.varchar().unique().notNull(),
-}))
 
 export const sd__institute = pgTable(
   'institute',
@@ -48,7 +43,7 @@ export const sd__class = pgTable(
     instituteId: id.references(() => sd__institute.id).notNull(),
     numeral: smallId().notNull(),
     name: c.varchar().notNull(),
-    stream: id.references(() => sd__classStream.id),
+    stream: id.references(() => sd__luStream.id, CASCADE_ON_UPDATE),
   }),
   (t) => [uniqueIndex().on(t.instituteId, t.numeral)],
 )
@@ -67,7 +62,7 @@ export const sd__classStudent = pgTable(
   'class_student',
   (c) => ({
     id: id.primaryKey(),
-    sessionId: smallId.references(() => sd__session.id).notNull(),
+    sessionId: smallId.references(() => sd__luSession.id, CASCADE_ON_UPDATE).notNull(),
     instituteId: id.references(() => sd__institute.id).notNull(),
     classId: smallId.references(() => sd__class.id).notNull(),
     sectionId: smallId.references(() => sd__classSection.id).notNull(),
@@ -77,9 +72,35 @@ export const sd__classStudent = pgTable(
   (t) => [uniqueIndex().on(t.sessionId, t.instituteId, t.classId, t.sectionId, t.studentId)],
 )
 
+export const sd__classStudentMarks = pgTable(
+  'class_student_mark',
+  withCommonColumns((c) => ({
+    exam: smallId.references(() => sd__luExam.id, CASCADE_ON_UPDATE).notNull(),
+    subject: smallId.references(() => sd__luSubject.id, CASCADE_ON_UPDATE).notNull(),
+    classStudentId: smallId.references(() => sd__classStudent.id).notNull(),
+    mark: c.smallint(),
+  })),
+  (t) => [uniqueIndex().on(t.exam, t.subject, t.classStudentId)],
+)
+
 // ~~~~~~ Lookup Tables ~~~~~~
 
-export const sd__classStream = pgTable('class_stream', (c) => ({
+export const sd__luExam = pgTable('lu_exam', (c) => ({
+  id: smallId.primaryKey(),
+  name: c.varchar().unique().notNull(),
+}))
+
+export const sd__luSession = pgTable('lu_session', (c) => ({
+  id: smallId.primaryKey(),
+  name: c.varchar().unique().notNull(),
+}))
+
+export const sd__luStream = pgTable('lu_stream', (c) => ({
+  id: smallId.primaryKey(),
+  name: c.varchar().unique().notNull(),
+}))
+
+export const sd__luSubject = pgTable('lu_subject', (c) => ({
   id: smallId.primaryKey(),
   name: c.varchar().unique().notNull(),
 }))

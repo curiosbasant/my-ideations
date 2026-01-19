@@ -1,7 +1,12 @@
 import { eq, sql } from 'drizzle-orm'
 import { check, index, primaryKey } from 'drizzle-orm/pg-core'
 
-import { getTimestampColumns, id, smallId } from '../utils/pg-column-helpers/helpers'
+import {
+  CASCADE_ON_UPDATE,
+  getTimestampColumns,
+  id,
+  smallId,
+} from '../utils/pg-column-helpers/helpers'
 import { length } from '../utils/pg-functions'
 import { pgTable } from '../utils/pg-table-helpers'
 import { address } from './address'
@@ -13,9 +18,9 @@ export const person = pgTable(
     firstName: c.varchar().notNull(),
     lastName: c.varchar(),
     dob: c.date(),
-    category: smallId.references(() => personCategory.id),
-    gender: smallId.references(() => personGender.id).notNull(),
-    religion: smallId.references(() => personReligion.id),
+    category: smallId.references(() => personCategory.id, CASCADE_ON_UPDATE),
+    gender: smallId.references(() => personGender.id, CASCADE_ON_UPDATE).notNull(),
+    religion: smallId.references(() => personReligion.id, CASCADE_ON_UPDATE),
     contactNo: c.varchar(),
     minority: c.boolean(),
     bpl: c.boolean(),
@@ -33,7 +38,7 @@ export const personRelation = pgTable(
   () => ({
     personId: id.references(() => person.id).notNull(),
     relativeId: id.references(() => person.id).notNull(),
-    relation: smallId.references(() => personRelationType.id).notNull(),
+    relation: smallId.references(() => personRelationType.id, CASCADE_ON_UPDATE).notNull(),
   }),
   (t) => [primaryKey({ columns: [t.personId, t.relativeId] })],
 )
@@ -42,7 +47,7 @@ export const personDocument = pgTable(
   'person_document',
   (c) => ({
     personId: id.references(() => person.id).notNull(),
-    type: smallId.references(() => personDocumentType.id).notNull(),
+    type: smallId.references(() => personDocumentType.id, CASCADE_ON_UPDATE).notNull(),
     number: c.text(),
     documentUrl: c.text().notNull(),
   }),
@@ -51,27 +56,27 @@ export const personDocument = pgTable(
 
 // ~~~~~~ Lookup Tables ~~~~~~
 
-export const personCategory = pgTable('person_category', (c) => ({
+export const personCategory = pgTable('person_lu_category', (c) => ({
   id: smallId().primaryKey(),
   name: c.varchar().unique().notNull(),
 }))
 
-export const personDocumentType = pgTable('person_document_type', (c) => ({
+export const personDocumentType = pgTable('person_lu_document_type', (c) => ({
   id: smallId().primaryKey(),
   name: c.varchar().unique().notNull(),
 }))
 
-export const personGender = pgTable('person_gender', (c) => ({
+export const personGender = pgTable('person_lu_gender', (c) => ({
   id: smallId().primaryKey(),
   name: c.varchar().unique().notNull(),
 }))
 
-export const personRelationType = pgTable('person_relation_type', (c) => ({
+export const personRelationType = pgTable('person_lu_relation_type', (c) => ({
   id: smallId().primaryKey(),
   name: c.varchar().unique().notNull(),
 }))
 
-export const personReligion = pgTable('person_religion', (c) => ({
+export const personReligion = pgTable('person_lu_religion', (c) => ({
   id: smallId().primaryKey(),
   name: c.varchar().unique().notNull(),
 }))

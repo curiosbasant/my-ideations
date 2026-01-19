@@ -10,7 +10,10 @@ import { CurrentYear, HtmlThemed } from '~/features/shared/components/client'
 import { ThemeProvider } from '~/features/theme/server'
 
 export const metadata: Metadata = {
-  title: 'SDBMS',
+  title: {
+    template: '%s | SDBMS',
+    absolute: 'SDBMS',
+  },
   description: 'Student DataBase Management System',
 }
 

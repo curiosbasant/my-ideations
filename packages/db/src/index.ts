@@ -4,4 +4,5 @@ export { authUid } from 'drizzle-orm/supabase'
 
 export * from './client'
 export * as schema from './schema'
+export * from './utils/fn-helpers'
 export * from './utils/pg-functions'

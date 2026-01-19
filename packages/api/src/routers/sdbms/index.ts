@@ -2,22 +2,36 @@ import { and, authUid, eq, schema } from '@my/db'
 import { z } from '@my/lib/zod'
 
 import { protectedProcedure, publicProcedure } from '../../trpc'
+import { classRouter } from './class'
 import { importFileProcedure } from './procedure-import-file'
 
 export const sdbmsRouter = {
+  class: classRouter,
+  exam: {
+    list: publicProcedure.query(({ ctx: { rls } }) => {
+      return rls((tx) => tx.select().from(schema.sd__luExam))
+    }),
+  },
   institute: {
-    list: publicProcedure.query(({ ctx: { db } }) => {
-      return db
-        .select({
-          id: schema.sd__institute.id,
-          name: schema.sd__institute.name,
-        })
-        .from(schema.sd__institute)
+    list: publicProcedure.query(({ ctx: { rls } }) => {
+      return rls((tx) =>
+        tx
+          .select({
+            id: schema.sd__institute.id,
+            name: schema.sd__institute.name,
+          })
+          .from(schema.sd__institute),
+      )
     }),
   },
   session: {
-    list: publicProcedure.query(({ ctx: { db } }) => {
-      return db.select().from(schema.sd__session)
+    list: publicProcedure.query(({ ctx: { rls } }) => {
+      return rls((tx) => tx.select().from(schema.sd__luSession))
+    }),
+  },
+  subject: {
+    list: publicProcedure.query(({ ctx: { rls } }) => {
+      return rls((tx) => tx.select().from(schema.sd__luSubject))
     }),
   },
   teacher: {
@@ -48,7 +62,7 @@ export const sdbmsRouter = {
           ])
           return teacher.id
         })
-    }),
+      }),
   },
   student: {
     connectProfile: protectedProcedure

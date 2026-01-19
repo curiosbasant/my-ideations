@@ -1,26 +1,19 @@
-import { Suspense } from 'react'
+import type { Metadata } from 'next/types'
 
 import { FormSubmitButton } from '~/components/forms/client'
 import { FormField } from '~/components/forms/shared'
 import { Input } from '~/components/ui/input'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '~/components/ui/select'
-import { getSessions } from '~/features/sdbms/dal'
+import { FormFieldSelectSession } from '~/features/sdbms/components/form-fields'
 import { FormWrapper } from './client'
+
+export const metadata: Metadata = {
+  title: 'Import File',
+}
 
 export default function ImportPage() {
   return (
     <FormWrapper>
-      <FormField label='Session'>
-        <Suspense>
-          <SessionOptions />
-        </Suspense>
-      </FormField>
+      <FormFieldSelectSession />
       <FormField label='Excel File'>
         <Input
           className='backdrop-blur-2xs'
@@ -33,24 +26,5 @@ export default function ImportPage() {
         <FormSubmitButton>Submit</FormSubmitButton>
       </div>
     </FormWrapper>
-  )
-}
-
-async function SessionOptions() {
-  const sessions = await getSessions()
-  const lastSessionId = Math.max(...sessions.map((s) => s.id))
-  return (
-    <Select name='session' defaultValue={lastSessionId.toString()}>
-      <SelectTrigger className='backdrop-blur-2xs w-full'>
-        <SelectValue />
-      </SelectTrigger>
-      <SelectContent>
-        {sessions.map((opt) => (
-          <SelectItem value={String(opt.id)} key={opt.id}>
-            {opt.name}
-          </SelectItem>
-        ))}
-      </SelectContent>
-    </Select>
   )
 }
