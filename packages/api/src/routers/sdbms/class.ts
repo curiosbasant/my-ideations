@@ -1,4 +1,13 @@
-import { and, authUserPersonId, eq, personFullName, schema, sql, type DbTransaction } from '@my/db'
+import {
+  and,
+  authUserPersonId,
+  eq,
+  now,
+  personFullName,
+  schema,
+  sql,
+  type DbTransaction,
+} from '@my/db'
 import { z } from '@my/lib/zod'
 
 import { protectedProcedure } from '../../trpc'
@@ -44,6 +53,7 @@ export const classRouter = {
                 class: {
                   id: withStudentProfile.classId,
                   standard: withStudentProfile.numeral,
+                  studentId: withStudentProfile.classStudentId,
                 },
                 section: {
                   id: withStudentProfile.sectionId,
@@ -78,6 +88,38 @@ export const classRouter = {
               )
 
             return students
+          })
+        }),
+      set: protectedProcedure
+        .input(
+          z.object({
+            exam: z.number(),
+            classStudentId: z.number(),
+            subject: z.number(),
+            mark: z.number(),
+          }),
+        )
+        .query(async ({ input, ctx: { rls } }) => {
+          return rls(async (tx) => {
+            return tx
+              .insert(schema.sd__classStudentMarks)
+              .values({
+                exam: input.exam,
+                subject: input.subject,
+                classStudentId: input.classStudentId,
+                mark: input.mark,
+              })
+              .onConflictDoUpdate({
+                target: [
+                  schema.sd__classStudentMarks.exam,
+                  schema.sd__classStudentMarks.subject,
+                  schema.sd__classStudentMarks.classStudentId,
+                ],
+                set: {
+                  mark: input.mark,
+                  updatedAt: now(),
+                },
+              })
           })
         }),
     },

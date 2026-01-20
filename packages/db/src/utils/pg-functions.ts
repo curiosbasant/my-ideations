@@ -17,6 +17,7 @@ export const coalesce = pgFn<2>('coalesce')
 export const concat = pgFn<2, string>('concat')
 export const numNonnulls = pgFn<1, number>('num_nonnulls')
 export const length = (column: Expression) => sql<number>`length(${column})`
+export const now = () => sql`now()`
 
 export function nullIf<T>(expressionLeft: Expression, expressionRight: Expression | string) {
   return sql<T | null>`nullif(${expressionLeft}, ${expressionRight})`

@@ -25,3 +25,9 @@ export const actionCreateTeacher = createAction(
     revalidatePath('/')
   },
 )
+
+export const actionSetStudentClassMark = createAction(
+  async (payload: { exam: number; classStudentId: number; subject: number; mark: number }) => {
+    await api.sdbms.class.student.mark.set(payload)
+  },
+)

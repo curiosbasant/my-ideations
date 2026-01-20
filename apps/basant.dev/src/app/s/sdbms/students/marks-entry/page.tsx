@@ -12,6 +12,7 @@ import {
   FormFieldSelectSubject,
 } from '~/features/sdbms/components/form-fields'
 import { getClassStudentsMark } from '~/features/sdbms/dal'
+import { MarkInput } from './client'
 
 export default async function StudentsMarksEntryPage(
   props: PageProps<'/s/sdbms/students/marks-entry'>,
@@ -69,10 +70,11 @@ async function StudentsList(props: { studentsPromise: ReturnType<typeof getClass
               </div>
               <span className='text-muted-foreground text-sm'>{student.fName}</span>
             </div>
-            <Input
+            <MarkInput
+              classStudentId={student.class.studentId}
               className='placeholder:text-muted-foreground/50 size-full text-center text-xl font-bold tabular-nums leading-normal shadow-inner md:text-2xl'
               placeholder='0'
-              name={`mark_${student.id}`}
+              name={`mark_${student.class.studentId}`}
               defaultValue={student.mark ?? undefined}
               type='text'
             />
