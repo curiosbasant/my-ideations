@@ -1,4 +1,4 @@
-import { and, authUid, eq, schema } from '@my/db'
+import { and, authUid, authUserPersonId, eq, schema } from '@my/db'
 import { z } from '@my/lib/zod'
 
 import { protectedProcedure, publicProcedure } from '../../trpc'
@@ -89,5 +89,24 @@ export const sdbmsRouter = {
         })
       }),
     importFile: importFileProcedure,
+  },
+  user: {
+    role: protectedProcedure.query(async ({ ctx: { rls } }) => {
+      return rls(async (tx) => {
+        const [[teacherExists], [studentExists]] = await Promise.all([
+          tx
+            .select({ id: schema.sd__teacher.id })
+            .from(schema.sd__teacher)
+            .where(eq(schema.sd__teacher.personId, authUserPersonId)),
+          tx
+            .select({ id: schema.sd__student.id })
+            .from(schema.sd__student)
+            .where(eq(schema.sd__student.personId, authUserPersonId)),
+        ])
+        if (teacherExists) return 'teacher'
+        if (studentExists) return 'student'
+        return null
+      })
+    }),
   },
 }

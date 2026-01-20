@@ -27,3 +27,7 @@ export const getClassStudentsMark = cache(
     return api.sdbms.class.student.mark.list({ sessionId, exam, standard, subject })
   },
 )
+
+export const getUserRole = cache(() => {
+  return api.sdbms.user.role()
+})
