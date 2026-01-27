@@ -7,6 +7,7 @@ import Link from 'next/link'
 import { geistMono, geistSans } from '~/app/shared'
 import { ScrollArea } from '~/components/ui/scroll-area'
 import { CurrentYear, HtmlThemed } from '~/features/shared/components/client'
+import { ProfileDropdownMenu } from '~/features/shared/components/profile-dropdown'
 import { ThemeProvider } from '~/features/theme/server'
 
 export const metadata: Metadata = {
@@ -26,7 +27,7 @@ export default async function SdbmsRootLayout(props: LayoutProps<'/s/sdbms'>) {
             <ScrollArea className='size-full'>
               <div className='isolate flex min-h-full w-full flex-col divide-y [--page-padding:--spacing(2)] [--page-size:var(--container-7xl)] sm:[--page-padding:--spacing(4)] md:[--page-padding:--spacing(8)]'>
                 <header className='bg-background/80 px-(--page-padding) sticky top-0 z-10 backdrop-blur-sm'>
-                  <div className='max-w-(--page-size) m-auto flex items-center gap-4 py-3'>
+                  <div className='max-w-(--page-size) m-auto flex items-center gap-4 py-2'>
                     <div className='@container flex-1'>
                       <Link href='/' className='inline-flex items-center gap-4'>
                         {/* <img src='/public/icons/parinaam.svg' width={26} height={26} alt='Logo' /> */}
@@ -35,6 +36,7 @@ export default async function SdbmsRootLayout(props: LayoutProps<'/s/sdbms'>) {
                         </span>
                       </Link>
                     </div>
+                    <ProfileDropdownMenu />
                   </div>
                 </header>
                 <div className='px-(--page-padding) flex flex-1'>
