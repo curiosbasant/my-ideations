@@ -1,6 +1,10 @@
-import { index, pgTableCreator, uniqueIndex } from 'drizzle-orm/pg-core'
+import { and, eq, exists, sql } from 'drizzle-orm'
+import { index, pgPolicy, pgTableCreator, uniqueIndex } from 'drizzle-orm/pg-core'
 
+import { authUserProfileId } from '../utils/fn-helpers'
 import { CASCADE_ON_UPDATE, id, smallId, withCommonColumns } from '../utils/pg-column-helpers'
+import { insertOnlyPolicy, selectOnlyPolicy } from '../utils/pg-table-helpers'
+import { qb } from '../utils/qb'
 import { address } from './address'
 import { person } from './person'
 
@@ -12,7 +16,7 @@ export const sd__institute = pgTable(
     name: c.varchar().notNull(),
     addressId: id.references(() => address.id),
   })),
-  (t) => [index().on(t.createdAt.desc())],
+  (t) => [selectOnlyPolicy, index().on(t.createdAt.desc())],
 )
 
 export const sd__teacher = pgTable(
@@ -21,7 +25,13 @@ export const sd__teacher = pgTable(
     personId: id.references(() => person.id).notNull(),
     instituteId: id.references(() => sd__institute.id).notNull(),
   })),
-  (t) => [uniqueIndex().on(t.personId), index().on(t.instituteId), index().on(t.createdAt.desc())],
+  (t) => [
+    selectOnlyPolicy,
+    insertOnlyPolicy,
+    uniqueIndex().on(t.personId),
+    index().on(t.instituteId),
+    index().on(t.createdAt.desc()),
+  ],
 )
 
 export const sd__student = pgTable(
@@ -33,7 +43,11 @@ export const sd__student = pgTable(
     admissionDate: c.date(),
     distanceKm: c.smallint(),
   })),
-  (t) => [index().on(t.createdAt.desc()), uniqueIndex().on(t.instituteId, t.admissionNo)],
+  (t) => [
+    selectOnlyPolicy,
+    index().on(t.createdAt.desc()),
+    uniqueIndex().on(t.instituteId, t.admissionNo),
+  ],
 )
 
 export const sd__class = pgTable(
@@ -45,7 +59,7 @@ export const sd__class = pgTable(
     name: c.varchar().notNull(),
     stream: id.references(() => sd__luStream.id, CASCADE_ON_UPDATE),
   }),
-  (t) => [uniqueIndex().on(t.instituteId, t.numeral)],
+  (t) => [selectOnlyPolicy, uniqueIndex().on(t.instituteId, t.numeral)],
 )
 
 export const sd__classSection = pgTable(
@@ -55,7 +69,7 @@ export const sd__classSection = pgTable(
     classId: smallId.references(() => sd__class.id).notNull(),
     name: c.varchar().notNull(),
   }),
-  (t) => [uniqueIndex().on(t.classId, t.name)],
+  (t) => [selectOnlyPolicy, uniqueIndex().on(t.classId, t.name)],
 )
 
 export const sd__classStudent = pgTable(
@@ -69,7 +83,10 @@ export const sd__classStudent = pgTable(
     studentId: id.references(() => sd__student.id).notNull(),
     rollNo: c.smallint(),
   }),
-  (t) => [uniqueIndex().on(t.sessionId, t.instituteId, t.classId, t.sectionId, t.studentId)],
+  (t) => [
+    selectOnlyPolicy,
+    uniqueIndex().on(t.sessionId, t.instituteId, t.classId, t.sectionId, t.studentId),
+  ],
 )
 
 export const sd__classStudentMarks = pgTable(
@@ -80,27 +97,58 @@ export const sd__classStudentMarks = pgTable(
     classStudentId: smallId.references(() => sd__classStudent.id).notNull(),
     mark: c.smallint(),
   })),
-  (t) => [uniqueIndex().on(t.exam, t.subject, t.classStudentId)],
+  (t) => [
+    selectOnlyPolicy,
+    pgPolicy('allow_insert_to_teachers', {
+      for: 'insert',
+      withCheck: and(
+        eq(t.createdBy, authUserProfileId),
+        exists(
+          qb
+            .select({ success: sql<number>`1` })
+            .from(sd__teacher)
+            .where(eq(sd__teacher.createdBy, t.createdBy)),
+        ),
+      ),
+    }),
+    uniqueIndex().on(t.exam, t.subject, t.classStudentId),
+  ],
 )
 
 // ~~~~~~ Lookup Tables ~~~~~~
 
-export const sd__luExam = pgTable('lu_exam', (c) => ({
-  id: smallId.primaryKey(),
-  name: c.varchar().unique().notNull(),
-}))
+export const sd__luExam = pgTable(
+  'lu_exam',
+  (c) => ({
+    id: smallId.primaryKey(),
+    name: c.varchar().unique().notNull(),
+  }),
+  () => [selectOnlyPolicy],
+)
 
-export const sd__luSession = pgTable('lu_session', (c) => ({
-  id: smallId.primaryKey(),
-  name: c.varchar().unique().notNull(),
-}))
+export const sd__luSession = pgTable(
+  'lu_session',
+  (c) => ({
+    id: smallId.primaryKey(),
+    name: c.varchar().unique().notNull(),
+  }),
+  () => [selectOnlyPolicy],
+)
 
-export const sd__luStream = pgTable('lu_stream', (c) => ({
-  id: smallId.primaryKey(),
-  name: c.varchar().unique().notNull(),
-}))
+export const sd__luStream = pgTable(
+  'lu_stream',
+  (c) => ({
+    id: smallId.primaryKey(),
+    name: c.varchar().unique().notNull(),
+  }),
+  () => [selectOnlyPolicy],
+)
 
-export const sd__luSubject = pgTable('lu_subject', (c) => ({
-  id: smallId.primaryKey(),
-  name: c.varchar().unique().notNull(),
-}))
+export const sd__luSubject = pgTable(
+  'lu_subject',
+  (c) => ({
+    id: smallId.primaryKey(),
+    name: c.varchar().unique().notNull(),
+  }),
+  () => [selectOnlyPolicy],
+)

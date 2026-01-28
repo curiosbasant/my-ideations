@@ -8,7 +8,7 @@ import {
   smallId,
 } from '../utils/pg-column-helpers/helpers'
 import { length } from '../utils/pg-functions'
-import { pgTable } from '../utils/pg-table-helpers'
+import { pgTable, selectOnlyPolicy } from '../utils/pg-table-helpers'
 import { address } from './address'
 
 export const person = pgTable(
@@ -56,27 +56,47 @@ export const personDocument = pgTable(
 
 // ~~~~~~ Lookup Tables ~~~~~~
 
-export const personCategory = pgTable('person_lu_category', (c) => ({
-  id: smallId().primaryKey(),
-  name: c.varchar().unique().notNull(),
-}))
+export const personCategory = pgTable(
+  'person_lu_category',
+  (c) => ({
+    id: smallId().primaryKey(),
+    name: c.varchar().unique().notNull(),
+  }),
+  () => [selectOnlyPolicy],
+)
 
-export const personDocumentType = pgTable('person_lu_document_type', (c) => ({
-  id: smallId().primaryKey(),
-  name: c.varchar().unique().notNull(),
-}))
+export const personDocumentType = pgTable(
+  'person_lu_document_type',
+  (c) => ({
+    id: smallId().primaryKey(),
+    name: c.varchar().unique().notNull(),
+  }),
+  () => [selectOnlyPolicy],
+)
 
-export const personGender = pgTable('person_lu_gender', (c) => ({
-  id: smallId().primaryKey(),
-  name: c.varchar().unique().notNull(),
-}))
+export const personGender = pgTable(
+  'person_lu_gender',
+  (c) => ({
+    id: smallId().primaryKey(),
+    name: c.varchar().unique().notNull(),
+  }),
+  () => [selectOnlyPolicy],
+)
 
-export const personRelationType = pgTable('person_lu_relation_type', (c) => ({
-  id: smallId().primaryKey(),
-  name: c.varchar().unique().notNull(),
-}))
+export const personRelationType = pgTable(
+  'person_lu_relation_type',
+  (c) => ({
+    id: smallId().primaryKey(),
+    name: c.varchar().unique().notNull(),
+  }),
+  () => [selectOnlyPolicy],
+)
 
-export const personReligion = pgTable('person_lu_religion', (c) => ({
-  id: smallId().primaryKey(),
-  name: c.varchar().unique().notNull(),
-}))
+export const personReligion = pgTable(
+  'person_lu_religion',
+  (c) => ({
+    id: smallId().primaryKey(),
+    name: c.varchar().unique().notNull(),
+  }),
+  () => [selectOnlyPolicy],
+)
