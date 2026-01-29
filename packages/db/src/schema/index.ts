@@ -1,6 +1,7 @@
 export * from './address'
 export * from './dots-and-boxes'
 export * from './person'
+export * from './person-document'
 export * from './profile'
 export * from './sdbms'
 export * from './snapfile'

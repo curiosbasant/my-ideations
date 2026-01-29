@@ -1,11 +1,6 @@
 import { db } from '../client'
-import {
-  personCategory,
-  personDocumentType,
-  personGender,
-  personRelationType,
-  personReligion,
-} from '../schema/person'
+import { personCategory, personGender, personRelationType, personReligion } from '../schema/person'
+import { personDocumentType } from '../schema/person-document'
 
 export default () => {
   return db.transaction(async (tx) => {

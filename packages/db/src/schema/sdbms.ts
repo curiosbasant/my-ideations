@@ -1,6 +1,14 @@
-import { index, pgTableCreator, uniqueIndex } from 'drizzle-orm/pg-core'
+import { eq, exists } from 'drizzle-orm'
+import { index, pgPolicy, pgTableCreator, uniqueIndex } from 'drizzle-orm/pg-core'
+import { authenticatedRole } from 'drizzle-orm/supabase'
 
 import { CASCADE_ON_UPDATE, id, smallId, withCommonColumns } from '../utils/pg-column-helpers'
+import {
+  policyAllowAuthenticatedInsert,
+  policyAllowAuthenticatedSelect,
+  policyAllowPublicSelect,
+} from '../utils/pg-table-helpers'
+import { qb } from '../utils/qb'
 import { address } from './address'
 import { person } from './person'
 
@@ -12,7 +20,7 @@ export const sd__institute = pgTable(
     name: c.varchar().notNull(),
     addressId: id.references(() => address.id),
   })),
-  (t) => [index().on(t.createdAt.desc())],
+  (t) => [index().on(t.createdAt.desc()), policyAllowPublicSelect],
 )
 
 export const sd__teacher = pgTable(
@@ -21,7 +29,13 @@ export const sd__teacher = pgTable(
     personId: id.references(() => person.id).notNull(),
     instituteId: id.references(() => sd__institute.id).notNull(),
   })),
-  (t) => [uniqueIndex().on(t.personId), index().on(t.instituteId), index().on(t.createdAt.desc())],
+  (t) => [
+    uniqueIndex().on(t.personId),
+    index().on(t.instituteId),
+    index().on(t.createdAt.desc()),
+    policyAllowAuthenticatedSelect,
+    policyAllowAuthenticatedInsert,
+  ],
 )
 
 export const sd__student = pgTable(
@@ -33,7 +47,11 @@ export const sd__student = pgTable(
     admissionDate: c.date(),
     distanceKm: c.smallint(),
   })),
-  (t) => [index().on(t.createdAt.desc()), uniqueIndex().on(t.instituteId, t.admissionNo)],
+  (t) => [
+    index().on(t.createdAt.desc()),
+    uniqueIndex().on(t.instituteId, t.admissionNo),
+    policyAllowAuthenticatedSelect,
+  ],
 )
 
 export const sd__class = pgTable(
@@ -45,7 +63,7 @@ export const sd__class = pgTable(
     name: c.varchar().notNull(),
     stream: id.references(() => sd__luStream.id, CASCADE_ON_UPDATE),
   }),
-  (t) => [uniqueIndex().on(t.instituteId, t.numeral)],
+  (t) => [uniqueIndex().on(t.instituteId, t.numeral), policyAllowPublicSelect],
 )
 
 export const sd__classSection = pgTable(
@@ -55,7 +73,7 @@ export const sd__classSection = pgTable(
     classId: smallId.references(() => sd__class.id).notNull(),
     name: c.varchar().notNull(),
   }),
-  (t) => [uniqueIndex().on(t.classId, t.name)],
+  (t) => [uniqueIndex().on(t.classId, t.name), policyAllowPublicSelect],
 )
 
 export const sd__classStudent = pgTable(
@@ -69,7 +87,10 @@ export const sd__classStudent = pgTable(
     studentId: id.references(() => sd__student.id).notNull(),
     rollNo: c.smallint(),
   }),
-  (t) => [uniqueIndex().on(t.sessionId, t.instituteId, t.classId, t.sectionId, t.studentId)],
+  (t) => [
+    uniqueIndex().on(t.sessionId, t.instituteId, t.classId, t.sectionId, t.studentId),
+    policyAllowAuthenticatedSelect,
+  ],
 )
 
 export const sd__classStudentMarks = pgTable(
@@ -80,27 +101,61 @@ export const sd__classStudentMarks = pgTable(
     classStudentId: smallId.references(() => sd__classStudent.id).notNull(),
     mark: c.smallint(),
   })),
-  (t) => [uniqueIndex().on(t.exam, t.subject, t.classStudentId)],
+  (t) => {
+    const isTeacher = exists(
+      qb.select().from(sd__teacher).where(eq(sd__teacher.createdBy, t.createdBy)),
+    )
+    return [
+      uniqueIndex().on(t.exam, t.subject, t.classStudentId),
+      policyAllowAuthenticatedSelect,
+      pgPolicy('Allow insert to teachers', {
+        for: 'insert',
+        to: authenticatedRole,
+        withCheck: isTeacher,
+      }),
+      pgPolicy('Allow update to teachers', {
+        for: 'update',
+        to: authenticatedRole,
+        using: isTeacher,
+      }),
+    ]
+  },
 )
 
 // ~~~~~~ Lookup Tables ~~~~~~
 
-export const sd__luExam = pgTable('lu_exam', (c) => ({
-  id: smallId.primaryKey(),
-  name: c.varchar().unique().notNull(),
-}))
+export const sd__luExam = pgTable(
+  'lu_exam',
+  (c) => ({
+    id: smallId.primaryKey(),
+    name: c.varchar().unique().notNull(),
+  }),
+  () => [policyAllowPublicSelect],
+)
 
-export const sd__luSession = pgTable('lu_session', (c) => ({
-  id: smallId.primaryKey(),
-  name: c.varchar().unique().notNull(),
-}))
+export const sd__luSession = pgTable(
+  'lu_session',
+  (c) => ({
+    id: smallId.primaryKey(),
+    name: c.varchar().unique().notNull(),
+  }),
+  () => [policyAllowPublicSelect],
+)
 
-export const sd__luStream = pgTable('lu_stream', (c) => ({
-  id: smallId.primaryKey(),
-  name: c.varchar().unique().notNull(),
-}))
+export const sd__luStream = pgTable(
+  'lu_stream',
+  (c) => ({
+    id: smallId.primaryKey(),
+    name: c.varchar().unique().notNull(),
+  }),
+  () => [policyAllowPublicSelect],
+)
 
-export const sd__luSubject = pgTable('lu_subject', (c) => ({
-  id: smallId.primaryKey(),
-  name: c.varchar().unique().notNull(),
-}))
+export const sd__luSubject = pgTable(
+  'lu_subject',
+  (c) => ({
+    id: smallId.primaryKey(),
+    name: c.varchar().unique().notNull(),
+  }),
+  () => [policyAllowPublicSelect],
+)

@@ -7,7 +7,7 @@ import {
   getTimestampColumns,
   id,
 } from '../utils/pg-column-helpers'
-import { pgTable, selectOnlyPolicy } from '../utils/pg-table-helpers'
+import { pgTable, policyAllowPublicSelect } from '../utils/pg-table-helpers'
 
 export const address = pgTable(
   'address',
@@ -25,7 +25,7 @@ export const address = pgTable(
     placeId: c.text().unique(),
     ...getTimestampColumns(),
   }),
-  (t) => [index().using('gist', t.geom), selectOnlyPolicy],
+  (t) => [index().using('gist', t.geom), policyAllowPublicSelect],
 )
 
 export const profileAddress = pgTable(
@@ -39,6 +39,6 @@ export const profileAddress = pgTable(
   (t) => [
     primaryKey({ columns: [t.profileId, t.addressId] }),
     index().on(t.type, t.updatedAt.desc()),
-    selectOnlyPolicy,
+    policyAllowPublicSelect,
   ],
 )

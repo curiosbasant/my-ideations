@@ -1,9 +1,14 @@
-import { index, uniqueIndex } from 'drizzle-orm/pg-core'
-import { sql } from 'drizzle-orm/sql'
-import { authUsers } from 'drizzle-orm/supabase'
+import { index, pgPolicy, uniqueIndex } from 'drizzle-orm/pg-core'
+import { eq, sql } from 'drizzle-orm/sql'
+import { authenticatedRole, authUid, authUsers } from 'drizzle-orm/supabase'
 
 import { id, smallId } from '../utils/pg-column-helpers/helpers'
-import { pgTable, selectOnlyPolicy } from '../utils/pg-table-helpers'
+import {
+  pgTable,
+  policyAllowAuthenticatedInsert,
+  policyAllowAuthenticatedSelect,
+  policyAllowPublicSelect,
+} from '../utils/pg-table-helpers'
 import { person } from './person'
 
 export const department = pgTable(
@@ -12,7 +17,7 @@ export const department = pgTable(
     id: smallId().primaryKey(),
     name: c.text().notNull(),
   }),
-  () => [selectOnlyPolicy],
+  () => [policyAllowPublicSelect],
 )
 
 export const designation = pgTable(
@@ -22,7 +27,11 @@ export const designation = pgTable(
     departmentId: smallId.references(() => department.id).notNull(),
     name: c.text().notNull(),
   }),
-  (t) => [uniqueIndex().on(t.departmentId, t.name), selectOnlyPolicy],
+  (t) => [
+    uniqueIndex().on(t.departmentId, t.name),
+    policyAllowPublicSelect,
+    policyAllowAuthenticatedInsert,
+  ],
 )
 
 export const profile = pgTable(
@@ -43,5 +52,18 @@ export const profile = pgTable(
     createdAt: c.timestamp({ withTimezone: true }).defaultNow().notNull(),
     updatedAt: c.timestamp({ withTimezone: true }),
   }),
-  (t) => [index().on(t.createdBy)],
+  (t) => [
+    index().on(t.createdBy),
+    policyAllowAuthenticatedSelect,
+    pgPolicy('Allow insert to self', {
+      for: 'insert',
+      to: authenticatedRole,
+      withCheck: eq(t.createdBy, authUid),
+    }),
+    pgPolicy('Allow update to self', {
+      for: 'update',
+      to: authenticatedRole,
+      using: eq(t.createdBy, authUid),
+    }),
+  ],
 )
