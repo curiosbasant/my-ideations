@@ -9,10 +9,6 @@ export default {
   dbCredentials: {
     url: process.env['POSTGRES_URL'],
   },
+  schemaFilter: 'public',
   casing: 'snake_case',
-  entities: {
-    roles: {
-      provider: 'supabase',
-    },
-  },
 } satisfies Config

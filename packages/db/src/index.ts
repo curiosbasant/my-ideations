@@ -1,5 +1,5 @@
 export * from 'drizzle-orm'
-export { PgDialect, unionAll } from 'drizzle-orm/pg-core'
+export { PgAsyncDatabase, PgDialect, unionAll } from 'drizzle-orm/pg-core'
 export { authUid } from 'drizzle-orm/supabase'
 
 export * from './client'

@@ -6,9 +6,13 @@ import { anonymousProcedure, protectedProcedure, publicProcedure } from '../trpc
 export const dotsAndBoxesRouter = {
   get: publicProcedure
     .input(z.object({ boardId: z.coerce.number() }))
-    .query(async ({ ctx: { db }, input }) => {
-      return await db.query.gdb__board.findFirst({
-        where: eq(schema.gdb__board.id, input.boardId),
+    .query(({ ctx: { rls }, input }) => {
+      return rls(async (tx) => {
+        const [row] = await tx
+          .select()
+          .from(schema.gdb__board)
+          .where(eq(schema.gdb__board.id, input.boardId))
+        return row
       })
     }),
   create: anonymousProcedure

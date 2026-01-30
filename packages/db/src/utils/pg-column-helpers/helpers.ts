@@ -6,7 +6,7 @@ export const CASCADE_ON_DELETE = { onDelete: 'cascade' as const }
 
 export const smallId = () => smallint()
 smallId.primaryKey = () => smallint().generatedByDefaultAsIdentity().primaryKey()
-smallId.references = (columnRef: ReferenceConfig['ref'], actions?: ReferenceConfig['actions']) =>
+smallId.references = (columnRef: ReferenceConfig['ref'], actions?: ReferenceConfig['config']) =>
   smallint().references(
     columnRef,
     actions ? { ...CASCADE_ON_DELETE, ...actions } : CASCADE_ON_DELETE,
@@ -14,7 +14,7 @@ smallId.references = (columnRef: ReferenceConfig['ref'], actions?: ReferenceConf
 
 export const id = () => bigint({ mode: 'number' })
 id.primaryKey = () => id().generatedByDefaultAsIdentity().primaryKey()
-id.references = (columnRef: ReferenceConfig['ref'], actions?: ReferenceConfig['actions']) =>
+id.references = (columnRef: ReferenceConfig['ref'], actions?: ReferenceConfig['config']) =>
   id().references(columnRef, actions ? { ...CASCADE_ON_DELETE, ...actions } : CASCADE_ON_DELETE)
 
 export const getDefaultTimezone = () => timestamp({ withTimezone: true }).notNull().defaultNow()

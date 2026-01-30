@@ -1,11 +1,10 @@
-import { PgDatabase } from 'drizzle-orm/pg-core'
-
+import type { PgAsyncDatabase } from '@my/db'
 import type { JwtPayload } from '@my/lib/supabase'
 
 // https://github.com/orgs/supabase/discussions/23224
 // Should be secure because we use the access token that is signed, and not the data read directly from the storage
 export function rlsCreator<
-  Database extends PgDatabase<any, any, any>,
+  Database extends PgAsyncDatabase<any, any, any>,
   Token extends JwtPayload = JwtPayload,
 >(db: Database, jwtPayload: Token): typeof db.transaction {
   return async (txCallback, ...rest) => {
