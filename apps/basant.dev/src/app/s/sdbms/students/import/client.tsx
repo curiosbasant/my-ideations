@@ -23,6 +23,7 @@ export function FormWrapper(props: PropsWithChildren) {
         {props.children}
       </form>
       {state?.success && <p className='text-emerald-500'>Success!</p>}
+      {state && !state.success && <p className='text-danger'>{state.message}</p>}
     </>
   )
 }

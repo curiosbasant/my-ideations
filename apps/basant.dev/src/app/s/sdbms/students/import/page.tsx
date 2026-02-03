@@ -17,6 +17,7 @@ export default function ImportPage() {
       <FormField label='Excel File'>
         <Input
           className='backdrop-blur-2xs'
+          required
           name='file'
           accept='.xlsx, .xls, .csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel'
           type='file'

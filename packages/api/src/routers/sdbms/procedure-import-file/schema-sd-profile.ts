@@ -119,3 +119,4 @@ const transformRawProfile = (raw: Record<ShalaDarpanProfileRawKey, string>) => (
 })
 
 export const sdProfileSchema = z.preprocess(transformRawProfile, sdSchema)
+export type sdProfileSchema = z.infer<typeof sdProfileSchema>

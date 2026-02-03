@@ -2,7 +2,13 @@ import { eq, exists } from 'drizzle-orm'
 import { index, pgPolicy, pgTableCreator, uniqueIndex } from 'drizzle-orm/pg-core'
 import { authenticatedRole } from 'drizzle-orm/supabase'
 
-import { CASCADE_ON_UPDATE, id, smallId, withCommonColumns } from '../utils/pg-column-helpers'
+import {
+  CASCADE_ON_UPDATE,
+  getTimestampColumns,
+  id,
+  smallId,
+  withCommonColumns,
+} from '../utils/pg-column-helpers'
 import {
   policyAllowAuthenticatedInsert,
   policyAllowAuthenticatedSelect,
@@ -17,7 +23,7 @@ const pgTable = pgTableCreator((tableName) => `sd__${tableName}`)
 export const sd__institute = pgTable(
   'institute',
   withCommonColumns((c) => ({
-    name: c.varchar().notNull(),
+    name: c.varchar().unique().notNull(),
     addressId: id.references(() => address.id),
   })),
   (t) => [index().on(t.createdAt.desc()), policyAllowPublicSelect],
@@ -62,6 +68,7 @@ export const sd__class = pgTable(
     numeral: smallId().notNull(),
     name: c.varchar().notNull(),
     stream: id.references(() => sd__luStream.id, CASCADE_ON_UPDATE),
+    ...getTimestampColumns(),
   }),
   (t) => [uniqueIndex().on(t.instituteId, t.numeral), policyAllowPublicSelect],
 )
@@ -72,6 +79,7 @@ export const sd__classSection = pgTable(
     id: smallId.primaryKey(),
     classId: smallId.references(() => sd__class.id).notNull(),
     name: c.varchar().notNull(),
+    ...getTimestampColumns(),
   }),
   (t) => [uniqueIndex().on(t.classId, t.name), policyAllowPublicSelect],
 )
@@ -86,6 +94,7 @@ export const sd__classStudent = pgTable(
     sectionId: smallId.references(() => sd__classSection.id).notNull(),
     studentId: id.references(() => sd__student.id).notNull(),
     rollNo: c.smallint(),
+    ...getTimestampColumns(),
   }),
   (t) => [
     uniqueIndex().on(t.sessionId, t.instituteId, t.classId, t.sectionId, t.studentId),
