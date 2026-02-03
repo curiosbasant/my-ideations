@@ -17,15 +17,13 @@ export const dotsAndBoxesRouter = {
     }),
   create: anonymousProcedure
     .input(z.object({ rows: z.number(), cols: z.number() }))
-    .mutation(({ ctx: { db, authUserId }, input }) => {
-      return db.transaction(async (tx) => {
+    .mutation(({ ctx: { rls }, input }) => {
+      return rls(async (tx) => {
         const [board] = await tx
           .insert(schema.gdb__board)
           .values({
             rows: input.rows,
             cols: input.cols,
-            players: [authUserId],
-            createdBy: authUserId,
           })
           .returning({ id: schema.gdb__board.id })
 
@@ -49,7 +47,7 @@ export const dotsAndBoxesRouter = {
           .where(eq(schema.gdb__board.id, input.boardId))
 
         await tx.update(schema.gdb__board).set({
-          players: [...board.players, authUserId],
+          players: [...board.players, +authUserId],
         })
       })
     }),

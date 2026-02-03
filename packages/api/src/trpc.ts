@@ -32,7 +32,7 @@ import { rlsCreator } from './lib/rls'
  */
 export async function createTRPCContext(opts: { headers: Headers; supabase: SupabaseClient }) {
   const { data } = await opts.supabase.auth.getClaims()
-  const rls = data ? rlsCreator(db, data.claims) : db.transaction
+  const rls = rlsCreator(db, data?.claims)
 
   const source = opts.headers.get('x-trpc-source') ?? 'unknown'
   console.log('>>> tRPC Request from', source, 'by', data?.claims.sub || 'someone')
@@ -58,7 +58,7 @@ const t = initTRPC.context<typeof createTRPCContext>().create({
       ...shape,
       data: {
         ...shape.data,
-        zodError: error.cause instanceof ZodError ? error.cause.flatten() : null,
+        zodError: error.cause instanceof ZodError ? z.treeifyError(error.cause) : null,
       },
     }
   },
@@ -93,21 +93,6 @@ export const createRouter = t.router
 export const publicProcedure = t.procedure
 
 /**
- * Reusable middleware that enforces users are logged in before running the procedure
- */
-const enforceUserIsAuthenticated = t.middleware(async ({ ctx, next }) => {
-  if (!ctx.claims) {
-    throw new TRPCError({ code: 'UNAUTHORIZED' })
-  }
-
-  return next({
-    ctx: {
-      authUserId: ctx.claims.sub,
-    },
-  })
-})
-
-/**
  * Procedure protected to authenticated users
  *
  * If you want a query or mutation to ONLY be accessible to logged in users, use
@@ -116,7 +101,31 @@ const enforceUserIsAuthenticated = t.middleware(async ({ ctx, next }) => {
  *
  * @see https://trpc.io/docs/procedures
  */
-export const protectedProcedure = t.procedure.use(enforceUserIsAuthenticated)
+export const protectedProcedure = t.procedure.use(async ({ ctx, next }) => {
+  if (!ctx.claims) {
+    throw new TRPCError({ code: 'UNAUTHORIZED' })
+  }
+
+  return next({
+    ctx: {
+      authUserId: ctx.claims.sub,
+      claims: ctx.claims,
+    },
+  })
+})
+
+export const adminProcedure = protectedProcedure.use(async ({ ctx, next }) => {
+  if (ctx.authUserId !== process.env['SUPABASE_ADMIN_USER_ID']) {
+    throw new TRPCError({ code: 'UNAUTHORIZED' })
+  }
+  const rls = rlsCreator(db, ctx.claims, true)
+
+  return next({
+    ctx: {
+      rls,
+    },
+  })
+})
 
 export const anonymousProcedure = t.procedure
   .input(z.object({ fullName: z.string() }))
@@ -133,8 +142,7 @@ export const anonymousProcedure = t.procedure
       return next({
         ctx: {
           session: data.session,
-          // TODO: temporarily cast to number, to resolve ts errors
-          authUserId: Number(data.session.user.id) || 0,
+          authUserId: data.session.user.id,
         },
       })
     }
