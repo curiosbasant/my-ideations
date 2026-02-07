@@ -126,19 +126,29 @@ async function createPersons(
     .innerJoin(schema.sd__student, eq(schema.person.id, schema.sd__student.personId))
     .innerJoin(schema.sd__institute, eq(schema.sd__institute.id, schema.sd__student.instituteId))
     .where(inArray(schema.sd__institute.id, instituteIds))
-    .then((rows) => {
+    .then(async (rows) => {
       const studentMap = rows.reduce(
         (acc, s) => acc.set(s.schoolName + s.studentAdmissionNo, s.personId),
         new Map<string, number>(),
       )
       const recordsToInsert = [],
         recordsToUpdate = []
+
       for (const record of sdRecords) {
-        const studentPersonId = studentMap.get(record.schoolName + record.srNo)
+        const key = record.schoolName + record.srNo
+        const studentPersonId = studentMap.get(key)
         studentPersonId ?
           recordsToUpdate.push({ studentPersonId, record })
         : recordsToInsert.push(record)
+        studentMap.delete(key)
       }
+
+      const toDelete = Array.from(studentMap.values())
+      await tx
+        .update(schema.sd__student)
+        .set({ status: 2, updatedAt: now() })
+        .where(inArray(schema.sd__student.personId, toDelete))
+
       return [recordsToInsert, recordsToUpdate] as const
     })
 
@@ -325,6 +335,7 @@ async function createStudents(
         admissionDate: record.doa?.toISOString(),
         admissionNo: record.srNo,
         distanceKm: record.schoolDistance && Math.round(record.schoolDistance),
+        status: 1,
       } satisfies typeof schema.sd__student.$inferInsert
     }),
   )

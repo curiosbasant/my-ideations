@@ -52,6 +52,7 @@ export const sd__student = pgTable(
     admissionNo: c.varchar(),
     admissionDate: c.date(),
     distanceKm: c.smallint(),
+    status: smallId.references(() => sd__luStudentStatus.id, CASCADE_ON_UPDATE),
   })),
   (t) => [
     index().on(t.createdAt.desc()),
@@ -144,6 +145,15 @@ export const sd__luExam = pgTable(
 
 export const sd__luSession = pgTable(
   'lu_session',
+  (c) => ({
+    id: smallId.primaryKey(),
+    name: c.varchar().unique().notNull(),
+  }),
+  () => [policyAllowPublicSelect],
+)
+
+export const sd__luStudentStatus = pgTable(
+  'lu_student_status',
   (c) => ({
     id: smallId.primaryKey(),
     name: c.varchar().unique().notNull(),

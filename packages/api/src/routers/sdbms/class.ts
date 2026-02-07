@@ -1,13 +1,4 @@
-import {
-  and,
-  authUserPersonId,
-  eq,
-  now,
-  personFullName,
-  schema,
-  sql,
-  type DbTransaction,
-} from '@my/db'
+import { and, authUserPersonId, eq, now, personFullName, schema, type DbTransaction } from '@my/db'
 import { z } from '@my/lib/zod'
 
 import { protectedProcedure } from '../../trpc'
@@ -148,7 +139,7 @@ function getStudentProfileCte(tx: DbTransaction) {
         classId: schema.sd__classStudent.classId,
         numeral: schema.sd__class.numeral,
         sectionId: schema.sd__classStudent.sectionId,
-        sectionName: sql`${schema.sd__classSection.name}`.as('section_name'),
+        sectionName: schema.sd__classSection.name.as('section_name'),
         studentId: schema.sd__classStudent.studentId,
         studentAdmissionNo: schema.sd__student.admissionNo,
         fullName: personFullName().as('full_name'),
@@ -162,6 +153,7 @@ function getStudentProfileCte(tx: DbTransaction) {
       )
       .innerJoin(schema.sd__student, eq(schema.sd__student.id, schema.sd__classStudent.studentId))
       .innerJoin(schema.person, eq(schema.person.id, schema.sd__student.personId))
-      .leftJoin(withRelativeFather, eq(withRelativeFather.studentPersonId, schema.person.id)),
+      .leftJoin(withRelativeFather, eq(withRelativeFather.studentPersonId, schema.person.id))
+      .where(eq(schema.sd__student.status, 1)),
   )
 }

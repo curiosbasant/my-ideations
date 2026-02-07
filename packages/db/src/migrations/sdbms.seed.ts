@@ -1,5 +1,11 @@
 import { db } from '../client'
-import { sd__luExam, sd__luSession, sd__luStream, sd__luSubject } from '../schema/sdbms'
+import {
+  sd__luExam,
+  sd__luSession,
+  sd__luStream,
+  sd__luStudentStatus,
+  sd__luSubject,
+} from '../schema/sdbms'
 
 export default () => {
   return db.transaction(async (tx) => {
@@ -22,6 +28,15 @@ export default () => {
           { id: 2, name: 'Commerce' },
           { id: 3, name: 'Science' },
           { id: 4, name: 'Agriculture' },
+        ])
+        .onConflictDoNothing(),
+      tx
+        .insert(sd__luStudentStatus)
+        .values([
+          { id: 1, name: 'Active' },
+          { id: 2, name: 'Inactive' },
+          { id: 3, name: 'Left with TC' },
+          { id: 4, name: 'Left without TC' },
         ])
         .onConflictDoNothing(),
       tx
