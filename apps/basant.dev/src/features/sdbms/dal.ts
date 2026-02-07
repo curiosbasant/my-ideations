@@ -2,6 +2,10 @@ import { cache } from 'react'
 
 import { api } from '~/lib/trpc'
 
+export const checkIfAdmin = cache(() => {
+  return api.sdbms.admin.check()
+})
+
 export const getExams = cache(() => {
   return api.sdbms.exam.list()
 })
