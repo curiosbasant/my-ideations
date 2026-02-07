@@ -1,3 +1,5 @@
+import Link from 'next/link'
+
 import { resolveStringParam } from '@my/lib/utils'
 
 import { FormSubmitButton } from '~/components/forms/client'
@@ -22,9 +24,7 @@ export default async function SdbmsHomePage(props: PageProps<'/s/sdbms'>) {
     return (
       <div className='h-full'>
         {role === 'teacher' ?
-          <p className='text-center font-bold text-emerald-500'>
-            Congrats! You've now acquired the teacher role.
-          </p>
+          <ViewTeacher />
         : role === 'student' ?
           <p className='text-center font-bold text-emerald-500'>
             Success! Your profile is now connected with the provided SR Number.
@@ -91,5 +91,15 @@ export default async function SdbmsHomePage(props: PageProps<'/s/sdbms'>) {
         </form>
       }
     </div>
+  )
+}
+
+function ViewTeacher() {
+  return (
+    <ul>
+      <li className=''>
+        <Link href='/students/marks-entry'>Students Mark Entry</Link>
+      </li>
+    </ul>
   )
 }
