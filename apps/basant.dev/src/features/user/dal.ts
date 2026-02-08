@@ -1,19 +1,14 @@
 import { cache } from 'react'
-import { TRPCError } from '@trpc/server'
 
+import { dalDbOperation } from '~/lib/dal/helpers'
 import { api } from '~/lib/trpc'
 
 export const getProfileDetails = cache(async () => {
-  try {
-    const user = await api.user.get()
-    if (!user) return null
-    return user
-  } catch (error) {
-    if (error instanceof TRPCError && error.code === 'UNAUTHORIZED') {
-      return null
-    }
-    throw error
-  }
+  const result = await dalDbOperation(() => api.user.get())
+  if (result.success) return result.data || null
+  if (result.error.type === 'unauthenticated') return null
+
+  throw 'error' in result.error ? result.error.error : result.error
 })
 
 export const getDepartments = cache(() => {

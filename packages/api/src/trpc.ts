@@ -116,7 +116,7 @@ export const protectedProcedure = t.procedure.use(async ({ ctx, next }) => {
 
 export const adminProcedure = protectedProcedure.use(async ({ ctx, next }) => {
   if (ctx.authUserId !== process.env['SUPABASE_ADMIN_USER_ID']) {
-    throw new TRPCError({ code: 'UNAUTHORIZED' })
+    throw new TRPCError({ code: 'FORBIDDEN' })
   }
   const rls = rlsCreator(db, ctx.claims, true)
 

@@ -1,9 +1,10 @@
 import { cache } from 'react'
 
+import { dalDbOperation, dalVerifySuccess } from '~/lib/dal/helpers'
 import { api } from '~/lib/trpc'
 
-export const checkIfAdmin = cache(() => {
-  return api.sdbms.admin.check()
+export const checkIfAdmin = cache(async () => {
+  return dalVerifySuccess(await dalDbOperation(() => api.sdbms.admin.check()))
 })
 
 export const getExams = cache(() => {
@@ -32,6 +33,6 @@ export const getClassStudentsMark = cache(
   },
 )
 
-export const getUserRole = cache(() => {
-  return api.sdbms.user.role()
+export const getUserRole = cache(async () => {
+  return dalVerifySuccess(await dalDbOperation(() => api.sdbms.user.role()))
 })
