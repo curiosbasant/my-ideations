@@ -1,69 +1,14 @@
 import { z } from '@my/lib/zod'
 
-const trimmedString = z.string().trim().nonempty()
-const dateSchema = trimmedString.transform(parseDDMMYYY).pipe(z.date())
-const coerceNumber = trimmedString.pipe(z.coerce.number())
+import {
+  categorySchema,
+  coerceNumber,
+  dateSchema,
+  genderSchema,
+  trimmedString,
+} from '../../../lib/utils/sd-schema'
 
-const sdSchema = z.object({
-  standard: coerceNumber,
-  section: trimmedString,
-  srNo: trimmedString,
-  doa: dateSchema.nullable().catch(null),
-  rollNo: coerceNumber.nullable().catch(null),
-
-  name: trimmedString,
-  fName: trimmedString,
-  mName: trimmedString,
-  dob: dateSchema,
-  gender: z.literal(['M', 'F', 'T']),
-  category: z.literal(['GEN', 'OBC', 'SC', 'ST']),
-  bpl: z
-    .literal(['Y', 'N'])
-    .transform((v) => v === 'Y')
-    .nullable()
-    .catch(null),
-  minority: z
-    .literal(['Yes', 'No'])
-    .transform((v) => v === 'Yes')
-    .nullable()
-    .catch(null),
-
-  religion: trimmedString.nullable().catch(null),
-  mobileNo: trimmedString.length(10).nullable().catch(null),
-  schoolDistance: coerceNumber.nullable().catch(null),
-  schoolName: trimmedString,
-})
-
-function parseDDMMYYY(value: string) {
-  const parts = value.split(/-|\//)
-  if (parts.length !== 3) return null
-
-  const day = Number.parseInt(parts[0], 10)
-  const month = Number.parseInt(parts[1], 10) - 1 // JS months are 0-indexed
-  const year = Number.parseInt(parts[2], 10)
-
-  if (isNaN(day) || isNaN(month) || isNaN(year)) return null
-
-  let resolvedYear = year
-  if (resolvedYear < 100) {
-    const currentYear = new Date().getFullYear()
-    const centuryBase = Math.floor(currentYear / 100) * 100
-    resolvedYear += centuryBase
-    if (resolvedYear > currentYear) {
-      resolvedYear -= 100
-    }
-  }
-
-  const date = new Date(Date.UTC(resolvedYear, month, day))
-  // Validate the date was created correctly
-  if (date.getFullYear() !== resolvedYear || date.getMonth() !== month || date.getDate() !== day) {
-    return null
-  }
-
-  return date
-}
-
-type ShalaDarpanProfileRawKey =
+type RawKeyStudent =
   | 'Class'
   | 'Section'
   | 'SRNO'
@@ -95,7 +40,7 @@ type ShalaDarpanProfileRawKey =
   | 'Co-Curricular Activity'
   | 'Distance From School'
 
-const transformRawProfile = (raw: Record<ShalaDarpanProfileRawKey, string>) => ({
+const transformRawStudent = (raw: Record<RawKeyStudent, string>) => ({
   // class specific
   standard: raw.Class,
   section: raw.Section,
@@ -118,5 +63,35 @@ const transformRawProfile = (raw: Record<ShalaDarpanProfileRawKey, string>) => (
   schoolName: raw['Name Of School'],
 })
 
-export const sdProfileSchema = z.preprocess(transformRawProfile, sdSchema)
-export type sdProfileSchema = z.infer<typeof sdProfileSchema>
+const schemaStudent = z.object({
+  standard: coerceNumber,
+  section: trimmedString,
+  srNo: trimmedString,
+  doa: dateSchema.nullable().catch(null),
+  rollNo: coerceNumber.nullable().catch(null),
+
+  name: trimmedString,
+  fName: trimmedString,
+  mName: trimmedString,
+  dob: dateSchema,
+  gender: genderSchema,
+  category: categorySchema,
+  bpl: z
+    .literal(['Y', 'N'])
+    .transform((v) => v === 'Y')
+    .nullable()
+    .catch(null),
+  minority: z
+    .literal(['Yes', 'No'])
+    .transform((v) => v === 'Yes')
+    .nullable()
+    .catch(null),
+
+  religion: trimmedString.nullable().catch(null),
+  mobileNo: trimmedString.length(10).nullable().catch(null),
+  schoolDistance: coerceNumber.nullable().catch(null),
+  schoolName: trimmedString,
+})
+
+export const sdStudentSchema = z.preprocess(transformRawStudent, schemaStudent)
+export type sdStudentSchema = z.infer<typeof sdStudentSchema>

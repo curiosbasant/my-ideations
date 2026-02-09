@@ -14,7 +14,7 @@ import { z } from '@my/lib/zod'
 
 import { splitFullName } from '../../../lib/utils'
 import { adminProcedure } from '../../../trpc'
-import { sdProfileSchema } from './schema-sd-profile'
+import { sdStudentSchema } from './schema-sd-profile'
 
 export const importFileProcedure = adminProcedure
   .input(
@@ -25,7 +25,7 @@ export const importFileProcedure = adminProcedure
   )
   .query(async ({ input, ctx: { rls } }) => {
     const sdRecords = await extractDataFromSheet(input.file).then(
-      sdProfileSchema.array().nonempty().parse,
+      sdStudentSchema.array().nonempty().parse,
     )
 
     await rls(async (tx) => {
@@ -35,7 +35,7 @@ export const importFileProcedure = adminProcedure
     })
   })
 
-async function createInstitutes(tx: DbTransaction, sdRecords: sdProfileSchema[]) {
+async function createInstitutes(tx: DbTransaction, sdRecords: sdStudentSchema[]) {
   const instituteEntries = Object.entries(groupBy(sdRecords, 'schoolName'))
   const institutes = await tx
     .insert(schema.sd__institute)
@@ -113,7 +113,7 @@ async function createInstitutes(tx: DbTransaction, sdRecords: sdProfileSchema[])
 
 async function createPersons(
   tx: DbTransaction,
-  sdRecords: sdProfileSchema[],
+  sdRecords: sdStudentSchema[],
   instituteIds: number[],
 ) {
   const [recordsToInsert, recordsToUpdate] = await tx
@@ -295,7 +295,7 @@ async function createPersons(
 
 async function createStudents(
   tx: DbTransaction,
-  sdRecords: sdProfileSchema[],
+  sdRecords: sdStudentSchema[],
   sessionId: number,
   persons: number[],
 ) {
