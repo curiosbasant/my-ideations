@@ -4,6 +4,7 @@ import { z } from '@my/lib/zod'
 import { protectedProcedure, publicProcedure } from '../../trpc'
 import { classRouter } from './class'
 import { studentRouter } from './student'
+import { importFileProcedure } from './teacher/import-file'
 
 export const sdbmsRouter = {
   admin: {
@@ -69,6 +70,7 @@ export const sdbmsRouter = {
           return teacher.id
         })
       }),
+    importFile: importFileProcedure,
   },
   user: {
     role: protectedProcedure.query(async ({ ctx: { rls } }) => {

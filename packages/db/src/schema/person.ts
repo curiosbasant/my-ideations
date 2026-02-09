@@ -32,6 +32,7 @@ export const person = pgTable(
     minority: c.boolean(),
     bpl: c.boolean(),
     addressId: id.references(() => address.id),
+    bloodGroup: c.varchar(),
     ...getTimestampColumns(),
   }),
   (t) => [

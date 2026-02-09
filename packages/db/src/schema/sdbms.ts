@@ -31,9 +31,11 @@ export const sd__institute = pgTable(
 
 export const sd__teacher = pgTable(
   'teacher',
-  withCommonColumns(() => ({
+  withCommonColumns((c) => ({
     personId: id.references(() => person.id).notNull(),
     instituteId: id.references(() => sd__institute.id).notNull(),
+    employeeId: c.varchar().unique(),
+    joiningDate: c.date(),
   })),
   (t) => [
     uniqueIndex().on(t.personId),

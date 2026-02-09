@@ -4,7 +4,6 @@ import Form from 'next/form'
 import { resolveStringParam } from '@my/lib/utils'
 
 import { FormSubmitButton } from '~/components/forms/client'
-import { Input } from '~/components/ui/input'
 import {
   FormFieldSelectClass,
   FormFieldSelectExam,
@@ -24,7 +23,7 @@ export default async function StudentsMarksEntryPage(
   const subject = resolveStringParam(searchParams.subject)
 
   return (
-    <>
+    <div className='mx-auto max-w-sm'>
       <Form action='' className='grid gap-4 sm:grid-cols-2 lg:grid-cols-4'>
         <FormFieldSelectSession defaultValue={session} />
         <FormFieldSelectExam defaultValue={exam} />
@@ -47,7 +46,7 @@ export default async function StudentsMarksEntryPage(
           />
         </Suspense>
       )}
-    </>
+    </div>
   )
 }
 

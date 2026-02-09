@@ -5,9 +5,17 @@ import { revalidatePath } from 'next/cache'
 import { api } from '~/lib/trpc'
 import { createAction } from '~/lib/utils/helper-action/shared'
 
-export const importFileAction = createAction(async (payload: { sessionId: number; file: File }) => {
+export const actionStudentImportFile = createAction(
+  async (payload: { sessionId: number; file: File }) => {
   await api.sdbms.student.importFile(payload)
-})
+  },
+)
+
+export const actionTeacherImportFile = createAction(
+  async (payload: { instituteId: number; file: File }) => {
+    await api.sdbms.teacher.importFile(payload)
+  },
+)
 
 export const actionConnectStudent = createAction(async (payload: { srNo: string; dob: string }) => {
   await api.sdbms.student.connectProfile(payload)

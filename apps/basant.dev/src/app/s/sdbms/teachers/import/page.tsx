@@ -4,7 +4,7 @@ import type { Metadata } from 'next/types'
 import { FormSubmitButton } from '~/components/forms/client'
 import { FormField } from '~/components/forms/shared'
 import { Input } from '~/components/ui/input'
-import { FormFieldSelectSession } from '~/features/sdbms/components/form-fields'
+import { FormFieldSelectInstitute } from '~/features/sdbms/components/form-fields'
 import { checkIfAdmin } from '~/features/sdbms/dal'
 import { FormWrapper } from './client'
 
@@ -12,14 +12,14 @@ export const metadata: Metadata = {
   title: 'Import File',
 }
 
-export default async function StudentsImportPage() {
+export default async function TeachersImportPage() {
   const isAdmin = await checkIfAdmin()
   if (!isAdmin) notFound()
 
   return (
     <div className='mx-auto max-w-sm'>
       <FormWrapper>
-        <FormFieldSelectSession />
+        <FormFieldSelectInstitute />
         <FormField label='Excel File'>
           <Input
             className='backdrop-blur-2xs'

@@ -2,23 +2,23 @@
 
 import type { PropsWithChildren } from 'react'
 
-import { actionStudentImportFile } from '~/features/sdbms/actions'
+import { actionTeacherImportFile } from '~/features/sdbms/actions'
 import { useAction } from '~/lib/utils/helper-action/client'
 
 export function FormWrapper(props: PropsWithChildren) {
   const { state, actionTransition } = useAction({
-    actionFn: actionStudentImportFile,
+    actionFn: actionTeacherImportFile,
   })
 
   return (
     <>
       <form
-        className='grid gap-4 sm:grid-cols-3'
+        className='grid gap-4'
         action={async (fd) => {
-          const sessionId = +(fd.get('session') as string)
+          const instituteId = +(fd.get('school') as string)
           const file = fd.get('file') as File
 
-          actionTransition({ sessionId, file })
+          actionTransition({ instituteId, file })
         }}>
         {props.children}
       </form>
