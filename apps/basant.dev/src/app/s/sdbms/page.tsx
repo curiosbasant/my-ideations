@@ -6,10 +6,7 @@ import { FormSubmitButton } from '~/components/forms/client'
 import { FormField } from '~/components/forms/shared'
 import { Button } from '~/components/ui/button'
 import { Input } from '~/components/ui/input'
-import { Label } from '~/components/ui/label'
-import { RadioGroup, RadioGroupItem } from '~/components/ui/radio-group'
 import { SignInWithGoogleButton } from '~/features/auth/components/sign-in-with-google/client'
-import { FormFieldSelectInstitute } from '~/features/sdbms/components/form-fields'
 import { getUserRole } from '~/features/sdbms/dal'
 import { getProfileDetails } from '~/features/user/dal'
 import { FormConnectStudent, FormConnectTeacher } from './client'
@@ -41,25 +38,12 @@ export default async function SdbmsHomePage(props: PageProps<'/s/sdbms'>) {
     <div className='h-full'>
       {role === 'teacher' ?
         <div className='@container mx-auto max-w-sm space-y-8'>
-          <FormConnectTeacher className='@xl:grid-cols-3 grid grid-cols-2 gap-4'>
-            <FormFieldSelectInstitute />
-            <FormField label='First Name'>
-              <Input className='backdrop-blur-2xs' name='firstName' required />
+          <FormConnectTeacher className='@xl:grid-cols-2 grid gap-4'>
+            <FormField label='Employee Id'>
+              <Input className='backdrop-blur-2xs w-full' name='employeeId' required />
             </FormField>
-            <FormField label='Last Name'>
-              <Input className='backdrop-blur-2xs' name='lastName' />
-            </FormField>
-            <FormField className='col-span-full' label='Gender'>
-              <RadioGroup className='grid-cols-[auto_1fr]' name='gender' required>
-                <RadioGroupItem value='1' id='g1' />
-                <Label htmlFor='g1'>Male</Label>
-                <RadioGroupItem value='2' id='g2' />
-                <Label htmlFor='g2'>Female</Label>
-                <RadioGroupItem value='3' id='g3' />
-                <Label htmlFor='g3'>Transgender</Label>
-                <RadioGroupItem value='4' id='g4' />
-                <Label htmlFor='g4'>Others</Label>
-              </RadioGroup>
+            <FormField label='Date of Birth'>
+              <Input className='backdrop-blur-2xs' name='dob' required type='date' />
             </FormField>
             <div className='col-span-full flex justify-end'>
               <FormSubmitButton>Save</FormSubmitButton>

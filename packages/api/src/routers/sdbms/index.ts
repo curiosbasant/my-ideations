@@ -1,10 +1,9 @@
-import { authUid, authUserPersonId, eq, schema } from '@my/db'
-import { z } from '@my/lib/zod'
+import { authUserPersonId, eq, schema } from '@my/db'
 
 import { protectedProcedure, publicProcedure } from '../../trpc'
 import { classRouter } from './class'
 import { studentRouter } from './student'
-import { importFileProcedure } from './teacher/import-file'
+import { teacherRouter } from './teacher'
 
 export const sdbmsRouter = {
   admin: {
@@ -41,37 +40,7 @@ export const sdbmsRouter = {
       return rls((tx) => tx.select().from(schema.sd__luSubject))
     }),
   },
-  teacher: {
-    create: publicProcedure
-      .input(
-        z.object({
-          instituteId: z.number(),
-          firstName: z.string(),
-          lastName: z.string().nullable(),
-          gender: z.number(),
-        }),
-      )
-      .mutation(async ({ input, ctx: { rls } }) => {
-        return rls(async (tx) => {
-          const [person] = await tx
-            .insert(schema.person)
-            .values({ firstName: input.firstName, lastName: input.lastName, gender: input.gender })
-            .returning({ id: schema.person.id })
-          const [[teacher]] = await Promise.all([
-            tx
-              .insert(schema.sd__teacher)
-              .values({ personId: person.id, instituteId: input.instituteId })
-              .returning({ id: schema.sd__teacher.id }),
-            tx
-              .update(schema.profile)
-              .set({ personId: person.id })
-              .where(eq(schema.profile.createdBy, authUid)),
-          ])
-          return teacher.id
-        })
-      }),
-    importFile: importFileProcedure,
-  },
+  teacher: teacherRouter,
   user: {
     role: protectedProcedure.query(async ({ ctx: { rls } }) => {
       return rls(async (tx) => {
