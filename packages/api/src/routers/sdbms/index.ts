@@ -1,9 +1,9 @@
-import { and, authUid, authUserPersonId, eq, schema } from '@my/db'
+import { authUid, authUserPersonId, eq, schema } from '@my/db'
 import { z } from '@my/lib/zod'
 
 import { protectedProcedure, publicProcedure } from '../../trpc'
 import { classRouter } from './class'
-import { importFileProcedure } from './procedure-import-file'
+import { studentRouter } from './student'
 
 export const sdbmsRouter = {
   admin: {
@@ -34,6 +34,7 @@ export const sdbmsRouter = {
       return rls((tx) => tx.select().from(schema.sd__luSession))
     }),
   },
+  student: studentRouter,
   subject: {
     list: publicProcedure.query(({ ctx: { rls } }) => {
       return rls((tx) => tx.select().from(schema.sd__luSubject))
@@ -68,32 +69,6 @@ export const sdbmsRouter = {
           return teacher.id
         })
       }),
-  },
-  student: {
-    connectProfile: protectedProcedure
-      .input(
-        z.object({
-          srNo: z.string(),
-          dob: z.string(),
-        }),
-      )
-      .mutation(async ({ input, ctx: { rls } }) => {
-        await rls(async (tx) => {
-          const [row] = await tx
-            .select({ personId: schema.person.id })
-            .from(schema.person)
-            .innerJoin(schema.sd__student, eq(schema.person.id, schema.sd__student.personId))
-            .where(
-              and(eq(schema.person.dob, input.dob), eq(schema.sd__student.admissionNo, input.srNo)),
-            )
-
-          await tx
-            .update(schema.profile)
-            .set({ personId: row.personId })
-            .where(eq(schema.profile.createdBy, authUid))
-        })
-      }),
-    importFile: importFileProcedure,
   },
   user: {
     role: protectedProcedure.query(async ({ ctx: { rls } }) => {
