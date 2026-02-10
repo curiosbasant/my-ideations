@@ -9,10 +9,9 @@ import {
   type DbTransaction,
 } from '@my/db'
 import { extractDataFromSheet } from '@my/lib/file'
-import { groupBy } from '@my/lib/utils'
+import { groupBy, splitFullName } from '@my/lib/utils'
 import { z } from '@my/lib/zod'
 
-import { splitFullName } from '../../../lib/utils'
 import {
   categorySchema,
   coerceNumber,

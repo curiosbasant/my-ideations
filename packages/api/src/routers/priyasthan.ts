@@ -1,7 +1,6 @@
-import { and, desc, eq, schema, unionAll } from '@my/db'
+import { and, desc, eq, isAllNotNull, profileDisplayName, schema, unionAll } from '@my/db'
 import { z } from '@my/lib/zod'
 
-import { isAllNotNull, userDisplayName } from '../lib/utils'
 import { protectedProcedure } from '../trpc'
 
 export const priyasthanRouter = {
@@ -98,7 +97,7 @@ export const priyasthanRouter = {
         .select({
           profile: {
             id: schema.profileAddress.profileId,
-            displayName: userDisplayName,
+            displayName: profileDisplayName().as('display_name'),
             avatarUrl: schema.profile.avatarUrl,
           },
           address: {

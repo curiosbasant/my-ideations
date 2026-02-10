@@ -1,4 +1,16 @@
-import { and, count, desc, eq, lt, schema, sql, sum, unionAll, type Database } from '@my/db'
+import {
+  and,
+  count,
+  desc,
+  eq,
+  lt,
+  profileDisplayName,
+  schema,
+  sql,
+  sum,
+  unionAll,
+  type Database,
+} from '@my/db'
 import {
   groupCreateSchema,
   groupMemberInviteSchema,
@@ -6,7 +18,6 @@ import {
 } from '@my/lib/schema/spend-buddy'
 import { z } from '@my/lib/zod'
 
-import { userDisplayName } from '../lib/utils'
 import { protectedProcedure } from '../trpc'
 
 export const spendBuddyRouter = {
@@ -112,7 +123,7 @@ export const spendBuddyRouter = {
               createdAt: schema.sb__spend.createdAt,
               user: {
                 id: schema.profile.id,
-                displayName: userDisplayName,
+                displayName: profileDisplayName().as('display_name'),
                 avatarUrl: schema.profile.avatarUrl,
               },
             })
@@ -172,7 +183,7 @@ export const spendBuddyRouter = {
         const rows = await db
           .select({
             id: schema.profile.id,
-            displayName: userDisplayName,
+            displayName: profileDisplayName().as('display_name'),
             avatarUrl: schema.profile.avatarUrl,
             joinedAt: schema.sb__member.joinedAt,
             spends: sql<string>`coalesce(${memberSpends.spends} / 100, 0)`.as('total_spends'),
@@ -230,7 +241,7 @@ export const spendBuddyRouter = {
             resourceId: schema.sb__notification.resourceId,
             createdAt: schema.sb__notification.createdAt,
             user: {
-              displayName: userDisplayName,
+              displayName: profileDisplayName().as('display_name'),
               avatarUrl: schema.profile.avatarUrl,
             },
           })
@@ -286,7 +297,7 @@ export const spendBuddyRouter = {
               },
               member: {
                 id: schema.profile.id,
-                displayName: userDisplayName,
+                displayName: profileDisplayName().as('display_name'),
                 avatarUrl: schema.profile.avatarUrl,
               },
               group: {

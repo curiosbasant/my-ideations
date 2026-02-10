@@ -1,4 +1,5 @@
 import {
+  eq,
   getColumns,
   getTableName,
   or,
@@ -11,13 +12,21 @@ import { toSnakeCase } from 'drizzle-orm/casing'
 import type { PgTable } from 'drizzle-orm/pg-core'
 
 import { person } from '../schema/person'
-import { concatWs, nullIf } from './pg-functions'
+import { profile } from '../schema/profile'
+import { coalesce, concat, concatWs, nullIf, numNonnulls } from './pg-functions'
 
 export const authUserPersonId = sql<number>`get_auth_user_person_id()`
 export const authUserProfileId = sql<number>`get_auth_user_profile_id()`
 
 export const personFullName = () =>
   nullIf<string>(concatWs(' ', person.firstName, person.lastName), '')
+
+export const profileDisplayName = () =>
+  coalesce<string>(
+    nullIf(concatWs(' ', profile.firstName, profile.lastName), ''),
+    profile.username,
+    concat(sql`'profile_'`, profile.id),
+  )
 
 export function buildConflictUpdateColumns<T extends PgTable, C extends keyof T['_']['columns']>(
   table: T,
@@ -53,3 +62,7 @@ export function buildConflictSetWhere<T extends PgTable, C extends keyof T['_'][
 export function isDistinctFrom(left: AnyColumn | SQLWrapper, right: AnyColumn | SQLWrapper) {
   return sql`${left} is distinct from ${right}`
 }
+
+export const isAllNotNull = (
+  ...expressions: [arg: AnyColumn | SQLWrapper, ...(AnyColumn | SQLWrapper)[]]
+) => eq(numNonnulls(...expressions), expressions.length)

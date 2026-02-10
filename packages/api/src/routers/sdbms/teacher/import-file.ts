@@ -8,9 +8,9 @@ import {
   schema,
 } from '@my/db'
 import { extractDataFromSheet } from '@my/lib/file'
+import { splitFullName } from '@my/lib/utils'
 import { z } from '@my/lib/zod'
 
-import { splitFullName } from '../../../lib/utils'
 import { dateSchema, genderSchema, trimmedString } from '../../../lib/utils/sd-schema'
 import { adminProcedure } from '../../../trpc'
 

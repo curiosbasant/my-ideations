@@ -1,4 +1,4 @@
-import type { ZodSchema } from 'zod'
+import type { ZodType } from 'zod'
 
 import type { Falsy } from './types'
 
@@ -115,7 +115,7 @@ export const makePlural = (word: string, count: number) =>
 /**
  * Safely parses a string into a specified Zod schema.
  */
-export function safeParseText<T>(schema: ZodSchema<T>, value: unknown) {
+export function safeParseText<T>(schema: ZodType<T>, value: unknown) {
   if (typeof value !== 'string') return null
   try {
     return schema.parse(JSON.parse(value))
@@ -262,3 +262,12 @@ function resolveArrayParam(param?: string | string[]) {
   return Array.isArray(param) ? param : null
 }
 export { resolveStringParam, resolveArrayParam }
+
+export function splitFullName(fullName: string): { firstName: string; lastName: string | null } {
+  const parts = fullName.split(/ +/)
+  if (parts.length === 1) return { firstName: fullName, lastName: null }
+  if (parts.length === 2) return { firstName: parts[0], lastName: parts[1] }
+
+  const lastName = parts.pop() ?? null
+  return { firstName: parts.join(' '), lastName }
+}

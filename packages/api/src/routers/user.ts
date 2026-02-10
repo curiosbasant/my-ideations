@@ -1,8 +1,7 @@
-import { and, desc, eq, schema, sql } from '@my/db'
+import { and, desc, eq, profileDisplayName, schema, sql } from '@my/db'
 import { placeIdToLocation } from '@my/lib/maps'
 import { z } from '@my/lib/zod'
 
-import { userDisplayName } from '../lib/utils'
 import { protectedProcedure, publicProcedure } from '../trpc'
 
 export const userRouter = {
@@ -10,7 +9,7 @@ export const userRouter = {
     const [user] = await db
       .select({
         id: schema.profile.id,
-        displayName: userDisplayName,
+        displayName: profileDisplayName().as('display_name'),
         avatarUrl: schema.profile.avatarUrl,
         designation: schema.designation,
         personId: schema.profile.personId,
