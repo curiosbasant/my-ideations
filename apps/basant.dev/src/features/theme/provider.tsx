@@ -23,14 +23,14 @@ export const ThemeContext = createContext<{
   setTheme: () => void 0,
 })
 
-export function ThemeProvider(props: PropsWithChildren<{ defaultTheme: ThemePreference }>) {
-  const [themePreference, setTheme] = useState(props.defaultTheme)
+export function ThemeProvider(props: PropsWithChildren<{ defaultTheme?: ThemePreference }>) {
+  const [themePreference, setThemePreference] = useState(props.defaultTheme ?? 'system')
   const themeSystem = useSystemTheme()
 
   const themeResolved = themePreference === 'system' ? themeSystem : themePreference
   const handleSetTheme = (theme: ThemePreference) => {
     startTransition(() => {
-      setTheme(theme)
+      setThemePreference(theme)
     })
     document.cookie = `${COOKIE_THEME_KEY}=${theme}`
   }

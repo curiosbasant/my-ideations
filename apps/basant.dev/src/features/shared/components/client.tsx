@@ -4,9 +4,9 @@ import { Suspense, use, type ComponentProps } from 'react'
 
 import { ThemeContext } from '~/features/theme/provider'
 
-export function HtmlThemed(props: ComponentProps<'html'>) {
+export function HtmlWithDataTheme(props: ComponentProps<'html'>) {
   const { themeResolved } = use(ThemeContext)
-  return <html {...props} data-theme={themeResolved} />
+  return <html {...props} data-theme={themeResolved} suppressHydrationWarning />
 }
 
 export function CurrentYear() {

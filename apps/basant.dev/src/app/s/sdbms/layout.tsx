@@ -6,9 +6,9 @@ import Link from 'next/link'
 
 import { geistMono, geistSans } from '~/app/shared'
 import { ScrollArea } from '~/components/ui/scroll-area'
-import { CurrentYear, HtmlThemed } from '~/features/shared/components/client'
+import { CurrentYear, HtmlWithDataTheme } from '~/features/shared/components/client'
 import { ProfileDropdownMenu } from '~/features/shared/components/profile-dropdown'
-import { ThemeProvider } from '~/features/theme/server'
+import { ScriptAutoApplyTheme, ThemeProvider } from '~/features/theme/server'
 
 export const metadata: Metadata = {
   title: {
@@ -21,7 +21,10 @@ export const metadata: Metadata = {
 export default async function SdbmsRootLayout(props: LayoutProps<'/s/sdbms'>) {
   return (
     <ThemeProvider>
-      <HtmlThemed className='size-full antialiased' lang='en'>
+      <HtmlWithDataTheme className='size-full antialiased' lang='en'>
+        <head>
+          <ScriptAutoApplyTheme />
+        </head>
         <body className={`${geistSans.variable} ${geistMono.variable} isolate size-full`}>
           <div className='light:bg-secondary selection:bg-primary/25 isolate size-full'>
             <ScrollArea className='size-full'>
@@ -66,7 +69,7 @@ export default async function SdbmsRootLayout(props: LayoutProps<'/s/sdbms'>) {
             </ScrollArea>
           </div>
         </body>
-      </HtmlThemed>
+      </HtmlWithDataTheme>
     </ThemeProvider>
   )
 }

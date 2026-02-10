@@ -6,8 +6,8 @@ import Link from 'next/link'
 
 import { geistMono, geistSans } from '~/app/shared'
 import { ScrollArea } from '~/components/ui/scroll-area'
-import { CurrentYear, HtmlThemed } from '~/features/shared/components/client'
-import { ThemeProvider } from '~/features/theme/server'
+import { CurrentYear, HtmlWithDataTheme } from '~/features/shared/components/client'
+import { ScriptAutoApplyTheme, ThemeProvider } from '~/features/theme/server'
 import { Providers, ShareResultButton } from './client'
 
 export const metadata: Metadata = {
@@ -18,7 +18,10 @@ export const metadata: Metadata = {
 export default function ParinaamRootLayout(props: LayoutProps<'/s/parinaam'>) {
   return (
     <ThemeProvider>
-      <HtmlThemed className='size-full antialiased' lang='en'>
+      <HtmlWithDataTheme className='size-full antialiased' lang='en'>
+        <head>
+          <ScriptAutoApplyTheme />
+        </head>
         <body className={`${geistSans.variable} ${geistMono.variable} isolate size-full`}>
           <div className='light:bg-secondary selection:bg-primary/25 isolate size-full'>
             <div className='mask-b-from-50% pointer-events-none absolute top-0 -z-10 h-2/3 w-full'>
@@ -80,7 +83,7 @@ export default function ParinaamRootLayout(props: LayoutProps<'/s/parinaam'>) {
             </ScrollArea>
           </div>
         </body>
-      </HtmlThemed>
+      </HtmlWithDataTheme>
     </ThemeProvider>
   )
 }
