@@ -1,14 +1,16 @@
 import type { Config } from 'drizzle-kit'
 
 // Needed for `drizzle-kit push`
-if (!process.env['POSTGRES_URL']) throw new Error('Required PostgreSQL connection url.')
+if (!process.env['POSTGRES_URL_NON_POOLING']) throw new Error('Required PostgreSQL connection url.')
 
 export default {
-  dialect: 'postgresql',
-  schema: './src/schema/index.ts',
-  dbCredentials: {
-    url: process.env['POSTGRES_URL'],
-  },
-  schemaFilter: 'public',
   casing: 'snake_case',
+  dialect: 'postgresql',
+  dbCredentials: {
+    url: process.env['POSTGRES_URL_NON_POOLING'],
+  },
+  schema: './src/schema/index.ts',
+  schemaFilter: 'public',
+  strict: true,
+  verbose: true,
 } satisfies Config
