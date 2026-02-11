@@ -4,9 +4,9 @@ import './theme.css'
 import type { Metadata } from 'next'
 import Link from 'next/link'
 
-import { geistMono, geistSans } from '~/app/shared'
 import { ScrollArea } from '~/components/ui/scroll-area'
 import { CurrentYear, HtmlWithDataTheme } from '~/features/shared/components/client'
+import { geistMono, geistSans } from '~/features/shared/fonts'
 import { ScriptAutoApplyTheme, ThemeProvider } from '~/features/theme/server'
 import { Providers, ShareResultButton } from './client'
 

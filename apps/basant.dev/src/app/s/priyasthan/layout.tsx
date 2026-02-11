@@ -4,8 +4,8 @@ import './theme.css'
 import type { Metadata } from 'next'
 import Link from 'next/link'
 
-import { latoFont } from '~/app/shared'
 import { ScrollArea } from '~/components/ui/scroll-area'
+import { latoFont } from '~/features/shared/fonts'
 
 export const metadata: Metadata = {
   title: {

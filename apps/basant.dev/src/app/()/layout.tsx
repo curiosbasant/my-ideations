@@ -3,7 +3,7 @@ import './theme.css'
 
 import type { Metadata } from 'next'
 
-import { geistMono, geistSans } from '~/app/shared'
+import { geistMono, geistSans } from '~/features/shared/fonts'
 
 export const metadata: Metadata = {
   title: 'Myself Basant',

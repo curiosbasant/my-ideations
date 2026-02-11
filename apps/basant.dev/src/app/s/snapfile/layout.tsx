@@ -6,9 +6,9 @@ import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
 
-import { latoFont } from '~/app/shared'
 import { Button } from '~/components/ui/button'
 import { ScrollArea } from '~/components/ui/scroll-area'
+import { latoFont } from '~/features/shared/fonts'
 
 export const metadata: Metadata = {
   title: {
