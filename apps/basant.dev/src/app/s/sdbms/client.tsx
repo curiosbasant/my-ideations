@@ -2,17 +2,26 @@
 
 import type { ComponentProps } from 'react'
 
+import { toast } from '~/components/ui/sonner'
 import { actionConnectStudent, actionConnectTeacher } from '~/features/sdbms/actions'
 import { useAction } from '~/lib/utils/helper-action/client'
 
 type FormProps = Omit<ComponentProps<'form'>, 'action'>
 
 export function FormConnectTeacher(props: FormProps) {
-  const { state, actionTransition } = useAction({ actionFn: actionConnectTeacher })
+  const { state, actionTransition } = useAction({
+    actionFn: actionConnectTeacher,
+    onSuccess: () => {
+      toast.success('Teacher connected successfully')
+    },
+  })
 
   return (
     <form
       {...props}
+      onSubmit={() => {
+        toast.success('Teacher connected successfully')
+      }}
       action={(fd) => {
         const employeeId = fd.get('employeeId') as string
         const dob = fd.get('dob') as string
@@ -25,7 +34,12 @@ export function FormConnectTeacher(props: FormProps) {
 }
 
 export function FormConnectStudent(props: FormProps) {
-  const { state, actionTransition } = useAction({ actionFn: actionConnectStudent })
+  const { state, actionTransition } = useAction({
+    actionFn: actionConnectStudent,
+    onSuccess: () => {
+      toast.success('Student connected successfully')
+    },
+  })
 
   return (
     <form

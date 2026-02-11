@@ -5,6 +5,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 
 import { ScrollArea } from '~/components/ui/scroll-area'
+import { Toaster } from '~/components/ui/sonner'
 import { CurrentYear, HtmlWithDataTheme } from '~/features/shared/components/client'
 import { ProfileDropdownMenu } from '~/features/shared/components/profile-dropdown'
 import { geistMono, geistSans } from '~/features/shared/fonts'
@@ -68,6 +69,7 @@ export default async function SdbmsRootLayout(props: LayoutProps<'/s/sdbms'>) {
               </div>
             </ScrollArea>
           </div>
+          <Toaster />
         </body>
       </HtmlWithDataTheme>
     </ThemeProvider>

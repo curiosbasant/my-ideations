@@ -2,12 +2,16 @@
 
 import type { PropsWithChildren } from 'react'
 
+import { toast } from '~/components/ui/sonner'
 import { actionStudentImportFile } from '~/features/sdbms/actions'
 import { useAction } from '~/lib/utils/helper-action/client'
 
 export function FormWrapper(props: PropsWithChildren) {
   const { state, actionTransition } = useAction({
     actionFn: actionStudentImportFile,
+    onSuccess: () => {
+      toast.success('Students imported successfully')
+    },
   })
 
   return (

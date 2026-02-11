@@ -42,8 +42,6 @@ export function MarkInput({
             mark,
           })
         }
-
-        console.log(ev.currentTarget.value)
       }}
     />
   )
