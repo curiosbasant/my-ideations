@@ -15,6 +15,7 @@ import { z } from '@my/lib/zod'
 import {
   categorySchema,
   coerceNumber,
+  coerceString,
   dateSchema,
   genderSchema,
   trimmedString,
@@ -79,7 +80,7 @@ const transformRawStudent = (raw: Record<RawKeyStudent, string>) => ({
 const SchemaStudent = z.object({
   standard: coerceNumber,
   section: trimmedString,
-  srNo: trimmedString,
+  srNo: coerceString,
   doa: dateSchema.nullable().catch(null),
   rollNo: coerceNumber.nullable().catch(null),
 
@@ -101,7 +102,10 @@ const SchemaStudent = z.object({
     .catch(null),
 
   religion: trimmedString.nullable().catch(null),
-  mobileNo: trimmedString.length(10).nullable().catch(null),
+  mobileNo: coerceString
+    .refine((s) => s.length === 10 && !isNaN(+s))
+    .nullable()
+    .catch(null),
   schoolDistance: coerceNumber.nullable().catch(null),
   schoolName: trimmedString,
 })

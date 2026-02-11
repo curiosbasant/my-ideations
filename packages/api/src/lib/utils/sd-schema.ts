@@ -3,8 +3,17 @@ import { z } from '@my/lib/zod'
 export const categorySchema = z.literal(['GEN', 'OBC', 'SC', 'ST'])
 export const genderSchema = z.literal(['M', 'F', 'T'])
 export const trimmedString = z.string().trim().nonempty()
-export const coerceNumber = trimmedString.pipe(z.coerce.number())
-export const dateSchema = trimmedString.transform(ddmmyyyyParser).pipe(z.date())
+export const coerceNumber = trimmedString.pipe(z.coerce.number()).or(z.number())
+export const coerceString = z.number().pipe(z.coerce.string()).or(trimmedString)
+
+const MS_PER_DAY = 86400 * 1000
+const EXCEL_EPOCH_OFFSET = 25569
+export const dateSchema = z
+  .union([
+    z.number().transform((v) => new Date((v - EXCEL_EPOCH_OFFSET) * MS_PER_DAY)),
+    trimmedString.transform(ddmmyyyyParser),
+  ])
+  .pipe(z.date())
 
 function ddmmyyyyParser(value: string) {
   const parts = value.split(/-|\//)

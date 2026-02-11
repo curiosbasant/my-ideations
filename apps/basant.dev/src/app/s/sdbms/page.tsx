@@ -65,7 +65,7 @@ export default async function SdbmsHomePage(props: PageProps<'/s/sdbms'>) {
           </FormConnectStudent>
         </div>
       : <form action='/' className='mx-auto grid max-w-xs grid-cols-2 gap-4'>
-          <p className='col-span-full text-center text-xl font-bold'>What are you?</p>
+          <p className='col-span-full text-center text-xl font-bold'>Select your role</p>
           <Button name='role' value='teacher' type='submit'>
             Teacher
           </Button>
