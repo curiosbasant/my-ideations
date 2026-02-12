@@ -271,3 +271,20 @@ export function splitFullName(fullName: string): { firstName: string; lastName: 
   const lastName = parts.pop() ?? null
   return { firstName: parts.join(' '), lastName }
 }
+
+export function getRootOrigin() {
+  // 1. Check if we are in a browser context (client-side)
+  if (typeof window !== 'undefined') {
+    return window.location.origin
+  }
+  // 2. Check for Vercel's Production URL
+  if (process.env['NEXT_PUBLIC_SITE_URL']) {
+    return process.env['NEXT_PUBLIC_SITE_URL']
+  }
+  // 3. Check for Vercel's generated Preview/Deployment URL
+  if (process.env['VERCEL_URL']) {
+    return `https://${process.env['VERCEL_URL']}`
+  }
+  // 4. Fallback to Localhost for development or local production runs
+  return `http://localhost:${process.env['PORT'] || 3000}`
+}

@@ -13,15 +13,18 @@
     "@dnd-kit/sortable": "^8.0.0",
     "@dnd-kit/utilities": "^3.2.2",
     "@hookform/resolvers": "^3.3.2",
+    "@my/lib": "workspace:*",
     "@tanstack/react-query": "^5.8.1",
     "@trpc/client": "^11.4.2",
     "@trpc/react-query": "^11.4.2",
+    "@trpc/tanstack-react-query": "^11.4.2",
     "@uidotdev/usehooks": "^2.4.1",
     "immer": "^10.0.3",
     "react-hook-form": "^7.48.2",
     "use-immer": "^0.9.0"
   },
   "devDependencies": {
+    "@my/api": "workspace:*",
     "@my/tsconfig": "workspace:*",
     "typescript": "~5.8.3"
   },

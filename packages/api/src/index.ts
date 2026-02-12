@@ -3,6 +3,7 @@ import type { inferRouterInputs, inferRouterOutputs } from '@trpc/server'
 import { appRouter } from './root'
 import { createCallerFactory } from './trpc'
 
+export { fetchRequestHandler } from '@trpc/server/adapters/fetch'
 export { createTRPCContext } from './trpc'
 
 export const createCaller = createCallerFactory(appRouter)

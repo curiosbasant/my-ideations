@@ -4,6 +4,8 @@ import './theme.css'
 import type { Metadata } from 'next'
 import Link from 'next/link'
 
+import { TrpcClientProvider } from '@my/core/trpc/client'
+
 import { ScrollArea } from '~/components/ui/scroll-area'
 import { Toaster } from '~/components/ui/sonner'
 import { CurrentYear, HtmlWithDataTheme } from '~/features/shared/components/client'
@@ -46,7 +48,7 @@ export default async function SdbmsRootLayout(props: LayoutProps<'/s/sdbms'>) {
                 </header>
                 <div className='px-(--page-padding) flex flex-1'>
                   <main className='max-w-(--page-size) mx-auto w-full pb-16 pt-8'>
-                    {props.children}
+                    <TrpcClientProvider>{props.children}</TrpcClientProvider>
                   </main>
                 </div>
                 <footer className='bg-background px-(--page-padding)'>
