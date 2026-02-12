@@ -9,6 +9,7 @@ import { Toaster } from '~/components/ui/sonner'
 import { CurrentYear, HtmlWithDataTheme } from '~/features/shared/components/client'
 import { ProfileDropdownMenu } from '~/features/shared/components/profile-dropdown'
 import { geistMono, geistSans } from '~/features/shared/fonts'
+import { ThemeToggleGroupButton } from '~/features/theme/client'
 import { ScriptAutoApplyTheme, ThemeProvider } from '~/features/theme/server'
 
 export const metadata: Metadata = {
@@ -49,13 +50,13 @@ export default async function SdbmsRootLayout(props: LayoutProps<'/s/sdbms'>) {
                   </main>
                 </div>
                 <footer className='bg-background px-(--page-padding)'>
-                  <div className='max-w-(--page-size) m-auto py-6'>
-                    <div className='flex flex-col justify-between gap-2 text-sm sm:flex-row'>
+                  <div className='max-w-(--page-size) m-auto py-4'>
+                    <div className='flex flex-col items-center justify-between gap-2 text-sm sm:flex-row'>
                       <p>
                         Made with ❤️ by{' '}
                         <a
                           className='text-blue-400 hover:text-blue-500'
-                          href='https://www.github.com/curiosbasant/pariksha-parinaam'
+                          href='https://www.github.com/curiosbasant'
                           target='_blank'>
                           Basant (Computer Instructor)
                         </a>
@@ -63,6 +64,7 @@ export default async function SdbmsRootLayout(props: LayoutProps<'/s/sdbms'>) {
                       <span>
                         ©<CurrentYear />
                       </span>
+                      <ThemeToggleGroupButton />
                     </div>
                   </div>
                 </footer>
