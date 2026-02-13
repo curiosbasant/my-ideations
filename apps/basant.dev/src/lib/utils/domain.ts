@@ -1,13 +1,14 @@
-import { ROOT_DOMAIN } from '~/lib/env'
+import { ROOT_HOSTNAME } from '~/lib/env'
 
 export function extractSubdomain(host: string | null) {
   if (!host) return null
   const [hostname] = host.split(':', 1)
-  if (!hostname) return null
+  if (!hostname || hostname === ROOT_HOSTNAME) return null
 
   // Local development environment
-  if (hostname.endsWith('.localhost')) {
-    return hostname.slice(0, -10)
+  if (hostname.endsWith('.' + ROOT_HOSTNAME)) {
+    const subdomain = hostname.slice(0, -(ROOT_HOSTNAME.length + 1))
+    return subdomain === 'www' ? null : subdomain
   }
 
   if (hostname.endsWith('.vercel.app')) {
@@ -23,14 +24,5 @@ export function extractSubdomain(host: string | null) {
     }
   }
 
-  // Production environment
-  const [rootDomainFormatted] = ROOT_DOMAIN.split(':', 1)
-
-  // Regular subdomain detection
-  const isSubdomain =
-    hostname !== rootDomainFormatted
-    && hostname !== `www.${rootDomainFormatted}`
-    && hostname.endsWith(`.${rootDomainFormatted}`)
-
-  return isSubdomain ? hostname.replace(`.${rootDomainFormatted}`, '') : null
+  return null
 }

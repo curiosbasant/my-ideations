@@ -286,5 +286,5 @@ export function getRootOrigin() {
     return `https://${process.env['VERCEL_URL']}`
   }
   // 4. Fallback to Localhost for development or local production runs
-  return `http://localhost:${process.env['PORT'] || 3000}`
+  return `http://${process.env['NEXT_PUBLIC_LOCAL_ROOT_HOSTNAME'] || 'localhost'}:${process.env['PORT'] || 3000}`
 }

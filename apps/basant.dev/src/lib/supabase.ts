@@ -3,6 +3,13 @@ import { NextResponse, type NextRequest } from 'next/server'
 
 import { createServerClient, type CookieMethodsServer, type Database } from '@my/lib/supabase'
 
+import { ROOT_HOSTNAME } from './env'
+
+const cookieOptions = {
+  domain: ROOT_HOSTNAME,
+  secure: process.env.NODE_ENV === 'production',
+}
+
 export async function getSupabase() {
   const cookieStore = await cookies()
 
@@ -10,9 +17,7 @@ export async function getSupabase() {
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!,
     {
-      auth: {
-        flowType: 'pkce',
-      },
+      cookieOptions,
       cookies: {
         getAll() {
           return cookieStore.getAll()
@@ -38,6 +43,7 @@ export function getSupabaseMiddleware(request: NextRequest, response: NextRespon
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!,
     {
+      cookieOptions,
       cookies: {
         getAll() {
           return request.cookies.getAll()
