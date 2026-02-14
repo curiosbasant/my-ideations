@@ -46,6 +46,17 @@ export const sd__teacher = pgTable(
   ],
 )
 
+export const sd__teacherSubject = pgTable(
+  'teacher_subject',
+  withCommonColumns(() => ({
+    sessionId: smallId.references(() => sd__luSession.id, CASCADE_ON_UPDATE).notNull(),
+    teacherId: id.references(() => sd__teacher.id).notNull(),
+    classSectionId: smallId.references(() => sd__classSection.id).notNull(),
+    subjectId: id.references(() => sd__luSubject.id).notNull(),
+  })),
+  (t) => [uniqueIndex().on(t.sessionId, t.teacherId, t.classSectionId, t.subjectId)],
+)
+
 export const sd__student = pgTable(
   'student',
   withCommonColumns((c) => ({

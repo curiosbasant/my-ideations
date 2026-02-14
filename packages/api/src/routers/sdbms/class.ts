@@ -20,6 +20,23 @@ export const classRouter = {
         .where(eq(schema.sd__teacher.personId, authUserPersonId))
     })
   }),
+  section: {
+    list: protectedProcedure.input(z.number()).query(({ input, ctx: { rls } }) => {
+      return rls((tx) => {
+        return tx
+          .select({
+            id: schema.sd__classSection.id,
+            name: schema.sd__classSection.name,
+          })
+          .from(schema.sd__class)
+          .innerJoin(
+            schema.sd__classSection,
+            eq(schema.sd__class.id, schema.sd__classSection.classId),
+          )
+          .where(eq(schema.sd__class.id, input))
+      })
+    }),
+  },
   student: {
     mark: {
       list: protectedProcedure

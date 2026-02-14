@@ -19,6 +19,10 @@ export const getSubjects = cache(() => {
   return api.sdbms.subject.list()
 })
 
+export const getTeacherSubjects = cache((sessionId: number) => {
+  return api.sdbms.teacher.subject.list({ sessionId })
+})
+
 export const getInstitutes = cache(() => {
   return api.sdbms.institute.list()
 })
