@@ -25,7 +25,7 @@ export function Table<T>(props: { rows: T[]; columns: ColumnDef<T, any>[] }) {
                   <div
                     className={
                       header.column.getCanSort() ?
-                        'cursor-pointer transition-colors select-none hover:text-primary'
+                        'hover:text-primary flex cursor-pointer select-none items-center gap-2 transition-colors'
                       : ''
                     }
                     onClick={header.column.getToggleSortingHandler()}>
@@ -41,11 +41,11 @@ export function Table<T>(props: { rows: T[]; columns: ColumnDef<T, any>[] }) {
           </tr>
         ))}
       </thead>
-      <tbody className='divide-y divide-border'>
+      <tbody className='divide-border divide-y'>
         {table.getRowModel().rows.map((row) => {
           return (
             <tr
-              className='transition-colors even:bg-secondary/40 hover:bg-secondary/75'
+              className='even:bg-secondary/40 hover:bg-secondary/75 transition-colors'
               key={row.id}>
               {row.getVisibleCells().map((cell) => (
                 <td className='px-4 py-3' key={cell.id}>
