@@ -17,6 +17,15 @@ export const actionTeacherImportFile = createAction(
   },
 )
 
+export async function actionTeacherToggleSubject(payload: {
+  sessionId: number
+  sectionId: number
+  subjectId: number
+}) {
+  await api.sdbms.teacher.subject.toggle(payload)
+  revalidatePath('/subjects')
+}
+
 export const actionConnectStudent = createAction(async (payload: { srNo: string; dob: string }) => {
   await api.sdbms.student.connectProfile(payload)
   revalidatePath('/')
