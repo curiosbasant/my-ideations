@@ -1,5 +1,5 @@
-import { eq, exists } from 'drizzle-orm'
-import { index, pgPolicy, pgTableCreator, uniqueIndex } from 'drizzle-orm/pg-core'
+import { index, pgPolicy, primaryKey, uniqueIndex } from 'drizzle-orm/pg-core'
+import { eq, exists } from 'drizzle-orm/sql'
 import { authenticatedRole } from 'drizzle-orm/supabase'
 
 import {
@@ -8,41 +8,42 @@ import {
   id,
   smallId,
   withCommonColumns,
-} from '../utils/pg-column-helpers'
+} from '../../utils/pg-column-helpers'
 import {
-  policyAllowAuthenticatedInsert,
   policyAllowAuthenticatedSelect,
   policyAllowPublicSelect,
-} from '../utils/pg-table-helpers'
-import { qb } from '../utils/qb'
-import { address } from './address'
-import { person } from './person'
+} from '../../utils/pg-table-helpers'
+import { qb } from '../../utils/qb'
+import { person } from '../person'
+import { pgTable } from './_helpers'
+import { sd__institute } from './institute'
+import {
+  policyAllowTeacherInsert,
+  policyAllowTeacherSelect,
+  policyAllowTeacherUpdate,
+  sd__teacher,
+} from './teacher'
 
-const pgTable = pgTableCreator((tableName) => `sd__${tableName}`)
+export { sd__institute, sd__teacher }
 
-export const sd__institute = pgTable(
-  'institute',
-  withCommonColumns((c) => ({
-    name: c.varchar().unique().notNull(),
-    addressId: id.references(() => address.id),
-  })),
-  (t) => [index().on(t.createdAt.desc()), policyAllowPublicSelect],
-)
-
-export const sd__teacher = pgTable(
-  'teacher',
-  withCommonColumns((c) => ({
-    personId: id.references(() => person.id).notNull(),
-    instituteId: id.references(() => sd__institute.id).notNull(),
-    employeeId: c.varchar().unique(),
-    joiningDate: c.date(),
-  })),
+export const sd__teacherSubject = pgTable(
+  'teacher_subject',
+  () => {
+    const { createdAt, updatedAt: deletedAt } = getTimestampColumns()
+    return {
+      sessionId: smallId.references(() => sd__luSession.id, CASCADE_ON_UPDATE).notNull(),
+      teacherId: id.references(() => sd__teacher.id).notNull(),
+      classSectionId: smallId.references(() => sd__classSection.id).notNull(),
+      subjectId: id.references(() => sd__luSubject.id).notNull(),
+      createdAt,
+      deletedAt,
+    }
+  },
   (t) => [
-    uniqueIndex().on(t.personId),
-    index().on(t.instituteId),
-    index().on(t.createdAt.desc()),
-    policyAllowAuthenticatedSelect,
-    policyAllowAuthenticatedInsert,
+    primaryKey({ columns: [t.sessionId, t.teacherId, t.classSectionId, t.subjectId] }),
+    policyAllowTeacherSelect(t.teacherId),
+    policyAllowTeacherInsert(t.teacherId),
+    policyAllowTeacherUpdate(t.teacherId),
   ],
 )
 

@@ -22,6 +22,7 @@
   "dependencies": {
     "@my/lib": "workspace:*",
     "drizzle-orm": "1.0.0-beta.15-859cf75",
+    "drizzle-plus": "1.0.0-beta.34",
     "postgres": "^3.3.5"
   },
   "devDependencies": {

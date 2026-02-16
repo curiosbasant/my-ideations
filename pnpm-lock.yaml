@@ -494,6 +494,9 @@ importers:
       drizzle-orm:
         specifier: 1.0.0-beta.15-859cf75
         version: 1.0.0-beta.15-859cf75(@types/mssql@9.1.9)(mssql@11.0.1)(postgres@3.4.8)(zod@4.3.5)
+      drizzle-plus:
+        specifier: 1.0.0-beta.34
+        version: 1.0.0-beta.34(drizzle-orm@1.0.0-beta.15-859cf75(@types/mssql@9.1.9)(mssql@11.0.1)(postgres@3.4.8)(zod@4.3.5))
       postgres:
         specifier: ^3.3.5
         version: 3.4.8
@@ -5642,6 +5645,11 @@ packages:
         optional: true
       zod:
         optional: true
+
+  drizzle-plus@1.0.0-beta.34:
+    resolution: {integrity: sha512-bqp9IiEjF+DWx75jWUnixT4SCAWoyzvCYpqRYs1+K1Z9IWV/3g33oyTHweDwEK8gb2/a1ZYnvlmvfD9+jEeAAQ==}
+    peerDependencies:
+      drizzle-orm: '>=1.0.0-0'
 
   drizzle-seed@0.3.1:
     resolution: {integrity: sha512-F/0lgvfOAsqlYoHM/QAGut4xXIOXoE5VoAdv2FIl7DpGYVXlAzKuJO+IphkKUFK3Dz+rFlOsQLnMNrvoQ0cx7g==}
@@ -15940,6 +15948,10 @@ snapshots:
     optionalDependencies:
       postgres: 3.4.8
       zod: 4.3.5
+
+  drizzle-plus@1.0.0-beta.34(drizzle-orm@1.0.0-beta.15-859cf75(@types/mssql@9.1.9)(mssql@11.0.1)(postgres@3.4.8)(zod@4.3.5)):
+    dependencies:
+      drizzle-orm: 1.0.0-beta.15-859cf75(@types/mssql@9.1.9)(mssql@11.0.1)(postgres@3.4.8)(zod@4.3.5)
 
   drizzle-seed@0.3.1(drizzle-orm@1.0.0-beta.15-859cf75(@types/mssql@9.1.9)(mssql@11.0.1)(postgres@3.4.8)(zod@4.3.5)):
     dependencies:
