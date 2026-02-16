@@ -1,7 +1,8 @@
-import { index, pgPolicy, uniqueIndex } from 'drizzle-orm/pg-core'
+import { index, pgPolicy, uniqueIndex, type PgColumn } from 'drizzle-orm/pg-core'
 import { eq, sql } from 'drizzle-orm/sql'
 import { authenticatedRole, authUid, authUsers } from 'drizzle-orm/supabase'
 
+import { authUserProfileId } from '../utils/fn-helpers'
 import { id, smallId } from '../utils/pg-column-helpers/helpers'
 import {
   pgTable,
@@ -67,3 +68,17 @@ export const profile = pgTable(
     }),
   ],
 )
+
+export const policyAllowOneselfInsert = (profileId: PgColumn) =>
+  pgPolicy('Allow insert to oneself', {
+    for: 'insert',
+    to: authenticatedRole,
+    withCheck: eq(profileId, authUserProfileId),
+  })
+
+export const policyAllowOneselfUpdate = (profileId: PgColumn) =>
+  pgPolicy('Allow update to oneself', {
+    for: 'update',
+    to: authenticatedRole,
+    using: eq(profileId, authUserProfileId),
+  })
