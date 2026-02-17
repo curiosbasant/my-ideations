@@ -26,3 +26,7 @@ export const objects = storageSchema.table('objects', (c) => ({
   ownerId: c.text(),
   userMetadata: c.jsonb(),
 }))
+
+export const bucketNames = {
+  snapfileFiles: 'sf__files',
+}

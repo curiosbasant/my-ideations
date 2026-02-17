@@ -1,7 +1,8 @@
-import { sql } from 'drizzle-orm'
 import { index, pgPolicy, pgTableCreator } from 'drizzle-orm/pg-core'
+import { eq, sql } from 'drizzle-orm/sql'
 
 import { getDefaultTimezone, id } from '../utils/pg-column-helpers'
+import { bucketNames, objects } from '../utils/supabase-helpers'
 
 const pgTable = pgTableCreator((tableName) => `sf__${tableName}`)
 
@@ -21,3 +22,11 @@ export const sf__shortUrl = pgTable(
     }),
   ],
 )
+
+// ~~~~~~ Bucket Policies ~~~~~~
+
+export const policyAllowFilesUpload = pgPolicy('Allow upload to anyone', {
+  as: 'permissive',
+  for: 'insert',
+  withCheck: eq(objects.bucketId, sql.raw(`'${bucketNames.snapfileFiles}'`)),
+}).link(objects)
