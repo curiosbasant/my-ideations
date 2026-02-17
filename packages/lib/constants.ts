@@ -1,0 +1,3 @@
+export const LOCAL_ROOT_HOSTNAME = process.env['NEXT_PUBLIC_LOCAL_ROOT_HOSTNAME'] || 'localhost'
+export const ROOT_HOSTNAME =
+  process.env['NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL'] || LOCAL_ROOT_HOSTNAME

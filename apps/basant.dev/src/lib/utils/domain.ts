@@ -1,4 +1,4 @@
-import { ROOT_HOSTNAME } from '~/lib/env'
+import { ROOT_HOSTNAME } from '@my/lib/constants'
 
 export function extractSubdomain(host: string | null) {
   if (!host) return null

@@ -1,14 +1,12 @@
 import { cookies } from 'next/headers'
 import { NextResponse, type NextRequest } from 'next/server'
 
-import { createServerClient, type CookieMethodsServer, type Database } from '@my/lib/supabase'
-
-import { ROOT_HOSTNAME } from './env'
-
-const cookieOptions = {
-  domain: ROOT_HOSTNAME,
-  secure: process.env.NODE_ENV === 'production',
-}
+import {
+  cookieOptions,
+  createServerClient,
+  type CookieMethodsServer,
+  type Database,
+} from '@my/lib/supabase'
 
 export async function getSupabase() {
   const cookieStore = await cookies()
