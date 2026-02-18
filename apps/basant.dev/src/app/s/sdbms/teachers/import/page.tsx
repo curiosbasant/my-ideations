@@ -9,7 +9,7 @@ import { checkIfAdmin } from '~/features/sdbms/dal'
 import { FormWrapper } from './client'
 
 export const metadata: Metadata = {
-  title: 'Import File',
+  title: 'Import Teachers',
 }
 
 export default async function TeachersImportPage() {

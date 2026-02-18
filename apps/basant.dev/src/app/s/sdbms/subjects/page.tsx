@@ -1,5 +1,11 @@
+import type { Metadata } from 'next/types'
+
 import { getTeacherSubjects } from '~/features/sdbms/dal'
 import { actionToggleSubject, FormAddSubject, SubjectTeacherMappingTable } from './client'
+
+export const metadata: Metadata = {
+  title: 'Subjects',
+}
 
 export default async function TeacherSubjectsPage() {
   const subjects = await getTeacherSubjects(2025)
