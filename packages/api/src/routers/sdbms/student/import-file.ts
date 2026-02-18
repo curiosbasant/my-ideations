@@ -4,10 +4,10 @@ import {
   buildConflictUpdateColumns,
   eq,
   inArray,
-  now,
   schema,
   type DbTransaction,
 } from '@my/db'
+import { now } from '@my/db/functions'
 import { extractDataFromSheet } from '@my/lib/file'
 import { groupBy, splitFullName } from '@my/lib/utils'
 import { z } from '@my/lib/zod'

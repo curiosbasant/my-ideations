@@ -1,4 +1,5 @@
-import { and, authUid, authUserPersonId, caseWhen, eq, isNull, now, schema } from '@my/db'
+import { and, authUid, authUserPersonId, eq, isNull, schema } from '@my/db'
+import { caseWhen, now } from '@my/db/functions'
 import { z } from '@my/lib/zod'
 
 import { protectedProcedure } from '../../../trpc'

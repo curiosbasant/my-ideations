@@ -11,6 +11,7 @@ import {
   unionAll,
   type Database,
 } from '@my/db'
+import { coalesce } from '@my/db/functions'
 import {
   groupCreateSchema,
   groupMemberInviteSchema,
@@ -63,7 +64,7 @@ export const spendBuddyRouter = {
           name: myGroups.name,
           ownerId: myGroups.ownerId,
           memberCount: groupMemberCount.count,
-          totalSpends: sql<string>`coalesce(${groupSpends.spends} / 100, 0)`.as('total_spends'),
+          totalSpends: coalesce(sql`${groupSpends.spends} / 100`, 0).as('total_spends'),
         })
         .from(myGroups)
         .leftJoin(groupMemberCount, eq(myGroups.id, groupMemberCount.id))
@@ -186,7 +187,7 @@ export const spendBuddyRouter = {
             displayName: profileDisplayName().as('display_name'),
             avatarUrl: schema.profile.avatarUrl,
             joinedAt: schema.sb__member.joinedAt,
-            spends: sql<string>`coalesce(${memberSpends.spends} / 100, 0)`.as('total_spends'),
+            spends: coalesce(sql`${memberSpends.spends} / 100`, 0).as('total_spends'),
           })
           .from(schema.sb__member)
           .innerJoin(schema.profile, eq(schema.profile.id, schema.sb__member.userId))

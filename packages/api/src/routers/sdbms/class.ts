@@ -1,4 +1,5 @@
-import { and, authUserPersonId, eq, now, personFullName, schema, type DbTransaction } from '@my/db'
+import { and, authUserPersonId, eq, personFullName, schema, type DbTransaction } from '@my/db'
+import { now } from '@my/db/functions'
 import { z } from '@my/lib/zod'
 
 import { protectedProcedure } from '../../trpc'

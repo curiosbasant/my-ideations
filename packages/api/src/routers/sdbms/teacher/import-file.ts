@@ -1,12 +1,5 @@
-import {
-  and,
-  buildConflictSetWhere,
-  buildConflictUpdateColumns,
-  eq,
-  inArray,
-  now,
-  schema,
-} from '@my/db'
+import { and, buildConflictSetWhere, buildConflictUpdateColumns, eq, inArray, schema } from '@my/db'
+import { now } from '@my/db/functions'
 import { extractDataFromSheet } from '@my/lib/file'
 import { splitFullName } from '@my/lib/utils'
 import { z } from '@my/lib/zod'

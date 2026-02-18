@@ -1,15 +1,7 @@
-import {
-  eq,
-  getColumns,
-  getTableName,
-  or,
-  SQL,
-  sql,
-  type AnyColumn,
-  type SQLWrapper,
-} from 'drizzle-orm'
+import { getColumns, getTableName, type AnyColumn, type SQLWrapper } from 'drizzle-orm'
 import { toSnakeCase } from 'drizzle-orm/casing'
 import type { PgTable } from 'drizzle-orm/pg-core'
+import { eq, or, SQL, sql } from 'drizzle-orm/sql'
 
 import { person } from '../schema/person'
 import { profile } from '../schema/profile'
@@ -22,10 +14,10 @@ export const personFullName = () =>
   nullIf<string>(concatWs(' ', person.firstName, person.lastName), '')
 
 export const profileDisplayName = () =>
-  coalesce<string>(
+  coalesce(
     nullIf(concatWs(' ', profile.firstName, profile.lastName), ''),
     profile.username,
-    concat(sql`'profile_'`, profile.id),
+    concat('profile_', sql`${profile.id}::text`),
   )
 
 export function buildConflictUpdateColumns<T extends PgTable, C extends keyof T['_']['columns']>(

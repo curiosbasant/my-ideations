@@ -1,5 +1,5 @@
-import { eq, or, sql } from 'drizzle-orm'
 import { check, index, pgPolicy, primaryKey } from 'drizzle-orm/pg-core'
+import { eq, or, sql } from 'drizzle-orm/sql'
 import { authenticatedRole } from 'drizzle-orm/supabase'
 
 import { authUserPersonId } from '../utils/fn-helpers'
