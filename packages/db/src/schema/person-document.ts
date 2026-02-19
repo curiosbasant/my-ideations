@@ -11,6 +11,7 @@ import {
   smallId,
 } from '../utils/pg-column-helpers'
 import { pgTable, policyAllowPublicSelect } from '../utils/pg-table-helpers'
+import { bucketNames, objects } from '../utils/supabase-helpers'
 import { person } from './person'
 
 export const personDocument = pgTable(
@@ -19,7 +20,7 @@ export const personDocument = pgTable(
     personId: id.references(() => person.id).notNull(),
     type: smallId.references(() => personDocumentType.id, CASCADE_ON_UPDATE).notNull(),
     number: c.text(),
-    documentUrl: c.text(),
+    path: c.text(),
     createdBy: getProfileRef().notNull(),
     ...getTimestampColumns(),
   }),
@@ -53,3 +54,24 @@ export const personDocumentType = pgTable(
   }),
   () => [policyAllowPublicSelect],
 )
+
+// ~~~~~~ Bucket Policies ~~~~~~
+
+const conditionPersonFolder = and(
+  eq(objects.bucketId, sql.raw(`'${bucketNames.documents}'`)),
+  eq(sql`${objects.pathTokens}[1]`, sql`${authUserPersonId}::text`),
+)
+
+export const policyAllowDocumentsSelect = pgPolicy('Allow select to oneself', {
+  as: 'permissive',
+  for: 'select',
+  to: authenticatedRole,
+  using: conditionPersonFolder,
+}).link(objects)
+
+export const policyAllowDocumentsUpload = pgPolicy('Allow upload to oneself', {
+  as: 'permissive',
+  for: 'insert',
+  to: authenticatedRole,
+  withCheck: conditionPersonFolder,
+}).link(objects)

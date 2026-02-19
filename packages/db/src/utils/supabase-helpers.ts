@@ -1,4 +1,5 @@
 import { pgSchema } from 'drizzle-orm/pg-core'
+import { sql } from 'drizzle-orm/sql'
 
 const storageSchema = pgSchema('storage')
 
@@ -18,6 +19,10 @@ export const objects = storageSchema.table('objects', (c) => ({
   bucketId: c.text('bucket_id').references(() => buckets.id),
   name: c.text(),
   owner: c.uuid(),
+  pathTokens: c
+    .text()
+    .array()
+    .generatedAlwaysAs(() => sql`string_to_array(name, '/'::text)`),
   createdAt: c.timestamp({ withTimezone: true }).defaultNow(),
   updatedAt: c.timestamp({ withTimezone: true }).defaultNow(),
   lastAccessedAt: c.timestamp({ withTimezone: true }).defaultNow(),
@@ -28,5 +33,6 @@ export const objects = storageSchema.table('objects', (c) => ({
 }))
 
 export const bucketNames = {
+  documents: '__documents',
   snapfileFiles: 'sf__files',
 }
