@@ -1,3 +1,4 @@
+import { headers } from 'next/headers'
 import { redirect } from 'next/navigation'
 import { TRPCError } from '@trpc/server'
 
@@ -12,7 +13,22 @@ import {
 export async function dalLoginRedirect<T, E extends DalError>(dalResult: Promise<DalResult<T, E>>) {
   const result = await dalResult
   if (result.success) return result
-  if (result.error.type === 'unauthenticated') return redirect('/')
+  if (result.error.type === 'unauthenticated') {
+    const head = await headers()
+
+    const pathname = ((header: Headers) => {
+      const host = header.get('host')
+      const referrer = header.get('referer')
+      if (!referrer || !host) return null
+      const index = referrer.indexOf(host)
+      if (index === -1) return null
+
+      const pathname = referrer.slice(index + host.length)
+      return pathname.startsWith('/') ? pathname : null
+    })(head)
+
+    return redirect(pathname ? `/?continue=${encodeURIComponent(pathname)}` : '/')
+  }
 
   return result as DalResult<T, Exclude<E, { type: 'unauthenticated' }>>
 }

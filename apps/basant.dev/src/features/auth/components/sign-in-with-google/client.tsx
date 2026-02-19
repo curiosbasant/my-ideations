@@ -13,7 +13,7 @@ export function SignInWithGoogleButton() {
   })
 
   return (
-    <form action={() => actionTransition({})}>
+    <form action={() => actionTransition({ continue: true })}>
       <Button disabled={isPending} type='submit'>
         {isPending ? 'Please wait...' : 'Login with Google'}
       </Button>
