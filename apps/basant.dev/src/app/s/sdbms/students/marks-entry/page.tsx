@@ -23,8 +23,8 @@ export default async function StudentsMarksEntryPage(
   const subject = resolveStringParam(searchParams.subject)
 
   return (
-    <div className='mx-auto max-w-sm'>
-      <Form action='' className='grid gap-4 sm:grid-cols-2 lg:grid-cols-4'>
+    <div className='@container mx-auto max-w-md'>
+      <Form action='' className='@md:grid-cols-2 @2xl:grid-cols-4 grid gap-4'>
         <FormFieldSelectSession defaultValue={session} />
         <FormFieldSelectExam defaultValue={exam} />
         <FormFieldSelectClass defaultValue={standard} />

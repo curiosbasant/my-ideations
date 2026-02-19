@@ -9,33 +9,36 @@ import {
   type DalResult,
 } from './types'
 
-export function dalLoginRedirect<T, E extends DalError>(dalResult: DalResult<T, E>) {
-  if (dalResult.success) return dalResult
-  if (dalResult.error.type === 'unauthenticated') return redirect('/')
+export async function dalLoginRedirect<T, E extends DalError>(dalResult: Promise<DalResult<T, E>>) {
+  const result = await dalResult
+  if (result.success) return result
+  if (result.error.type === 'unauthenticated') return redirect('/')
 
-  return dalResult as DalResult<T, Exclude<E, { type: 'unauthenticated' }>>
+  return result as DalResult<T, Exclude<E, { type: 'unauthenticated' }>>
 }
 
-export function dalUnauthorizedRedirect<T, E extends DalError>(
-  dalResult: DalResult<T, E>,
+export async function dalUnauthorizedRedirect<T, E extends DalError>(
+  dalResult: Promise<DalResult<T, E>>,
   redirectPath = '/',
 ) {
-  if (dalResult.success) return dalResult
-  if (dalResult.error.type === 'unauthorized') return redirect(redirectPath)
+  const result = await dalResult
+  if (result.success) return result
+  if (result.error.type === 'unauthorized') return redirect(redirectPath)
 
-  return dalResult as DalResult<T, Exclude<E, { type: 'unauthorized' }>>
+  return result as DalResult<T, Exclude<E, { type: 'unauthorized' }>>
 }
 
-export function dalThrowError<T, E extends DalError>(dalResult: DalResult<T, E>) {
-  if (dalResult.success) return dalResult
-  throw 'error' in dalResult.error ? dalResult.error.error : dalResult.error
+export async function dalThrowError<T, E extends DalError>(dalResult: Promise<DalResult<T, E>>) {
+  const result = await dalResult
+  if (result.success) return result
+  throw 'error' in result.error ? result.error.error : result.error
 }
 
-export function dalVerifySuccess<T, E extends DalError>(
-  dalResult: DalResult<T, E>,
+export async function dalVerifySuccess<T, E extends DalError>(
+  dalResult: Promise<DalResult<T, E>>,
   { unauthorizedRedirectPath }: { unauthorizedRedirectPath?: string } = {},
-): T {
-  const result = dalThrowError(
+): Promise<T> {
+  const result = await dalThrowError(
     dalUnauthorizedRedirect(dalLoginRedirect(dalResult), unauthorizedRedirectPath),
   )
   return result.data

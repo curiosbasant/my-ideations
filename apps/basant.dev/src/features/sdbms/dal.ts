@@ -3,8 +3,8 @@ import { cache } from 'react'
 import { dalDbOperation, dalVerifySuccess } from '~/lib/dal/helpers'
 import { api } from '~/lib/trpc'
 
-export const checkIfAdmin = cache(async () => {
-  return dalVerifySuccess(await dalDbOperation(() => api.sdbms.admin.check()))
+export const checkIfAdmin = cache(() => {
+  return dalVerifySuccess(dalDbOperation(() => api.sdbms.admin.check()))
 })
 
 export const getExams = cache(() => {
@@ -16,11 +16,11 @@ export const getSessions = cache(() => {
 })
 
 export const getSubjects = cache(() => {
-  return api.sdbms.subject.list()
+  return dalVerifySuccess(dalDbOperation(() => api.sdbms.subject.list()))
 })
 
 export const getTeacherSubjects = cache((sessionId: number) => {
-  return api.sdbms.teacher.subject.list({ sessionId })
+  return dalVerifySuccess(dalDbOperation(() => api.sdbms.teacher.subject.list({ sessionId })))
 })
 
 export const getInstitutes = cache(() => {
@@ -28,15 +28,19 @@ export const getInstitutes = cache(() => {
 })
 
 export const getInstituteClasses = cache(() => {
-  return api.sdbms.class.list()
+  return dalVerifySuccess(dalDbOperation(() => api.sdbms.class.list()))
 })
 
 export const getClassStudentsMark = cache(
   (sessionId: number, exam: number, standard: number, subject: number) => {
-    return api.sdbms.class.student.mark.list({ sessionId, exam, standard, subject })
+    return dalVerifySuccess(
+      dalDbOperation(() =>
+        api.sdbms.class.student.mark.list({ sessionId, exam, standard, subject }),
+      ),
+    )
   },
 )
 
-export const getUserRole = cache(async () => {
-  return dalVerifySuccess(await dalDbOperation(() => api.sdbms.user.role()))
+export const getUserRole = cache(() => {
+  return dalVerifySuccess(dalDbOperation(() => api.sdbms.user.role()))
 })
