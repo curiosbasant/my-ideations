@@ -4,9 +4,11 @@ import type { JwtPayload } from '@my/lib/supabase'
 // https://github.com/orgs/supabase/discussions/23224
 // Should be secure because we use the access token that is signed, and not the data read directly from the storage
 export function rlsCreator<
-  Database extends PgAsyncDatabase<any, any, any>,
-  Token extends JwtPayload = JwtPayload,
->(db: Database, jwtPayload?: Token | null, admin?: true): typeof db.transaction {
+  TDatabase extends PgAsyncDatabase<any, any, any>,
+  TTransaction extends TDatabase['transaction'],
+  TJwtPayload extends JwtPayload = JwtPayload,
+>(db: TDatabase, jwtPayload?: TJwtPayload | null, admin?: true): TTransaction {
+  // @ts-expect-error
   return async (txCallback, ...rest) => {
     const txFn: typeof txCallback = async (tx) => {
       // Supabase exposes auth.uid() and auth.jwt()
