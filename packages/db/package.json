@@ -8,7 +8,7 @@
   },
   "scripts": {
     "clean": "rm -rf .turbo node_modules",
-    "lint": "tsc -P tsconfig.lint.json",
+    "lint": "tsc --noEmit",
     "push": "pnpm with-env -- drizzle-kit push",
     "push:prod": "pnpm with-env:prod -- drizzle-kit push",
     "migrate": "pnpm with-env -- tsx src/migrate.ts",

@@ -20,5 +20,5 @@
     }
   },
   "include": [".next/dev/types/**/*.ts", ".next/types/**/*.ts", "src", "*.d.ts"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "archive", "*.archive", "*.archive.*"]
 }
