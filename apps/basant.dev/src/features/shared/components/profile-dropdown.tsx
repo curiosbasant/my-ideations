@@ -36,7 +36,7 @@ async function ProfileDropdownMenuInner() {
           <AvatarImage src={profile.avatarUrl || ''} alt={`${profile.displayName} Photo`} />
           <AvatarFallback>{getNameInitials(profile.displayName)}</AvatarFallback>
         </Avatar>
-        {profile.displayName && <span>{profile.displayName}</span>}
+        {profile.displayName && <span className='@max-xl:hidden'>{profile.displayName}</span>}
         <ChevronDownIcon />
       </DropdownMenuTrigger>
       <DropdownMenuContent className='w-40' align='end'>

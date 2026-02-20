@@ -1,5 +1,5 @@
 import { pgPolicy, primaryKey } from 'drizzle-orm/pg-core'
-import { and, eq, or, sql } from 'drizzle-orm/sql'
+import { and, eq, inArray, or, sql } from 'drizzle-orm/sql'
 import { authenticatedRole } from 'drizzle-orm/supabase'
 
 import { authUserPersonId, authUserProfileId } from '../utils/fn-helpers'
@@ -11,8 +11,9 @@ import {
   smallId,
 } from '../utils/pg-column-helpers'
 import { pgTable, policyAllowPublicSelect } from '../utils/pg-table-helpers'
+import { qb } from '../utils/qb'
 import { bucketNames, objects } from '../utils/supabase-helpers'
-import { person } from './person'
+import { person, personRelation } from './person'
 
 export const personDocument = pgTable(
   'person_document',
@@ -35,6 +36,17 @@ export const personDocument = pgTable(
       for: 'insert',
       to: authenticatedRole,
       withCheck: eq(t.personId, authUserPersonId),
+    }),
+    pgPolicy('Allow insert to person for relatives', {
+      for: 'insert',
+      to: authenticatedRole,
+      withCheck: inArray(
+        t.personId,
+        qb
+          .select({ relativeId: personRelation.relativeId })
+          .from(personRelation)
+          .where(eq(personRelation.personId, authUserPersonId)),
+      ),
     }),
     pgPolicy('Allow update to self or person', {
       for: 'update',

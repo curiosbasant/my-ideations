@@ -7,18 +7,15 @@ export async function proxy(request: NextRequest) {
   const { pathname, search } = request.nextUrl
   const subdomain = extractSubdomain(request.headers.get('host'))
 
-  const rewriteTo = (url: string) => NextResponse.rewrite(new URL(url, request.url))
+  const rewriteTo = (url: string) => NextResponse.rewrite(new URL(url, request.url), { request })
 
   if (subdomain) {
     if (pathname === '/favicon.ico') {
       return rewriteTo(`/public/icons/${subdomain}.ico`)
     }
 
-    const response =
-      pathname === '/auth/callback' ?
-        NextResponse.next() // ignore subdomain
-        // For the root path on a subdomain, rewrite to the subdomain page
-      : rewriteTo(`/s/${subdomain + (pathname === '/' ? '' : pathname) + search}`)
+    // For the root path on a subdomain, rewrite to the subdomain page
+    const response = rewriteTo(`/s/${subdomain + (pathname === '/' ? '' : pathname) + search}`)
 
     if (subdomain === 'priyasthan' || subdomain === 'sdbms') {
       const supabase = getSupabaseMiddleware(request, response)
@@ -33,7 +30,7 @@ export async function proxy(request: NextRequest) {
   }
 
   // On the root domain, allow normal access
-  return NextResponse.next()
+  return NextResponse.next({ request })
 }
 
 export const config: ProxyConfig = {
@@ -44,6 +41,6 @@ export const config: ProxyConfig = {
      * 2. /_next (Next.js internals)
      * 3. all files inside /public
      */
-    '/((?!api|_next|public).*)',
+    '/((?!_next|api|public).*)',
   ],
 }

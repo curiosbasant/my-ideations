@@ -63,11 +63,12 @@ export function FormWrapper(props: ComponentProps<'form'>) {
     <form
       {...props}
       action={async (fd) => {
+        const relation = fd.get('relation') as 'oneself'
         const documentType = fd.get('documentType') as string
         const documentNo = fd.get('documentNo') as string
         const filePath = fd.get('filePath') as string
 
-        if (!documentType || !documentNo) {
+        if (!relation || !documentType || !documentNo) {
           toast.error('Please fill in all fields')
           return
         }
@@ -76,6 +77,7 @@ export function FormWrapper(props: ComponentProps<'form'>) {
           return
         }
         await actionAddDocument({
+          relation,
           documentType: parseInt(documentType),
           documentNo,
           filePath,

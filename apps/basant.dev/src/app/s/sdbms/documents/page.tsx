@@ -2,6 +2,7 @@ import { getDocuments } from '~/features/document/dal'
 
 export default async function DocumentsPage() {
   const documents = await getDocuments()
+  console.log(documents)
 
   return documents.length === 0 ?
       <div className='rounded-lg border-2 border-dashed p-6'>
@@ -18,6 +19,9 @@ export default async function DocumentsPage() {
             <div className='flex-1'>
               <p className='text-muted-foreground text-sm font-bold'>{doc.type}</p>
               <p className='font-bold tabular-nums'>{doc.number}</p>
+              {doc.relation && (
+                <p className='text-muted-foreground text-sm font-bold'>{doc.relation}</p>
+              )}
             </div>
           </li>
         ))}

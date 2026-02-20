@@ -7,18 +7,18 @@ export type ActionFn<Input, Output> = (
   payload: Input,
 ) => Promise<ActionState<Output>>
 
-export function useAction<Input, Output>(params: {
+export function useAction<Input, Output>(options: {
   actionFn: ActionFn<Input, Output>
-  onSuccess?: (data: Output) => void
-  onError?: (message: string) => void
+  onSuccess?: (data: Output, variable: Input) => void
+  onError?: (message: string, variable: Input) => void
 }) {
   const [state, actionFn, isPending] = useActionState(
     async (state: Awaited<ActionState<Output>>, payload: Input) => {
-      const result = await params.actionFn(state, payload)
+      const result = await options.actionFn(state, payload)
       if (result?.success) {
-        params.onSuccess?.(result.data)
+        options.onSuccess?.(result.data, payload)
       } else if (result) {
-        params.onError?.(result.message)
+        options.onError?.(result.message, payload)
       }
       return result
     },
