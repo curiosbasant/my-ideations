@@ -1,3 +1,5 @@
+import { TRPCError } from '@trpc/server'
+
 import type { PgAsyncDatabase } from '@my/db'
 import type { JwtPayload } from '@my/lib/supabase'
 
@@ -26,17 +28,25 @@ export function rlsCreator<
         } else {
           await tx.execute(`set local role anon;`)
         }
+
         return await txCallback(tx)
       } catch (err) {
         console.error(err)
+        if (
+          err instanceof Error
+          && err.cause instanceof Error
+          && err.cause.message.startsWith('new row violates row-level security policy for table')
+        ) {
+          throw new TRPCError({ code: 'FORBIDDEN', message: 'Permission Denied', cause: err })
+        }
         throw err
       } finally {
-        await tx.execute(`
-          -- reset
+        const query = `-- reset
           select set_config('request.jwt.claims', '{}', TRUE);
           select set_config('request.jwt.claim.sub', NULL, TRUE);
           reset role;
-        `)
+        `
+        await tx.execute(query).catch(() => void 0)
       }
     }
     return await db.transaction(txFn, ...rest)

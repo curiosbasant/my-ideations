@@ -1,10 +1,10 @@
 'use server'
 
-import { api } from '~/lib/trpc'
-import { createAction } from '~/lib/utils/helper-action/shared'
+import { revalidatePath } from 'next/cache'
 
-export const actionAddDocument = createAction(
-  async (payload: { docNumber: string; filePath: string }) => {
-    await api.person.document.set(payload)
-  },
-)
+import { api } from '~/lib/trpc'
+
+export const actionAddDocument = async (payload: Parameters<typeof api.person.document.set>[0]) => {
+  await api.person.document.set(payload)
+  revalidatePath('/documents')
+}

@@ -11,7 +11,7 @@ import {
 import { concat, now } from '@my/db/functions'
 import { z } from '@my/lib/zod'
 
-import { protectedProcedure } from '../trpc'
+import { protectedProcedure, publicProcedure } from '../trpc'
 
 export const personRouter = {
   document: {
@@ -53,6 +53,11 @@ export const personRouter = {
         signedUrl: data[i].error ? null : data[i].signedUrl,
       }))
     }),
+    type: {
+      list: publicProcedure.query(async ({ ctx: { rls } }) => {
+        return rls((tx) => tx.select().from(schema.personDocumentType))
+      }),
+    },
     getSignedUrl: protectedProcedure
       .input(
         z.object({
@@ -77,7 +82,8 @@ export const personRouter = {
     set: protectedProcedure
       .input(
         z.object({
-          docNumber: z.string(),
+          documentType: z.number(),
+          documentNo: z.string(),
           filePath: z.string(),
         }),
       )
@@ -89,8 +95,8 @@ export const personRouter = {
             .insert(schema.personDocument)
             .values({
               personId,
-              type: 1,
-              number: input.docNumber,
+              type: input.documentType,
+              number: input.documentNo,
               path: input.filePath,
             })
             .onConflictDoUpdate({

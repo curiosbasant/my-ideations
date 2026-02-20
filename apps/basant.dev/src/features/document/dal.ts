@@ -6,3 +6,7 @@ import { api } from '~/lib/trpc'
 export const getDocuments = cache(() => {
   return dalVerifySuccess(dalDbOperation(() => api.person.document.list()))
 })
+
+export const getDocumentTypes = cache(() => {
+  return dalVerifySuccess(dalDbOperation(() => api.person.document.type.list()))
+})

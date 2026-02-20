@@ -17,6 +17,7 @@ export function DropArea({
     if (ev.dataTransfer.files) {
       onFilesDrop(Array.from(ev.dataTransfer.files))
     }
+    setIsOver(false)
   }
 
   return (
