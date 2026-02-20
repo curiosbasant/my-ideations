@@ -1,4 +1,5 @@
 import { appRouter, createTRPCContext, fetchRequestHandler } from '@my/api'
+import { createOrigin } from '@my/lib/utils'
 
 import { getSupabase } from '~/lib/supabase'
 
@@ -7,7 +8,7 @@ import { getSupabase } from '~/lib/supabase'
  * You should extend this to match your needs
  */
 const setCorsHeaders = (res: Response, origin: string) => {
-  if (['http://sdbms.localhost:3000'].includes(origin)) {
+  if ([createOrigin('sdbms')].includes(origin)) {
     res.headers.set('Access-Control-Allow-Origin', origin)
   }
   res.headers.set('Access-Control-Allow-Credentials', 'true')

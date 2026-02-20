@@ -7,6 +7,8 @@ import {
   SquareFunctionIcon,
 } from 'lucide-react'
 
+import { createOrigin } from '@my/lib/utils'
+
 export const socialLinks = {
   email: 'basantbrpl@gmail.com',
   github: 'https://github.com/curiosbasant',
@@ -90,7 +92,7 @@ export const projects = [
     description:
       'Tool to fetch board class results in a interactive table with visual charts and performance analysis for all students.',
     tech: ['TypeScript', 'Nextjs', 'TailwindCSS', 'Tanstack Query', 'Tanstack Table'],
-    link: 'https://parinaam.basant.dev',
+    link: createOrigin('parinaam'),
     githubUrl: 'https://github.com/curiosbasant/my-ideations',
   },
   {
@@ -105,7 +107,7 @@ export const projects = [
     description:
       'A convenient tool that enables users to share files quickly by generating short URLs and corresponding QR codes for easy access and distribution.',
     tech: ['TypeScript', 'Nextjs', 'TailwindCSS', 'Supabase', 'QR Code'],
-    link: 'https://snapfile.basant.dev',
+    link: createOrigin('snapfile'),
     githubUrl: 'https://github.com/curiosbasant/my-ideations',
   },
   {

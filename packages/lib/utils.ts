@@ -1,5 +1,6 @@
 import type { ZodType } from 'zod'
 
+import { ROOT_HOST, ROOT_ORIGIN } from './constants'
 import type { Falsy } from './types'
 
 /**
@@ -272,19 +273,8 @@ export function splitFullName(fullName: string): { firstName: string; lastName: 
   return { firstName: parts.join(' '), lastName }
 }
 
-export function getRootOrigin() {
-  // 1. Check if we are in a browser context (client-side)
-  if (typeof window !== 'undefined') {
-    return window.location.origin
-  }
-  // 2. Check for Vercel's Production URL
-  if (process.env['NEXT_PUBLIC_SITE_URL']) {
-    return process.env['NEXT_PUBLIC_SITE_URL']
-  }
-  // 3. Check for Vercel's generated Preview/Deployment URL
-  if (process.env['VERCEL_URL']) {
-    return `https://${process.env['VERCEL_URL']}`
-  }
-  // 4. Fallback to Localhost for development or local production runs
-  return `http://${process.env['NEXT_PUBLIC_LOCAL_ROOT_HOSTNAME'] || 'localhost'}:${process.env['PORT'] || 3000}`
+export function createOrigin(subdomain?: string) {
+  return subdomain ?
+      `${ROOT_HOST.includes('local') ? 'http' : 'https'}://${subdomain}.${ROOT_HOST}`
+    : ROOT_ORIGIN
 }

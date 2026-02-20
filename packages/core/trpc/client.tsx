@@ -6,8 +6,8 @@ import { createTRPCClient, httpBatchLink } from '@trpc/client'
 import { createTRPCContext } from '@trpc/tanstack-react-query'
 
 import type { AppRouter } from '@my/api'
+import { ROOT_ORIGIN } from '@my/lib/constants'
 import { SuperJSON } from '@my/lib/superjson'
-import { getRootOrigin } from '@my/lib/utils'
 
 export * from '@trpc/client'
 
@@ -46,13 +46,10 @@ const getTrpcClient = () =>
   createTRPCClient<AppRouter>({
     links: [
       httpBatchLink({
-        url: `${getRootOrigin()}/api/trpc`,
+        url: `${ROOT_ORIGIN}/api/trpc`,
         headers: { 'x-trpc-source': 'client' },
         fetch(url, options) {
-          return fetch(url, {
-            ...options,
-            credentials: 'include',
-          })
+          return fetch(url, { ...options, credentials: 'include' })
         },
         transformer: SuperJSON,
       }),
