@@ -2,6 +2,7 @@ import { NextResponse, type NextRequest, type ProxyConfig } from 'next/server'
 
 import { getSupabaseMiddleware } from '~/lib/supabase'
 import { extractSubdomain } from '~/lib/utils/domain'
+import { SIGN_IN_PATH } from './features/shared/constants'
 
 export async function proxy(request: NextRequest) {
   const { pathname, search } = request.nextUrl
@@ -15,11 +16,18 @@ export async function proxy(request: NextRequest) {
     }
 
     // For the root path on a subdomain, rewrite to the subdomain page
-    const response = rewriteTo(`/s/${subdomain + (pathname === '/' ? '' : pathname) + search}`)
+    const subdomainPath = (pathname === '/' ? '' : pathname) + search
+    const response = rewriteTo(`/s/${subdomain + subdomainPath}`)
 
     if (subdomain === 'priyasthan' || subdomain === 'sdbms') {
       const supabase = getSupabaseMiddleware(request, response)
-      await supabase.auth.getClaims()
+      const { data, error } = await supabase.auth.getClaims()
+      const isAuthenticated = Boolean(!error && data?.claims)
+      if (subdomain === 'sdbms' && pathname !== SIGN_IN_PATH && !isAuthenticated) {
+        return NextResponse.redirect(
+          new URL(`${SIGN_IN_PATH}?continue=${encodeURIComponent(subdomainPath)}`, request.url),
+        )
+      }
     }
 
     return response
@@ -30,7 +38,7 @@ export async function proxy(request: NextRequest) {
   }
 
   // On the root domain, allow normal access
-  return NextResponse.next({ request })
+  return NextResponse.next()
 }
 
 export const config: ProxyConfig = {
