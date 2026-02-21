@@ -2,6 +2,7 @@ import { headers } from 'next/headers'
 import { redirect } from 'next/navigation'
 import { TRPCError } from '@trpc/server'
 
+import { SIGN_IN_PATH } from '~/features/shared/constants'
 import {
   createErrorReturn,
   createSuccessReturn,
@@ -27,7 +28,9 @@ export async function dalLoginRedirect<T, E extends DalError>(dalResult: Promise
       return pathname.startsWith('/') ? pathname : null
     })(head)
 
-    return redirect(pathname ? `/?continue=${encodeURIComponent(pathname)}` : '/')
+    return redirect(
+      pathname ? `${SIGN_IN_PATH}?continue=${encodeURIComponent(pathname)}` : SIGN_IN_PATH,
+    )
   }
 
   return result as DalResult<T, Exclude<E, { type: 'unauthenticated' }>>

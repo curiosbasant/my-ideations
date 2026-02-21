@@ -6,14 +6,11 @@ import { FormSubmitButton } from '~/components/forms/client'
 import { FormField } from '~/components/forms/shared'
 import { Button } from '~/components/ui/button'
 import { Input } from '~/components/ui/input'
-import { SignInWithGoogleButton } from '~/features/auth/components/sign-in-with-google/client'
-import { getUserRole } from '~/features/sdbms/dal'
-import { getProfileDetails } from '~/features/user/dal'
+import { getProfileDetails, getUserRole } from '~/features/sdbms/dal'
 import { FormConnectStudent, FormConnectTeacher } from './client'
 
 export default async function SdbmsHomePage(props: PageProps<'/s/sdbms'>) {
   const profile = await getProfileDetails()
-  if (!profile) return <SignInWithGoogleButton />
 
   if (profile.personId) {
     const role = await getUserRole()
