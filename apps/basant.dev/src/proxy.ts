@@ -14,11 +14,9 @@ export async function proxy(request: NextRequest) {
       return rewriteTo(`/public/icons/${subdomain}.ico`)
     }
 
-    const response =
-      pathname === '/auth/callback' ?
-        NextResponse.next() // ignore subdomain
         // For the root path on a subdomain, rewrite to the subdomain page
-      : rewriteTo(`/s/${subdomain + (pathname === '/' ? '' : pathname) + search}`)
+    const subdomainPath = (pathname === '/' ? '' : pathname) + search
+    const response = rewriteTo(`/s/${subdomain + subdomainPath}`)
 
     if (subdomain === 'priyasthan' || subdomain === 'sdbms') {
       const supabase = getSupabaseMiddleware(request, response)
@@ -44,6 +42,6 @@ export const config: ProxyConfig = {
      * 2. /_next (Next.js internals)
      * 3. all files inside /public
      */
-    '/((?!api|_next|public).*)',
+    '/((?!_next|api|public).*)',
   ],
 }

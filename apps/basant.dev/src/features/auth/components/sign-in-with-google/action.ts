@@ -12,7 +12,7 @@ export const signInWithProviderAction = createAction(
     const origin = heads.get('origin')
     if (!origin) throw new Error('No origin header found')
 
-    const redirectUrl = new URL('/auth/callback', origin)
+    const redirectUrl = new URL('/api/auth/callback', origin)
 
     if (payload.continue === true) {
       const referrer = heads.get('referer')

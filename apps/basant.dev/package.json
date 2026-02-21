@@ -2,10 +2,10 @@
   "name": "@my/basant.dev",
   "type": "module",
   "scripts": {
-    "dev": "pnpm with-env next dev -p 3000 -H basantdev.local",
+    "dev": "pnpm with-env next dev -H basantdev.local",
     "build": "pnpm with-env next build",
     "clean": "git clean -xdf .next .turbo node_modules",
-    "start": "pnpm with-env next start -p 3000 -H basantdev.local",
+    "start": "pnpm with-env next start -H basantdev.local",
     "lint": "next typegen && tsc --noEmit",
     "with-env": "dotenv -e ../../.env.local --"
   },
