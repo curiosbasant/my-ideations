@@ -73,6 +73,10 @@ export default async function DocumentsLayout(props: LayoutProps<'/s/sdbms/docum
                       required
                     />
                   </Field>
+                  <Field>
+                    <FieldLabel htmlFor='note'>Note (optional)</FieldLabel>
+                    <Input className='backdrop-blur-2xs' id='note' name='note' />
+                  </Field>
                 </div>
                 <DocumentView />
                 <DialogFooter>

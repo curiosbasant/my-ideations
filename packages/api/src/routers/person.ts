@@ -29,6 +29,7 @@ export const personRouter = {
             type: schema.personDocumentType.name,
             number: schema.personDocument.number,
             path: schema.personDocument.path,
+            note: schema.personDocument.note,
             relation: schema.personRelationType.name,
           })
           .from(schema.personDocument)
@@ -103,6 +104,7 @@ export const personRouter = {
           documentType: z.number(),
           documentNo: z.string(),
           filePath: z.string(),
+          note: z.string().optional(),
         }),
       )
       .mutation(async ({ input, ctx: { rls } }) => {
@@ -129,11 +131,12 @@ export const personRouter = {
               type: input.documentType,
               number: input.documentNo,
               path: input.filePath,
+              note: input.note,
             })
             .onConflictDoUpdate({
               target: [schema.personDocument.personId, schema.personDocument.type],
               set: {
-                ...buildConflictUpdateColumns(schema.personDocument, ['number', 'path']),
+                ...buildConflictUpdateColumns(schema.personDocument, ['number', 'path', 'note']),
                 updatedAt: now(),
               },
             })

@@ -15,7 +15,7 @@ export default async function DocumentsPage() {
             <div className='rounded-xs bg-secondary/50 aspect-video h-0 flex-1 overflow-clip'>
               <img src={doc.signedUrl!} className='mx-auto h-full object-contain' />
             </div>
-            <div className=''>
+            <div className='space-y-2'>
               <p className='font-bold tabular-nums'>{doc.number}</p>
               <div className='flex items-center'>
                 <span className='text-muted-foreground text-sm font-bold'>{doc.type} </span>
@@ -25,6 +25,11 @@ export default async function DocumentsPage() {
                   </span>
                 )}
               </div>
+              {doc.note && (
+                <div className='bg-secondary/50 rounded-sm border border-dashed p-1 px-2'>
+                  <p className='text-secondary-foreground text-sm'>{doc.note}</p>
+                </div>
+              )}
             </div>
           </li>
         ))}

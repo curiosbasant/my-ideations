@@ -68,6 +68,7 @@ export function FormWrapper(props: ComponentProps<'form'>) {
         const documentType = fd.get('documentType') as string
         const documentNo = fd.get('documentNo') as string
         const filePath = fd.get('filePath') as string
+        const note = fd.get('note') as string
 
         if (!relation || !documentType || !documentNo) {
           toast.error('Please fill in all fields')
@@ -83,6 +84,7 @@ export function FormWrapper(props: ComponentProps<'form'>) {
             documentType: parseInt(documentType),
             documentNo,
             filePath,
+            note,
           })
           toast.success('Document added successfully')
         } catch (error) {

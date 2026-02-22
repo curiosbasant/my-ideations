@@ -22,6 +22,7 @@ export const personDocument = pgTable(
     type: smallId.references(() => personDocumentType.id, CASCADE_ON_UPDATE).notNull(),
     number: c.text(),
     path: c.text(),
+    note: c.text(),
     createdBy: getProfileRef().notNull(),
     ...getTimestampColumns(),
   }),
