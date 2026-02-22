@@ -4,7 +4,6 @@ import {
   and,
   authUserPersonId,
   authUserProfileId,
-  buildConflictUpdateColumns,
   eq,
   or,
   queryPersonId,
@@ -97,7 +96,7 @@ export const personRouter = {
         }
         return data
       }),
-    set: protectedProcedure
+    create: protectedProcedure
       .input(
         z.object({
           relation: z.literal(['mine', 'father', 'mother']).default('mine'),
@@ -124,22 +123,13 @@ export const personRouter = {
           if (!row?.personId)
             throw new TRPCError({ code: 'NOT_FOUND', message: 'Related person not found' })
 
-          await tx
-            .insert(schema.personDocument)
-            .values({
-              personId: row.personId,
-              type: input.documentType,
-              number: input.documentNo,
-              path: input.filePath,
-              note: input.note,
-            })
-            .onConflictDoUpdate({
-              target: [schema.personDocument.personId, schema.personDocument.type],
-              set: {
-                ...buildConflictUpdateColumns(schema.personDocument, ['number', 'path', 'note']),
-                updatedAt: now(),
-              },
-            })
+          await tx.insert(schema.personDocument).values({
+            personId: row.personId,
+            type: input.documentType,
+            number: input.documentNo,
+            path: input.filePath,
+            note: input.note,
+          })
         })
       }),
   },

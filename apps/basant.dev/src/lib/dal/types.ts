@@ -16,6 +16,9 @@ export type DalError =
       type: 'unauthorized'
     }
   | {
+      type: 'conflict'
+    }
+  | {
       type: 'unknown-error'
       error: unknown
     }

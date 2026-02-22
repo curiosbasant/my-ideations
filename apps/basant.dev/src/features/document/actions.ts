@@ -2,9 +2,13 @@
 
 import { revalidatePath } from 'next/cache'
 
+import { dalDbOperation, dalFormatErrorMessage, dalLoginRedirect } from '~/lib/dal/helpers'
 import { api } from '~/lib/trpc'
 
-export const actionAddDocument = async (payload: Parameters<typeof api.person.document.set>[0]) => {
-  await api.person.document.set(payload)
-  revalidatePath('/documents')
+export const actionCreateDocument = async (
+  payload: Parameters<typeof api.person.document.create>[0],
+) => {
+  const result = await dalLoginRedirect(dalDbOperation(() => api.person.document.create(payload)))
+
+  return result.success ? revalidatePath('/documents') : dalFormatErrorMessage(result.error)
 }

@@ -78,6 +78,9 @@ export async function dalDbOperation<T>(operation: () => Promise<T>) {
       if (e.code === 'FORBIDDEN') {
         return createErrorReturn({ type: 'unauthorized' })
       }
+      if (e.code === 'CONFLICT') {
+        return createErrorReturn({ type: 'conflict' })
+      }
     }
     return createErrorReturn({ type: 'unknown-error', error: e })
   }
@@ -91,6 +94,8 @@ export function dalFormatErrorMessage(error: DalError) {
       return 'You must be logged in to access or perform this action.'
     case 'unauthorized':
       return 'You do not have permission to access or perform this action.'
+    case 'conflict':
+      return 'That resource already exists.'
     case 'unknown-error':
       return 'An unknown error occurred'
     default:

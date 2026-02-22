@@ -8,7 +8,7 @@ import { getSupabaseClient } from '@my/lib/supabase/client'
 
 import { DropArea } from '~/components/elements/drop-area'
 import { toast } from '~/components/ui/sonner'
-import { actionAddDocument } from '~/features/document/actions'
+import { actionCreateDocument } from '~/features/document/actions'
 
 export function DocumentView() {
   const [uploadingFile, setUploadingFile] = useState<{ url?: string; path?: string } | null>(null)
@@ -78,15 +78,20 @@ export function FormWrapper(props: ComponentProps<'form'>) {
           toast.error('Please upload a document')
           return
         }
+
         try {
-          await actionAddDocument({
+          const errMessage = await actionCreateDocument({
             relation,
             documentType: parseInt(documentType),
             documentNo,
             filePath,
             note,
           })
-          toast.success('Document added successfully')
+          if (errMessage) {
+            toast.error(errMessage)
+          } else {
+            toast.success('Document added successfully')
+          }
         } catch (error) {
           if (error instanceof Error && error.message === 'Related person not found') {
             toast.error(`Relation with ${relation} doesn't exist`)

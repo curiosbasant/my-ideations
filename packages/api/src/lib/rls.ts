@@ -31,14 +31,16 @@ export function rlsCreator<
 
         return await txCallback(tx)
       } catch (err) {
-        console.error(err)
-        if (
-          err instanceof Error
-          && err.cause instanceof Error
-          && err.cause.message.startsWith('new row violates row-level security policy for table')
-        ) {
+        if (!(err instanceof Error && err.cause instanceof Error)) throw err
+
+        const pgMessage = err.cause.message
+        if (pgMessage.startsWith('new row violates row-level security policy for table')) {
           throw new TRPCError({ code: 'FORBIDDEN', message: 'Permission Denied', cause: err })
         }
+        if (pgMessage.startsWith('duplicate key value violates unique constraint')) {
+          throw new TRPCError({ code: 'CONFLICT', message: 'Resource already exist', cause: err })
+        }
+
         throw err
       } finally {
         const query = `-- reset
