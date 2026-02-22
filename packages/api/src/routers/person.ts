@@ -1,9 +1,12 @@
 import { TRPCError } from '@trpc/server'
 
 import {
+  and,
   authUserPersonId,
+  authUserProfileId,
   buildConflictUpdateColumns,
   eq,
+  or,
   queryPersonId,
   schema,
   sql,
@@ -26,13 +29,27 @@ export const personRouter = {
             type: schema.personDocumentType.name,
             number: schema.personDocument.number,
             path: schema.personDocument.path,
+            relation: schema.personRelationType.name,
           })
           .from(schema.personDocument)
           .innerJoin(
             schema.personDocumentType,
             eq(schema.personDocument.type, schema.personDocumentType.id),
           )
-          .where(eq(schema.personDocument.personId, authUserPersonId))
+          .leftJoin(
+            schema.personRelation,
+            eq(schema.personRelation.relativeId, schema.personDocument.personId),
+          )
+          .leftJoin(
+            schema.personRelationType,
+            eq(schema.personRelation.relation, schema.personRelationType.id),
+          )
+          .where(
+            or(
+              eq(schema.personDocument.personId, authUserPersonId),
+              eq(schema.personDocument.createdBy, authUserProfileId),
+            ),
+          )
       })
       if (documents.length === 0) return []
 
@@ -82,6 +99,7 @@ export const personRouter = {
     set: protectedProcedure
       .input(
         z.object({
+          relation: z.literal(['mine', 'father', 'mother']).default('mine'),
           documentType: z.number(),
           documentNo: z.string(),
           filePath: z.string(),
@@ -89,12 +107,25 @@ export const personRouter = {
       )
       .mutation(async ({ input, ctx: { rls } }) => {
         return rls(async (tx) => {
-          const [{ personId }] = await tx.execute<{ personId: number }>(queryPersonId)
+          const [row] = await (input.relation === 'father' || input.relation === 'mother' ?
+            tx
+              .select({ personId: schema.personRelation.relativeId })
+              .from(schema.personRelation)
+              .where(
+                and(
+                  eq(schema.personRelation.personId, authUserPersonId),
+                  eq(schema.personRelation.relation, input.relation === 'father' ? 1 : 2),
+                ),
+              )
+          : tx.execute<{ personId: number }>(queryPersonId))
+
+          if (!row?.personId)
+            throw new TRPCError({ code: 'NOT_FOUND', message: 'Related person not found' })
 
           await tx
             .insert(schema.personDocument)
             .values({
-              personId,
+              personId: row.personId,
               type: input.documentType,
               number: input.documentNo,
               path: input.filePath,

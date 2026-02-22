@@ -11,13 +11,20 @@ export default async function DocumentsPage() {
       </div>
     : <ul className='grid select-none grid-cols-[repeat(auto-fill,minmax(--spacing(96),1fr))] gap-4'>
         {documents.map((doc) => (
-          <li className='bg-background flex gap-2 rounded-md border p-2' key={doc.id}>
-            <div className='rounded-xs overflow-clip'>
-              <img src={doc.signedUrl!} className='object-contain' />
+          <li className='bg-background flex flex-col gap-2 rounded-md border p-2' key={doc.id}>
+            <div className='rounded-xs bg-secondary/50 aspect-video h-0 flex-1 overflow-clip'>
+              <img src={doc.signedUrl!} className='mx-auto h-full object-contain' />
             </div>
-            <div className='flex-1'>
-              <p className='text-muted-foreground text-sm font-bold'>{doc.type}</p>
+            <div className=''>
               <p className='font-bold tabular-nums'>{doc.number}</p>
+              <div className='flex items-center'>
+                <span className='text-muted-foreground text-sm font-bold'>{doc.type} </span>
+                {doc.relation && (
+                  <span className='text-muted-foreground text-sm font-bold'>
+                    &ensp;•&ensp;{doc.relation}
+                  </span>
+                )}
+              </div>
             </div>
           </li>
         ))}

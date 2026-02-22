@@ -14,6 +14,13 @@ import {
 } from '~/components/ui/dialog'
 import { Field, FieldLabel } from '~/components/ui/field'
 import { Input } from '~/components/ui/input'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '~/components/ui/select'
 import { SelectDocumentType } from '~/features/document/fields'
 import { DocumentView, FormWrapper } from './client'
 
@@ -39,7 +46,21 @@ export default async function DocumentsLayout(props: LayoutProps<'/s/sdbms/docum
             </DialogHeader>
             <FormWrapper>
               <div className='grid grid-cols-2 gap-6'>
+                <DocumentView />
                 <div className='space-y-6'>
+                  <Field>
+                    <FieldLabel htmlFor='relation'>Relation</FieldLabel>
+                    <Select name='relation' defaultValue='mine' required>
+                      <SelectTrigger className='backdrop-blur-2xs w-full' id='relation'>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value='mine'>Mine</SelectItem>
+                        <SelectItem value='father'>Father</SelectItem>
+                        <SelectItem value='mother'>Mother</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </Field>
                   <Field>
                     <FieldLabel htmlFor='document-type'>Document Type</FieldLabel>
                     <SelectDocumentType />
@@ -60,7 +81,6 @@ export default async function DocumentsLayout(props: LayoutProps<'/s/sdbms/docum
                     <FormSubmitButton>Save changes</FormSubmitButton>
                   </DialogFooter>
                 </div>
-                <DocumentView />
               </div>
             </FormWrapper>
           </DialogContent>
