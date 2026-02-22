@@ -45,8 +45,7 @@ export default async function DocumentsLayout(props: LayoutProps<'/s/sdbms/docum
               </DialogDescription>
             </DialogHeader>
             <FormWrapper>
-              <div className='grid grid-cols-2 gap-6'>
-                <DocumentView />
+              <div className='grid gap-6 md:grid-cols-2 md:grid-rows-[1fr_auto]'>
                 <div className='space-y-6'>
                   <Field>
                     <FieldLabel htmlFor='relation'>Relation</FieldLabel>
@@ -74,13 +73,14 @@ export default async function DocumentsLayout(props: LayoutProps<'/s/sdbms/docum
                       required
                     />
                   </Field>
-                  <DialogFooter>
-                    <DialogClose asChild>
-                      <Button variant='outline'>Cancel</Button>
-                    </DialogClose>
-                    <FormSubmitButton>Save changes</FormSubmitButton>
-                  </DialogFooter>
                 </div>
+                <DocumentView />
+                <DialogFooter>
+                  <DialogClose asChild>
+                    <Button variant='outline'>Cancel</Button>
+                  </DialogClose>
+                  <FormSubmitButton>Save changes</FormSubmitButton>
+                </DialogFooter>
               </div>
             </FormWrapper>
           </DialogContent>

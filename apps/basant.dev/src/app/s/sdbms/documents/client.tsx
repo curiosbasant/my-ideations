@@ -17,8 +17,9 @@ export function DocumentView() {
 
   return (
     <DropArea
-      className='group flex overflow-clip rounded-lg border-2 border-dashed'
+      className='group flex min-h-80 overflow-clip rounded-lg border-2 border-dashed md:row-span-full'
       activeClassName='border-primary bg-primary/10'
+      enablePromptFile
       onFilesDrop={async ([file]) => {
         setUploadingFile((prev) => {
           prev?.url && URL.revokeObjectURL(prev.url)

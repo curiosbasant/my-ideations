@@ -278,3 +278,33 @@ export function createOrigin(subdomain?: string) {
       `${ROOT_HOST.includes('local') ? 'http' : 'https'}://${subdomain}.${ROOT_HOST}`
     : ROOT_ORIGIN
 }
+
+/**
+ * Prompts the user to select a file
+ */
+export function promptFile(params?: Partial<Pick<HTMLInputElement, 'accept' | 'capture'>>) {
+  const input = document.createElement('input')
+  input.type = 'file'
+
+  if (params) {
+    for (const [attr, value] of Object.entries(params)) {
+      input.setAttribute(attr, value)
+    }
+  }
+
+  return new Promise<File[]>(function (resolve, reject) {
+    input.addEventListener(
+      'change',
+      (ev) => {
+        const input = ev.currentTarget as HTMLInputElement
+        const files = input?.files
+
+        return files ? resolve(Array.from(files)) : reject(null)
+      },
+      { once: true },
+    )
+
+    // backwards compatibility
+    input.showPicker?.() ?? input.click()
+  })
+}

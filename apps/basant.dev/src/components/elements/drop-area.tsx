@@ -2,14 +2,23 @@
 
 import { useState, type ComponentProps } from 'react'
 
+import { promptFile } from '@my/lib/utils'
+
 import { cn } from '~/lib/utils'
+
+type DropAreaProps = ComponentProps<'div'> & {
+  activeClassName: string
+  enablePromptFile?: boolean
+  onFilesDrop: (files: File[]) => void
+}
 
 export function DropArea({
   className,
   activeClassName,
+  enablePromptFile,
   onFilesDrop,
   ...props
-}: ComponentProps<'div'> & { activeClassName: string; onFilesDrop: (files: File[]) => void }) {
+}: DropAreaProps) {
   const [isOver, setIsOver] = useState(false)
 
   const handleDrop = (ev: React.DragEvent<HTMLDivElement>) => {
@@ -32,6 +41,13 @@ export function DropArea({
         setIsOver(ev.currentTarget !== ev.target && ev.currentTarget.contains(ev.target as Node))
       }}
       onDrop={handleDrop}
+      onClick={
+        enablePromptFile ?
+          () => {
+            promptFile({ capture: 'environment' }).then(onFilesDrop)
+          }
+        : undefined
+      }
       {...props}
     />
   )
