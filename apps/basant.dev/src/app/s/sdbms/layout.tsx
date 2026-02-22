@@ -9,6 +9,7 @@ import { TrpcClientProvider } from '@my/core/trpc/client'
 import { ScrollArea } from '~/components/ui/scroll-area'
 import { Toaster } from '~/components/ui/sonner'
 import { CurrentYear, HtmlWithDataTheme } from '~/features/shared/components/client'
+import { HeaderNavItem } from '~/features/shared/components/header-nav-item'
 import { ProfileDropdownMenu } from '~/features/shared/components/profile-dropdown'
 import { geistMono, geistSans } from '~/features/shared/fonts'
 import { ThemeToggleGroupButton } from '~/features/theme/client'
@@ -34,15 +35,15 @@ export default async function SdbmsRootLayout(props: LayoutProps<'/s/sdbms'>) {
             <ScrollArea className='size-full'>
               <div className='isolate flex min-h-full w-full flex-col divide-y [--page-padding:--spacing(2)] [--page-size:var(--container-7xl)] sm:[--page-padding:--spacing(4)] md:[--page-padding:--spacing(8)]'>
                 <header className='bg-background/80 px-(--page-padding) sticky top-0 z-10 backdrop-blur-sm'>
-                  <div className='max-w-(--page-size) m-auto flex items-center gap-4 py-2'>
-                    <div className='@container flex-1'>
-                      <Link href='/' className='inline-flex items-center gap-4'>
-                        {/* <img src='/public/icons/parinaam.svg' width={26} height={26} alt='Logo' /> */}
-                        <span className='@2xs:text-2xl text-primary text-xl font-extrabold'>
-                          SDBMS
-                        </span>
-                      </Link>
-                    </div>
+                  <div className='@container max-w-(--page-size) h-13 m-auto flex items-center gap-4'>
+                    <Link href='/' className='inline-flex items-center gap-4'>
+                      <span className='@xl:text-2xl text-primary text-xl font-extrabold'>
+                        SDBMS
+                      </span>
+                    </Link>
+                    <nav className='flex-1'>
+                      <HeaderNavItem path='/documents'>My Documents</HeaderNavItem>
+                    </nav>
                     <ProfileDropdownMenu />
                   </div>
                 </header>
