@@ -1,24 +1,26 @@
-import { and, desc, eq, profileDisplayName, schema, sql } from '@my/db'
+import { and, authUid, desc, eq, profileDisplayName, schema, sql } from '@my/db'
 import { placeIdToLocation } from '@my/lib/maps'
 import { z } from '@my/lib/zod'
 
 import { protectedProcedure, publicProcedure } from '../trpc'
 
 export const userRouter = {
-  get: protectedProcedure.query(async ({ ctx: { db, authUserId } }) => {
-    const [user] = await db
-      .select({
-        id: schema.profile.id,
-        displayName: profileDisplayName().as('display_name'),
-        avatarUrl: schema.profile.avatarUrl,
-        designation: schema.designation,
-        personId: schema.profile.personId,
-      })
-      .from(schema.profile)
-      .leftJoin(schema.designation, eq(schema.designation.id, schema.profile.postId))
-      .where(eq(schema.profile.createdBy, authUserId))
+  get: protectedProcedure.query(({ ctx: { rls } }) => {
+    return rls(async (tx) => {
+      const [user] = await tx
+        .select({
+          id: schema.profile.id,
+          displayName: profileDisplayName().as('display_name'),
+          avatarUrl: schema.profile.avatarUrl,
+          designation: schema.designation,
+          personId: schema.profile.personId,
+        })
+        .from(schema.profile)
+        .leftJoin(schema.designation, eq(schema.designation.id, schema.profile.postId))
+        .where(eq(schema.profile.createdBy, authUid))
 
-    return user
+      return user
+    })
   }),
 
   department: {

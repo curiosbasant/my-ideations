@@ -1,8 +1,8 @@
 import { index, pgPolicy, uniqueIndex, type PgColumn } from 'drizzle-orm/pg-core'
-import { eq, sql } from 'drizzle-orm/sql'
-import { authenticatedRole, authUid, authUsers } from 'drizzle-orm/supabase'
+import { eq } from 'drizzle-orm/sql'
+import { authenticatedRole, authUsers } from 'drizzle-orm/supabase'
 
-import { authUserProfileId } from '../utils/fn-helpers'
+import { authUid, authUserProfileId } from '../utils/fn-helpers'
 import { id, smallId } from '../utils/pg-column-helpers/helpers'
 import {
   pgTable,
@@ -49,7 +49,7 @@ export const profile = pgTable(
     createdBy: c
       .uuid()
       .references(() => authUsers.id, { onDelete: 'set null' })
-      .default(sql`auth.uid()`),
+      .default(authUid),
     createdAt: c.timestamp({ withTimezone: true }).defaultNow().notNull(),
     updatedAt: c.timestamp({ withTimezone: true }),
   }),

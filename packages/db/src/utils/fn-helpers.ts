@@ -7,6 +7,7 @@ import { person } from '../schema/person'
 import { profile } from '../schema/profile'
 import { coalesce, concat, concatWs, nullIf, numNonnulls } from './pg-functions'
 
+export const authUid = sql<string>`auth.uid()`
 export const authUserPersonId = sql<number>`get_auth_user_person_id()`
 export const queryPersonId = sql<number>`select get_auth_user_person_id() as ${sql.identifier('personId')}`
 export const authUserProfileId = sql<number>`get_auth_user_profile_id()`
