@@ -1,11 +1,11 @@
 import type { ComponentProps } from 'react'
-import { Slot } from '@radix-ui/react-slot'
 import { cva, type VariantProps } from 'class-variance-authority'
+import { Slot } from 'radix-ui'
 
 import { cn } from '~/lib/utils'
 
 export const buttonVariants = cva(
-  'outline-ring/50 focus-visible:border-ring focus-visible:outline-3 aria-invalid:border-destructive aria-invalid:outline-destructive/20 dark:aria-invalid:outline-destructive/40 inline-flex shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0',
+  'outline-ring/50 focus-visible:border-ring focus-visible:outline-3 aria-invalid:border-destructive aria-invalid:outline-destructive/20 dark:aria-invalid:outline-destructive/40 inline-flex shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 aria-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0',
   {
     variants: {
       variant: {
@@ -38,7 +38,7 @@ export type ButtonProps = ComponentProps<'button'>
   & VariantProps<typeof buttonVariants> & { asChild?: boolean }
 
 export function Button({ className, variant, size, asChild = false, ...props }: ButtonProps) {
-  const Comp = asChild ? Slot : 'button'
+  const Comp = asChild ? Slot.Root : 'button'
 
   return (
     <Comp

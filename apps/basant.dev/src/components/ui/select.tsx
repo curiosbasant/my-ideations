@@ -1,8 +1,8 @@
 'use client'
 
 import type { ComponentProps } from 'react'
-import * as SelectPrimitive from '@radix-ui/react-select'
 import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from 'lucide-react'
+import { Select as SelectPrimitive } from 'radix-ui'
 
 import { cn } from '~/lib/utils'
 
@@ -101,7 +101,7 @@ export function SelectItem({
         className,
       )}
       {...props}>
-      <span className='absolute right-2 flex size-3.5 items-center justify-center'>
+      <span className='absolute end-2 flex size-3.5 items-center justify-center'>
         <SelectPrimitive.ItemIndicator>
           <CheckIcon className='size-4' />
         </SelectPrimitive.ItemIndicator>
