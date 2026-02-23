@@ -9,6 +9,7 @@
   "scripts": {
     "clean": "rm -rf .turbo node_modules",
     "lint": "tsc --noEmit",
+    "diff": "pnpm with-env -- drizzle-kit push --explain",
     "push": "pnpm with-env -- drizzle-kit push",
     "push:prod": "pnpm with-env:prod -- drizzle-kit push",
     "migrate": "pnpm with-env -- tsx src/migrate.ts",

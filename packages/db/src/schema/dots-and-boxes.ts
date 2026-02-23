@@ -15,7 +15,7 @@ export const gdb__board = pgTable(
     activePlayerIndex: c.smallint(),
     players: id()
       .array()
-      .default(sql`array[get_auth_user_profile_id()]`)
+      .default(sql`ARRAY[get_auth_user_profile_id()]`)
       .notNull(),
     status: c.varchar(),
   })),

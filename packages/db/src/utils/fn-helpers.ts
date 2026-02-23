@@ -1,6 +1,6 @@
 import { getColumns, getTableName, type AnyColumn, type SQLWrapper } from 'drizzle-orm'
 import { toSnakeCase } from 'drizzle-orm/casing'
-import type { PgTable } from 'drizzle-orm/pg-core'
+import type { PgTable, PgUpdateSetSource } from 'drizzle-orm/pg-core'
 import { eq, or, SQL, sql } from 'drizzle-orm/sql'
 
 import { person } from '../schema/person'
@@ -51,6 +51,23 @@ export function buildConflictSetWhere<T extends PgTable, C extends keyof T['_'][
       return isDistinctFrom(sql`${tableIdentifier}.${cId}`, sql`${excludedIdentifier}.${cId}`)
     }),
   )
+}
+
+export function withExcluded<T extends PgTable>(
+  table: T,
+  cb: (excluded: T['_']['columns']) => PgUpdateSetSource<T>,
+) {
+  const columns = getColumns(table)
+  const excludedIdentifier = sql.identifier('excluded')
+  const tableProxy = new Proxy(columns, {
+    get(target, prop) {
+      if (typeof prop !== 'string') return null
+      const cId = sql.identifier(toSnakeCase(target[prop].name))
+      return sql`${excludedIdentifier}.${cId}`
+    },
+  })
+
+  return cb(tableProxy)
 }
 
 export function isDistinctFrom(left: AnyColumn | SQLWrapper, right: AnyColumn | SQLWrapper) {

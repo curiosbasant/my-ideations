@@ -3,41 +3,51 @@ import * as sb from 'drizzle-orm/supabase'
 
 import { db } from '../client'
 import * as schema from '../schema'
+import { withExcluded } from '../utils/fn-helpers'
+import { coalesce, now, splitPart } from '../utils/pg-functions'
 
-const fnName = sql.raw('public.create_user_profile')
+export const queryProfileInsert = db
+  .insert(schema.profile)
+  .values({
+    username: sql`new.raw_user_meta_data ->> 'username'`,
+    firstName: splitPart(sql`new.raw_user_meta_data ->> 'full_name'`, ' ', 1),
+    lastName: splitPart(sql`new.raw_user_meta_data ->> 'full_name'`, ' ', 2),
+    email: sql`new.email`,
+    avatarUrl: sql`new.raw_user_meta_data ->> 'avatar_url'`,
+    createdBy: sql`new.id`,
+  })
+  .onConflictDoUpdate({
+    target: schema.profile.email,
+    set: withExcluded(schema.profile, (excluded) => ({
+      username: coalesce(schema.profile.username, excluded.username),
+      firstName: coalesce(schema.profile.firstName, excluded.firstName),
+      lastName: coalesce(schema.profile.lastName, excluded.lastName),
+      avatarUrl: coalesce(schema.profile.avatarUrl, excluded.avatarUrl),
+      createdBy: excluded.createdBy,
+      updatedAt: now(),
+    })),
+  })
 
-const insertProfileSql = sql.raw(
-  db
-    .insert(schema.profile)
-    .values({
-      username: sql`new.raw_user_meta_data ->> 'username'`,
-      firstName: sql`split_part(new.raw_user_meta_data ->> 'full_name', ' ', 1)`,
-      lastName: sql`split_part(new.raw_user_meta_data ->> 'full_name', ' ', 2)`,
-      email: sql`new.email`,
-      avatarUrl: sql`new.raw_user_meta_data ->> 'avatar_url'`,
-      createdBy: sql`new.id`,
-    })
-    .toSQL().sql,
-)
+const createUserProfile = sql.raw('public.create_user_profile')
 
 /**
  * Create a profile for every user registered
  */
 const fn = sql`
-  create or replace function ${fnName}()
+  create or replace function ${createUserProfile}()
   returns trigger as $$
     begin
-      ${insertProfileSql};
+      ${queryProfileInsert};
       return new;
     end;
   $$ language plpgsql security definer set search_path = public;
 
-  alter function ${fnName}() owner to postgres;
-  grant all on function ${fnName}() to anon, authenticated, service_role;
+  alter function ${createUserProfile}() owner to postgres;
+  grant all on function ${createUserProfile}() to anon, authenticated, service_role;
 
   create or replace trigger on_auth_user_created
   after insert on ${sb.authUsers} for each row
-  execute function ${fnName}();
+  execute function ${createUserProfile}();
 `
 
 export default () => db.execute(fn)

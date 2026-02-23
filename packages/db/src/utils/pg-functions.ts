@@ -29,4 +29,8 @@ export function concat(...args: MinRequiredArg<SQLValue<string | null>, 2>) {
 
 export const length = (column: Expression) => sql<number>`length(${column})`
 
+export function splitPart(column: Expression, delimiter: string, position: number) {
+  return sql`split_part(${column}, ${sql.raw(`'${delimiter}'`)}, ${sql.raw(position.toString())})`
+}
+
 export const now = () => sql`now()`
