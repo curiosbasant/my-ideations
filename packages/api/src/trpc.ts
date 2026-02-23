@@ -35,7 +35,9 @@ export async function createTRPCContext(opts: { headers: Headers; supabase: Supa
   const rls = rlsCreator(db, data?.claims)
 
   const source = opts.headers.get('x-trpc-source') ?? 'unknown'
-  console.log('>>> tRPC Request from', source, 'by', data?.claims.sub || 'someone')
+  console.log(
+    `>>> \x1b[35m[${new Date().toLocaleTimeString()}]\x1b[0m tRPC ${source} request by \x1b[33m${data?.claims.email || data?.claims.sub || 'someone'}\x1b[0m`,
+  )
 
   return {
     ...opts,

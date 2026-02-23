@@ -47,11 +47,15 @@ export function getSupabaseMiddleware(request: NextRequest, response: NextRespon
           return request.cookies.getAll()
         },
         setAll(cookiesToSet) {
-          cookiesToSet.forEach((c) => request.cookies.set(c))
+          // refreshed auth token for Server Components
+          cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value))
           for (const pair of request.headers) {
             response.headers.set(...pair)
           }
-          cookiesToSet.forEach((c) => response.cookies.set(c))
+          // refresh auth token for the browser
+          cookiesToSet.forEach(({ name, value, options }) =>
+            response.cookies.set(name, value, options),
+          )
         },
       } satisfies CookieMethodsServer,
     },
