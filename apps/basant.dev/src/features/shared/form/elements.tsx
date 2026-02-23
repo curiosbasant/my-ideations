@@ -1,5 +1,7 @@
 import type { PropsWithChildren } from 'react'
+import type { Select as RadixSelect } from 'radix-ui'
 
+import { Button, type ButtonProps } from '~/components/ui/button'
 import {
   Field,
   FieldContent,
@@ -7,9 +9,24 @@ import {
   FieldError,
   FieldLabel,
 } from '~/components/ui/field'
-import { Input } from '~/components/ui/input'
-import { Select, type SelectProps } from '~/components/ui/select'
-import { useFieldContext } from './hooks'
+import { Input, type InputProps } from '~/components/ui/input'
+import {
+  Select,
+  SelectContent,
+  SelectTrigger,
+  SelectValue,
+  type SelectProps,
+} from '~/components/ui/select'
+import { useFieldContext, useFormContext } from './hooks'
+
+export function FormSubmitButton(props: ButtonProps) {
+  const form = useFormContext()
+  return (
+    <form.Subscribe>
+      {(state) => <Button {...props} aria-disabled={!state.canSubmit} type='submit' />}
+    </form.Subscribe>
+  )
+}
 
 export type FormControlProps = {
   label: string
@@ -32,23 +49,25 @@ export function FormField(props: PropsWithChildren<FormControlProps>) {
   )
 }
 
-export function FormInput() {
+export function FormInput(props: InputProps) {
   const field = useFieldContext<string>()
   const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid
 
   return (
     <Input
-      id={field.name}
+      id={field.name + field.form.formId}
       name={field.name}
       value={field.state.value}
       onBlur={field.handleBlur}
       onChange={(e) => field.handleChange(e.target.value)}
       aria-invalid={isInvalid}
+      {...props}
     />
   )
 }
 
-export function FormSelect(props: SelectProps) {
+type FormSelectProps = SelectProps & RadixSelect.SelectValueProps
+export function FormSelect({ placeholder, ...props }: FormSelectProps) {
   const field = useFieldContext<string>()
   const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid
 
@@ -58,7 +77,11 @@ export function FormSelect(props: SelectProps) {
       value={field.state.value}
       onValueChange={field.handleChange}
       aria-invalid={isInvalid}
-      {...props}
-    />
+      {...props}>
+      <SelectTrigger className='backdrop-blur-2xs w-full' id={field.name + field.form.formId}>
+        <SelectValue placeholder={typeof placeholder === 'string' ? placeholder : '---'} />
+      </SelectTrigger>
+      <SelectContent position='item-aligned'>{props.children}</SelectContent>
+    </Select>
   )
 }
