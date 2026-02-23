@@ -1,100 +1,35 @@
 'use client'
 
-import { useState, type ComponentProps } from 'react'
-import { useQueryClient } from '@tanstack/react-query'
+import { use } from 'react'
 
-import { useTrpc } from '@my/core/trpc/client'
-import { getSupabaseClient } from '@my/lib/supabase/client'
-
-import { DropArea } from '~/components/elements/drop-area'
+import { DialogContext } from '~/components/ui/dialog'
 import { toast } from '~/components/ui/sonner'
 import { actionCreateDocument } from '~/features/document/actions'
+import { FormSetDocument } from '~/features/document/components/form-set-document'
 
-export function DocumentView() {
-  const [uploadingFile, setUploadingFile] = useState<{ url?: string; path?: string } | null>(null)
-  const trpc = useTrpc()
-  const query = useQueryClient()
+export function DocumentCreateForm() {
+  const setOpen = use(DialogContext)
 
   return (
-    <DropArea
-      className='group flex min-h-80 overflow-clip rounded-lg border-2 border-dashed md:row-span-full'
-      activeClassName='border-primary bg-primary/10'
-      enablePromptFile
-      onFilesDrop={async ([file]) => {
-        setUploadingFile((prev) => {
-          prev?.url && URL.revokeObjectURL(prev.url)
-          return { file, url: URL.createObjectURL(file) }
-        })
-        const obj = await query.ensureQueryData(
-          trpc.person.document.getSignedUrl.queryOptions({ fileName: file.name }),
-        )
-        const supabase = getSupabaseClient()
-        const bkt = supabase.storage.from('__documents')
-
-        const { data, error } = await bkt.uploadToSignedUrl(obj.path, obj.token, file)
-        if (error) {
-          if (error.message === 'The resource already exists') {
-            return setUploadingFile((prev) => ({ ...prev, path: obj.path }))
-          }
-          toast.error('Failed to upload file')
-          return console.error(error)
-        }
-        setUploadingFile((prev) => ({ ...prev, path: data.path }))
-      }}>
-      {uploadingFile?.url ?
-        <div className='flex flex-1'>
-          <img
-            src={uploadingFile.url}
-            className='group-data-drag-over:opacity-20 m-auto object-contain'
-          />
-        </div>
-      : <div className='m-auto'>
-          <p className='text-muted-foreground text-balance text-center text-sm'>
-            Drag and drop a file here to upload
-          </p>
-        </div>
-      }
-      <input name='filePath' value={uploadingFile?.path || ''} readOnly required type='hidden' />
-    </DropArea>
-  )
-}
-
-export function FormWrapper(props: ComponentProps<'form'>) {
-  return (
-    <form
-      {...props}
-      action={async (fd) => {
-        const relation = fd.get('relation') as 'mine'
-        const documentType = fd.get('documentType') as string
-        const documentNo = fd.get('documentNo') as string
-        const filePath = fd.get('filePath') as string
-        const note = fd.get('note') as string
-
-        if (!relation || !documentType || !documentNo) {
-          toast.error('Please fill in all fields')
-          return
-        }
-        if (!filePath) {
-          toast.error('Please upload a document')
-          return
-        }
-
+    <FormSetDocument
+      onSubmit={async (value) => {
         try {
           const errMessage = await actionCreateDocument({
-            relation,
-            documentType: parseInt(documentType),
-            documentNo,
-            filePath,
-            note,
+            relation: value.relation as 'mine',
+            documentType: parseInt(value.documentType),
+            documentNo: value.documentNo,
+            filePath: value.filePath,
+            note: value.note,
           })
           if (errMessage) {
             toast.error(errMessage)
           } else {
             toast.success('Document added successfully')
           }
+          setOpen(false)
         } catch (error) {
           if (error instanceof Error && error.message === 'Related person not found') {
-            toast.error(`Relation with ${relation} doesn't exist`)
+            toast.error(`Relation with ${value.relation} doesn't exist`)
             return
           }
           throw error

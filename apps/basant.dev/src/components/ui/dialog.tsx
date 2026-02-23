@@ -1,6 +1,6 @@
 'use client'
 
-import type { ComponentProps } from 'react'
+import { createContext, useState, type ComponentProps } from 'react'
 import { XIcon } from 'lucide-react'
 import { Dialog as DialogPrimitive } from 'radix-ui'
 
@@ -8,6 +8,17 @@ import { cn } from '~/lib/utils'
 
 export function Dialog(props: ComponentProps<typeof DialogPrimitive.Root>) {
   return <DialogPrimitive.Root data-slot='dialog' {...props} />
+}
+
+export const DialogContext = createContext((bool: boolean) => {})
+export function DialogProvider(props: ComponentProps<typeof DialogPrimitive.Root>) {
+  const [open, setOpen] = useState(false)
+
+  return (
+    <DialogContext value={setOpen}>
+      <DialogPrimitive.Root data-slot='dialog' {...props} open={open} onOpenChange={setOpen} />
+    </DialogContext>
+  )
 }
 
 export function DialogTrigger(props: ComponentProps<typeof DialogPrimitive.Trigger>) {

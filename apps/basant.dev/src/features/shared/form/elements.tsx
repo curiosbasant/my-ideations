@@ -29,20 +29,26 @@ export function FormSubmitButton(props: ButtonProps) {
 }
 
 export type FormControlProps = {
-  label: string
+  label?: string | false
   description?: string | null
 }
-
-export function FormField(props: PropsWithChildren<FormControlProps>) {
+export function FormControl(props: PropsWithChildren<FormControlProps>) {
   const field = useFieldContext()
   const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid
 
   return (
     <Field data-invalid={isInvalid}>
-      <FieldContent>
-        <FieldLabel htmlFor={field.name}>{props.label}</FieldLabel>
-        {props.description && <FieldDescription>{props.description}</FieldDescription>}
-      </FieldContent>
+      {props.label === false || (
+        <FieldContent>
+          <FieldLabel className='capitalize' htmlFor={field.name + field.form.formId}>
+            {props.label || field.name.replace(/([A-Z])/g, ' $1')}
+            <span className='text-muted-foreground group-has-required/field:hidden font-normal'>
+              (optional)
+            </span>
+          </FieldLabel>
+          {props.description && <FieldDescription>{props.description}</FieldDescription>}
+        </FieldContent>
+      )}
       {props.children}
       {isInvalid && <FieldError errors={field.state.meta.errors} />}
     </Field>
