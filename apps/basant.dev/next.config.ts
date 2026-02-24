@@ -4,6 +4,7 @@ const LOCAL_ROOT_HOSTNAME = process.env.NEXT_PUBLIC_LOCAL_ROOT_HOSTNAME
 
 export default {
   allowedDevOrigins: getDevOrigins(),
+  cacheComponents: true,
   logging: {
     fetches: {
       fullUrl: true,
