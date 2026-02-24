@@ -12,3 +12,11 @@ export const actionCreateDocument = async (
 
   return result.success ? revalidatePath('/documents') : dalFormatErrorMessage(result.error)
 }
+
+export const actionUpdateDocument = async (
+  payload: Parameters<typeof api.person.document.update>[0],
+) => {
+  const result = await dalLoginRedirect(dalDbOperation(() => api.person.document.update(payload)))
+
+  return result.success ? revalidatePath('/documents') : dalFormatErrorMessage(result.error)
+}

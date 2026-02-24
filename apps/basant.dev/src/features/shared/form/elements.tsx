@@ -1,5 +1,4 @@
 import type { PropsWithChildren } from 'react'
-import type { Select as RadixSelect } from 'radix-ui'
 
 import { Button, type ButtonProps } from '~/components/ui/button'
 import {
@@ -16,6 +15,7 @@ import {
   SelectTrigger,
   SelectValue,
   type SelectProps,
+  type SelectValueProps,
 } from '~/components/ui/select'
 import { useFieldContext, useFormContext } from './hooks'
 
@@ -72,7 +72,7 @@ export function FormInput(props: InputProps) {
   )
 }
 
-type FormSelectProps = SelectProps & RadixSelect.SelectValueProps
+type FormSelectProps = SelectProps & SelectValueProps
 export function FormSelect({ placeholder, ...props }: FormSelectProps) {
   const field = useFieldContext<string>()
   const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid

@@ -8,9 +8,9 @@ import {
   or,
   queryPersonId,
   schema,
-  sql,
+  type DbTransaction,
 } from '@my/db'
-import { concat, now } from '@my/db/functions'
+import { now } from '@my/db/functions'
 import { z } from '@my/lib/zod'
 
 import { protectedProcedure, publicProcedure } from '../trpc'
@@ -21,11 +21,9 @@ export const personRouter = {
       const documents = await rls((tx) => {
         return tx
           .select({
-            id: concat(
-              sql`${schema.personDocument.personId}::text`,
-              sql`${schema.personDocument.type}::text`,
-            ).as('id'),
-            type: schema.personDocumentType.name,
+            personId: schema.personDocument.personId,
+            typeId: schema.personDocumentType.id,
+            typeName: schema.personDocumentType.name,
             number: schema.personDocument.number,
             path: schema.personDocument.path,
             note: schema.personDocument.note,
@@ -88,6 +86,10 @@ export const personRouter = {
         const fileName = `${Date.now().toString(36)}_${input.fileName.replace(/\W+/g, '_')}`
         const { data, error } = await bkt.createSignedUploadUrl(`${personId}/${fileName}`)
         if (error) {
+          if (error.message === 'new row violates row-level security policy') {
+            throw new TRPCError({ code: 'FORBIDDEN', message: 'Permission Denied', cause: error })
+          }
+
           throw new TRPCError({
             code: 'INTERNAL_SERVER_ERROR',
             message: 'Failed to create signed upload url',
@@ -99,7 +101,7 @@ export const personRouter = {
     create: protectedProcedure
       .input(
         z.object({
-          relation: z.literal(['mine', 'father', 'mother']).default('mine'),
+          relation: z.string().default('mine'),
           documentType: z.number(),
           documentNo: z.string(),
           filePath: z.string(),
@@ -108,23 +110,10 @@ export const personRouter = {
       )
       .mutation(async ({ input, ctx: { rls } }) => {
         return rls(async (tx) => {
-          const [row] = await (input.relation === 'father' || input.relation === 'mother' ?
-            tx
-              .select({ personId: schema.personRelation.relativeId })
-              .from(schema.personRelation)
-              .where(
-                and(
-                  eq(schema.personRelation.personId, authUserPersonId),
-                  eq(schema.personRelation.relation, input.relation === 'father' ? 1 : 2),
-                ),
-              )
-          : tx.execute<{ personId: number }>(queryPersonId))
-
-          if (!row?.personId)
-            throw new TRPCError({ code: 'NOT_FOUND', message: 'Related person not found' })
+          const personId = await resolvePersonIdFromRelation(tx, input.relation)
 
           await tx.insert(schema.personDocument).values({
-            personId: row.personId,
+            personId,
             type: input.documentType,
             number: input.documentNo,
             path: input.filePath,
@@ -132,5 +121,59 @@ export const personRouter = {
           })
         })
       }),
+    update: protectedProcedure
+      .input(
+        z.object({
+          personId: z.number(),
+          documentType: z.number(),
+          relation: z.string().optional(),
+          newDocumentType: z.number().optional(),
+          documentNo: z.string().nullish(),
+          filePath: z.string().nullish(),
+          note: z.string().nullish(),
+        }),
+      )
+      .mutation(async ({ input, ctx: { rls } }) => {
+        return rls(async (tx) => {
+          const personId =
+            input.relation ? await resolvePersonIdFromRelation(tx, input.relation) : undefined
+
+          await tx
+            .update(schema.personDocument)
+            .set({
+              personId,
+              type: input.newDocumentType,
+              number: input.documentNo,
+              path: input.filePath,
+              note: input.note,
+              updatedAt: now(),
+            })
+            .where(
+              and(
+                eq(schema.personDocument.personId, input.personId),
+                eq(schema.personDocument.type, input.documentType),
+              ),
+            )
+        })
+      }),
   },
+}
+
+async function resolvePersonIdFromRelation(tx: DbTransaction, relation?: string) {
+  const [row] = await (relation === 'father' || relation === 'mother' ?
+    tx
+      .select({ personId: schema.personRelation.relativeId })
+      .from(schema.personRelation)
+      .where(
+        and(
+          eq(schema.personRelation.personId, authUserPersonId),
+          eq(schema.personRelation.relation, relation === 'father' ? 1 : 2),
+        ),
+      )
+  : tx.execute<{ personId: number }>(queryPersonId))
+
+  if (!row?.personId)
+    throw new TRPCError({ code: 'NOT_FOUND', message: 'Related person not found' })
+
+  return row.personId
 }

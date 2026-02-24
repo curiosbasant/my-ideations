@@ -53,7 +53,13 @@ export function FormSetDocument(props: {
       onMount: schema,
     },
     async onSubmit({ value }) {
-      await props.onSubmit(value)
+      const dirtyFields = Object.fromEntries(
+        Object.entries(value).filter(
+          ([key]) => !form.getFieldMeta(key as keyof FormInput)?.isDefaultValue,
+        ),
+      ) as FormInput // Can't trust
+
+      await props.onSubmit(dirtyFields)
     },
   })
 
@@ -62,7 +68,8 @@ export function FormSetDocument(props: {
       className='grid gap-6 md:grid-cols-2 md:grid-rows-[1fr_auto]'
       onSubmit={(ev) => {
         ev.preventDefault()
-        form.handleSubmit()
+        if (form.state.isPristine) return
+        return form.handleSubmit()
       }}>
       <form.AppForm>
         <div className='space-y-6'>
@@ -132,7 +139,7 @@ export function FormSetDocument(props: {
                 : <DialogClose asChild>{buttonJsx}</DialogClose>
             }}
           </form.Subscribe>
-          <form.SubmitButton>Add Documents</form.SubmitButton>
+          <form.SubmitButton>Save Document</form.SubmitButton>
         </DialogFooter>
       </form.AppForm>
     </form>
