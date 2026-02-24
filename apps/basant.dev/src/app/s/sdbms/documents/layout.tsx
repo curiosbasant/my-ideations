@@ -9,6 +9,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '~/components/ui/dialog'
+import { ensurePersonId } from '~/features/person/dal'
 import { DocumentCreateForm } from './client'
 
 export const metadata: Metadata = {
@@ -16,6 +17,7 @@ export const metadata: Metadata = {
 }
 
 export default async function DocumentsLayout(props: LayoutProps<'/s/sdbms/documents'>) {
+  await ensurePersonId()
   return (
     <div className='space-y-8'>
       <div className='flex items-center justify-between'>

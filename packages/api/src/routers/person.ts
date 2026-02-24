@@ -16,6 +16,12 @@ import { z } from '@my/lib/zod'
 import { protectedProcedure, publicProcedure } from '../trpc'
 
 export const personRouter = {
+  id: protectedProcedure.query(async ({ ctx: { rls } }) => {
+    return rls(async (tx) => {
+      const [row] = await tx.execute<{ personId: number }>(queryPersonId)
+      return row.personId
+    })
+  }),
   document: {
     list: protectedProcedure.query(async ({ ctx: { rls, supabase } }) => {
       const documents = await rls((tx) => {
