@@ -4,13 +4,15 @@ import {
   and,
   authUserPersonId,
   authUserProfileId,
+  desc,
   eq,
   or,
+  profileDisplayName,
   queryPersonId,
   schema,
   type DbTransaction,
 } from '@my/db'
-import { now } from '@my/db/functions'
+import { coalesce, now } from '@my/db/functions'
 import { z } from '@my/lib/zod'
 
 import { protectedProcedure, publicProcedure } from '../trpc'
@@ -28,12 +30,19 @@ export const personRouter = {
         return tx
           .select({
             personId: schema.personDocument.personId,
-            typeId: schema.personDocumentType.id,
-            typeName: schema.personDocumentType.name,
+            type: schema.personDocumentType,
             number: schema.personDocument.number,
             path: schema.personDocument.path,
             note: schema.personDocument.note,
             relation: schema.personRelationType.name,
+            createdBy: {
+              displayName: profileDisplayName().as('creator_display_name'),
+              avatarUrl: schema.profile.avatarUrl,
+            },
+            lastModifiedAt: coalesce(
+              schema.personDocument.updatedAt,
+              schema.personDocument.createdAt,
+            ).as('last_modified_at'),
           })
           .from(schema.personDocument)
           .innerJoin(
@@ -48,12 +57,14 @@ export const personRouter = {
             schema.personRelationType,
             eq(schema.personRelation.relation, schema.personRelationType.id),
           )
+          .leftJoin(schema.profile, eq(schema.profile.id, schema.personDocument.createdBy))
           .where(
             or(
               eq(schema.personDocument.personId, authUserPersonId),
               eq(schema.personDocument.createdBy, authUserProfileId),
             ),
           )
+          .orderBy(desc(coalesce(schema.personDocument.updatedAt, schema.personDocument.createdAt)))
       })
       if (documents.length === 0) return []
 

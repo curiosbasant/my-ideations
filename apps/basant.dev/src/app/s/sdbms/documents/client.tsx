@@ -50,7 +50,7 @@ export function DocumentUpdateForm(props: {
     <FormSetDocument
       defaultValues={{
         relation: props.document.relation?.toLowerCase() ?? 'mine',
-        documentType: props.document.typeId.toString(),
+        documentType: props.document.type.id.toString(),
         documentNo: props.document.number ?? '',
         url: props.document.signedUrl ?? '',
         note: props.document.note ?? '',
@@ -60,7 +60,7 @@ export function DocumentUpdateForm(props: {
         try {
           const errMessage = await actionUpdateDocument({
             personId: props.document.personId,
-            documentType: props.document.typeId,
+            documentType: props.document.type.id,
 
             relation: value.relation || undefined,
             newDocumentType: parseInt(value.documentType) || undefined,

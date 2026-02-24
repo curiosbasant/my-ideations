@@ -1,3 +1,6 @@
+import { formatDistance } from '@my/lib/date'
+
+import { Avatar, AvatarImage } from '~/components/ui/avatar'
 import {
   DialogContent,
   DialogDescription,
@@ -18,18 +21,18 @@ export default async function DocumentsPage() {
           No documents found. Please add a document to get started.
         </p>
       </div>
-    : <ul className='grid select-none grid-cols-[repeat(auto-fill,minmax(--spacing(96),1fr))] gap-4'>
+    : <ul className='grid select-none grid-cols-[repeat(auto-fill,minmax(--spacing(96),1fr))] grid-rows-[1fr_auto_auto] gap-4'>
         {documents.map((doc) => (
-          <DialogProvider key={`${doc.personId}${doc.typeId}`}>
+          <DialogProvider key={`${doc.personId}${doc.type.id}`}>
             <DialogTrigger asChild>
-              <li className='bg-background hover:outline-primary/75 flex flex-col gap-4 rounded-md border p-2 outline-2 outline-transparent transition'>
-                <div className='rounded-xs bg-secondary/50 aspect-video h-0 flex-1 overflow-clip'>
+              <li className='bg-background hover:outline-primary/75 row-span-3 grid grid-rows-subgrid gap-0 rounded-md border outline-2 outline-transparent transition'>
+                <div className='rounded-xs bg-secondary/50 m-2 aspect-video overflow-clip'>
                   <img src={doc.signedUrl!} className='mx-auto h-full object-contain' />
                 </div>
-                <div className='space-y-2'>
+                <div className='space-y-2 p-2'>
                   <p className='font-bold tabular-nums'>{doc.number}</p>
                   <div className='flex items-center'>
-                    <span className='text-muted-foreground text-sm font-bold'>{doc.typeName} </span>
+                    <span className='text-muted-foreground text-sm font-bold'>{doc.type.name}</span>
                     {doc.relation && (
                       <span className='text-muted-foreground text-sm font-bold'>
                         &ensp;•&ensp;{doc.relation}
@@ -41,6 +44,17 @@ export default async function DocumentsPage() {
                       <p className='text-secondary-foreground text-sm'>{doc.note}</p>
                     </div>
                   )}
+                </div>
+                <div className='text-muted-foreground flex items-center justify-end gap-2 border-t p-2'>
+                  {doc.createdBy && (
+                    <>
+                      <Avatar size='sm'>
+                        <AvatarImage src={doc.createdBy.avatarUrl || ''} />
+                      </Avatar>
+                      <span className='text-sm'>{doc.createdBy.displayName}</span>•
+                    </>
+                  )}
+                  <span className='text-sm'>{formatDistance(doc.lastModifiedAt)}</span>
                 </div>
               </li>
             </DialogTrigger>
