@@ -63,6 +63,11 @@ export async function dalVerifySuccess<T, E extends DalError>(
   return result.data
 }
 
+export async function dalNullifyError<T, E extends DalError>(dalResult: Promise<DalResult<T, E>>) {
+  const result = await dalResult
+  return result.success ? result.data : null
+}
+
 export async function dalDbOperation<T>(operation: () => Promise<T>) {
   try {
     const data = await operation()

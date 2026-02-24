@@ -8,8 +8,8 @@ import { TrpcClientProvider } from '@my/core/trpc/client'
 
 import { ScrollArea } from '~/components/ui/scroll-area'
 import { Toaster } from '~/components/ui/sonner'
+import { PathDocuments } from '~/features/sdbms/components/header-nav-path'
 import { CurrentYear, HtmlWithDataTheme } from '~/features/shared/components/client'
-import { HeaderNavItem } from '~/features/shared/components/header-nav-item'
 import { ProfileDropdownMenu } from '~/features/shared/components/profile-dropdown'
 import { geistMono, geistSans } from '~/features/shared/fonts'
 import { ThemeToggleGroupButton } from '~/features/theme/client'
@@ -42,7 +42,7 @@ export default async function SdbmsRootLayout(props: LayoutProps<'/s/sdbms'>) {
                       </span>
                     </Link>
                     <nav className='flex-1'>
-                      <HeaderNavItem path='/documents'>My Documents</HeaderNavItem>
+                      <PathDocuments />
                     </nav>
                     <ProfileDropdownMenu />
                   </div>
