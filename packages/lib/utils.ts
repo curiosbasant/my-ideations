@@ -308,3 +308,12 @@ export function promptFile(params?: Partial<Pick<HTMLInputElement, 'accept' | 'c
     input.showPicker?.() ?? input.click()
   })
 }
+
+export function sanitizeFilenameForStorage(fileName: string) {
+  const lastDotIndex = fileName.lastIndexOf('.')
+  const basename = lastDotIndex === -1 ? fileName : fileName.slice(0, lastDotIndex)
+  const extname = lastDotIndex === -1 ? '' : fileName.slice(lastDotIndex)
+  // Keep only first 64 alphanumeric character
+  const sanitizedBasename = basename.replace(/\W+/g, '_').slice(0, 64)
+  return `${Date.now().toString(36)}_${sanitizedBasename}${extname}`
+}

@@ -3,6 +3,7 @@ import { dotsAndBoxesRouter } from './routers/dots-and-boxes'
 import { personRouter } from './routers/person'
 import { priyasthanRouter } from './routers/priyasthan'
 import { sdbmsRouter } from './routers/sdbms'
+import { snapfileRouter } from './routers/snapfile'
 import { spendBuddyRouter } from './routers/spend-buddy'
 import { userRouter } from './routers/user'
 import { createRouter } from './trpc'
@@ -13,6 +14,7 @@ export const appRouter = createRouter({
   person: personRouter,
   priyasthan: priyasthanRouter,
   sdbms: sdbmsRouter,
+  snapfile: snapfileRouter,
   spendBuddy: spendBuddyRouter,
   user: userRouter,
 })

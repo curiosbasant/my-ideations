@@ -13,6 +13,7 @@ import {
   type DbTransaction,
 } from '@my/db'
 import { coalesce, now } from '@my/db/functions'
+import { sanitizeFilenameForStorage } from '@my/lib/utils'
 import { z } from '@my/lib/zod'
 
 import { protectedProcedure, publicProcedure } from '../trpc'
@@ -100,8 +101,8 @@ export const personRouter = {
         const [{ personId }] = await rls((tx) => tx.execute<{ personId: number }>(queryPersonId))
 
         const bkt = supabase.storage.from('__documents')
-        const fileName = `${Date.now().toString(36)}_${input.fileName.replace(/\W+/g, '_')}`
-        const { data, error } = await bkt.createSignedUploadUrl(`${personId}/${fileName}`)
+        const filePath = `${personId}/${sanitizeFilenameForStorage(input.fileName)}`
+        const { data, error } = await bkt.createSignedUploadUrl(filePath)
         if (error) {
           if (error.message === 'new row violates row-level security policy') {
             throw new TRPCError({ code: 'FORBIDDEN', message: 'Permission Denied', cause: error })

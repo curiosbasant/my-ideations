@@ -1,8 +1,11 @@
 import { index, pgPolicy, pgTableCreator } from 'drizzle-orm/pg-core'
-import { eq, sql } from 'drizzle-orm/sql'
+import { eq, ne, not, or, sql } from 'drizzle-orm/sql'
 
-import { getDefaultTimezone, id } from '../utils/pg-column-helpers'
+import { getDefaultTimezone, id, withCommonColumns } from '../utils/pg-column-helpers'
+import { coalesce } from '../utils/pg-functions'
+import { policyAllowPublicInsert, policyAllowPublicSelect } from '../utils/pg-table-helpers'
 import { bucketNames, objects } from '../utils/supabase-helpers'
+import { policyAllowOneselfInsert, policyAllowOneselfUpdate } from './profile'
 
 const pgTable = pgTableCreator((tableName) => `sf__${tableName}`)
 
@@ -14,19 +17,43 @@ export const sf__shortUrl = pgTable(
     url: c.text().notNull(),
     createdAt: getDefaultTimezone(),
   }),
+  (t) => [index().on(t.createdAt.desc()), policyAllowPublicSelect, policyAllowPublicInsert],
+)
+
+export const sf__formats = pgTable(
+  'formats',
+  withCommonColumns((c) => ({
+    name: c.varchar().notNull().unique(),
+    description: c.text(),
+    path: c.text().notNull(),
+  })),
   (t) => [
     index().on(t.createdAt.desc()),
-    pgPolicy('Allow anyone to save a short code.', {
-      for: 'insert',
-      withCheck: sql`true`,
-    }),
+    policyAllowPublicSelect,
+    policyAllowOneselfInsert(t.createdBy),
+    policyAllowOneselfUpdate(t.createdBy),
   ],
 )
 
 // ~~~~~~ Bucket Policies ~~~~~~
+const isSnapfileBucket = eq(objects.bucketId, sql.raw(`'${bucketNames.snapfileFiles}'`))
 
 export const policyAllowFilesUpload = pgPolicy('Allow upload to anyone', {
   as: 'permissive',
   for: 'insert',
-  withCheck: eq(objects.bucketId, sql.raw(`'${bucketNames.snapfileFiles}'`)),
+  withCheck: isSnapfileBucket,
 }).link(objects)
+
+export const policyAllowAuthenticatedUpload = pgPolicy(
+  'Allow upload in formats to only authenticated',
+  {
+    as: 'restrictive',
+    for: 'insert',
+    to: 'public', // necessary for restrictive policy
+    withCheck: or(
+      not(isSnapfileBucket),
+      ne(coalesce(sql`${objects.pathTokens}[1]`, sql.raw("''")), sql.raw(`'formats'`)),
+      eq(sql`auth.role()`, sql.raw(`'authenticated'`)),
+    ),
+  },
+).link(objects)
