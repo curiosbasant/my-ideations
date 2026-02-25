@@ -4,7 +4,9 @@ import type { FormEvent } from 'react'
 
 import { getSupabaseClient } from '@my/lib/supabase/client'
 import { throwOnError } from '@my/lib/supabase/shared'
+import { sanitizeFilenameForStorage } from '@my/lib/utils'
 
+import { actionCreateFormat } from '~/features/snapfile/actions'
 import { createAction } from '~/lib/utils/helper-action/shared'
 
 function debounce<T extends any[]>(cb: (...args: T) => void, delay: number) {
@@ -25,27 +27,20 @@ export const handleChange = (ev: FormEvent<HTMLFormElement>) => {
 
 export const uploadFileAction = createAction(
   async (p: { file: File; fileName: string; fileDescription?: string }) => {
-    const fileShortCode = crypto.randomUUID().slice(-6)
-    const filePath = `${fileShortCode}-${p.fileName}`
+    const filePath = `formats/${sanitizeFilenameForStorage(p.file.name)}`
 
     const supabase = getSupabaseClient()
-    const filesBucket = supabase.storage.from('format--files')
-    const filePublicUrl = filesBucket.getPublicUrl(filePath, {
-      download: p.file.name,
-    }).data.publicUrl
+    const bkt = supabase.storage.from('sf__files')
 
     try {
       await Promise.all([
-        filesBucket.upload(filePath, p.file).then(throwOnError),
-        supabase
-          .from('format__file')
-          .insert({ name: p.fileName, description: p.fileDescription || null, url: filePublicUrl })
-          .then(throwOnError),
+        bkt.upload(filePath, p.file).then(throwOnError),
+        actionCreateFormat({
+          fileName: p.fileName,
+          description: p.fileDescription || null,
+          path: filePath,
+        }),
       ])
-
-      return {
-        publicUrl: filePublicUrl,
-      }
     } catch {
       throw new Error('There seems to some problem uploading your file!')
     }

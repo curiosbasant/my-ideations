@@ -1,7 +1,6 @@
 import '~/app/tailwind.css'
 import './theme.css'
 
-import type { PropsWithChildren } from 'react'
 import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -18,7 +17,7 @@ export const metadata: Metadata = {
   description: 'Instantly share files by scanning and generating QRCodes!',
 }
 
-export default function SnapFileRootLayout(props: PropsWithChildren) {
+export default function SnapFileRootLayout(props: LayoutProps<'/s/snapfile'>) {
   return (
     <html lang='en' className='size-full antialiased'>
       <body className={`size-full ${latoFont.className}`}>
@@ -33,6 +32,10 @@ export default function SnapFileRootLayout(props: PropsWithChildren) {
                 <Button className='text-base' variant='ghost' asChild>
                   <Link href='/scan'>Scan QR</Link>
                 </Button>
+                <Button className='text-base' variant='ghost' asChild>
+                  <Link href='/formats'>Formats</Link>
+                </Button>
+                {props.headerRight}
               </div>
             </header>
             <div className='px-(--page-padding) bg-secondary flex flex-1'>

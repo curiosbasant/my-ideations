@@ -3,7 +3,6 @@
 import { useState, type PropsWithChildren } from 'react'
 import { CloudUploadIcon } from 'lucide-react'
 
-import { useToggle } from '@my/core/hooks'
 import { formatBytes } from '@my/lib/utils'
 
 import { DropArea } from '~/components/elements/drop-area'
@@ -50,13 +49,11 @@ export function FileUploadModalViews() {
         className='group grid h-96 place-items-center content-center rounded-2xl border-2 border-dashed'
         activeClassName='border-primary bg-primary/10'
         onFilesDrop={handleFile}>
-        <CloudUploadIcon className='group-data-[drag-over]:text-primary size-20 text-gray-400' />
-        <p className='group-data-[drag-over]:text-primary text-gray-500'>
+        <CloudUploadIcon className='group-data-drag-over:text-primary size-20 text-gray-400' />
+        <p className='group-data-drag-over:text-primary text-gray-500'>
           Drag and drop your file here
         </p>
-        <p className='group-data-[drag-over]:text-primary text-gray-500'>
-          or click to select a file
-        </p>
+        <p className='group-data-drag-over:text-primary text-gray-500'>or click to select a file</p>
         <Button className='mt-4' variant='outline' asChild>
           <label>
             Select File
@@ -97,19 +94,5 @@ function FileDetails(props: PropsWithChildren<{ file: File }>) {
       }}>
       {props.children}
     </form>
-  )
-}
-
-export function FormatTime(props: {
-  dateTime: string
-  formattedTime: string
-  distanceTime: string
-}) {
-  const [isToggled, toggle] = useToggle()
-
-  return (
-    <time className='cursor-default' dateTime={props.dateTime} onClick={toggle}>
-      {isToggled ? props.formattedTime : props.distanceTime}
-    </time>
   )
 }

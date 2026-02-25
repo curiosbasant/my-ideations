@@ -2,6 +2,8 @@
 
 import { Suspense, use, type ComponentProps } from 'react'
 
+import { useToggle } from '@my/core/hooks'
+
 import { ThemeContext } from '~/features/theme/provider'
 
 export function HtmlWithDataTheme(props: ComponentProps<'html'>) {
@@ -18,4 +20,18 @@ export function CurrentYear() {
 }
 function CurrentYearInner() {
   return <span suppressHydrationWarning>{new Date().getFullYear()}</span>
+}
+
+export function TimeFormat(props: {
+  dateTime: string
+  formattedTime: string
+  distanceTime: string
+}) {
+  const [isToggled, toggle] = useToggle()
+
+  return (
+    <time className='cursor-default' dateTime={props.dateTime} onClick={toggle}>
+      {isToggled ? props.formattedTime : props.distanceTime}
+    </time>
+  )
 }
