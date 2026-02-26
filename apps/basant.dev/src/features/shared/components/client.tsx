@@ -1,8 +1,9 @@
 'use client'
 
 import { Suspense, use, type ComponentProps } from 'react'
+import { WifiOffIcon } from 'lucide-react'
 
-import { useToggle } from '@my/core/hooks'
+import { useIsDeviceOnline, useToggle } from '@my/core/hooks'
 
 import { ThemeContext } from '~/features/theme/provider'
 
@@ -33,5 +34,17 @@ export function TimeFormat(props: {
     <time className='cursor-default' dateTime={props.dateTime} onClick={toggle}>
       {isToggled ? props.formattedTime : props.distanceTime}
     </time>
+  )
+}
+
+export function BannerDeviceOnline() {
+  const isOnline = useIsDeviceOnline()
+  return (
+    isOnline || (
+      <div className='bg-destructive flex items-center justify-center gap-2 py-1 transition'>
+        <WifiOffIcon />
+        <p className='text-center text-sm font-bold leading-none text-white'>You're Offline</p>
+      </div>
+    )
   )
 }

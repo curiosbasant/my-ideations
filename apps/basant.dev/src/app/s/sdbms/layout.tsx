@@ -9,7 +9,11 @@ import { TrpcClientProvider } from '@my/core/trpc/client'
 import { ScrollArea } from '~/components/ui/scroll-area'
 import { Toaster } from '~/components/ui/sonner'
 import { PathDocuments } from '~/features/sdbms/components/header-nav-path'
-import { CurrentYear, HtmlWithDataTheme } from '~/features/shared/components/client'
+import {
+  BannerDeviceOnline,
+  CurrentYear,
+  HtmlWithDataTheme,
+} from '~/features/shared/components/client'
 import { ProfileDropdownMenu } from '~/features/shared/components/profile-dropdown'
 import { geistMono, geistSans } from '~/features/shared/fonts'
 import { ThemeToggleGroupButton } from '~/features/theme/client'
@@ -34,6 +38,7 @@ export default async function SdbmsRootLayout(props: LayoutProps<'/s/sdbms'>) {
           <div className='light:bg-secondary selection:bg-primary/25 isolate size-full'>
             <ScrollArea className='size-full'>
               <div className='isolate flex min-h-full w-full flex-col divide-y [--page-padding:--spacing(2)] [--page-size:var(--container-7xl)] sm:[--page-padding:--spacing(4)] md:[--page-padding:--spacing(8)]'>
+                <BannerDeviceOnline />
                 <header className='bg-background/80 px-(--page-padding) sticky top-0 z-10 backdrop-blur-sm'>
                   <div className='@container max-w-(--page-size) h-13 m-auto flex items-center gap-4'>
                     <Link href='/' className='inline-flex items-center gap-4'>

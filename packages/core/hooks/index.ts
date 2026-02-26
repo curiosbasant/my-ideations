@@ -1,5 +1,6 @@
 export * from './use-debounce-callback'
 export * from './use-is-client'
+export * from './use-is-device-online'
 export * from './use-local-storage'
 export * from './use-refs'
 export * from './use-timer'
