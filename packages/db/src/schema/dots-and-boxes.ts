@@ -1,6 +1,7 @@
 import { pgTableCreator } from 'drizzle-orm/pg-core'
 import { sql } from 'drizzle-orm/sql'
 
+import { userProfileId } from '../utils/helpers/db-functions'
 import { id, withCommonColumns } from '../utils/pg-column-helpers'
 
 const pgTable = pgTableCreator((tableName) => `gdb__${tableName}`)
@@ -15,7 +16,7 @@ export const gdb__board = pgTable(
     activePlayerIndex: c.smallint(),
     players: id()
       .array()
-      .default(sql`ARRAY[get_auth_user_profile_id()]`)
+      .default(sql`ARRAY[${userProfileId}]`)
       .notNull(),
     status: c.varchar(),
   })),

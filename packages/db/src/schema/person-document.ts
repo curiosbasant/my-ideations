@@ -2,7 +2,8 @@ import { pgPolicy, primaryKey } from 'drizzle-orm/pg-core'
 import { and, eq, inArray, or, sql } from 'drizzle-orm/sql'
 import { authenticatedRole } from 'drizzle-orm/supabase'
 
-import { authUserPersonId, authUserProfileId } from '../utils/fn-helpers'
+import { userPersonId, userProfileId } from '../utils/helpers/db-functions'
+import { bucketNames, objects } from '../utils/helpers/supabase'
 import {
   CASCADE_ON_UPDATE,
   getProfileRef,
@@ -12,7 +13,6 @@ import {
 } from '../utils/pg-column-helpers'
 import { pgTable, policyAllowPublicSelect } from '../utils/pg-table-helpers'
 import { qb } from '../utils/qb'
-import { bucketNames, objects } from '../utils/supabase-helpers'
 import { person, personRelation } from './person'
 
 export const personDocument = pgTable(
@@ -31,12 +31,12 @@ export const personDocument = pgTable(
     pgPolicy('Allow select to self or person', {
       for: 'select',
       to: authenticatedRole,
-      using: or(eq(t.personId, authUserPersonId), eq(t.createdBy, authUserProfileId)),
+      using: or(eq(t.personId, userPersonId), eq(t.createdBy, userProfileId)),
     }),
     pgPolicy('Allow insert to person', {
       for: 'insert',
       to: authenticatedRole,
-      withCheck: eq(t.personId, authUserPersonId),
+      withCheck: eq(t.personId, userPersonId),
     }),
     pgPolicy('Allow insert to person for relatives', {
       for: 'insert',
@@ -46,13 +46,13 @@ export const personDocument = pgTable(
         qb
           .select({ relativeId: personRelation.relativeId })
           .from(personRelation)
-          .where(eq(personRelation.personId, authUserPersonId)),
+          .where(eq(personRelation.personId, userPersonId)),
       ),
     }),
     pgPolicy('Allow update to self or person', {
       for: 'update',
       to: authenticatedRole,
-      using: or(eq(t.personId, authUserPersonId), eq(t.createdBy, authUserProfileId)),
+      using: or(eq(t.personId, userPersonId), eq(t.createdBy, userProfileId)),
     }),
   ],
 )
@@ -72,7 +72,7 @@ export const personDocumentType = pgTable(
 
 const conditionPersonFolder = and(
   eq(objects.bucketId, sql.raw(`'${bucketNames.documents}'`)),
-  eq(sql`${objects.pathTokens}[1]`, sql`${authUserPersonId}::text`),
+  eq(sql`${objects.pathTokens}[1]`, sql`${userPersonId}::text`),
 )
 
 export const policyAllowDocumentsSelect = pgPolicy('Allow select to oneself', {

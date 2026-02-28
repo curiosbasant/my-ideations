@@ -1,4 +1,5 @@
-import { eq, schema, sql } from '@my/db'
+import { schema } from '@my/db'
+import { eq, sql } from '@my/db/sql'
 import { z } from '@my/lib/zod'
 
 import { anonymousProcedure, protectedProcedure, publicProcedure } from '../trpc'

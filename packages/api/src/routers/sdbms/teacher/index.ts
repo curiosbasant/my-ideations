@@ -1,5 +1,6 @@
-import { and, authUid, authUserPersonId, eq, isNull, schema } from '@my/db'
-import { caseWhen, now } from '@my/db/functions'
+import { schema } from '@my/db'
+import { authUserId, userPersonId } from '@my/db/db-functions'
+import { and, caseWhen, eq, isNull, now } from '@my/db/sql'
 import { z } from '@my/lib/zod'
 
 import { protectedProcedure } from '../../../trpc'
@@ -24,7 +25,7 @@ export const teacherRouter = {
             and(
               eq(schema.person.dob, input.dob),
               eq(schema.sd__teacher.employeeId, input.employeeId),
-              eq(schema.profile.createdBy, authUid),
+              eq(schema.profile.createdBy, authUserId),
             ),
           )
       })
@@ -66,7 +67,7 @@ export const teacherRouter = {
               and(
                 isNull(schema.sd__teacherSubject.deletedAt),
                 eq(schema.sd__teacherSubject.sessionId, input.sessionId),
-                eq(schema.sd__teacher.personId, authUserPersonId),
+                eq(schema.sd__teacher.personId, userPersonId),
               ),
             )
             .orderBy(schema.sd__class.id)
@@ -85,7 +86,7 @@ export const teacherRouter = {
           const [row] = await tx
             .select({ id: schema.sd__teacher.id })
             .from(schema.sd__teacher)
-            .where(eq(schema.sd__teacher.personId, authUserPersonId))
+            .where(eq(schema.sd__teacher.personId, userPersonId))
 
           await tx
             .insert(schema.sd__teacherSubject)

@@ -1,5 +1,7 @@
-import { and, authUserPersonId, eq, personFullName, schema, type DbTransaction } from '@my/db'
-import { now } from '@my/db/functions'
+import { schema, type DbTransaction } from '@my/db'
+import { userPersonId } from '@my/db/db-functions'
+import { personFullName } from '@my/db/helpers'
+import { and, eq, now } from '@my/db/sql'
 import { z } from '@my/lib/zod'
 
 import { protectedProcedure } from '../../trpc'
@@ -18,7 +20,7 @@ export const classRouter = {
           schema.sd__teacher,
           eq(schema.sd__class.instituteId, schema.sd__teacher.instituteId),
         )
-        .where(eq(schema.sd__teacher.personId, authUserPersonId))
+        .where(eq(schema.sd__teacher.personId, userPersonId))
     })
   }),
   section: {
@@ -89,7 +91,7 @@ export const classRouter = {
               )
               .where(
                 and(
-                  eq(schema.sd__teacher.personId, authUserPersonId),
+                  eq(schema.sd__teacher.personId, userPersonId),
                   eq(withStudentProfile.sessionId, input.sessionId),
                   eq(withStudentProfile.numeral, input.standard),
                   eq(withStudentProfile.sectionName, 'A'),

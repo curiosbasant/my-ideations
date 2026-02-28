@@ -1,4 +1,6 @@
-import { authUserPersonId, eq, schema } from '@my/db'
+import { schema } from '@my/db'
+import { userPersonId } from '@my/db/db-functions'
+import { eq } from '@my/db/sql'
 
 import { protectedProcedure, publicProcedure } from '../../trpc'
 import { classRouter } from './class'
@@ -48,11 +50,11 @@ export const sdbmsRouter = {
           tx
             .select({ id: schema.sd__teacher.id })
             .from(schema.sd__teacher)
-            .where(eq(schema.sd__teacher.personId, authUserPersonId)),
+            .where(eq(schema.sd__teacher.personId, userPersonId)),
           tx
             .select({ id: schema.sd__student.id })
             .from(schema.sd__student)
-            .where(eq(schema.sd__student.personId, authUserPersonId)),
+            .where(eq(schema.sd__student.personId, userPersonId)),
         ])
         if (teacherExists) return 'teacher'
         if (studentExists) return 'student'

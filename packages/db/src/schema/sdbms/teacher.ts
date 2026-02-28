@@ -2,12 +2,12 @@ import { index, pgPolicy, uniqueIndex, type PgColumn } from 'drizzle-orm/pg-core
 import { eq, inArray } from 'drizzle-orm/sql'
 import { authenticatedRole } from 'drizzle-orm/supabase'
 
-import { authUserPersonId } from '../../utils/fn-helpers'
-import { id, withCommonColumns } from '../../utils/pg-column-helpers'
+import { selectPersonId } from '../../utils/helpers/db-functions'
 import {
   policyAllowAuthenticatedInsert,
   policyAllowAuthenticatedSelect,
-} from '../../utils/pg-table-helpers'
+} from '../../utils/helpers/policy'
+import { id, withCommonColumns } from '../../utils/pg-column-helpers'
 import { qb } from '../../utils/qb'
 import { person } from '../person'
 import { pgTable } from './_helpers'
@@ -33,7 +33,7 @@ export const sd__teacher = pgTable(
 const currentTeacher = qb
   .select({ id: sd__teacher.id })
   .from(sd__teacher)
-  .where(eq(sd__teacher.personId, authUserPersonId))
+  .where(eq(sd__teacher.personId, selectPersonId))
 
 export const policyAllowTeacherSelect = (teacherId: PgColumn) =>
   pgPolicy('Allow select to teacher', {

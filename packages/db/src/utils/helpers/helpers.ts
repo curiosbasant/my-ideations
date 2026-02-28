@@ -1,16 +1,11 @@
 import { getColumns, getTableName, type AnyColumn, type SQLWrapper } from 'drizzle-orm'
 import { toSnakeCase } from 'drizzle-orm/casing'
 import type { PgTable, PgUpdateSetSource } from 'drizzle-orm/pg-core'
-import { eq, or, SQL, sql } from 'drizzle-orm/sql'
+import { eq, or, sql, type SQL } from 'drizzle-orm/sql'
 
-import { person } from '../schema/person'
-import { profile } from '../schema/profile'
-import { coalesce, concat, concatWs, nullIf, numNonnulls } from './pg-functions'
-
-export const authUserId = sql<string>`auth.uid()`
-export const userPersonId = sql<number>`private.get_user_person_id()`
-export const queryPersonId = sql<number>`select get_auth_user_person_id() as ${sql.identifier('personId')}`
-export const userProfileId = sql<number>`private.get_user_profile_id()`
+import { person } from '../../schema/person'
+import { profile } from '../../schema/profile'
+import { coalesce, concat, concatWs, isDistinctFrom, nullIf, numNonnulls } from './sql'
 
 export const personFullName = () =>
   nullIf<string>(concatWs(' ', person.firstName, person.lastName), '')
@@ -68,10 +63,6 @@ export function withExcluded<T extends PgTable>(
   })
 
   return cb(tableProxy)
-}
-
-export function isDistinctFrom(left: AnyColumn | SQLWrapper, right: AnyColumn | SQLWrapper) {
-  return sql`${left} is distinct from ${right}`
 }
 
 export const isAllNotNull = (

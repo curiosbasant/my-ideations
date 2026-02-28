@@ -1,4 +1,6 @@
-import { and, authUid, eq, schema } from '@my/db'
+import { schema } from '@my/db'
+import { authUserId } from '@my/db/db-functions'
+import { and, eq } from '@my/db/sql'
 import { z } from '@my/lib/zod'
 
 import { protectedProcedure } from '../../../trpc'
@@ -23,7 +25,7 @@ export const studentRouter = {
             and(
               eq(schema.person.dob, input.dob),
               eq(schema.sd__student.admissionNo, input.srNo),
-              eq(schema.profile.createdBy, authUid),
+              eq(schema.profile.createdBy, authUserId),
             ),
           )
       })

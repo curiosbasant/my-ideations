@@ -2,7 +2,7 @@ import { eq, sql } from 'drizzle-orm/sql'
 
 import { db } from '../client'
 import { profile } from '../schema'
-import { authUserId, userPersonId, userProfileId } from '../utils/fn-helpers'
+import { authUserId, userPersonId, userProfileId } from '../utils/helpers/db-functions'
 
 const fn = sql`
   create schema if not exists private;

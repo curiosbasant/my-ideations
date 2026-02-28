@@ -1,6 +1,8 @@
-import { sql, type AnyColumn, type SQLWrapper } from 'drizzle-orm'
+import type { AnyColumn } from 'drizzle-orm'
+import { sql, type SQLWrapper } from 'drizzle-orm/sql'
 import type { SQLValue } from 'drizzle-plus/types'
 
+export * from 'drizzle-orm/sql'
 export { caseWhen, coalesce, concatWithSeparator as concatWs, nullif as nullIf } from 'drizzle-plus'
 
 type Expression = AnyColumn | SQLWrapper
@@ -34,3 +36,7 @@ export function splitPart(column: Expression, delimiter: string, position: numbe
 }
 
 export const now = () => sql`now()`
+
+export function isDistinctFrom(left: AnyColumn | SQLWrapper, right: AnyColumn | SQLWrapper) {
+  return sql`${left} is distinct from ${right}`
+}

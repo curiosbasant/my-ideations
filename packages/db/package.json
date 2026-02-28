@@ -4,7 +4,9 @@
   "type": "module",
   "exports": {
     ".": "./src/index.ts",
-    "./functions": "./src/utils/pg-functions.ts"
+    "./db-functions": "./src/utils/helpers/db-functions.ts",
+    "./helpers": "./src/utils/helpers/helpers.ts",
+    "./sql": "./src/utils/helpers/sql.ts"
   },
   "scripts": {
     "clean": "rm -rf .turbo node_modules",

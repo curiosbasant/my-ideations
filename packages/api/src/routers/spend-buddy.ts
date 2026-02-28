@@ -1,17 +1,6 @@
-import {
-  and,
-  count,
-  desc,
-  eq,
-  lt,
-  profileDisplayName,
-  schema,
-  sql,
-  sum,
-  unionAll,
-  type Database,
-} from '@my/db'
-import { coalesce } from '@my/db/functions'
+import { schema, unionAll, type Database } from '@my/db'
+import { profileDisplayName } from '@my/db/helpers'
+import { and, coalesce, count, desc, eq, lt, sql, sum } from '@my/db/sql'
 import {
   groupCreateSchema,
   groupMemberInviteSchema,

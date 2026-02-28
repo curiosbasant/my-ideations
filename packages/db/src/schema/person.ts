@@ -2,14 +2,14 @@ import { check, index, pgPolicy, primaryKey } from 'drizzle-orm/pg-core'
 import { eq, or, sql } from 'drizzle-orm/sql'
 import { authenticatedRole } from 'drizzle-orm/supabase'
 
-import { authUserPersonId } from '../utils/fn-helpers'
+import { selectPersonId } from '../utils/helpers/db-functions'
+import { length } from '../utils/helpers/sql'
 import {
   CASCADE_ON_UPDATE,
   getTimestampColumns,
   id,
   smallId,
 } from '../utils/pg-column-helpers/helpers'
-import { length } from '../utils/pg-functions'
 import {
   pgTable,
   policyAllowAuthenticatedInsert,
@@ -60,7 +60,7 @@ export const personRelation = pgTable(
     pgPolicy('Allow select to person or relative', {
       for: 'select',
       to: authenticatedRole,
-      using: or(eq(t.personId, authUserPersonId), eq(t.relativeId, authUserPersonId)),
+      using: or(eq(t.personId, selectPersonId), eq(t.relativeId, selectPersonId)),
     }),
     pgPolicy('Allow insert to person', {
       for: 'insert',
@@ -70,7 +70,7 @@ export const personRelation = pgTable(
     pgPolicy('Allow update to person or relative', {
       for: 'update',
       to: authenticatedRole,
-      using: or(eq(t.personId, authUserPersonId), eq(t.relativeId, authUserPersonId)),
+      using: or(eq(t.personId, selectPersonId), eq(t.relativeId, selectPersonId)),
     }),
   ],
 )

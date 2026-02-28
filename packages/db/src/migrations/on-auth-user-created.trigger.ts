@@ -1,10 +1,9 @@
-import { sql } from 'drizzle-orm'
-import * as sb from 'drizzle-orm/supabase'
+import { authUsers } from 'drizzle-orm/supabase'
 
 import { db } from '../client'
 import * as schema from '../schema'
-import { withExcluded } from '../utils/fn-helpers'
-import { coalesce, now, splitPart } from '../utils/pg-functions'
+import { withExcluded } from '../utils/helpers/helpers'
+import { coalesce, now, splitPart, sql } from '../utils/helpers/sql'
 
 export const queryProfileInsert = db
   .insert(schema.profile)
@@ -39,14 +38,14 @@ const fn = sql`
   create or replace function ${createUserProfile}()
   returns trigger as $$
     begin
-      ${queryProfileInsert};
+      ${sql.raw(queryProfileInsert.toSQL().sql)};
       return new;
     end;
   $$ language plpgsql security definer
   set search_path = public;
 
   create or replace trigger on_auth_user_created
-  after insert on ${sb.authUsers} for each row
+  after insert on ${authUsers} for each row
   execute function ${createUserProfile}();
 `
 

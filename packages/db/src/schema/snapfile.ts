@@ -1,10 +1,11 @@
 import { index, pgPolicy, pgTableCreator } from 'drizzle-orm/pg-core'
 import { eq, ne, not, or, sql } from 'drizzle-orm/sql'
 
+import { selectAuthRole } from '../utils/helpers/db-functions'
+import { coalesce } from '../utils/helpers/sql'
+import { bucketNames, objects } from '../utils/helpers/supabase'
 import { getDefaultTimezone, id, withCommonColumns } from '../utils/pg-column-helpers'
-import { coalesce } from '../utils/pg-functions'
 import { policyAllowPublicInsert, policyAllowPublicSelect } from '../utils/pg-table-helpers'
-import { bucketNames, objects } from '../utils/supabase-helpers'
 import { policyAllowOneselfInsert, policyAllowOneselfUpdate } from './profile'
 
 const pgTable = pgTableCreator((tableName) => `sf__${tableName}`)
@@ -53,7 +54,7 @@ export const policyAllowAuthenticatedUpload = pgPolicy(
     withCheck: or(
       not(isSnapfileBucket),
       ne(coalesce(sql`${objects.pathTokens}[1]`, sql.raw("''")), sql.raw(`'formats'`)),
-      eq(sql`auth.role()`, sql.raw(`'authenticated'`)),
+      eq(selectAuthRole, sql.raw(`'authenticated'`)),
     ),
   },
 ).link(objects)

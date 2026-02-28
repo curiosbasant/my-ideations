@@ -1,18 +1,9 @@
 import { TRPCError } from '@trpc/server'
 
-import {
-  and,
-  authUserPersonId,
-  authUserProfileId,
-  desc,
-  eq,
-  or,
-  profileDisplayName,
-  queryPersonId,
-  schema,
-  type DbTransaction,
-} from '@my/db'
-import { coalesce, now } from '@my/db/functions'
+import { schema, type DbTransaction } from '@my/db'
+import { selectPersonId, userPersonId, userProfileId } from '@my/db/db-functions'
+import { profileDisplayName } from '@my/db/helpers'
+import { and, coalesce, desc, eq, now, or } from '@my/db/sql'
 import { sanitizeFilenameForStorage } from '@my/lib/utils'
 import { z } from '@my/lib/zod'
 
@@ -21,7 +12,7 @@ import { protectedProcedure, publicProcedure } from '../trpc'
 export const personRouter = {
   id: protectedProcedure.query(async ({ ctx: { rls } }) => {
     return rls(async (tx) => {
-      const [row] = await tx.execute<{ personId: number }>(queryPersonId)
+      const [row] = await tx.execute<{ personId: number }>(selectPersonId)
       return row.personId
     })
   }),
@@ -61,8 +52,8 @@ export const personRouter = {
           .leftJoin(schema.profile, eq(schema.profile.id, schema.personDocument.createdBy))
           .where(
             or(
-              eq(schema.personDocument.personId, authUserPersonId),
-              eq(schema.personDocument.createdBy, authUserProfileId),
+              eq(schema.personDocument.personId, userPersonId),
+              eq(schema.personDocument.createdBy, userProfileId),
             ),
           )
           .orderBy(desc(coalesce(schema.personDocument.updatedAt, schema.personDocument.createdAt)))
@@ -98,7 +89,7 @@ export const personRouter = {
         }),
       )
       .query(async ({ input, ctx: { rls, supabase } }) => {
-        const [{ personId }] = await rls((tx) => tx.execute<{ personId: number }>(queryPersonId))
+        const [{ personId }] = await rls((tx) => tx.execute<{ personId: number }>(selectPersonId))
 
         const bkt = supabase.storage.from('__documents')
         const filePath = `${personId}/${sanitizeFilenameForStorage(input.fileName)}`
@@ -184,11 +175,11 @@ async function resolvePersonIdFromRelation(tx: DbTransaction, relation?: string)
       .from(schema.personRelation)
       .where(
         and(
-          eq(schema.personRelation.personId, authUserPersonId),
+          eq(schema.personRelation.personId, userPersonId),
           eq(schema.personRelation.relation, relation === 'father' ? 1 : 2),
         ),
       )
-  : tx.execute<{ personId: number }>(queryPersonId))
+  : tx.execute<{ personId: number }>(selectPersonId))
 
   if (!row?.personId)
     throw new TRPCError({ code: 'NOT_FOUND', message: 'Related person not found' })

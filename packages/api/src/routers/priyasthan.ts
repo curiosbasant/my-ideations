@@ -1,4 +1,6 @@
-import { and, desc, eq, isAllNotNull, profileDisplayName, schema, unionAll } from '@my/db'
+import { schema, unionAll } from '@my/db'
+import { isAllNotNull, profileDisplayName } from '@my/db/helpers'
+import { and, desc, eq } from '@my/db/sql'
 import { z } from '@my/lib/zod'
 
 import { protectedProcedure } from '../trpc'

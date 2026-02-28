@@ -1,5 +1,5 @@
 import { db } from '../client'
-import { bucketNames, buckets } from '../utils/supabase-helpers'
+import { bucketNames, buckets } from '../utils/helpers/supabase'
 
 const bucketValues: (typeof buckets.$inferInsert)[] = [
   { id: bucketNames.documents, name: bucketNames.documents },

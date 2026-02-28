@@ -1,4 +1,7 @@
-import { and, authUid, desc, eq, profileDisplayName, schema, sql } from '@my/db'
+import { schema } from '@my/db'
+import { authUserId } from '@my/db/db-functions'
+import { profileDisplayName } from '@my/db/helpers'
+import { and, desc, eq, sql } from '@my/db/sql'
 import { placeIdToLocation } from '@my/lib/maps'
 import { z } from '@my/lib/zod'
 
@@ -17,7 +20,7 @@ export const userRouter = {
         })
         .from(schema.profile)
         .leftJoin(schema.designation, eq(schema.designation.id, schema.profile.postId))
-        .where(eq(schema.profile.createdBy, authUid))
+        .where(eq(schema.profile.createdBy, authUserId))
 
       return user
     })

@@ -1,4 +1,5 @@
-import { desc, ilike, schema } from '@my/db'
+import { schema } from '@my/db'
+import { desc, ilike } from '@my/db/sql'
 import { z } from '@my/lib/zod'
 
 import { protectedProcedure, publicProcedure } from '../trpc'
