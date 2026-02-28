@@ -1,4 +1,4 @@
-import { eq, sql } from 'drizzle-orm'
+import { eq, sql } from 'drizzle-orm/sql'
 
 import { db } from '../client'
 import * as schema from '../schema'
@@ -54,8 +54,7 @@ const fn = sql`
       return new;
     end;
   $$ language plpgsql security definer set search_path = public;
-  alter function ${groupSpendNotificationFn}() owner to postgres;
-  grant all on function ${groupSpendNotificationFn}() to authenticated, service_role;
+  grant execute on function ${groupSpendNotificationFn}() to authenticated, service_role;
 
   create or replace trigger sb__on_group_spend
   after insert on ${schema.sb__spend} for each row
@@ -78,8 +77,7 @@ const fn = sql`
       return new;
     end;
   $$ language plpgsql security definer set search_path = public;
-  alter function ${groupMemberJoinNotificationFn}() owner to postgres;
-  grant all on function ${groupMemberJoinNotificationFn}() to authenticated, service_role;
+  grant execute on function ${groupMemberJoinNotificationFn}() to authenticated, service_role;
 
   create or replace trigger sb__on_group_member_join
   after insert on ${schema.sb__member} for each row

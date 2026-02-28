@@ -28,22 +28,22 @@ export const queryProfileInsert = db
     })),
   })
 
-const createUserProfile = sql.raw('public.create_user_profile')
+const createUserProfile = sql.raw(`private.create_user_profile`)
 
 /**
  * Create a profile for every user registered
  */
 const fn = sql`
+  create schema if not exists private;
+
   create or replace function ${createUserProfile}()
   returns trigger as $$
     begin
       ${queryProfileInsert};
       return new;
     end;
-  $$ language plpgsql security definer set search_path = public;
-
-  alter function ${createUserProfile}() owner to postgres;
-  grant all on function ${createUserProfile}() to anon, authenticated, service_role;
+  $$ language plpgsql security definer
+  set search_path = public;
 
   create or replace trigger on_auth_user_created
   after insert on ${sb.authUsers} for each row
