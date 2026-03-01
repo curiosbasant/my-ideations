@@ -2,11 +2,15 @@ import { index, pgPolicy, pgTableCreator } from 'drizzle-orm/pg-core'
 import { eq, ne, not, or, sql } from 'drizzle-orm/sql'
 
 import { selectAuthRole } from '../utils/helpers/db-functions'
+import {
+  policyAllowAnyoneInsert,
+  policyAllowAnyoneSelect,
+  policyAllowProfileInsertOwn,
+  policyAllowProfileUpdateOwn,
+} from '../utils/helpers/policy'
 import { coalesce } from '../utils/helpers/sql'
 import { bucketNames, objects } from '../utils/helpers/supabase'
 import { getDefaultTimezone, id, withCommonColumns } from '../utils/pg-column-helpers'
-import { policyAllowPublicInsert, policyAllowPublicSelect } from '../utils/pg-table-helpers'
-import { policyAllowOneselfInsert, policyAllowOneselfUpdate } from './profile'
 
 const pgTable = pgTableCreator((tableName) => `sf__${tableName}`)
 
@@ -18,7 +22,7 @@ export const sf__shortUrl = pgTable(
     url: c.text().notNull(),
     createdAt: getDefaultTimezone(),
   }),
-  (t) => [index().on(t.createdAt.desc()), policyAllowPublicSelect, policyAllowPublicInsert],
+  (t) => [index().on(t.createdAt.desc()), policyAllowAnyoneSelect, policyAllowAnyoneInsert],
 )
 
 export const sf__formats = pgTable(
@@ -30,31 +34,30 @@ export const sf__formats = pgTable(
   })),
   (t) => [
     index().on(t.createdAt.desc()),
-    policyAllowPublicSelect,
-    policyAllowOneselfInsert(t.createdBy),
-    policyAllowOneselfUpdate(t.createdBy),
+    policyAllowAnyoneSelect,
+    policyAllowProfileInsertOwn(t.createdBy),
+    policyAllowProfileUpdateOwn(t.createdBy),
   ],
 )
 
 // ~~~~~~ Bucket Policies ~~~~~~
+
 const isSnapfileBucket = eq(objects.bucketId, sql.raw(`'${bucketNames.snapfileFiles}'`))
 
-export const policyAllowFilesUpload = pgPolicy('Allow upload to anyone', {
+export const policyAllowFilesUpload = pgPolicy('allow_anyone_upload', {
   as: 'permissive',
   for: 'insert',
+  to: 'public',
   withCheck: isSnapfileBucket,
 }).link(objects)
 
-export const policyAllowAuthenticatedUpload = pgPolicy(
-  'Allow upload in formats to only authenticated',
-  {
-    as: 'restrictive',
-    for: 'insert',
-    to: 'public', // necessary for restrictive policy
-    withCheck: or(
-      not(isSnapfileBucket),
-      ne(coalesce(sql`${objects.pathTokens}[1]`, sql.raw("''")), sql.raw(`'formats'`)),
-      eq(selectAuthRole, sql.raw(`'authenticated'`)),
-    ),
-  },
-).link(objects)
+export const policyAllowAuthenticatedUpload = pgPolicy('disallow_anyone_upload_in_formats', {
+  as: 'restrictive',
+  for: 'insert',
+  to: 'public', // necessary for restrictive policy
+  withCheck: or(
+    not(isSnapfileBucket),
+    ne(coalesce(sql`${objects.pathTokens}[1]`, sql.raw("''")), sql.raw(`'formats'`)),
+    eq(selectAuthRole, sql.raw(`'authenticated'`)),
+  ),
+}).link(objects)

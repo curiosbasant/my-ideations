@@ -1,9 +1,18 @@
 import { pgPolicy, primaryKey } from 'drizzle-orm/pg-core'
-import { and, eq, inArray, or, sql } from 'drizzle-orm/sql'
+import { and, eq, inArray, sql } from 'drizzle-orm/sql'
 import { authenticatedRole } from 'drizzle-orm/supabase'
 
-import { userPersonId, userProfileId } from '../utils/helpers/db-functions'
+import { userPersonId } from '../utils/helpers/db-functions'
+import {
+  policyAllowAnyoneSelect,
+  policyAllowPersonInsertOwn,
+  policyAllowPersonSelectOwn,
+  policyAllowPersonUpdateOwn,
+  policyAllowProfileSelectOwn,
+  policyAllowProfileUpdateOwn,
+} from '../utils/helpers/policy'
 import { bucketNames, objects } from '../utils/helpers/supabase'
+import { pgTable } from '../utils/helpers/table'
 import {
   CASCADE_ON_UPDATE,
   getProfileRef,
@@ -11,7 +20,6 @@ import {
   id,
   smallId,
 } from '../utils/pg-column-helpers'
-import { pgTable, policyAllowPublicSelect } from '../utils/pg-table-helpers'
 import { qb } from '../utils/qb'
 import { person, personRelation } from './person'
 
@@ -28,17 +36,10 @@ export const personDocument = pgTable(
   }),
   (t) => [
     primaryKey({ columns: [t.personId, t.type] }),
-    pgPolicy('Allow select to self or person', {
-      for: 'select',
-      to: authenticatedRole,
-      using: or(eq(t.personId, userPersonId), eq(t.createdBy, userProfileId)),
-    }),
-    pgPolicy('Allow insert to person', {
-      for: 'insert',
-      to: authenticatedRole,
-      withCheck: eq(t.personId, userPersonId),
-    }),
-    pgPolicy('Allow insert to person for relatives', {
+    policyAllowPersonSelectOwn(t.personId),
+    policyAllowProfileSelectOwn(t.createdBy),
+    policyAllowPersonInsertOwn(t.personId),
+    pgPolicy('allow_person_insert_for_relatives', {
       for: 'insert',
       to: authenticatedRole,
       withCheck: inArray(
@@ -49,11 +50,8 @@ export const personDocument = pgTable(
           .where(eq(personRelation.personId, userPersonId)),
       ),
     }),
-    pgPolicy('Allow update to self or person', {
-      for: 'update',
-      to: authenticatedRole,
-      using: or(eq(t.personId, userPersonId), eq(t.createdBy, userProfileId)),
-    }),
+    policyAllowPersonUpdateOwn(t.personId),
+    policyAllowProfileUpdateOwn(t.createdBy),
   ],
 )
 
@@ -65,7 +63,7 @@ export const personDocumentType = pgTable(
     id: smallId().primaryKey(),
     name: c.varchar().unique().notNull(),
   }),
-  () => [policyAllowPublicSelect],
+  () => [policyAllowAnyoneSelect],
 )
 
 // ~~~~~~ Bucket Policies ~~~~~~
@@ -75,14 +73,14 @@ const conditionPersonFolder = and(
   eq(sql`${objects.pathTokens}[1]`, sql`${userPersonId}::text`),
 )
 
-export const policyAllowDocumentsSelect = pgPolicy('Allow select to oneself', {
+export const allowSelectOwnDocument = pgPolicy('allow_person_select_own_document', {
   as: 'permissive',
   for: 'select',
   to: authenticatedRole,
   using: conditionPersonFolder,
 }).link(objects)
 
-export const policyAllowDocumentsUpload = pgPolicy('Allow upload to oneself', {
+export const allowUploadOwnDocument = pgPolicy('allow_person_upload_own_document', {
   as: 'permissive',
   for: 'insert',
   to: authenticatedRole,

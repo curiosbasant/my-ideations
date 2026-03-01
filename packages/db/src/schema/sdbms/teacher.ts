@@ -1,5 +1,5 @@
 import { index, pgPolicy, uniqueIndex, type PgColumn } from 'drizzle-orm/pg-core'
-import { eq, inArray } from 'drizzle-orm/sql'
+import { and, eq, exists } from 'drizzle-orm/sql'
 import { authenticatedRole } from 'drizzle-orm/supabase'
 
 import { selectPersonId } from '../../utils/helpers/db-functions'
@@ -30,28 +30,34 @@ export const sd__teacher = pgTable(
   ],
 )
 
-const currentTeacher = qb
-  .select({ id: sd__teacher.id })
-  .from(sd__teacher)
-  .where(eq(sd__teacher.personId, selectPersonId))
+const checkIfTeacherWithId = (teacherId: PgColumn) =>
+  exists(
+    qb
+      .select()
+      .from(sd__teacher)
+      .where(and(eq(sd__teacher.personId, selectPersonId), eq(sd__teacher.id, teacherId))),
+  )
 
-export const policyAllowTeacherSelect = (teacherId: PgColumn) =>
-  pgPolicy('Allow select to teacher', {
+export const policyAllowTeacherSelectOwn = (teacherId: PgColumn) =>
+  pgPolicy('allow_teacher_select_own', {
+    as: 'permissive',
     for: 'select',
     to: authenticatedRole,
-    using: inArray(teacherId, currentTeacher),
+    using: checkIfTeacherWithId(teacherId),
   })
 
-export const policyAllowTeacherInsert = (teacherId: PgColumn) =>
-  pgPolicy('Allow insert to teacher', {
+export const policyAllowTeacherInsertOwn = (teacherId: PgColumn) =>
+  pgPolicy('allow_teacher_insert_own', {
+    as: 'permissive',
     for: 'insert',
     to: authenticatedRole,
-    withCheck: inArray(teacherId, currentTeacher),
+    withCheck: checkIfTeacherWithId(teacherId),
   })
 
-export const policyAllowTeacherUpdate = (teacherId: PgColumn) =>
-  pgPolicy('Allow update to teacher', {
+export const policyAllowTeacherUpdateOwn = (teacherId: PgColumn) =>
+  pgPolicy('allow_teacher_update_own', {
+    as: 'permissive',
     for: 'update',
     to: authenticatedRole,
-    using: inArray(teacherId, currentTeacher),
+    using: checkIfTeacherWithId(teacherId),
   })

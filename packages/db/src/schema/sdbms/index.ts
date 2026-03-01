@@ -2,6 +2,7 @@ import { index, pgPolicy, primaryKey, uniqueIndex } from 'drizzle-orm/pg-core'
 import { eq, exists } from 'drizzle-orm/sql'
 import { authenticatedRole } from 'drizzle-orm/supabase'
 
+import { policyAllowAnyoneSelect, policyAllowAuthenticatedSelect } from '../../utils/helpers/policy'
 import {
   CASCADE_ON_UPDATE,
   getTimestampColumns,
@@ -9,18 +10,14 @@ import {
   smallId,
   withCommonColumns,
 } from '../../utils/pg-column-helpers'
-import {
-  policyAllowAuthenticatedSelect,
-  policyAllowPublicSelect,
-} from '../../utils/pg-table-helpers'
 import { qb } from '../../utils/qb'
 import { person } from '../person'
 import { pgTable } from './_helpers'
 import { sd__institute } from './institute'
 import {
-  policyAllowTeacherInsert,
-  policyAllowTeacherSelect,
-  policyAllowTeacherUpdate,
+  policyAllowTeacherInsertOwn,
+  policyAllowTeacherSelectOwn,
+  policyAllowTeacherUpdateOwn,
   sd__teacher,
 } from './teacher'
 
@@ -41,9 +38,9 @@ export const sd__teacherSubject = pgTable(
   },
   (t) => [
     primaryKey({ columns: [t.sessionId, t.teacherId, t.classSectionId, t.subjectId] }),
-    policyAllowTeacherSelect(t.teacherId),
-    policyAllowTeacherInsert(t.teacherId),
-    policyAllowTeacherUpdate(t.teacherId),
+    policyAllowTeacherSelectOwn(t.teacherId),
+    policyAllowTeacherInsertOwn(t.teacherId),
+    policyAllowTeacherUpdateOwn(t.teacherId),
   ],
 )
 
@@ -74,7 +71,7 @@ export const sd__class = pgTable(
     stream: id.references(() => sd__luStream.id, CASCADE_ON_UPDATE),
     ...getTimestampColumns(),
   }),
-  (t) => [uniqueIndex().on(t.instituteId, t.numeral), policyAllowPublicSelect],
+  (t) => [uniqueIndex().on(t.instituteId, t.numeral), policyAllowAnyoneSelect],
 )
 
 export const sd__classSection = pgTable(
@@ -85,7 +82,7 @@ export const sd__classSection = pgTable(
     name: c.varchar().notNull(),
     ...getTimestampColumns(),
   }),
-  (t) => [uniqueIndex().on(t.classId, t.name), policyAllowPublicSelect],
+  (t) => [uniqueIndex().on(t.classId, t.name), policyAllowAnyoneSelect],
 )
 
 export const sd__classStudent = pgTable(
@@ -121,12 +118,12 @@ export const sd__classStudentMarks = pgTable(
     return [
       uniqueIndex().on(t.exam, t.subject, t.classStudentId),
       policyAllowAuthenticatedSelect,
-      pgPolicy('Allow insert to teachers', {
+      pgPolicy('allow_teacher_insert', {
         for: 'insert',
         to: authenticatedRole,
         withCheck: isTeacher,
       }),
-      pgPolicy('Allow update to teachers', {
+      pgPolicy('allow_teacher_update', {
         for: 'update',
         to: authenticatedRole,
         using: isTeacher,
@@ -143,7 +140,7 @@ export const sd__luExam = pgTable(
     id: smallId.primaryKey(),
     name: c.varchar().unique().notNull(),
   }),
-  () => [policyAllowPublicSelect],
+  () => [policyAllowAnyoneSelect],
 )
 
 export const sd__luSession = pgTable(
@@ -152,7 +149,7 @@ export const sd__luSession = pgTable(
     id: smallId.primaryKey(),
     name: c.varchar().unique().notNull(),
   }),
-  () => [policyAllowPublicSelect],
+  () => [policyAllowAnyoneSelect],
 )
 
 export const sd__luStudentStatus = pgTable(
@@ -161,7 +158,7 @@ export const sd__luStudentStatus = pgTable(
     id: smallId.primaryKey(),
     name: c.varchar().unique().notNull(),
   }),
-  () => [policyAllowPublicSelect],
+  () => [policyAllowAnyoneSelect],
 )
 
 export const sd__luStream = pgTable(
@@ -170,7 +167,7 @@ export const sd__luStream = pgTable(
     id: smallId.primaryKey(),
     name: c.varchar().unique().notNull(),
   }),
-  () => [policyAllowPublicSelect],
+  () => [policyAllowAnyoneSelect],
 )
 
 export const sd__luSubject = pgTable(
@@ -179,5 +176,5 @@ export const sd__luSubject = pgTable(
     id: smallId.primaryKey(),
     name: c.varchar().unique().notNull(),
   }),
-  () => [policyAllowPublicSelect],
+  () => [policyAllowAnyoneSelect],
 )

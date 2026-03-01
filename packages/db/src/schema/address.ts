@@ -1,13 +1,14 @@
 import { index, primaryKey } from 'drizzle-orm/pg-core'
 import { sql, type SQL } from 'drizzle-orm/sql'
 
+import { policyAllowAnyoneSelect } from '../utils/helpers/policy'
+import { pgTable } from '../utils/helpers/table'
 import {
   getDefaultTimezone,
   getProfileRef,
   getTimestampColumns,
   id,
 } from '../utils/pg-column-helpers'
-import { pgTable, policyAllowPublicSelect } from '../utils/pg-table-helpers'
 
 export const address = pgTable(
   'address',
@@ -25,7 +26,7 @@ export const address = pgTable(
     placeId: c.text().unique(),
     ...getTimestampColumns(),
   }),
-  (t) => [index().using('gist', t.geom), policyAllowPublicSelect],
+  (t) => [index().using('gist', t.geom), policyAllowAnyoneSelect],
 )
 
 export const profileAddress = pgTable(
@@ -39,6 +40,6 @@ export const profileAddress = pgTable(
   (t) => [
     primaryKey({ columns: [t.profileId, t.addressId] }),
     index().on(t.type, t.updatedAt.desc()),
-    policyAllowPublicSelect,
+    policyAllowAnyoneSelect,
   ],
 )

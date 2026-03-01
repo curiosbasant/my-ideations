@@ -1,21 +1,24 @@
 import { check, index, pgPolicy, primaryKey } from 'drizzle-orm/pg-core'
-import { eq, or, sql } from 'drizzle-orm/sql'
+import { eq, sql } from 'drizzle-orm/sql'
 import { authenticatedRole } from 'drizzle-orm/supabase'
 
 import { selectPersonId } from '../utils/helpers/db-functions'
+import {
+  policyAllowAnyoneSelect,
+  policyAllowAuthenticatedInsert,
+  policyAllowAuthenticatedSelect,
+  policyAllowPersonInsertOwn,
+  policyAllowPersonSelectOwn,
+  policyAllowPersonUpdateOwn,
+} from '../utils/helpers/policy'
 import { length } from '../utils/helpers/sql'
+import { pgTable } from '../utils/helpers/table'
 import {
   CASCADE_ON_UPDATE,
   getTimestampColumns,
   id,
   smallId,
 } from '../utils/pg-column-helpers/helpers'
-import {
-  pgTable,
-  policyAllowAuthenticatedInsert,
-  policyAllowAuthenticatedSelect,
-  policyAllowPublicSelect,
-} from '../utils/pg-table-helpers'
 import { address } from './address'
 
 export const person = pgTable(
@@ -40,11 +43,7 @@ export const person = pgTable(
     check('enforce_contact_length', eq(length(t.contactNo), sql.raw('10'))),
     policyAllowAuthenticatedSelect,
     policyAllowAuthenticatedInsert,
-    pgPolicy('Allow update to person', {
-      for: 'update',
-      to: authenticatedRole,
-      using: eq(t.id, authUserPersonId),
-    }),
+    policyAllowPersonUpdateOwn(t.id),
   ],
 )
 
@@ -57,20 +56,19 @@ export const personRelation = pgTable(
   }),
   (t) => [
     primaryKey({ columns: [t.personId, t.relativeId] }),
-    pgPolicy('Allow select to person or relative', {
+    policyAllowPersonSelectOwn(t.personId),
+    pgPolicy('allow_relative_select', {
+      as: 'permissive',
       for: 'select',
       to: authenticatedRole,
-      using: or(eq(t.personId, selectPersonId), eq(t.relativeId, selectPersonId)),
+      using: eq(t.relativeId, selectPersonId),
     }),
-    pgPolicy('Allow insert to person', {
-      for: 'insert',
-      to: authenticatedRole,
-      withCheck: eq(t.personId, authUserPersonId),
-    }),
-    pgPolicy('Allow update to person or relative', {
+    policyAllowPersonInsertOwn(t.personId),
+    policyAllowPersonUpdateOwn(t.personId),
+    pgPolicy('allow_relative_update', {
       for: 'update',
       to: authenticatedRole,
-      using: or(eq(t.personId, selectPersonId), eq(t.relativeId, selectPersonId)),
+      using: eq(t.relativeId, selectPersonId),
     }),
   ],
 )
@@ -83,7 +81,7 @@ export const personCategory = pgTable(
     id: smallId().primaryKey(),
     name: c.varchar().unique().notNull(),
   }),
-  () => [policyAllowPublicSelect],
+  () => [policyAllowAnyoneSelect],
 )
 
 export const personGender = pgTable(
@@ -92,7 +90,7 @@ export const personGender = pgTable(
     id: smallId().primaryKey(),
     name: c.varchar().unique().notNull(),
   }),
-  () => [policyAllowPublicSelect],
+  () => [policyAllowAnyoneSelect],
 )
 
 export const personRelationType = pgTable(
@@ -101,7 +99,7 @@ export const personRelationType = pgTable(
     id: smallId().primaryKey(),
     name: c.varchar().unique().notNull(),
   }),
-  () => [policyAllowPublicSelect],
+  () => [policyAllowAnyoneSelect],
 )
 
 export const personReligion = pgTable(
@@ -110,5 +108,5 @@ export const personReligion = pgTable(
     id: smallId().primaryKey(),
     name: c.varchar().unique().notNull(),
   }),
-  () => [policyAllowPublicSelect],
+  () => [policyAllowAnyoneSelect],
 )

@@ -1,15 +1,15 @@
-import { index, pgPolicy, uniqueIndex, type PgColumn } from 'drizzle-orm/pg-core'
+import { index, pgPolicy, uniqueIndex } from 'drizzle-orm/pg-core'
 import { eq } from 'drizzle-orm/sql'
 import { authenticatedRole, authUsers } from 'drizzle-orm/supabase'
 
 import { authUserId, selectUserId } from '../utils/helpers/db-functions'
-import { id, smallId } from '../utils/pg-column-helpers/helpers'
 import {
-  pgTable,
+  policyAllowAnyoneSelect,
   policyAllowAuthenticatedInsert,
   policyAllowAuthenticatedSelect,
-  policyAllowPublicSelect,
-} from '../utils/pg-table-helpers'
+} from '../utils/helpers/policy'
+import { pgTable } from '../utils/helpers/table'
+import { id, smallId } from '../utils/pg-column-helpers/helpers'
 import { person } from './person'
 
 export const department = pgTable(
@@ -18,7 +18,7 @@ export const department = pgTable(
     id: smallId().primaryKey(),
     name: c.text().notNull(),
   }),
-  () => [policyAllowPublicSelect],
+  () => [policyAllowAnyoneSelect],
 )
 
 export const designation = pgTable(
@@ -30,7 +30,7 @@ export const designation = pgTable(
   }),
   (t) => [
     uniqueIndex().on(t.departmentId, t.name),
-    policyAllowPublicSelect,
+    policyAllowAnyoneSelect,
     policyAllowAuthenticatedInsert,
   ],
 )
@@ -56,29 +56,17 @@ export const profile = pgTable(
   (t) => [
     index().on(t.createdBy),
     policyAllowAuthenticatedSelect,
-    pgPolicy('Allow insert to self', {
+    pgPolicy('allow_user_insert_own_profile', {
+      as: 'permissive',
       for: 'insert',
       to: authenticatedRole,
       withCheck: eq(t.createdBy, selectUserId),
     }),
-    pgPolicy('Allow update to self', {
+    pgPolicy('allow_user_update_own_profile', {
+      as: 'permissive',
       for: 'update',
       to: authenticatedRole,
       using: eq(t.createdBy, selectUserId),
     }),
   ],
 )
-
-export const policyAllowOneselfInsert = (profileId: PgColumn) =>
-  pgPolicy('Allow insert to oneself', {
-    for: 'insert',
-    to: authenticatedRole,
-    withCheck: eq(profileId, authUserProfileId),
-  })
-
-export const policyAllowOneselfUpdate = (profileId: PgColumn) =>
-  pgPolicy('Allow update to oneself', {
-    for: 'update',
-    to: authenticatedRole,
-    using: eq(profileId, authUserProfileId),
-  })
