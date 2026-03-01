@@ -1,6 +1,6 @@
 import { schema } from '@my/db'
-import { buildConflictSetWhere, buildConflictUpdateColumns } from '@my/db/helpers'
-import { and, eq, inArray, now } from '@my/db/sql'
+import { aliasExcluded } from '@my/db/helpers'
+import { and, eq, inArray, isDistinctFrom, now, or } from '@my/db/sql'
 import { extractDataFromSheet } from '@my/lib/file'
 import { splitFullName } from '@my/lib/utils'
 import { z } from '@my/lib/zod'
@@ -155,24 +155,29 @@ export const importFileProcedure = adminProcedure
           f && (values[f.relation].id = f.relativeId) // 1
           return values
         })
-        const setFieldsPerson = [
-          'firstName',
-          'lastName',
-          'dob',
-          'gender',
-          'bloodGroup',
-        ] satisfies (keyof typeof schema.person.$inferInsert)[]
         await tx
           .insert(schema.person)
           .values(personUpdateValues)
-          .onConflictDoUpdate({
-            target: schema.person.id,
-            set: {
-              ...buildConflictUpdateColumns(schema.person, setFieldsPerson),
-              updatedAt: now(),
-            },
-            setWhere: buildConflictSetWhere(schema.person, setFieldsPerson),
-          })
+          .onConflictDoUpdate(
+            aliasExcluded(schema.person, (excluded) => ({
+              target: schema.person.id,
+              set: {
+                firstName: excluded.firstName,
+                lastName: excluded.lastName,
+                dob: excluded.dob,
+                gender: excluded.gender,
+                bloodGroup: excluded.bloodGroup,
+                updatedAt: now(),
+              },
+              setWhere: or(
+                isDistinctFrom(schema.person.firstName, excluded.firstName),
+                isDistinctFrom(schema.person.lastName, excluded.lastName),
+                isDistinctFrom(schema.person.dob, excluded.dob),
+                isDistinctFrom(schema.person.gender, excluded.gender),
+                isDistinctFrom(schema.person.bloodGroup, excluded.bloodGroup),
+              ),
+            })),
+          )
         return personUpdateValues.map((v) => v.id!)
       }
 
@@ -213,14 +218,20 @@ export const importFileProcedure = adminProcedure
               })),
             ),
         )
-        .onConflictDoUpdate({
-          target: schema.sd__teacher.employeeId,
-          set: {
-            ...buildConflictUpdateColumns(schema.sd__teacher, ['personId', 'joiningDate']),
-            updatedAt: now(),
-          },
-          setWhere: buildConflictSetWhere(schema.sd__teacher, ['personId', 'joiningDate']),
-        })
+        .onConflictDoUpdate(
+          aliasExcluded(schema.sd__teacher, (excluded) => ({
+            target: schema.sd__teacher.employeeId,
+            set: {
+              personId: excluded.personId,
+              joiningDate: excluded.joiningDate,
+              updatedAt: now(),
+            },
+            setWhere: or(
+              isDistinctFrom(schema.sd__teacher.personId, excluded.personId),
+              isDistinctFrom(schema.sd__teacher.joiningDate, excluded.joiningDate),
+            ),
+          })),
+        )
 
       await Promise.all([insertRelationsPromise, insertTeachersPromise])
     })

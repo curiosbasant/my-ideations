@@ -1,6 +1,9 @@
+import type { PgAsyncInsertBase, PgQueryResultHKT } from 'drizzle-orm/pg-core'
+import type { PgInsertOnConflictDoUpdateConfig } from 'drizzle-orm/pg-core/query-builders/insert'
+
 import { schema, type DbTransaction } from '@my/db'
-import { buildConflictSetWhere, buildConflictUpdateColumns } from '@my/db/helpers'
-import { and, eq, inArray, now } from '@my/db/sql'
+import { aliasExcluded } from '@my/db/helpers'
+import { and, eq, inArray, isDistinctFrom, now, or } from '@my/db/sql'
 import { extractDataFromSheet } from '@my/lib/file'
 import { groupBy, splitFullName } from '@my/lib/utils'
 import { z } from '@my/lib/zod'
@@ -143,6 +146,27 @@ async function createInstitutes(tx: DbTransaction, sdRecords: SchemaStudent[]) {
     })
   const instituteIds = institutes.map((i) => i.id)
 
+  const classConflictUpdateConfig: PgInsertOnConflictDoUpdateConfig<
+    PgAsyncInsertBase<typeof schema.sd__class, PgQueryResultHKT>
+  > = aliasExcluded(schema.sd__class, (excluded) => ({
+    target: [schema.sd__class.instituteId, schema.sd__class.numeral],
+    set: {
+      name: excluded.name,
+      stream: excluded.stream,
+      updatedAt: now(),
+    },
+  }))
+  const classSectionConflictUpdateConfig: PgInsertOnConflictDoUpdateConfig<
+    PgAsyncInsertBase<typeof schema.sd__classSection, PgQueryResultHKT>
+  > = aliasExcluded(schema.sd__classSection, (excluded) => ({
+    target: [schema.sd__classSection.classId, schema.sd__classSection.name],
+    set: {
+      name: excluded.name,
+      updatedAt: now(),
+    },
+    setWhere: isDistinctFrom(schema.sd__classSection.name, excluded.name),
+  }))
+
   for (let i = 0; i < instituteEntries.length; i++) {
     const [, instituteProfiles] = instituteEntries[i]
     const instituteId = instituteIds[i]
@@ -159,18 +183,9 @@ async function createInstitutes(tx: DbTransaction, sdRecords: SchemaStudent[]) {
           stream: +standard > 10 ? 1 : null, // Assuming Arts
         })),
       )
-      .onConflictDoUpdate({
-        target: [schema.sd__class.instituteId, schema.sd__class.numeral],
-        set: {
-          ...buildConflictUpdateColumns(schema.sd__class, ['name', 'stream']),
-          updatedAt: now(),
-        },
-      })
+      .onConflictDoUpdate(classConflictUpdateConfig)
       .returning({ id: schema.sd__class.id })
 
-    const setFieldsClassSection = [
-      'name',
-    ] satisfies (keyof typeof schema.sd__classSection.$inferInsert)[]
     for (let i = 0; i < classEntries.length; i++) {
       const [, classProfiles] = classEntries[i]
       const classId = classes[i].id
@@ -185,14 +200,7 @@ async function createInstitutes(tx: DbTransaction, sdRecords: SchemaStudent[]) {
             name: sectionName,
           })),
         )
-        .onConflictDoUpdate({
-          target: [schema.sd__classSection.classId, schema.sd__classSection.name],
-          set: {
-            ...buildConflictUpdateColumns(schema.sd__classSection, setFieldsClassSection),
-            updatedAt: now(),
-          },
-          setWhere: buildConflictSetWhere(schema.sd__classSection, setFieldsClassSection),
-        })
+        .onConflictDoUpdate(classSectionConflictUpdateConfig)
         .returning({ id: schema.sd__classSection.id })
     }
   }
@@ -330,27 +338,35 @@ async function createPersons(
       values[m.relation].id = m.relativeId // 2
       return values
     })
-    const setFieldsPerson = [
-      'firstName',
-      'lastName',
-      'dob',
-      'gender',
-      'category',
-      'bpl',
-      'minority',
-      'contactNo',
-    ] satisfies (keyof typeof schema.person.$inferInsert)[]
     await tx
       .insert(schema.person)
       .values(personUpdateValues)
-      .onConflictDoUpdate({
-        target: schema.person.id,
-        set: {
-          ...buildConflictUpdateColumns(schema.person, setFieldsPerson),
-          updatedAt: now(),
-        },
-        setWhere: buildConflictSetWhere(schema.person, setFieldsPerson),
-      })
+      .onConflictDoUpdate(
+        aliasExcluded(schema.person, (excluded) => ({
+          target: schema.person.id,
+          set: {
+            firstName: excluded.firstName,
+            lastName: excluded.lastName,
+            dob: excluded.dob,
+            gender: excluded.gender,
+            category: excluded.category,
+            bpl: excluded.bpl,
+            minority: excluded.minority,
+            contactNo: excluded.contactNo,
+            updatedAt: now(),
+          },
+          setWhere: or(
+            isDistinctFrom(schema.person.firstName, excluded.firstName),
+            isDistinctFrom(schema.person.lastName, excluded.lastName),
+            isDistinctFrom(schema.person.dob, excluded.dob),
+            isDistinctFrom(schema.person.gender, excluded.gender),
+            isDistinctFrom(schema.person.category, excluded.category),
+            isDistinctFrom(schema.person.bpl, excluded.bpl),
+            isDistinctFrom(schema.person.minority, excluded.minority),
+            isDistinctFrom(schema.person.contactNo, excluded.contactNo),
+          ),
+        })),
+      )
     return personUpdateValues.map((v) => v.id!)
   }
 
@@ -433,14 +449,12 @@ async function createStudents(
     .values(studentValues)
     .onConflictDoUpdate({
       target: [schema.sd__student.instituteId, schema.sd__student.admissionNo],
-      set: {
-        ...buildConflictUpdateColumns(schema.sd__student, [
-          'personId',
-          'admissionDate',
-          'distanceKm',
-        ]),
+      set: aliasExcluded(schema.sd__student, (excluded) => ({
+        personId: excluded.personId,
+        admissionDate: excluded.admissionDate,
+        distanceKm: excluded.distanceKm,
         updatedAt: now(),
-      },
+      })),
     })
     .returning({ id: schema.sd__student.id })
 
@@ -462,25 +476,24 @@ async function createStudents(
     }),
   )
 
-  const setFieldsClassStudent = [
-    'rollNo',
-  ] satisfies (keyof typeof schema.sd__classStudent.$inferInsert)[]
   await tx
     .insert(schema.sd__classStudent)
     .values(classStudentValues)
-    .onConflictDoUpdate({
-      target: [
-        schema.sd__classStudent.sessionId,
-        schema.sd__classStudent.instituteId,
-        schema.sd__classStudent.classId,
-        schema.sd__classStudent.sectionId,
-        schema.sd__classStudent.studentId,
-      ],
-      set: {
-        ...buildConflictUpdateColumns(schema.sd__classStudent, setFieldsClassStudent),
-        updatedAt: now(),
-      },
-      setWhere: buildConflictSetWhere(schema.sd__classStudent, setFieldsClassStudent),
-    })
+    .onConflictDoUpdate(
+      aliasExcluded(schema.sd__classStudent, (excluded) => ({
+        target: [
+          schema.sd__classStudent.sessionId,
+          schema.sd__classStudent.instituteId,
+          schema.sd__classStudent.classId,
+          schema.sd__classStudent.sectionId,
+          schema.sd__classStudent.studentId,
+        ],
+        set: {
+          rollNo: excluded.rollNo,
+          updatedAt: now(),
+        },
+        setWhere: isDistinctFrom(schema.sd__classStudent.rollNo, excluded.rollNo),
+      })),
+    )
     .returning({ id: schema.sd__classStudent.id })
 }

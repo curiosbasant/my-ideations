@@ -2,7 +2,7 @@ import { authUsers } from 'drizzle-orm/supabase'
 
 import { db } from '../client'
 import * as schema from '../schema'
-import { withExcluded } from '../utils/helpers/helpers'
+import { aliasExcluded } from '../utils/helpers/helpers'
 import { coalesce, now, splitPart, sql } from '../utils/helpers/sql'
 
 export const queryProfileInsert = db
@@ -17,7 +17,7 @@ export const queryProfileInsert = db
   })
   .onConflictDoUpdate({
     target: schema.profile.email,
-    set: withExcluded(schema.profile, (excluded) => ({
+    set: aliasExcluded(schema.profile, (excluded) => ({
       username: coalesce(schema.profile.username, excluded.username),
       firstName: coalesce(schema.profile.firstName, excluded.firstName),
       lastName: coalesce(schema.profile.lastName, excluded.lastName),
