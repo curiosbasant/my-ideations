@@ -17,6 +17,7 @@ export const profileDisplayName = () =>
   )
 
 export const aliasExcluded = aliasedTableCreator('excluded')
+export const aliasNew = aliasedTableCreator('new')
 function aliasedTableCreator<TAlias extends string>(name: TAlias) {
   return <TTable extends PgTable, TReturn>(
     table: TTable,

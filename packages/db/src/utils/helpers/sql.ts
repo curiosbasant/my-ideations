@@ -1,5 +1,5 @@
-import type { AnyColumn } from 'drizzle-orm'
-import { sql, type SQLWrapper } from 'drizzle-orm/sql'
+import type { AnyColumn, ColumnBaseConfig } from 'drizzle-orm'
+import { isSQLWrapper, sql, type SQLWrapper } from 'drizzle-orm/sql'
 import type { SQLValue } from 'drizzle-plus/types'
 
 export * from 'drizzle-orm/sql'
@@ -21,22 +21,31 @@ function pgFn<N extends number, T = unknown>(fnName: string) {
 export const numNonnulls = pgFn<1, number>('num_nonnulls')
 
 export function concat(...args: MinRequiredArg<SQLValue<string | null>, 2>) {
-  const chunks = args.map((arg) =>
-    arg === null ? sql.raw('null')
-    : typeof arg === 'string' ? sql.raw(`'${arg}'`)
-    : arg,
+  return sql<string>`concat(${sql.join(args.map(toSQL), sqlComma)})`
+}
+function toSQL<T>(value: T) {
+  return (
+    isSQLWrapper(value) ? value
+    : typeof value === 'string' ? sql.raw(`'${value}'`)
+    : sql`${value}`
   )
-  return sql<string>`concat(${sql.join(chunks, sqlComma)})`
 }
 
 export const length = (column: Expression) => sql<number>`length(${column})`
 
 export function splitPart(column: Expression, delimiter: string, position: number) {
-  return sql`split_part(${column}, ${sql.raw(`'${delimiter}'`)}, ${sql.raw(position.toString())})`
+  return sql`split_part(${column}, ${sql.raw(`'${delimiter}'`)}, ${position})`
 }
 
 export const now = () => sql`now()`
 
 export function isDistinctFrom(left: AnyColumn | SQLWrapper, right: AnyColumn | SQLWrapper) {
   return sql`${left} is distinct from ${right}`
+}
+
+export function extractJson<T extends ColumnBaseConfig<'object json'>>(
+  json: AnyColumn<T>,
+  key: string | number,
+) {
+  return sql`${json} ->> ${typeof key === 'string' ? sql.raw(`'${key}'`) : key}`
 }
