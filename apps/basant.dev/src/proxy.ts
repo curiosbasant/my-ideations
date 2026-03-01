@@ -8,7 +8,8 @@ type RouteConfig = {
   subdomain: string | string[]
   /** If no public paths are specified, it would treat all pages as public under the specified subdomain */
   publicPaths?: string[]
-  authRedirectPath?: string
+  authRedirectPath?: `/${string}`
+  landingPath?: `/${string}`
 }
 
 const routesConfig: RouteConfig[] = [
@@ -16,16 +17,18 @@ const routesConfig: RouteConfig[] = [
     subdomain: 'priyasthan',
     publicPaths: ['/'],
     authRedirectPath: '/',
+    landingPath: '/',
   },
   {
     subdomain: 'sdbms',
     publicPaths: [],
     authRedirectPath: SIGN_IN_PATH,
+    landingPath: '/',
   },
 ]
 
 export async function proxy(request: NextRequest) {
-  const { pathname, search } = request.nextUrl
+  const { pathname } = request.nextUrl
   const subdomain = extractSubdomain(request.headers.get('host'))
 
   const rewriteTo = (url: string) => NextResponse.rewrite(new URL(url, request.url))
@@ -44,7 +47,7 @@ export async function proxy(request: NextRequest) {
   }
 
   // For the root path on a subdomain, rewrite to the subdomain page
-  const subdomainPath = (pathname === '/' ? '' : pathname) + search
+  const subdomainPath = (pathname === '/' ? '' : pathname) + request.nextUrl.search
   const response = rewriteTo(`/s/${subdomain + subdomainPath}`)
 
   const route = routesConfig.find((r) =>
@@ -55,11 +58,25 @@ export async function proxy(request: NextRequest) {
   if (!route?.publicPaths) return response
 
   const isPublicPath = route.publicPaths.some((path) => path === pathname)
-  if (isPublicPath || route.authRedirectPath === pathname) return response
+  if (isPublicPath) return response
 
   const supabase = getSupabaseMiddleware(request, response)
   const { data, error } = await supabase.auth.getClaims()
   const isAuthenticated = Boolean(!error && data?.claims)
+
+  if (route.authRedirectPath === pathname) {
+    if (!isAuthenticated) return response
+
+    const continueSearchParam = request.nextUrl.searchParams.get('continue')
+    const redirectPath =
+      !continueSearchParam || continueSearchParam.startsWith(route.authRedirectPath) ?
+        route.landingPath
+      : continueSearchParam
+
+    if (redirectPath) return NextResponse.redirect(new URL(redirectPath, request.url))
+    console.warn('Skipping redirecting, as no landing page is defined!')
+    return response
+  }
   if (isAuthenticated) return response
 
   const redirectPath =
