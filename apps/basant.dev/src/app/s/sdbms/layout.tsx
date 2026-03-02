@@ -35,51 +35,54 @@ export default async function SdbmsRootLayout(props: LayoutProps<'/s/sdbms'>) {
           <ScriptAutoApplyTheme />
         </head>
         <body className={`${geistSans.variable} ${geistMono.variable} isolate size-full`}>
-          <div className='light:bg-secondary selection:bg-primary/25 isolate size-full'>
-            <ScrollArea className='size-full'>
-              <div className='isolate flex min-h-full w-full flex-col divide-y [--page-padding:--spacing(2)] [--page-size:var(--container-7xl)] sm:[--page-padding:--spacing(4)] md:[--page-padding:--spacing(8)]'>
-                <BannerDeviceOnline />
-                <header className='bg-background/80 px-(--page-padding) sticky top-0 z-10 backdrop-blur-sm'>
-                  <div className='@container max-w-(--page-size) h-13 m-auto flex items-center gap-4'>
-                    <Link href='/' className='inline-flex items-center gap-4'>
-                      <span className='@xl:text-2xl text-primary text-xl font-extrabold'>
-                        SDBMS
-                      </span>
-                    </Link>
-                    <nav className='flex-1'>
-                      <PathDocuments />
-                    </nav>
-                    <ProfileDropdownMenu />
-                  </div>
-                </header>
-                <div className='px-(--page-padding) flex flex-1'>
-                  <main className='max-w-(--page-size) mx-auto w-full pb-16 pt-8'>
-                    <TrpcClientProvider>{props.children}</TrpcClientProvider>
-                  </main>
-                </div>
-                <footer className='bg-background px-(--page-padding)'>
-                  <div className='max-w-(--page-size) m-auto py-4'>
-                    <div className='flex flex-col items-center justify-between gap-2 text-sm sm:flex-row'>
-                      <p>
-                        Made with ❤️ by{' '}
-                        <a
-                          className='text-blue-400 hover:text-blue-500'
-                          href='https://www.github.com/curiosbasant'
-                          target='_blank'>
-                          Basant (Computer Instructor)
-                        </a>
-                      </p>
-                      <span>
-                        ©<CurrentYear />
-                      </span>
-                      <ThemeToggleGroupButton />
+          <TrpcClientProvider>
+            <div className='light:bg-secondary selection:bg-primary/25 isolate size-full'>
+              <ScrollArea className='size-full'>
+                <div className='isolate flex min-h-full w-full flex-col divide-y [--page-padding:--spacing(2)] [--page-size:var(--container-7xl)] sm:[--page-padding:--spacing(4)] md:[--page-padding:--spacing(8)]'>
+                  <BannerDeviceOnline />
+                  <header className='bg-background/80 px-(--page-padding) sticky top-0 z-10 backdrop-blur-sm'>
+                    <div className='@container max-w-(--page-size) h-13 m-auto flex items-center gap-4'>
+                      <Link href='/' className='inline-flex items-center gap-4'>
+                        <span className='@xl:text-2xl text-primary text-xl font-extrabold'>
+                          SDBMS
+                        </span>
+                      </Link>
+                      <nav className='flex-1'>
+                        <PathDocuments />
+                      </nav>
+                      <ProfileDropdownMenu />
                     </div>
+                  </header>
+                  <div className='px-(--page-padding) flex flex-1'>
+                    <main className='max-w-(--page-size) mx-auto w-full pb-16 pt-8'>
+                      {props.children}
+                    </main>
                   </div>
-                </footer>
-              </div>
-            </ScrollArea>
-          </div>
-          <Toaster />
+                  <footer className='bg-background px-(--page-padding)'>
+                    <div className='max-w-(--page-size) m-auto py-4'>
+                      <div className='flex flex-col items-center justify-between gap-2 text-sm sm:flex-row'>
+                        <p>
+                          Made with ❤️ by{' '}
+                          <a
+                            className='text-blue-400 hover:text-blue-500'
+                            href='https://www.github.com/curiosbasant'
+                            target='_blank'>
+                            Basant (Computer Instructor)
+                          </a>
+                        </p>
+                        <span>
+                          ©<CurrentYear />
+                        </span>
+                        <ThemeToggleGroupButton />
+                      </div>
+                    </div>
+                  </footer>
+                </div>
+              </ScrollArea>
+            </div>
+            <Toaster />
+            {props.modals}
+          </TrpcClientProvider>
         </body>
       </HtmlWithDataTheme>
     </ThemeProvider>

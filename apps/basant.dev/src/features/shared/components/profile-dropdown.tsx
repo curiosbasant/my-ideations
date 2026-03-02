@@ -1,5 +1,6 @@
 import { Suspense } from 'react'
-import { ChevronDownIcon } from 'lucide-react'
+import Link from 'next/link'
+import { ChevronDownIcon, LogOutIcon, MessageCircleWarningIcon } from 'lucide-react'
 
 import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar'
 import {
@@ -9,6 +10,7 @@ import {
   DropdownMenuTrigger,
 } from '~/components/ui/dropdown-menu'
 import { actionSignOut } from '~/features/auth/actions'
+import { saveFeedbackPage } from '~/features/feedback/actions.client'
 import { getProfileDetails } from '~/features/user/dal'
 
 export function ProfileDropdownMenu() {
@@ -40,7 +42,14 @@ async function ProfileDropdownMenuInner() {
         <ChevronDownIcon />
       </DropdownMenuTrigger>
       <DropdownMenuContent className='w-40' align='end'>
+        <DropdownMenuItem onSelect={saveFeedbackPage} asChild>
+          <Link href='/give-feedback' scroll={false}>
+            <MessageCircleWarningIcon />
+            Give Feedback
+          </Link>
+        </DropdownMenuItem>
         <DropdownMenuItem variant='destructive' onSelect={actionSignOut}>
+          <LogOutIcon />
           Log out
         </DropdownMenuItem>
       </DropdownMenuContent>

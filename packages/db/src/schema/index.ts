@@ -1,5 +1,6 @@
 export * from './address'
 export * from './dots-and-boxes'
+export * from './feedback'
 export * from './person'
 export * from './person-document'
 export * from './profile'

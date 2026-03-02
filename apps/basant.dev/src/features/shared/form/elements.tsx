@@ -2,21 +2,11 @@ import type { PropsWithChildren } from 'react'
 
 import { Button, type ButtonProps } from '~/components/ui/button'
 import {
-  Field,
-  FieldContent,
-  FieldDescription,
-  FieldError,
-  FieldLabel,
-} from '~/components/ui/field'
+  FormControl as FormControlUi,
+  FormSelect as FormSelectUi,
+  type FormSelectProps,
+} from '~/components/ui/form'
 import { Input, type InputProps } from '~/components/ui/input'
-import {
-  Select,
-  SelectContent,
-  SelectTrigger,
-  SelectValue,
-  type SelectProps,
-  type SelectValueProps,
-} from '~/components/ui/select'
 import { useFieldContext, useFormContext } from './hooks'
 
 export function FormSubmitButton(props: ButtonProps) {
@@ -37,21 +27,13 @@ export function FormControl(props: PropsWithChildren<FormControlProps>) {
   const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid
 
   return (
-    <Field data-invalid={isInvalid}>
-      {props.label === false || (
-        <FieldContent>
-          <FieldLabel className='capitalize' htmlFor={field.name + field.form.formId}>
-            {props.label || field.name.replace(/([A-Z])/g, ' $1')}
-            <span className='text-muted-foreground group-has-required/field:hidden font-normal'>
-              (optional)
-            </span>
-          </FieldLabel>
-          {props.description && <FieldDescription>{props.description}</FieldDescription>}
-        </FieldContent>
-      )}
+    <FormControlUi
+      fieldId={field.name + field.form.formId}
+      label={props.label ?? field.name.replace(/([A-Z])/g, ' $1')}
+      description={props.description}
+      errors={isInvalid ? field.state.meta.errors : undefined}>
       {props.children}
-      {isInvalid && <FieldError errors={field.state.meta.errors} />}
-    </Field>
+    </FormControlUi>
   )
 }
 
@@ -72,22 +54,18 @@ export function FormInput(props: InputProps) {
   )
 }
 
-type FormSelectProps = SelectProps & SelectValueProps
-export function FormSelect({ placeholder, ...props }: FormSelectProps) {
+export function FormSelect(props: FormSelectProps) {
   const field = useFieldContext<string>()
   const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid
 
   return (
-    <Select
+    <FormSelectUi
+      {...props}
+      fieldId={field.name + field.form.formId}
       name={field.name}
       value={field.state.value}
       onValueChange={field.handleChange}
       aria-invalid={isInvalid}
-      {...props}>
-      <SelectTrigger className='backdrop-blur-2xs w-full' id={field.name + field.form.formId}>
-        <SelectValue placeholder={typeof placeholder === 'string' ? placeholder : '---'} />
-      </SelectTrigger>
-      <SelectContent position='item-aligned'>{props.children}</SelectContent>
-    </Select>
+    />
   )
 }
