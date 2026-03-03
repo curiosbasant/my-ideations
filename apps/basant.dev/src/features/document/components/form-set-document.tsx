@@ -1,5 +1,6 @@
 import { Suspense, useState, type PropsWithChildren } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
+import imageCompression from 'browser-image-compression'
 
 import { useTrpc } from '@my/core/trpc/client'
 import { Query } from '@my/core/trpc/query'
@@ -197,7 +198,8 @@ function DocumentUploadArea(props: {
         const supabase = getSupabaseClient()
         const bkt = supabase.storage.from('__documents')
 
-        const { data, error } = await bkt.uploadToSignedUrl(obj.path, obj.token, file)
+        const processedFile = await processFile(file)
+        const { data, error } = await bkt.uploadToSignedUrl(obj.path, obj.token, processedFile)
         if (error) {
           if (error.message === 'The resource already exists') {
             return props.onSelect?.(obj.path)
@@ -219,4 +221,15 @@ function DocumentUploadArea(props: {
       }
     </DropArea>
   )
+}
+
+function processFile(file: File) {
+  if (file.type.startsWith('image/')) {
+    return imageCompression(file, {
+      maxWidthOrHeight: 1080,
+      alwaysKeepResolution: true,
+      maxSizeMB: 1,
+    })
+  }
+  return file
 }
