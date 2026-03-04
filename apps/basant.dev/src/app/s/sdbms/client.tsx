@@ -12,23 +12,20 @@ export function FormConnectTeacher(props: FormProps) {
   const { state, actionTransition } = useAction({
     actionFn: actionConnectTeacher,
     onSuccess: () => {
-      toast.success('Teacher connected successfully')
+      toast.success("You're now a teacher")
     },
   })
 
   return (
     <form
       {...props}
-      onSubmit={() => {
-        toast.success('Teacher connected successfully')
-      }}
       action={(fd) => {
         const employeeId = fd.get('employeeId') as string
         const dob = fd.get('dob') as string
         actionTransition({ employeeId, dob })
       }}>
       {props.children}
-      {state && !state.success && <p className='text-destructive'>There is some problem!</p>}
+      {state && !state.success && <p className='text-destructive'>{state.message}</p>}
     </form>
   )
 }
@@ -37,7 +34,7 @@ export function FormConnectStudent(props: FormProps) {
   const { state, actionTransition } = useAction({
     actionFn: actionConnectStudent,
     onSuccess: () => {
-      toast.success('Student connected successfully')
+      toast.success("You're now a student")
     },
   })
 
@@ -50,7 +47,7 @@ export function FormConnectStudent(props: FormProps) {
         actionTransition({ srNo, dob })
       }}>
       {props.children}
-      {state && !state.success && <p className='text-destructive'>No Match Found!</p>}
+      {state && !state.success && <p className='text-destructive'>{state.message}</p>}
     </form>
   )
 }

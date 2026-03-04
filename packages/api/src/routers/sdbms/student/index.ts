@@ -1,3 +1,5 @@
+import { TRPCError } from '@trpc/server'
+
 import { schema } from '@my/db'
 import { authUserId } from '@my/db/db-functions'
 import { and, eq } from '@my/db/sql'
@@ -16,7 +18,7 @@ export const studentRouter = {
     )
     .mutation(async ({ input, ctx: { rls } }) => {
       await rls(async (tx) => {
-        await tx
+        const [row] = await tx
           .update(schema.profile)
           .set({ personId: schema.person.id })
           .from(schema.person)
@@ -28,6 +30,13 @@ export const studentRouter = {
               eq(schema.profile.createdBy, authUserId),
             ),
           )
+          .returning({ personId: schema.person.id })
+
+        if (!row) {
+          throw new TRPCError({ code: 'NOT_FOUND', message: 'No matching record found!' })
+        }
+
+        return row
       })
     }),
   importFile: importFileProcedure,

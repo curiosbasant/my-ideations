@@ -1,3 +1,5 @@
+import { TRPCError } from '@trpc/server'
+
 import { schema } from '@my/db'
 import { authUserId, userPersonId } from '@my/db/db-functions'
 import { and, caseWhen, eq, isNull, now } from '@my/db/sql'
@@ -16,9 +18,9 @@ export const teacherRouter = {
     )
     .mutation(async ({ input, ctx: { rls } }) => {
       return rls(async (tx) => {
-        await tx
+        const [row] = await tx
           .update(schema.profile)
-          .set({ personId: schema.person.id })
+          .set({ personId: schema.person.id, updatedAt: now() })
           .from(schema.person)
           .innerJoin(schema.sd__teacher, eq(schema.person.id, schema.sd__teacher.personId))
           .where(
@@ -28,6 +30,13 @@ export const teacherRouter = {
               eq(schema.profile.createdBy, authUserId),
             ),
           )
+          .returning({ personId: schema.person.id })
+
+        if (!row) {
+          throw new TRPCError({ code: 'NOT_FOUND', message: 'No matching record found!' })
+        }
+
+        return row
       })
     }),
   importFile: importFileProcedure,
