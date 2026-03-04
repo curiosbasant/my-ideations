@@ -181,7 +181,7 @@ function DocumentUploadArea(props: {
   return (
     <DropArea
       className={cn(
-        'group flex min-h-80 overflow-clip rounded-lg border-2 border-dashed md:row-span-full',
+        'hover:bg-input/25 group flex min-h-80 overflow-clip rounded-lg border-2 border-dashed transition md:row-span-full',
         props.invalid && 'border-destructive bg-destructive/5',
       )}
       activeClassName='border-primary bg-primary/10'

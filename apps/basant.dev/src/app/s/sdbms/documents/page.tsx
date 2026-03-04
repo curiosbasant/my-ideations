@@ -25,7 +25,7 @@ export default async function DocumentsPage() {
         {documents.map((doc) => (
           <DialogProvider key={`${doc.personId}${doc.type.id}`}>
             <DialogTrigger asChild>
-              <li className='bg-background hover:outline-primary/75 row-span-3 grid grid-rows-subgrid gap-0 rounded-md border outline-2 outline-transparent transition'>
+              <li className='bg-background dark:hover:bg-secondary/25 hover:outline-primary/75 row-span-3 grid grid-rows-subgrid gap-0 rounded-md border outline-2 outline-transparent transition'>
                 <div className='rounded-xs bg-secondary/50 m-2 aspect-video overflow-clip'>
                   <img src={doc.signedUrl!} className='mx-auto h-full object-contain' />
                 </div>

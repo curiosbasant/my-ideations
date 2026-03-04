@@ -13,7 +13,7 @@
   --accent-foreground: oklch(0.21 0.006 285.885);
   --muted: var(--secondary);
   --muted-foreground: oklch(0.552 0.016 285.938);
-  --destructive: oklch(0.577 0.245 27.325);
+  --destructive: oklch(0.637 0.237 25.331);
 
   --card: var(--background);
   --card-foreground: var(--foreground);
