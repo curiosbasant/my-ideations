@@ -8,6 +8,7 @@ import { DialogContext } from '~/components/ui/dialog'
 import { toast } from '~/components/ui/sonner'
 import { actionCreateDocument, actionUpdateDocument } from '~/features/document/actions'
 import { FormSetDocument } from '~/features/document/components/form-set-document'
+import { dalFormatErrorMessage } from '~/lib/dal/shared'
 
 export function DocumentCreateForm() {
   const setOpen = use(DialogContext)
@@ -15,26 +16,18 @@ export function DocumentCreateForm() {
   return (
     <FormSetDocument
       onSubmit={async (value) => {
-        try {
-          const errMessage = await actionCreateDocument({
-            relation: value.relation as 'mine',
-            documentType: parseInt(value.documentType),
-            documentNo: value.documentNo,
-            filePath: value.filePath,
-            note: value.note,
-          })
-          if (errMessage) {
-            toast.error(errMessage)
-          } else {
-            toast.success('Document added successfully')
-            setOpen(false)
-          }
-        } catch (error) {
-          if (error instanceof Error && error.message === 'Related person not found') {
-            toast.error(`Relation with ${value.relation} doesn't exist`)
-            return
-          }
-          throw error
+        const result = await actionCreateDocument({
+          relation: value.relation as 'mine',
+          documentType: parseInt(value.documentType),
+          documentNo: value.documentNo,
+          filePath: value.filePath,
+          note: value.note,
+        })
+        if (result.success) {
+          toast.success('Document added successfully')
+          setOpen(false)
+        } else {
+          toast.error(dalFormatErrorMessage(result.error))
         }
       }}
     />
@@ -57,29 +50,21 @@ export function DocumentUpdateForm(props: {
         filePath: props.document.path ?? '',
       }}
       onSubmit={async (value) => {
-        try {
-          const errMessage = await actionUpdateDocument({
-            personId: props.document.personId,
-            documentType: props.document.type.id,
+        const result = await actionUpdateDocument({
+          personId: props.document.personId,
+          documentType: props.document.type.id,
 
-            relation: value.relation || undefined,
-            newDocumentType: parseInt(value.documentType) || undefined,
-            documentNo: value.documentNo || undefined,
-            filePath: value.filePath || undefined,
-            note: value.note || null, // remove note, if empty string
-          })
-          if (errMessage) {
-            toast.error(errMessage)
-          } else {
-            toast.success('Document updated successfully')
-            setOpen(false)
-          }
-        } catch (error) {
-          if (error instanceof Error && error.message === 'Related person not found') {
-            toast.error(`Relation with ${value.relation} doesn't exist`)
-            return
-          }
-          throw error
+          relation: value.relation || undefined,
+          newDocumentType: parseInt(value.documentType) || undefined,
+          documentNo: value.documentNo || undefined,
+          filePath: value.filePath || undefined,
+          note: value.note || null, // remove note, if empty string
+        })
+        if (result.success) {
+          toast.success('Document updated successfully')
+          setOpen(false)
+        } else {
+          toast.error(dalFormatErrorMessage(result.error))
         }
       }}
     />

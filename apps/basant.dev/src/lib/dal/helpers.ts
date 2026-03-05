@@ -1,6 +1,11 @@
 import { headers } from 'next/headers'
 import { redirect } from 'next/navigation'
-import { TRPCError } from '@trpc/server'
+import {
+  TRPCError,
+  type AnyProcedure,
+  type inferProcedureInput,
+  type inferProcedureOutput,
+} from '@trpc/server'
 
 import { SIGN_IN_PATH } from '~/features/shared/constants'
 import {
@@ -9,31 +14,42 @@ import {
   ThrowableDalError,
   type DalError,
   type DalResult,
-} from './types'
+} from './shared'
+
+export function dalTrpcAction<
+  TProcedure extends AnyProcedure,
+  TInput extends inferProcedureInput<TProcedure>,
+  TOutput extends inferProcedureOutput<TProcedure>,
+  TResult,
+>(
+  procedure: (input: TInput) => Promise<TOutput>,
+  cb: (op: Promise<DalResult<TOutput, DalError>>) => TResult,
+) {
+  return (payload: TInput) => {
+    return cb(dalDbOperation(() => procedure(payload)))
+  }
+}
 
 export async function dalLoginRedirect<T, E extends DalError>(dalResult: Promise<DalResult<T, E>>) {
   const result = await dalResult
   if (result.success) return result
   if (result.error.type === 'unauthenticated') {
-    const head = await headers()
-
-    const pathname = ((header: Headers) => {
-      const host = header.get('host')
-      const referrer = header.get('referer')
-      if (!referrer || !host) return null
-      const index = referrer.indexOf(host)
-      if (index === -1) return null
-
-      const pathname = referrer.slice(index + host.length)
-      return pathname.startsWith('/') ? pathname : null
-    })(head)
-
-    return redirect(
-      pathname ? `${SIGN_IN_PATH}?continue=${encodeURIComponent(pathname)}` : SIGN_IN_PATH,
-    )
+    const pathname = await guessContinuePath()
+    return redirect(SIGN_IN_PATH + (pathname ? `?continue=${encodeURIComponent(pathname)}` : ''))
   }
 
   return result as DalResult<T, Exclude<E, { type: 'unauthenticated' }>>
+}
+async function guessContinuePath() {
+  const header = await headers()
+  const host = header.get('host')
+  const referrer = header.get('referer')
+  if (!referrer || !host) return null
+  const index = referrer.indexOf(host)
+  if (index === -1) return null
+
+  const pathname = referrer.slice(index + host.length)
+  return pathname.startsWith('/') ? pathname : null
 }
 
 export async function dalUnauthorizedRedirect<T, E extends DalError>(
@@ -77,33 +93,17 @@ export async function dalDbOperation<T>(operation: () => Promise<T>) {
       return createErrorReturn(e.dalError)
     }
     if (e instanceof TRPCError) {
-      if (e.code === 'UNAUTHORIZED') {
-        return createErrorReturn({ type: 'unauthenticated' })
-      }
-      if (e.code === 'FORBIDDEN') {
-        return createErrorReturn({ type: 'unauthorized' })
-      }
-      if (e.code === 'CONFLICT') {
-        return createErrorReturn({ type: 'conflict' })
+      switch (e.code) {
+        case 'UNAUTHORIZED':
+          return createErrorReturn({ type: 'unauthenticated' })
+        case 'FORBIDDEN':
+          return createErrorReturn({ type: 'unauthorized' })
+        case 'CONFLICT':
+          return createErrorReturn({ type: 'conflict' })
+        case 'NOT_FOUND':
+          return createErrorReturn({ type: 'not-found', error: e })
       }
     }
     return createErrorReturn({ type: 'unknown-error', error: e })
-  }
-}
-
-export function dalFormatErrorMessage(error: DalError) {
-  const type = error.type
-
-  switch (type) {
-    case 'unauthenticated':
-      return 'You must be logged in to access or perform this action.'
-    case 'unauthorized':
-      return 'You do not have permission to access or perform this action.'
-    case 'conflict':
-      return 'That resource already exists.'
-    case 'unknown-error':
-      return 'An unknown error occurred'
-    default:
-      throw new Error(`Unhandled error type: ${type as never}`)
   }
 }
