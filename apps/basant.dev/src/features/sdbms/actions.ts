@@ -2,44 +2,41 @@
 
 import { revalidatePath } from 'next/cache'
 
+import { dalLoginRedirect, dalTrpcAction } from '~/lib/dal/helpers'
 import { api } from '~/lib/trpc'
-import { createAction } from '~/lib/utils/helper-action/shared'
 
-export const actionStudentImportFile = createAction(
-  async (payload: { sessionId: number; file: File }) => {
-    await api.sdbms.student.importFile(payload)
+export const actionStudentImportFile = dalTrpcAction(api.sdbms.student.importFile, dalLoginRedirect)
+
+export const actionTeacherImportFile = dalTrpcAction(api.sdbms.teacher.importFile, dalLoginRedirect)
+
+export const actionTeacherToggleSubject = dalTrpcAction(
+  api.sdbms.teacher.subject.toggle,
+  async (operation) => {
+    const result = await dalLoginRedirect(operation)
+    revalidatePath('/subjects')
+    return result
   },
 )
 
-export const actionTeacherImportFile = createAction(
-  async (payload: { instituteId: number; file: File }) => {
-    await api.sdbms.teacher.importFile(payload)
-  },
-)
-
-export async function actionTeacherToggleSubject(payload: {
-  sessionId: number
-  sectionId: number
-  subjectId: number
-}) {
-  await api.sdbms.teacher.subject.toggle(payload)
-  revalidatePath('/subjects')
-}
-
-export const actionConnectStudent = createAction(async (payload: { srNo: string; dob: string }) => {
-  await api.sdbms.student.connectProfile(payload)
-  revalidatePath('/')
-})
-
-export const actionConnectTeacher = createAction(
-  async (payload: { employeeId: string; dob: string }) => {
-    await api.sdbms.teacher.connectProfile(payload)
+export const actionConnectStudent = dalTrpcAction(
+  api.sdbms.student.connectProfile,
+  async (operation) => {
+    const result = await dalLoginRedirect(operation)
     revalidatePath('/')
+    return result
   },
 )
 
-export const actionSetStudentClassMark = createAction(
-  async (payload: { exam: number; classStudentId: number; subject: number; mark: number }) => {
-    await api.sdbms.class.student.mark.set(payload)
+export const actionConnectTeacher = dalTrpcAction(
+  api.sdbms.teacher.connectProfile,
+  async (operation) => {
+    const result = await dalLoginRedirect(operation)
+    revalidatePath('/')
+    return result
   },
+)
+
+export const actionSetStudentClassMark = dalTrpcAction(
+  api.sdbms.class.student.mark.set,
+  dalLoginRedirect,
 )

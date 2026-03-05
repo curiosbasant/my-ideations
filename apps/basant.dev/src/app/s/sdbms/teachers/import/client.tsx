@@ -4,11 +4,10 @@ import type { PropsWithChildren } from 'react'
 
 import { toast } from '~/components/ui/sonner'
 import { actionTeacherImportFile } from '~/features/sdbms/actions'
-import { useAction } from '~/lib/utils/helper-action/client'
+import { useDalMutation } from '~/lib/dal/use-action'
 
 export function FormWrapper(props: PropsWithChildren) {
-  const { state, actionTransition } = useAction({
-    actionFn: actionTeacherImportFile,
+  const { success, errorMessage, action } = useDalMutation(actionTeacherImportFile, {
     onSuccess: () => {
       toast.success('Teachers imported successfully')
     },
@@ -21,13 +20,12 @@ export function FormWrapper(props: PropsWithChildren) {
         action={async (fd) => {
           const instituteId = +(fd.get('school') as string)
           const file = fd.get('file') as File
-
-          actionTransition({ instituteId, file })
+          action({ instituteId, file })
         }}>
         {props.children}
       </form>
-      {state?.success && <p className='text-emerald-500'>Success!</p>}
-      {state && !state.success && <p className='text-danger'>{state.message}</p>}
+      {success && <p className='text-emerald-500'>Success!</p>}
+      {errorMessage && <p className='text-danger'>{errorMessage}</p>}
     </>
   )
 }

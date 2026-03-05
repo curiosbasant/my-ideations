@@ -4,24 +4,23 @@ import type { ComponentProps } from 'react'
 
 import { Input } from '~/components/ui/input'
 import { actionSetStudentClassMark } from '~/features/sdbms/actions'
+import { useDalMutation } from '~/lib/dal/use-action'
 import { cn } from '~/lib/utils'
-import { useAction } from '~/lib/utils/helper-action/client'
 
 export function MarkInput({
   classStudentId,
   ...props
 }: ComponentProps<'input'> & { classStudentId: number }) {
-  const { state, isPending, actionTransition } = useAction({
-    actionFn: actionSetStudentClassMark,
-  })
+  const { success, isPending, actionTransition } = useDalMutation(actionSetStudentClassMark)
+
   return (
     <Input
       {...props}
       className={cn(
         props.className,
-        isPending ? 'animate-pulse' : (
-          state && (state.success ? 'border-emerald-500' : 'border-destructive')
-        ),
+        isPending ? 'animate-pulse'
+        : success ? 'border-emerald-500'
+        : 'border-destructive',
       )}
       autoComplete='off'
       autoCorrect='off'

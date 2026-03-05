@@ -4,13 +4,12 @@ import type { ComponentProps } from 'react'
 
 import { toast } from '~/components/ui/sonner'
 import { actionConnectStudent, actionConnectTeacher } from '~/features/sdbms/actions'
-import { useAction } from '~/lib/utils/helper-action/client'
+import { useDalMutation } from '~/lib/dal/use-action'
 
 type FormProps = Omit<ComponentProps<'form'>, 'action'>
 
 export function FormConnectTeacher(props: FormProps) {
-  const { state, actionTransition } = useAction({
-    actionFn: actionConnectTeacher,
+  const { errorMessage, action } = useDalMutation(actionConnectTeacher, {
     onSuccess: () => {
       toast.success("You're now a teacher")
     },
@@ -22,17 +21,16 @@ export function FormConnectTeacher(props: FormProps) {
       action={(fd) => {
         const employeeId = fd.get('employeeId') as string
         const dob = fd.get('dob') as string
-        actionTransition({ employeeId, dob })
+        action({ employeeId, dob })
       }}>
       {props.children}
-      {state && !state.success && <p className='text-destructive'>{state.message}</p>}
+      {errorMessage && <p className='text-destructive'>{errorMessage}</p>}
     </form>
   )
 }
 
 export function FormConnectStudent(props: FormProps) {
-  const { state, actionTransition } = useAction({
-    actionFn: actionConnectStudent,
+  const { errorMessage, action } = useDalMutation(actionConnectStudent, {
     onSuccess: () => {
       toast.success("You're now a student")
     },
@@ -44,10 +42,10 @@ export function FormConnectStudent(props: FormProps) {
       action={(fd) => {
         const srNo = fd.get('srNo') as string
         const dob = fd.get('dob') as string
-        actionTransition({ srNo, dob })
+        action({ srNo, dob })
       }}>
       {props.children}
-      {state && !state.success && <p className='text-destructive'>{state.message}</p>}
+      {errorMessage && <p className='text-destructive'>{errorMessage}</p>}
     </form>
   )
 }
