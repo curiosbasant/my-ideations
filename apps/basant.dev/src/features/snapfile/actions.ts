@@ -2,8 +2,10 @@
 
 import { revalidatePath } from 'next/cache'
 
-import { dalDbOperation, dalVerifySuccess } from '~/lib/dal/helpers'
+import { dalDbOperation, dalTrpcAction, dalVerifySuccess } from '~/lib/dal/helpers'
 import { api } from '~/lib/trpc'
+
+export const actionUploadSnapFile = dalTrpcAction(api.snapfile.upload, dalVerifySuccess)
 
 export async function actionCreateFormat(
   payload: Parameters<typeof api.snapfile.format.create>[0],

@@ -23,8 +23,15 @@ export function DropArea({
 
   const handleDrop = (ev: React.DragEvent<HTMLDivElement>) => {
     ev.preventDefault()
-    if (ev.dataTransfer.files) {
-      onFilesDrop(Array.from(ev.dataTransfer.files))
+    if (!ev.dataTransfer.items) {
+      const fileList = ev.dataTransfer.files // fallback for older browsers
+      fileList.length > 0 && onFilesDrop(Array.from(fileList))
+    } else {
+      const files = Array.from(ev.dataTransfer.items, (item) =>
+        item.kind === 'file' ? item.getAsFile() : null,
+      ).filter((v) => v !== null)
+
+      files.length > 0 && onFilesDrop(files)
     }
     setIsOver(false)
   }
@@ -43,8 +50,9 @@ export function DropArea({
       onDrop={handleDrop}
       onClick={
         enablePromptFile ?
-          () => {
-            promptFile({ capture: 'environment' }).then(onFilesDrop)
+          async () => {
+            const files = await promptFile()
+            files.length > 0 && onFilesDrop(files)
           }
         : undefined
       }

@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 
 import { FileDownloadButton } from '~/app/client.component'
-import { getPublicUrlFromShortcode } from '../server'
+import { getPublicUrlFromShortcode } from '~/features/snapfile/dal'
 import { FileDownloadingText } from './client.component'
 
 export const metadata: Metadata = {

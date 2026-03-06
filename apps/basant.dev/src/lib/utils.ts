@@ -34,7 +34,7 @@ export async function zipFiles(files: File[]) {
   }
 
   const zipBlob = await zip.generateAsync({ type: 'blob', compressionOptions: { level: 6 } })
-  return new File([zipBlob], `combined-${Date.now()}.zip`, { type: 'application/zip' })
+  return new File([zipBlob], `combined-${Date.now().toString(36)}.zip`, { type: 'application/zip' })
 }
 
 export function downloadFileFromUrl(url: string, fileName = '') {

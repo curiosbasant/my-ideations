@@ -1,5 +1,6 @@
+import { cache } from 'react'
 import { headers } from 'next/headers'
-import { redirect } from 'next/navigation'
+import { notFound, redirect } from 'next/navigation'
 import {
   TRPCError,
   type AnyProcedure,
@@ -16,6 +17,20 @@ import {
   type DalResult,
 } from './shared'
 
+export function dalTrpcQuery<
+  TProcedure extends AnyProcedure,
+  TInput extends inferProcedureInput<TProcedure>,
+  TOutput extends inferProcedureOutput<TProcedure>,
+  TResult,
+>(
+  procedure: (input: TInput) => Promise<TOutput>,
+  cb: (op: Promise<DalResult<TOutput, DalError>>) => TResult,
+) {
+  return cache((payload: TInput) => {
+    return cb(dalNotFound(dalDbOperation(() => procedure(payload))))
+  })
+}
+
 export function dalTrpcAction<
   TProcedure extends AnyProcedure,
   TInput extends inferProcedureInput<TProcedure>,
@@ -28,6 +43,16 @@ export function dalTrpcAction<
   return (payload: TInput) => {
     return cb(dalDbOperation(() => procedure(payload)))
   }
+}
+
+export async function dalNotFound<T, E extends DalError>(dalResult: Promise<DalResult<T, E>>) {
+  const result = await dalResult
+  if (result.success) return result
+  if (result.error.type === 'not-found') {
+    notFound()
+  }
+
+  return result as DalResult<T, Exclude<E, { type: 'not-found' }>>
 }
 
 export async function dalLoginRedirect<T, E extends DalError>(dalResult: Promise<DalResult<T, E>>) {
