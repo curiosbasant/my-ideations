@@ -21,7 +21,7 @@ export default async function DocumentsPage() {
           No documents found. Please add a document to get started.
         </p>
       </div>
-    : <ul className='grid select-none grid-cols-[repeat(auto-fill,minmax(--spacing(96),1fr))] grid-rows-[1fr_auto_auto] gap-4'>
+    : <ul className='grid select-none grid-cols-[repeat(auto-fill,minmax(min(--spacing(80),100%),1fr))] grid-rows-[1fr_auto_auto] gap-4'>
         {documents.map((doc) => (
           <DialogProvider key={`${doc.personId}${doc.type.id}`}>
             <DialogTrigger asChild>

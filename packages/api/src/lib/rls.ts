@@ -31,6 +31,8 @@ export function rlsCreator<
 
         return await txCallback(tx)
       } catch (err) {
+        console.log('Caught RLS Error: ', err)
+
         if (!(err instanceof Error && err.cause instanceof Error)) throw err
 
         const pgMessage = err.cause.message

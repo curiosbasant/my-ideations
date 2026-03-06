@@ -30,6 +30,31 @@ export const sd__teacher = pgTable(
   ],
 )
 
+const isPersonTeacher = exists(
+  qb.select().from(sd__teacher).where(eq(sd__teacher.personId, selectPersonId)),
+)
+
+export const policyAllowAnyTeacherSelect = pgPolicy('allow_any_teacher_select', {
+  as: 'permissive',
+  for: 'select',
+  to: authenticatedRole,
+  using: isPersonTeacher,
+})
+
+export const policyAllowAnyTeacherInsert = pgPolicy('allow_any_teacher_insert', {
+  as: 'permissive',
+  for: 'insert',
+  to: authenticatedRole,
+  withCheck: isPersonTeacher,
+})
+
+export const policyAllowAnyTeacherUpdate = pgPolicy('allow_any_teacher_update', {
+  as: 'permissive',
+  for: 'update',
+  to: authenticatedRole,
+  using: isPersonTeacher,
+})
+
 const checkIfTeacherWithId = (teacherId: PgColumn) =>
   exists(
     qb
