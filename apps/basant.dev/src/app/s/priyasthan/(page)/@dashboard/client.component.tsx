@@ -22,8 +22,8 @@ import { useAction } from '~/lib/utils/helper-action/client'
 import { getDepartmentDesignations, saveWorkplace } from './server.action'
 
 type Location = {
-  profileId?: number
-  addressId: number
+  profileId?: string
+  addressId: string
   latitude: number
   longitude: number
   type: `${'current' | 'preferred'}-workplace`
@@ -41,7 +41,7 @@ export function MapWorkPlaces(props: { locations: Location[] }) {
         })
       }
       return prev.concat({
-        addressId: 0,
+        addressId: '0',
         type: prev.length ? 'preferred-workplace' : 'current-workplace',
         latitude: payload.lat,
         longitude: payload.lng,

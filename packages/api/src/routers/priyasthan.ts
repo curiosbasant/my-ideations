@@ -78,7 +78,7 @@ export const priyasthanRouter = {
     update: protectedProcedure
       .input(
         z.object({
-          addressId: z.number(),
+          addressId: z.string(),
           text: z.string().optional(),
           latitude: z.number(),
           longitude: z.number(),

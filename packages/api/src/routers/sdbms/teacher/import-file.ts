@@ -54,7 +54,7 @@ const schemaTeacherArray = z.preprocess(transformRawTeacher, SchemaTeacher).arra
 export const importFileProcedure = adminProcedure
   .input(
     z.object({
-      instituteId: z.number(),
+      instituteId: z.string(),
       file: z.instanceof(File),
     }),
   )
@@ -81,7 +81,7 @@ export const importFileProcedure = adminProcedure
         .then(async (rows) => {
           const teachersMap = rows.reduce(
             (acc, s) => acc.set(s.employeeId!, s.personId),
-            new Map<string, number>(),
+            new Map<string, string>(),
           )
           const recordsToInsert = [],
             recordsToUpdate = []

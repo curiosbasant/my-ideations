@@ -5,17 +5,15 @@ import { z } from '@my/lib/zod'
 import { anonymousProcedure, protectedProcedure, publicProcedure } from '../trpc'
 
 export const dotsAndBoxesRouter = {
-  get: publicProcedure
-    .input(z.object({ boardId: z.coerce.number() }))
-    .query(({ ctx: { rls }, input }) => {
-      return rls(async (tx) => {
-        const [row] = await tx
-          .select()
-          .from(schema.gdb__board)
-          .where(eq(schema.gdb__board.id, input.boardId))
-        return row
-      })
-    }),
+  get: publicProcedure.input(z.object({ boardId: z.string() })).query(({ ctx: { rls }, input }) => {
+    return rls(async (tx) => {
+      const [row] = await tx
+        .select()
+        .from(schema.gdb__board)
+        .where(eq(schema.gdb__board.id, input.boardId))
+      return row
+    })
+  }),
   create: anonymousProcedure
     .input(z.object({ rows: z.number(), cols: z.number() }))
     .mutation(({ ctx: { rls }, input }) => {
@@ -32,7 +30,7 @@ export const dotsAndBoxesRouter = {
       })
     }),
   join: anonymousProcedure
-    .input(z.object({ boardId: z.coerce.number() }))
+    .input(z.object({ boardId: z.string() }))
     .mutation(async ({ ctx: { db, authUserId }, input }) => {
       return await db
         .update(schema.gdb__board)
@@ -48,12 +46,12 @@ export const dotsAndBoxesRouter = {
           .where(eq(schema.gdb__board.id, input.boardId))
 
         await tx.update(schema.gdb__board).set({
-          players: [...board.players, +authUserId],
+          players: [...board.players, authUserId],
         })
       })
     }),
   start: protectedProcedure
-    .input(z.object({ boardId: z.coerce.number() }))
+    .input(z.object({ boardId: z.string() }))
     .mutation(async ({ ctx: { db }, input }) => {
       await db
         .update(schema.gdb__board)
@@ -64,7 +62,7 @@ export const dotsAndBoxesRouter = {
         .where(eq(schema.gdb__board.id, input.boardId))
     }),
   move: protectedProcedure
-    .input(z.object({ boardId: z.coerce.number(), dashName: z.string() }))
+    .input(z.object({ boardId: z.string(), dashName: z.string() }))
     .mutation(async ({ ctx: { db }, input }) => {
       return db.transaction(async (tx) => {
         const [board] = await tx

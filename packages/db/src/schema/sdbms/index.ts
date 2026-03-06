@@ -66,7 +66,7 @@ export const sd__class = pgTable(
   (c) => ({
     id: smallId.primaryKey(),
     instituteId: id.references(() => sd__institute.id).notNull(),
-    numeral: smallId().notNull(),
+    numeral: c.smallint().notNull(),
     name: c.varchar().notNull(),
     stream: smallId.references(() => sd__luStream.id, CASCADE_ON_UPDATE),
     ...getTimestampColumns(),

@@ -210,7 +210,7 @@ async function createInstitutes(tx: DbTransaction, sdRecords: SchemaStudent[]) {
 async function createPersons(
   tx: DbTransaction,
   sdRecords: SchemaStudent[],
-  instituteIds: number[],
+  instituteIds: string[],
 ) {
   const [recordsToInsert, recordsToUpdate] = await tx
     .select({
@@ -225,7 +225,7 @@ async function createPersons(
     .then(async (rows) => {
       const studentMap = rows.reduce(
         (acc, s) => acc.set(s.schoolName + s.studentAdmissionNo, s.personId),
-        new Map<string, number>(),
+        new Map<string, string>(),
       )
       const recordsToInsert = [],
         recordsToUpdate = []
@@ -401,9 +401,16 @@ async function createStudents(
   tx: DbTransaction,
   sdRecords: SchemaStudent[],
   sessionId: number,
-  persons: number[],
+  persons: string[],
 ) {
-  const cache = new Map<string, Record<'instituteId' | 'classId' | 'sectionId', number>>()
+  const cache = new Map<
+    string,
+    {
+      instituteId: string
+      classId: number
+      sectionId: number
+    }
+  >()
   const getData = async (instituteName: string, standard: number, sectionName: string) => {
     const key = standard + sectionName + instituteName
     const v = cache.get(key)

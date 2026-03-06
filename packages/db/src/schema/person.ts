@@ -24,7 +24,8 @@ import { address } from './address'
 export const person = pgTable(
   'person',
   (c) => ({
-    id: id.primaryKey(),
+    // Needs generatedByDefaultAsIdentity as to update on conflict target
+    id: id().generatedByDefaultAsIdentity().primaryKey(),
     firstName: c.varchar().notNull(),
     lastName: c.varchar(),
     dob: c.date(),

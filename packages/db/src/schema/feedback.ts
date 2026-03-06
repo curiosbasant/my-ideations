@@ -24,7 +24,7 @@ export const feedback = pgTable(
 export const feedbackType = pgTable(
   'feedback_lu_type',
   (c) => ({
-    id: smallId.primaryKey(),
+    id: smallId().primaryKey(),
     name: c.varchar().unique().notNull(),
   }),
   () => [policyAllowAuthenticatedSelect],
