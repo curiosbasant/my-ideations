@@ -99,7 +99,7 @@ export const spendBuddyRouter = {
       all: protectedProcedure
         .input(
           z.object({
-            groupId: z.coerce.number(),
+            groupId: z.string(),
             cursor: z.date().nullish(),
             limit: z.number().min(1).max(50).default(15),
           }),
@@ -159,7 +159,7 @@ export const spendBuddyRouter = {
         }),
     },
     member: {
-      all: protectedProcedure.input(z.coerce.number()).query(async ({ ctx: { db }, input }) => {
+      all: protectedProcedure.input(z.string()).query(async ({ ctx: { db }, input }) => {
         const memberSpends = db
           .select({
             id: schema.sb__spend.createdBy,
@@ -197,7 +197,7 @@ export const spendBuddyRouter = {
           }
           await db.insert(schema.sb__member).values({
             groupId: input.groupId,
-            userId: Number(userId),
+            userId: userId,
           })
 
           return {
@@ -257,7 +257,7 @@ export const spendBuddyRouter = {
                 amount: sql<number>`${schema.sb__spend.amount} / 100`.as('amount_rupee'),
               },
               member: {
-                id: sql<number>`${null}`,
+                id: sql<string>`${null}`,
                 displayName: sql<string>`${null}`,
                 avatarUrl: sql<string | null>`${null}`,
               },
@@ -282,7 +282,7 @@ export const spendBuddyRouter = {
                 avatarUrl: query.user.avatarUrl,
               },
               spend: {
-                id: sql<number>`${null}`,
+                id: sql<string>`${null}`,
                 amount: sql<number>`${null}`,
               },
               member: {
@@ -317,7 +317,7 @@ export const spendBuddyRouter = {
     mark: protectedProcedure
       .input(
         z.object({
-          notificationId: z.coerce.number(),
+          notificationId: z.string(),
           read: z.boolean().default(true),
         }),
       )

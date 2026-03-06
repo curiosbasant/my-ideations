@@ -105,7 +105,7 @@ export const classRouter = {
         .input(
           z.object({
             exam: z.number(),
-            classStudentId: z.number(),
+            classStudentId: z.string(),
             subject: z.number(),
             mark: z.number(),
           }),

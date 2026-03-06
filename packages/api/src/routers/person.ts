@@ -133,7 +133,7 @@ export const personRouter = {
     update: protectedProcedure
       .input(
         z.object({
-          personId: z.number(),
+          personId: z.string(),
           documentType: z.number(),
           relation: z.string().optional(),
           newDocumentType: z.number().optional(),
@@ -179,7 +179,7 @@ async function resolvePersonIdFromRelation(tx: DbTransaction, relation?: string)
           eq(schema.personRelation.relation, relation === 'father' ? 1 : 2),
         ),
       )
-  : tx.execute<{ personId: number }>(selectPersonId))
+  : tx.execute<{ personId: string }>(selectPersonId))
 
   if (!row?.personId)
     throw new TRPCError({ code: 'NOT_FOUND', message: `Relation with ${relation} not found` })

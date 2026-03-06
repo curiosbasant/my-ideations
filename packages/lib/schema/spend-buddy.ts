@@ -4,7 +4,7 @@ export const groupCreateSchema = z.object({ name: z.string() })
 export type groupCreateSchema = z.infer<typeof groupCreateSchema>
 
 export const groupSpendCreateSchema = z.object({
-  groupId: z.coerce.number(),
+  groupId: z.string(),
   amount: z
     .number()
     .or(z.string().pipe(z.coerce.number()))
@@ -14,7 +14,7 @@ export const groupSpendCreateSchema = z.object({
 export type groupSpendCreateSchema = z.infer<typeof groupSpendCreateSchema>
 
 export const groupMemberInviteSchema = z.object({
-  groupId: z.coerce.number(),
+  groupId: z.string(),
   userIdentity: z.union([z.string(), z.string().email()]),
 })
 export type groupMemberInviteSchema = z.infer<typeof groupMemberInviteSchema>

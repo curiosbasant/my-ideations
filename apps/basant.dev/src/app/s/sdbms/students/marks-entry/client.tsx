@@ -10,24 +10,25 @@ import { cn } from '~/lib/utils'
 export function MarkInput({
   classStudentId,
   ...props
-}: ComponentProps<'input'> & { classStudentId: number }) {
-  const { success, isPending, actionTransition } = useDalMutation(actionSetStudentClassMark)
+}: ComponentProps<'input'> & { classStudentId: string }) {
+  const { success, isPending, error, actionTransition } = useDalMutation(actionSetStudentClassMark)
 
   return (
     <Input
       {...props}
       className={cn(
         props.className,
-        isPending ? 'animate-pulse'
-        : success ? 'border-emerald-500'
-        : 'border-destructive',
+        isPending && 'animate-pulse',
+        success && 'border-emerald-500',
+        error && 'border-destructive',
       )}
       autoComplete='off'
       autoCorrect='off'
       inputMode='numeric'
       onBlur={(ev) => {
+        if (ev.currentTarget.value === '') return
         const mark = Number(ev.currentTarget.value)
-        if (ev.currentTarget.value === '' || isNaN(mark)) return
+        if (isNaN(mark) || mark === props.defaultValue) return
 
         const searchParams = new URLSearchParams(window.location.search)
         const exam = searchParams.get('exam')

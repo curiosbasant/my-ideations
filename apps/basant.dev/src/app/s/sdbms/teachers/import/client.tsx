@@ -18,7 +18,7 @@ export function FormWrapper(props: PropsWithChildren) {
       <form
         className='grid gap-4'
         action={async (fd) => {
-          const instituteId = +(fd.get('school') as string)
+          const instituteId = fd.get('school') as string
           const file = fd.get('file') as File
           action({ instituteId, file })
         }}>

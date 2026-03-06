@@ -25,7 +25,7 @@ export const saveWorkplace = async (
         type: `${'current' | 'preferred'}-workplace`
       }
     | {
-        addressId: number
+        addressId: string
         latitude: number
         longitude: number
       },

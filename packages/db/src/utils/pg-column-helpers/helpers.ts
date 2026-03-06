@@ -12,7 +12,7 @@ smallId.references = (columnRef: ReferenceConfig['ref'], actions?: ReferenceConf
     actions ? { ...CASCADE_ON_DELETE, ...actions } : CASCADE_ON_DELETE,
   )
 
-export const id = () => bigint({ mode: 'number' })
+export const id = () => bigint({ mode: 'string' })
 id.primaryKey = () => id().generatedByDefaultAsIdentity().primaryKey()
 id.references = (columnRef: ReferenceConfig['ref'], actions?: ReferenceConfig['config']) =>
   id().references(columnRef, actions ? { ...CASCADE_ON_DELETE, ...actions } : CASCADE_ON_DELETE)
