@@ -31,7 +31,7 @@ export const sd__teacherSubject = pgTable(
       sessionId: smallId.references(() => sd__luSession.id, CASCADE_ON_UPDATE).notNull(),
       teacherId: id.references(() => sd__teacher.id).notNull(),
       classSectionId: smallId.references(() => sd__classSection.id).notNull(),
-      subjectId: id.references(() => sd__luSubject.id).notNull(),
+      subjectId: smallId.references(() => sd__luSubject.id).notNull(),
       createdAt,
       deletedAt,
     }
@@ -68,7 +68,7 @@ export const sd__class = pgTable(
     instituteId: id.references(() => sd__institute.id).notNull(),
     numeral: smallId().notNull(),
     name: c.varchar().notNull(),
-    stream: id.references(() => sd__luStream.id, CASCADE_ON_UPDATE),
+    stream: smallId.references(() => sd__luStream.id, CASCADE_ON_UPDATE),
     ...getTimestampColumns(),
   }),
   (t) => [uniqueIndex().on(t.instituteId, t.numeral), policyAllowAnyoneSelect],
@@ -108,7 +108,7 @@ export const sd__classStudentMarks = pgTable(
   withCommonColumns((c) => ({
     exam: smallId.references(() => sd__luExam.id, CASCADE_ON_UPDATE).notNull(),
     subject: smallId.references(() => sd__luSubject.id, CASCADE_ON_UPDATE).notNull(),
-    classStudentId: smallId.references(() => sd__classStudent.id).notNull(),
+    classStudentId: id.references(() => sd__classStudent.id).notNull(),
     mark: c.smallint(),
   })),
   (t) => {
