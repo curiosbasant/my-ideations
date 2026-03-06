@@ -8,7 +8,7 @@ import { z } from '@my/lib/zod'
 import { protectedProcedure, publicProcedure } from '../trpc'
 
 export const snapfileRouter = {
-  upload: publicProcedure
+  create: publicProcedure
     .input(
       z.object({
         fileName: z.string(),
@@ -67,19 +67,22 @@ export const snapfileRouter = {
     create: protectedProcedure
       .input(
         z.object({
+          fileOriginalName: z.string().nonempty(),
           fileName: z.string().nonempty(),
           description: z.string().nullish(),
-          path: z.string().nonempty(),
         }),
       )
-      .mutation(({ input, ctx: { rls } }) => {
-        return rls(async (tx) => {
+      .mutation(async ({ input, ctx: { rls } }) => {
+        const filePath = `formats/${sanitizeFilenameForStorage(input.fileOriginalName)}`
+
+        await rls(async (tx) => {
           await tx.insert(schema.sf__formats).values({
             name: input.fileName,
             description: input.description,
-            path: input.path,
+            path: filePath,
           })
         })
+        return { filePath }
       }),
   },
 }

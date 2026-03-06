@@ -11,8 +11,8 @@ import { Button } from '~/components/ui/button'
 import { DialogClose, DialogFooter } from '~/components/ui/dialog'
 import { Input } from '~/components/ui/input'
 import { Label } from '~/components/ui/label'
-import { useAction } from '~/lib/utils/helper-action/client'
-import { uploadFileAction } from './client.action'
+import { actionUploadFormatFile } from '~/features/snapfile/actions.client'
+import { useDalMutation } from '~/lib/dal/use-action'
 
 export function FileUploadModalViews() {
   const [file, setFile] = useState<File | null>(null)
@@ -72,9 +72,7 @@ export function FileUploadModalViews() {
 }
 
 function FileDetails(props: PropsWithChildren<{ file: File }>) {
-  const { isPending, actionTransition: uploadFile } = useAction({
-    actionFn: uploadFileAction,
-  })
+  const { isPending, action: uploadFile } = useDalMutation(actionUploadFormatFile, {})
 
   if (isPending) {
     return (

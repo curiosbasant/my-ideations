@@ -165,11 +165,11 @@ export async function withArtificialDelay<T>(promise: Promise<T>, delay = 1) {
  * This limits the rate at which the callback gets invoked.
  * @default 1s
  */
-export function debounce<const T>(cb: (...param: T[]) => void, delay = 1) {
+export function debounce<const T>(cb: (...param: T[]) => void, options: { wait: number }) {
   let timeoutId = 0
   return (...param: T[]) => {
     clearTimeout(timeoutId)
-    timeoutId = setTimeout(cb, delay * 1e3, ...param) as unknown as number
+    timeoutId = setTimeout(cb, options.wait, ...param) as unknown as number
   }
 }
 

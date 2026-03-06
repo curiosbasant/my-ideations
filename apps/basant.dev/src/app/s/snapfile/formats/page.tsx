@@ -1,4 +1,3 @@
-import Form from 'next/form'
 import type { Metadata } from 'next/types'
 import { format } from 'date-fns/format'
 import { DownloadIcon } from 'lucide-react'
@@ -7,11 +6,10 @@ import type { RouterOutputs } from '@my/api'
 import { formatDistance } from '@my/lib/date'
 import { resolveStringParam } from '@my/lib/utils'
 
-import { Input } from '~/components/ui/input'
 import { TimeFormat } from '~/features/shared/components/client'
 import { FileDownloadButton } from '~/features/shared/components/file-download-button'
+import { SearchQueryInput } from '~/features/shared/components/search-query-input'
 import { getRecentFormats } from '~/features/snapfile/dal'
-import { handleChange } from '../@headerRight/formats/client.action'
 
 export const metadata: Metadata = {
   title: 'Formats',
@@ -25,15 +23,11 @@ export default async function FormatsPage(props: PageProps<'/s/snapfile/formats'
 
   return (
     <div className='flex flex-1 flex-col gap-8'>
-      <Form action='' onChange={handleChange}>
-        <Input
-          className='h-auto px-4 py-3 text-lg md:text-xl'
-          name='query'
-          defaultValue={query ?? undefined}
-          placeholder='Search for a format'
-          type='search'
-        />
-      </Form>
+      <SearchQueryInput
+        className='h-auto px-4 py-3 text-lg md:text-xl'
+        defaultValue={query ?? undefined}
+        placeholder='Search for a format'
+      />
       <h2 className='text-2xl font-bold'>Recent Formats</h2>
       {recentFormats.length ?
         <ul className='grid grid-cols-[1fr_auto] gap-4'>
