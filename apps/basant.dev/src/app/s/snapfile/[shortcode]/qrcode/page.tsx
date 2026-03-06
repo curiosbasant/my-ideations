@@ -8,6 +8,8 @@ import QRCode from 'qrcode'
 import { ClientOnly } from '@my/core/elements'
 
 import { Spinner } from '~/components/elements/spinner'
+import { Skeleton } from '~/components/ui/skeleton'
+import { toast } from '~/components/ui/sonner'
 
 export default function SnapFileQrCodePage(props: PageProps<'/s/snapfile/[shortcode]/qrcode'>) {
   const { shortcode } = use(props.params)
@@ -51,18 +53,18 @@ function CopyShortLink(props: { shortcode: string }) {
   return (
     <div className='bg-background flex divide-x rounded-md border'>
       <div className='px-4 pb-2 pt-1 tabular-nums leading-none'>
-        <ClientOnly
-          fallback={
-            <div className='rounded-xs bg-secondary -mb-1 inline-block h-5 w-40 animate-pulse' />
-          }>
+        <ClientOnly fallback={<Skeleton className='rounded-xs -mb-1 inline-block h-5 w-40' />}>
           {() => location.origin}
         </ClientOnly>
         /<span className='text-xl font-bold text-slate-700'>{props.shortcode}</span>
       </div>
       <button
         className='hover:bg-secondary/50 inline-flex aspect-square h-full transition hover:opacity-80'
-        onClick={() => {
-          navigator.clipboard.writeText(props.shortcode)
+        onClick={async () => {
+          if (!navigator.clipboard)
+            return toast.info('That action is only supported in secure environment')
+          await navigator.clipboard.writeText(`${location.origin}/${props.shortcode}`)
+          toast.success('Copied to clipboard')
         }}
         title='Copy URL'
         type='button'>
