@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 
-import { FileDownloadButton } from '~/app/client.component'
+import { FileDownloadButton } from '~/features/shared/components/file-download-button'
 import { getPublicUrlFromShortcode } from '~/features/snapfile/dal'
 import { FileDownloadingText } from './client.component'
 

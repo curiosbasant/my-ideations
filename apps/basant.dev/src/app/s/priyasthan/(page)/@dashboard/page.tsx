@@ -1,4 +1,4 @@
-import { SubmitButton } from '~/app/client.component'
+import { FormSubmitButton } from '~/components/forms/client'
 import { PageLayoutFixed, PageLayoutFluid } from '~/components/layout'
 import { getDepartments, getProfileDetails } from '~/features/user/dal'
 import { api } from '~/lib/trpc'
@@ -23,7 +23,7 @@ export default async function DashboardPage() {
       <form className='mx-auto grid max-w-sm gap-8' action={handleDesignationUpdate}>
         <DepartmentDesignation departments={getDepartments()} />
         <div className='col-span-full justify-self-end'>
-          <SubmitButton>Save</SubmitButton>
+          <FormSubmitButton>Save</FormSubmitButton>
         </div>
       </form>
     </PageLayoutFixed>

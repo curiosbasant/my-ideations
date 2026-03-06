@@ -7,9 +7,9 @@ import type { RouterOutputs } from '@my/api'
 import { formatDistance } from '@my/lib/date'
 import { resolveStringParam } from '@my/lib/utils'
 
-import { FileDownloadButton } from '~/app/client.component'
 import { Input } from '~/components/ui/input'
 import { TimeFormat } from '~/features/shared/components/client'
+import { FileDownloadButton } from '~/features/shared/components/file-download-button'
 import { getRecentFormats } from '~/features/snapfile/dal'
 import { handleChange } from '../@headerRight/formats/client.action'
 
