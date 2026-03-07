@@ -21,10 +21,10 @@
   },
   "devDependencies": {
     "@my/prettier-config": "workspace:*",
-    "@turbo/gen": "~2.7",
-    "supabase": "^2.72.6",
-    "turbo": "~2.7",
-    "typescript": "~5.8.3"
+    "@turbo/gen": "~2.8",
+    "supabase": "^2.77",
+    "turbo": "~2.8",
+    "typescript": "~5.9.3"
   },
   "pnpm": {
     "overrides": {

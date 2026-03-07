@@ -15,18 +15,19 @@
     "@hookform/resolvers": "^3.3.2",
     "@my/lib": "workspace:*",
     "@tanstack/react-query": "^5.8.1",
-    "@trpc/client": "^11.4.2",
-    "@trpc/react-query": "^11.4.2",
-    "@trpc/tanstack-react-query": "^11.4.2",
+    "@trpc/client": "^11.12",
+    "@trpc/react-query": "^11.12",
+    "@trpc/tanstack-react-query": "^11.12",
     "@uidotdev/usehooks": "^2.4.1",
-    "immer": "^10.0.3",
+    "immer": "^11.1",
     "react-hook-form": "^7.48.2",
-    "use-immer": "^0.9.0"
+    "use-immer": "^0.11.0"
   },
   "devDependencies": {
     "@my/api": "workspace:*",
     "@my/tsconfig": "workspace:*",
-    "typescript": "~5.8.3"
+    "@trpc/server": "^11.12",
+    "typescript": "~5.9.3"
   },
   "peerDependencies": {
     "react": "*"

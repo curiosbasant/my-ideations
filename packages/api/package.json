@@ -11,11 +11,11 @@
   "dependencies": {
     "@my/db": "workspace:*",
     "@my/lib": "workspace:*",
-    "@trpc/server": "^11.4.2"
+    "@trpc/server": "^11.12"
   },
   "devDependencies": {
     "@my/tsconfig": "workspace:*",
-    "typescript": "~5.8.3"
+    "typescript": "~5.9.3"
   },
   "private": true
 }
