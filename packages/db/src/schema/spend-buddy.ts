@@ -1,9 +1,9 @@
 import { index, pgTableCreator, primaryKey } from 'drizzle-orm/pg-core'
 
 import {
+  bigId,
   getDefaultTimezone,
   getProfileRef,
-  id,
   withCommonColumns,
 } from '../utils/pg-column-helpers'
 
@@ -19,7 +19,7 @@ export const sb__group = pgTable(
 export const sb__member = pgTable(
   'group_member',
   {
-    groupId: id.references(() => sb__group.id).notNull(),
+    groupId: bigId.references(() => sb__group.id).notNull(),
     userId: getProfileRef().notNull(),
     joinedAt: getDefaultTimezone(),
   },
@@ -29,7 +29,7 @@ export const sb__member = pgTable(
 export const sb__spend = pgTable(
   'group_spend',
   withCommonColumns((c) => ({
-    groupId: id.references(() => sb__group.id).notNull(),
+    groupId: bigId.references(() => sb__group.id).notNull(),
     amount: c.integer().notNull(),
     note: c.text(),
   })),
@@ -41,7 +41,7 @@ export const sb__notification = pgTable(
   withCommonColumns((c) => ({
     type: c.varchar({ enum: ['group_spend_add', 'group_member_join'] }).notNull(),
     read: c.boolean().default(false),
-    resourceId: id(),
+    resourceId: bigId(),
     /** The user who receives the notification */
     userId: getProfileRef(),
   })),

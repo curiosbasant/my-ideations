@@ -12,10 +12,10 @@ smallId.references = (columnRef: ReferenceConfig['ref'], actions?: ReferenceConf
     actions ? { ...CASCADE_ON_DELETE, ...actions } : CASCADE_ON_DELETE,
   )
 
-export const id = () => bigint({ mode: 'string' })
-id.primaryKey = () => id().generatedByDefaultAsIdentity().primaryKey()
-id.references = (columnRef: ReferenceConfig['ref'], actions?: ReferenceConfig['config']) =>
-  id().references(columnRef, actions ? { ...CASCADE_ON_DELETE, ...actions } : CASCADE_ON_DELETE)
+export const bigId = () => bigint({ mode: 'string' })
+bigId.primaryKey = () => bigId().generatedAlwaysAsIdentity().primaryKey()
+bigId.references = (columnRef: ReferenceConfig['ref'], actions?: ReferenceConfig['config']) =>
+  bigId().references(columnRef, actions ? { ...CASCADE_ON_DELETE, ...actions } : CASCADE_ON_DELETE)
 
 export const getDefaultTimezone = () => timestamp({ withTimezone: true }).notNull().defaultNow()
 export const getTimestampColumns = () => ({

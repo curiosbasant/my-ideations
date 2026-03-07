@@ -2,7 +2,7 @@ import { pgTableCreator } from 'drizzle-orm/pg-core'
 import { sql } from 'drizzle-orm/sql'
 
 import { userProfileId } from '../utils/helpers/db-functions'
-import { id, withCommonColumns } from '../utils/pg-column-helpers'
+import { bigId, withCommonColumns } from '../utils/pg-column-helpers'
 
 const pgTable = pgTableCreator((tableName) => `gdb__${tableName}`)
 
@@ -14,7 +14,7 @@ export const gdb__board = pgTable(
     boxes: c.json().default({}).$type<Record<string, number>>(),
     dashes: c.json().default({}).$type<Record<string, number>>(),
     activePlayerIndex: c.smallint(),
-    players: id()
+    players: bigId()
       .array()
       .default(sql`ARRAY[${userProfileId}]`)
       .notNull(),

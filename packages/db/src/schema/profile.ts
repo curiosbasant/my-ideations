@@ -9,7 +9,7 @@ import {
   policyAllowAuthenticatedSelect,
 } from '../utils/helpers/policy'
 import { pgTable } from '../utils/helpers/table'
-import { id, smallId } from '../utils/pg-column-helpers/helpers'
+import { bigId, smallId } from '../utils/pg-column-helpers/helpers'
 import { person } from './person'
 
 export const department = pgTable(
@@ -38,14 +38,14 @@ export const designation = pgTable(
 export const profile = pgTable(
   'profile',
   (c) => ({
-    id: id.primaryKey(),
+    id: bigId.primaryKey(),
     username: c.varchar({ length: 32 }).unique(),
     firstName: c.varchar({ length: 256 }),
     lastName: c.varchar({ length: 256 }),
     email: c.varchar({ length: 320 }).unique(),
     avatarUrl: c.varchar({ length: 256 }),
     postId: smallId.references(() => designation.id, { onDelete: 'set null' }),
-    personId: id.references(() => person.id, { onDelete: 'set null' }),
+    personId: bigId.references(() => person.id, { onDelete: 'set null' }),
     createdBy: c
       .uuid()
       .references(() => authUsers.id, { onDelete: 'set null' })

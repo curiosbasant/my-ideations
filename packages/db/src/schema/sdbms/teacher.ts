@@ -7,7 +7,7 @@ import {
   policyAllowAuthenticatedInsert,
   policyAllowAuthenticatedSelect,
 } from '../../utils/helpers/policy'
-import { id, withCommonColumns } from '../../utils/pg-column-helpers'
+import { bigId, withCommonColumns } from '../../utils/pg-column-helpers'
 import { qb } from '../../utils/qb'
 import { person } from '../person'
 import { pgTable } from './_helpers'
@@ -16,8 +16,8 @@ import { sd__institute } from './institute'
 export const sd__teacher = pgTable(
   'teacher',
   withCommonColumns((c) => ({
-    personId: id.references(() => person.id).notNull(),
-    instituteId: id.references(() => sd__institute.id).notNull(),
+    personId: bigId.references(() => person.id).notNull(),
+    instituteId: bigId.references(() => sd__institute.id).notNull(),
     employeeId: c.varchar().unique(),
     joiningDate: c.date(),
   })),

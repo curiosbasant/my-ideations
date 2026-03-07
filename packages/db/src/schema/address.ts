@@ -4,16 +4,16 @@ import { sql, type SQL } from 'drizzle-orm/sql'
 import { policyAllowAnyoneSelect } from '../utils/helpers/policy'
 import { pgTable } from '../utils/helpers/table'
 import {
+  bigId,
   getDefaultTimezone,
   getProfileRef,
   getTimestampColumns,
-  id,
 } from '../utils/pg-column-helpers'
 
 export const address = pgTable(
   'address',
   (c) => ({
-    id: id.primaryKey(),
+    id: bigId.primaryKey(),
     text: c.text().notNull(),
     secondaryText: c.text(),
     latitude: c.doublePrecision(),
@@ -33,7 +33,7 @@ export const profileAddress = pgTable(
   'profile_has_addresses',
   (c) => ({
     profileId: getProfileRef().notNull(),
-    addressId: id.references(() => address.id).notNull(),
+    addressId: bigId.references(() => address.id).notNull(),
     type: c.varchar({ enum: ['current-workplace', 'preferred-workplace'] }),
     updatedAt: getDefaultTimezone(),
   }),

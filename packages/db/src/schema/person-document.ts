@@ -14,10 +14,10 @@ import {
 import { bucketNames, objects } from '../utils/helpers/supabase'
 import { pgTable } from '../utils/helpers/table'
 import {
+  bigId,
   CASCADE_ON_UPDATE,
   getProfileRef,
   getTimestampColumns,
-  id,
   smallId,
 } from '../utils/pg-column-helpers'
 import { qb } from '../utils/qb'
@@ -26,7 +26,7 @@ import { person, personRelation } from './person'
 export const personDocument = pgTable(
   'person_document',
   (c) => ({
-    personId: id.references(() => person.id).notNull(),
+    personId: bigId.references(() => person.id).notNull(),
     type: smallId.references(() => personDocumentType.id, CASCADE_ON_UPDATE).notNull(),
     number: c.text(),
     path: c.text(),

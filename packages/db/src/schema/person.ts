@@ -14,9 +14,9 @@ import {
 import { length } from '../utils/helpers/sql'
 import { pgTable } from '../utils/helpers/table'
 import {
+  bigId,
   CASCADE_ON_UPDATE,
   getTimestampColumns,
-  id,
   smallId,
 } from '../utils/pg-column-helpers/helpers'
 import { address } from './address'
@@ -25,7 +25,7 @@ export const person = pgTable(
   'person',
   (c) => ({
     // Needs generatedByDefaultAsIdentity as to update on conflict target
-    id: id().generatedByDefaultAsIdentity().primaryKey(),
+    id: bigId().generatedByDefaultAsIdentity().primaryKey(),
     firstName: c.varchar().notNull(),
     lastName: c.varchar(),
     dob: c.date(),
@@ -35,7 +35,7 @@ export const person = pgTable(
     contactNo: c.varchar(),
     minority: c.boolean(),
     bpl: c.boolean(),
-    addressId: id.references(() => address.id),
+    addressId: bigId.references(() => address.id),
     bloodGroup: c.varchar(),
     ...getTimestampColumns(),
   }),
@@ -51,8 +51,8 @@ export const person = pgTable(
 export const personRelation = pgTable(
   'person_relation',
   () => ({
-    personId: id.references(() => person.id).notNull(),
-    relativeId: id.references(() => person.id).notNull(),
+    personId: bigId.references(() => person.id).notNull(),
+    relativeId: bigId.references(() => person.id).notNull(),
     relation: smallId.references(() => personRelationType.id, CASCADE_ON_UPDATE).notNull(),
   }),
   (t) => [

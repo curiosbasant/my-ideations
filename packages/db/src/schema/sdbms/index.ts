@@ -4,9 +4,9 @@ import { authenticatedRole } from 'drizzle-orm/supabase'
 
 import { policyAllowAnyoneSelect, policyAllowAuthenticatedSelect } from '../../utils/helpers/policy'
 import {
+  bigId,
   CASCADE_ON_UPDATE,
   getTimestampColumns,
-  id,
   smallId,
   withCommonColumns,
 } from '../../utils/pg-column-helpers'
@@ -29,7 +29,7 @@ export const sd__teacherSubject = pgTable(
     const { createdAt, updatedAt: deletedAt } = getTimestampColumns()
     return {
       sessionId: smallId.references(() => sd__luSession.id, CASCADE_ON_UPDATE).notNull(),
-      teacherId: id.references(() => sd__teacher.id).notNull(),
+      teacherId: bigId.references(() => sd__teacher.id).notNull(),
       classSectionId: smallId.references(() => sd__classSection.id).notNull(),
       subjectId: smallId.references(() => sd__luSubject.id).notNull(),
       createdAt,
@@ -47,8 +47,8 @@ export const sd__teacherSubject = pgTable(
 export const sd__student = pgTable(
   'student',
   withCommonColumns((c) => ({
-    personId: id.references(() => person.id).notNull(),
-    instituteId: id.references(() => sd__institute.id).notNull(),
+    personId: bigId.references(() => person.id).notNull(),
+    instituteId: bigId.references(() => sd__institute.id).notNull(),
     admissionNo: c.varchar(),
     admissionDate: c.date(),
     distanceKm: c.smallint(),
@@ -65,7 +65,7 @@ export const sd__class = pgTable(
   'class',
   (c) => ({
     id: smallId.primaryKey(),
-    instituteId: id.references(() => sd__institute.id).notNull(),
+    instituteId: bigId.references(() => sd__institute.id).notNull(),
     numeral: c.smallint().notNull(),
     name: c.varchar().notNull(),
     stream: smallId.references(() => sd__luStream.id, CASCADE_ON_UPDATE),
@@ -88,12 +88,12 @@ export const sd__classSection = pgTable(
 export const sd__classStudent = pgTable(
   'class_student',
   (c) => ({
-    id: id.primaryKey(),
+    id: bigId.primaryKey(),
     sessionId: smallId.references(() => sd__luSession.id, CASCADE_ON_UPDATE).notNull(),
-    instituteId: id.references(() => sd__institute.id).notNull(),
+    instituteId: bigId.references(() => sd__institute.id).notNull(),
     classId: smallId.references(() => sd__class.id).notNull(),
     sectionId: smallId.references(() => sd__classSection.id).notNull(),
-    studentId: id.references(() => sd__student.id).notNull(),
+    studentId: bigId.references(() => sd__student.id).notNull(),
     rollNo: c.smallint(),
     ...getTimestampColumns(),
   }),
@@ -108,7 +108,7 @@ export const sd__classStudentMarks = pgTable(
   withCommonColumns((c) => ({
     exam: smallId.references(() => sd__luExam.id, CASCADE_ON_UPDATE).notNull(),
     subject: smallId.references(() => sd__luSubject.id, CASCADE_ON_UPDATE).notNull(),
-    classStudentId: id.references(() => sd__classStudent.id).notNull(),
+    classStudentId: bigId.references(() => sd__classStudent.id).notNull(),
     mark: c.smallint(),
   })),
   (t) => {

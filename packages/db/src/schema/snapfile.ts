@@ -10,14 +10,14 @@ import {
 } from '../utils/helpers/policy'
 import { coalesce } from '../utils/helpers/sql'
 import { bucketNames, objects } from '../utils/helpers/supabase'
-import { getDefaultTimezone, id, withCommonColumns } from '../utils/pg-column-helpers'
+import { bigId, getDefaultTimezone, withCommonColumns } from '../utils/pg-column-helpers'
 
 const pgTable = pgTableCreator((tableName) => `sf__${tableName}`)
 
 export const sf__shortUrl = pgTable(
   'short_url',
   (c) => ({
-    id: id.primaryKey(),
+    id: bigId.primaryKey(),
     code: c.varchar().notNull().unique(),
     url: c.text().notNull(),
     createdAt: getDefaultTimezone(),
