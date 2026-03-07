@@ -105,13 +105,13 @@ export const importFileProcedure = adminProcedure
                 [
                   {
                     ...splitFullName(record.name),
-                    gender: ['M', 'F', 'T'].indexOf(record.gender) + 1,
+                    gender: String(['M', 'F', 'T'].indexOf(record.gender) + 1),
                     dob: record.dob.toISOString(),
                     bloodGroup: record.bloodGroup,
                   },
                   {
                     ...splitFullName(record.fName),
-                    gender: 1,
+                    gender: '1',
                   },
                 ] satisfies (typeof schema.person.$inferInsert)[],
             ),
@@ -131,7 +131,7 @@ export const importFileProcedure = adminProcedure
           .from(schema.personRelation)
           .where(
             and(
-              eq(schema.personRelation.relation, 1),
+              eq(schema.personRelation.relation, '1'),
               inArray(schema.personRelation.personId, personIds),
             ),
           )
@@ -141,18 +141,18 @@ export const importFileProcedure = adminProcedure
             {
               id: teacherPersonId,
               ...splitFullName(record.name),
-              gender: ['M', 'F', 'T'].indexOf(record.gender) + 1,
+              gender: String(['M', 'F', 'T'].indexOf(record.gender) + 1),
               dob: record.dob.toISOString(),
               bloodGroup: record.bloodGroup,
             },
             {
               ...splitFullName(record.fName),
-              gender: 1,
+              gender: '1',
             },
           ]
 
           const f = parentRelations.find(({ personId }) => personId === teacherPersonId)
-          f && (values[f.relation].id = f.relativeId) // 1
+          f && (values[+f.relation].id = f.relativeId) // 1
           return values
         })
         await tx
@@ -194,7 +194,7 @@ export const importFileProcedure = adminProcedure
           teacherPersonIds.map((_, i) => ({
             personId: allPersonIds[i * 2],
             relativeId: allPersonIds[i * 2 + 1],
-            relation: 1,
+            relation: '1',
           })),
         )
         .onConflictDoNothing()

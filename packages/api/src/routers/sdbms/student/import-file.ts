@@ -112,7 +112,7 @@ const schemaStudentArray = z.preprocess(transformRawStudent, SchemaStudent).arra
 export const importFileProcedure = adminProcedure
   .input(
     z.object({
-      sessionId: z.number(),
+      sessionId: z.string(),
       file: z.instanceof(File),
     }),
   )
@@ -180,7 +180,7 @@ async function createInstitutes(tx: DbTransaction, sdRecords: SchemaStudent[]) {
           instituteId,
           numeral: +standard,
           name: `Class ${standard}`,
-          stream: +standard > 10 ? 1 : null, // Assuming Arts
+          stream: +standard > 10 ? '1' : null, // Assuming Arts
         })),
       )
       .onConflictDoUpdate(classConflictUpdateConfig)
@@ -242,7 +242,7 @@ async function createPersons(
       const toDelete = Array.from(studentMap.values())
       await tx
         .update(schema.sd__student)
-        .set({ status: 2, updatedAt: now() })
+        .set({ status: '2', updatedAt: now() })
         .where(inArray(schema.sd__student.personId, toDelete))
 
       return [recordsToInsert, recordsToUpdate] as const
@@ -254,11 +254,11 @@ async function createPersons(
       .insert(schema.person)
       .values(
         recordsToInsert.flatMap((record) => {
-          const category = ['GEN', 'OBC', 'SC', 'ST'].indexOf(record.category) + 1
+          const category = String(['GEN', 'OBC', 'SC', 'ST'].indexOf(record.category) + 1)
           return [
             {
               ...splitFullName(record.name),
-              gender: ['M', 'F', 'T'].indexOf(record.gender) + 1,
+              gender: String(['M', 'F', 'T'].indexOf(record.gender) + 1),
               category,
               dob: record.dob.toISOString(),
               bpl: record.bpl,
@@ -267,14 +267,14 @@ async function createPersons(
             },
             {
               ...splitFullName(record.fName),
-              gender: 1,
+              gender: '1',
               category,
               bpl: record.bpl,
               contactNo: record.mobileNo,
             },
             {
               ...splitFullName(record.mName),
-              gender: 2,
+              gender: '2',
               category,
               bpl: record.bpl,
             },
@@ -296,18 +296,18 @@ async function createPersons(
       .from(schema.personRelation)
       .where(
         and(
-          inArray(schema.personRelation.relation, [1, 2]),
+          inArray(schema.personRelation.relation, ['1', '2']),
           inArray(schema.personRelation.personId, studentPersonIds),
         ),
       )
 
     const personUpdateValues = recordsToUpdate.flatMap(({ studentPersonId, record }) => {
-      const category = ['GEN', 'OBC', 'SC', 'ST'].indexOf(record.category) + 1
+      const category = String(['GEN', 'OBC', 'SC', 'ST'].indexOf(record.category) + 1)
       const values: (typeof schema.person.$inferInsert)[] = [
         {
           id: studentPersonId,
           ...splitFullName(record.name),
-          gender: ['M', 'F', 'T'].indexOf(record.gender) + 1,
+          gender: String(['M', 'F', 'T'].indexOf(record.gender) + 1),
           category,
           dob: record.dob.toISOString(),
           bpl: record.bpl,
@@ -316,14 +316,14 @@ async function createPersons(
         },
         {
           ...splitFullName(record.fName),
-          gender: 1,
+          gender: '1',
           category,
           bpl: record.bpl,
           contactNo: record.mobileNo,
         },
         {
           ...splitFullName(record.mName),
-          gender: 2,
+          gender: '2',
           category,
           bpl: record.bpl,
         },
@@ -334,8 +334,8 @@ async function createPersons(
       if (relations.length !== 2) throw new Error('Must be exactly two parents!')
       const [f, m] = relations
 
-      values[f.relation].id = f.relativeId // 1
-      values[m.relation].id = m.relativeId // 2
+      values[+f.relation].id = f.relativeId // 1
+      values[+m.relation].id = m.relativeId // 2
       return values
     })
     await tx
@@ -383,12 +383,12 @@ async function createPersons(
             {
               personId: allPersonIds[i * 3],
               relativeId: allPersonIds[i * 3 + 1],
-              relation: 1,
+              relation: '1',
             },
             {
               personId: allPersonIds[i * 3],
               relativeId: allPersonIds[i * 3 + 2],
-              relation: 2,
+              relation: '2',
             },
           ] satisfies (typeof schema.personRelation.$inferInsert)[],
       ),
@@ -400,17 +400,10 @@ async function createPersons(
 async function createStudents(
   tx: DbTransaction,
   sdRecords: SchemaStudent[],
-  sessionId: number,
+  sessionId: string,
   persons: string[],
 ) {
-  const cache = new Map<
-    string,
-    {
-      instituteId: string
-      classId: number
-      sectionId: number
-    }
-  >()
+  const cache = new Map<string, Record<'instituteId' | 'classId' | 'sectionId', string>>()
   const getData = async (instituteName: string, standard: number, sectionName: string) => {
     const key = standard + sectionName + instituteName
     const v = cache.get(key)
@@ -446,7 +439,7 @@ async function createStudents(
         admissionDate: record.doa?.toISOString(),
         admissionNo: record.srNo,
         distanceKm: record.schoolDistance && Math.round(record.schoolDistance),
-        status: 1,
+        status: '1',
       } satisfies typeof schema.sd__student.$inferInsert
     }),
   )

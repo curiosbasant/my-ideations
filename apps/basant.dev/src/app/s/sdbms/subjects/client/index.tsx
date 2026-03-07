@@ -12,18 +12,18 @@ import { actionTeacherToggleSubject } from '~/features/sdbms/actions'
 export * from './form-add-subject'
 
 type SubjectMap = {
-  classId: number
-  sectionId: number
-  subjectId: number
+  classId: string
+  sectionId: string
+  subjectId: string
   className: string
   sectionName: string
   subjectName: string
 }
 
-export function actionToggleSubject(data: { sectionId: number; subjectId: number }) {
+export function actionToggleSubject(data: { sectionId: string; subjectId: string }) {
   startTransition(async () => {
     await actionTeacherToggleSubject({
-      sessionId: 2025,
+      sessionId: '2025',
       sectionId: data.sectionId,
       subjectId: data.subjectId,
     })
@@ -52,7 +52,7 @@ const columns = [
           onClick={() => {
             startTransition(async () => {
               await actionTeacherToggleSubject({
-                sessionId: 2025,
+                sessionId: '2025',
                 sectionId: row.original.sectionId,
                 subjectId: row.original.subjectId,
               })

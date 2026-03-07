@@ -18,7 +18,7 @@ export function DocumentCreateForm() {
       onSubmit={async (value) => {
         const result = await actionCreateDocument({
           relation: value.relation as 'mine',
-          documentType: parseInt(value.documentType),
+          documentType: value.documentType,
           documentNo: value.documentNo,
           filePath: value.filePath,
           note: value.note,
@@ -55,7 +55,7 @@ export function DocumentUpdateForm(props: {
           documentType: props.document.type.id,
 
           relation: value.relation || undefined,
-          newDocumentType: parseInt(value.documentType) || undefined,
+          newDocumentType: value.documentType || undefined,
           documentNo: value.documentNo || undefined,
           filePath: value.filePath || undefined,
           note: value.note || null, // remove note, if empty string

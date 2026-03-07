@@ -125,7 +125,7 @@ export function FormFieldSelectSession(props: { defaultValue?: string | null }) 
 }
 async function OptionsSession(props: { defaultValue?: string | null }) {
   const sessions = await getSessions()
-  const lastSessionId = props.defaultValue ?? Math.max(...sessions.map((s) => s.id))
+  const lastSessionId = props.defaultValue ?? Math.max(...sessions.map((s) => +s.id))
   return (
     <Select name='session' required defaultValue={lastSessionId.toString()}>
       <SelectTrigger className='backdrop-blur-2xs w-full'>

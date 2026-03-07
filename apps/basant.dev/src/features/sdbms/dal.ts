@@ -23,7 +23,7 @@ export const getSubjects = cache(() => {
   return dalVerifySuccess(dalDbOperation(() => api.sdbms.subject.list()))
 })
 
-export const getTeacherSubjects = cache((sessionId: number) => {
+export const getTeacherSubjects = cache((sessionId: string) => {
   return dalVerifySuccess(dalDbOperation(() => api.sdbms.teacher.subject.list({ sessionId })))
 })
 
@@ -36,7 +36,7 @@ export const getInstituteClasses = cache(() => {
 })
 
 export const getClassStudentsMark = cache(
-  (sessionId: number, exam: number, standard: number, subject: number) => {
+  (sessionId: string, exam: string, standard: number, subject: string) => {
     return dalVerifySuccess(
       dalDbOperation(() =>
         api.sdbms.class.student.mark.list({ sessionId, exam, standard, subject }),

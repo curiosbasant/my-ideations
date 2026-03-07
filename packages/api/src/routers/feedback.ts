@@ -9,7 +9,7 @@ export const feedbackRouter = {
       z.object({
         title: z.string().min(3),
         content: z.string(),
-        type: z.number(),
+        type: z.string(),
         rating: z.number().min(1).max(5),
         page: z.string().nullish(),
       }),

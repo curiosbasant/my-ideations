@@ -31,7 +31,7 @@ export const userRouter = {
       return db.select().from(schema.department)
     }),
     update: protectedProcedure
-      .input(z.object({ departmentId: z.coerce.number(), designation: z.string() }))
+      .input(z.object({ departmentId: z.string(), designation: z.string() }))
       .mutation(async ({ ctx: { db, authUserId }, input }) => {
         db.transaction(async (tx) => {
           const [insertedRow] = await tx
@@ -66,7 +66,7 @@ export const userRouter = {
 
     designation: {
       list: publicProcedure
-        .input(z.object({ departmentId: z.coerce.number() }))
+        .input(z.object({ departmentId: z.string() }))
         .query(async ({ ctx: { db }, input }) => {
           return db
             .select({

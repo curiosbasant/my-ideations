@@ -111,7 +111,7 @@ export const personRouter = {
       .input(
         z.object({
           relation: z.string().default('mine'),
-          documentType: z.number(),
+          documentType: z.string(),
           documentNo: z.string(),
           filePath: z.string(),
           note: z.string().optional(),
@@ -134,9 +134,9 @@ export const personRouter = {
       .input(
         z.object({
           personId: z.string(),
-          documentType: z.number(),
+          documentType: z.string(),
           relation: z.string().optional(),
-          newDocumentType: z.number().optional(),
+          newDocumentType: z.string().optional(),
           documentNo: z.string().nullish(),
           filePath: z.string().nullish(),
           note: z.string().nullish(),
@@ -176,7 +176,7 @@ async function resolvePersonIdFromRelation(tx: DbTransaction, relation?: string)
       .where(
         and(
           eq(schema.personRelation.personId, userPersonId),
-          eq(schema.personRelation.relation, relation === 'father' ? 1 : 2),
+          eq(schema.personRelation.relation, relation === 'father' ? '1' : '2'),
         ),
       )
   : tx.execute<{ personId: string }>(selectPersonId))

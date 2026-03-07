@@ -20,7 +20,7 @@ export function FormGiveFeedback() {
         const payload = {
           title,
           content,
-          type: parseInt(type),
+          type,
           page,
           rating: parseInt(rating),
         }

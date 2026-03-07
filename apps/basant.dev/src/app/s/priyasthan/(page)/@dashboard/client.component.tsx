@@ -98,8 +98,8 @@ export function MapWorkPlaces(props: { locations: Location[] }) {
 }
 
 export function DepartmentDesignation(props: {
-  departments: Promise<{ id: number; name: string }[]>
-  defaultDepartmentId?: number
+  departments: Promise<{ id: string; name: string }[]>
+  defaultDepartmentId?: string
   defaultDesignation?: string
 }) {
   const { isPending, state, actionTransition } = useAction({
@@ -111,7 +111,7 @@ export function DepartmentDesignation(props: {
       <div className='space-y-2'>
         <Label>Department</Label>
         <SelectDepartment
-          currentDepartment={props.defaultDepartmentId || 0}
+          currentDepartment={props.defaultDepartmentId || '0'}
           departments={props.departments}
           onSelect={(departmentId) => {
             actionTransition({ departmentId })
@@ -140,7 +140,7 @@ export function DepartmentDesignation(props: {
 function SelectDesignation(props: {
   defaultValue?: string
   loading: boolean
-  designations: { id: number; name: string; count: number }[]
+  designations: { id: string; name: string; count: number }[]
 }) {
   const [value, setValue] = useState(props.defaultValue || '')
   const [open, setOpen] = useState(false)
@@ -202,9 +202,9 @@ function SelectDesignation(props: {
 }
 
 function SelectDepartment(props: {
-  currentDepartment: number
-  departments: Promise<{ id: number; name: string }[]>
-  onSelect: (value: number) => void
+  currentDepartment: string
+  departments: Promise<{ id: string; name: string }[]>
+  onSelect: (value: string) => void
 }) {
   const departments = use(props.departments)
   const [open, setOpen] = useState(false)

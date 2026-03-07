@@ -8,7 +8,7 @@ import { useAppForm } from '~/features/shared/form/hooks'
 
 const schemaAddSubject = z.record(
   z.literal(['classId', 'sectionId', 'subjectId']),
-  z.string().nonempty().transform(Number),
+  z.string().nonempty(),
 )
 const defaultValues: z.input<typeof schemaAddSubject> = {
   classId: '',
@@ -70,9 +70,7 @@ export function FormAddSubject(props: {
                   <Suspense fallback={<field.Select placeholder='Loading Sections' />}>
                     <field.Select placeholder='Select Section'>
                       <Query
-                        options={(trpc) =>
-                          trpc.sdbms.class.section.list.queryOptions(Number.parseInt(classId))
-                        }>
+                        options={(trpc) => trpc.sdbms.class.section.list.queryOptions(classId)}>
                         {(sections) =>
                           sections.map((s) => (
                             <SelectItem value={s.id.toString()} key={s.id}>

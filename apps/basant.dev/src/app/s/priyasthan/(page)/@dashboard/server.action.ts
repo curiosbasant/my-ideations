@@ -5,13 +5,13 @@ import { revalidatePath } from 'next/cache'
 import { api } from '~/lib/trpc'
 import { createAction } from '~/lib/utils/helper-action/shared'
 
-export const getDepartmentDesignations = createAction(async (payload: { departmentId: number }) => {
+export const getDepartmentDesignations = createAction(async (payload: { departmentId: string }) => {
   return api.user.department.designation.list({ departmentId: payload.departmentId })
 })
 
 export const saveDesignation = async (payload: { departmentId: string; designation: string }) => {
   await api.user.department.update({
-    departmentId: Number(payload.departmentId),
+    departmentId: payload.departmentId,
     designation: payload.designation,
   })
   revalidatePath('/')

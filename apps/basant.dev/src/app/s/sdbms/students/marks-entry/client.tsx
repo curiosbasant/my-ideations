@@ -36,8 +36,8 @@ export function MarkInput({
 
         if (exam && subject) {
           actionTransition({
-            exam: +exam,
-            subject: +subject,
+            exam,
+            subject,
             classStudentId,
             mark,
           })

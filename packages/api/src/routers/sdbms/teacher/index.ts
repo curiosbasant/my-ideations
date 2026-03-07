@@ -44,7 +44,7 @@ export const teacherRouter = {
     list: protectedProcedure
       .input(
         z.object({
-          sessionId: z.number(),
+          sessionId: z.string(),
         }),
       )
       .query(async ({ input, ctx: { rls } }) => {
@@ -85,9 +85,9 @@ export const teacherRouter = {
     toggle: protectedProcedure
       .input(
         z.object({
-          sessionId: z.number(),
-          sectionId: z.number(),
-          subjectId: z.number(),
+          sessionId: z.string(),
+          sectionId: z.string(),
+          subjectId: z.string(),
         }),
       )
       .mutation(async ({ input, ctx: { rls } }) => {

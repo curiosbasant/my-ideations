@@ -24,7 +24,7 @@ export const classRouter = {
     })
   }),
   section: {
-    list: protectedProcedure.input(z.number()).query(({ input, ctx: { rls } }) => {
+    list: protectedProcedure.input(z.string()).query(({ input, ctx: { rls } }) => {
       return rls((tx) => {
         return tx
           .select({
@@ -45,10 +45,10 @@ export const classRouter = {
       list: protectedProcedure
         .input(
           z.object({
-            sessionId: z.number(),
-            exam: z.number(),
+            sessionId: z.string(),
+            exam: z.string(),
             standard: z.number(),
-            subject: z.number(),
+            subject: z.string(),
           }),
         )
         .query(async ({ input, ctx: { rls } }) => {
@@ -104,9 +104,9 @@ export const classRouter = {
       set: protectedProcedure
         .input(
           z.object({
-            exam: z.number(),
+            exam: z.string(),
             classStudentId: z.string(),
-            subject: z.number(),
+            subject: z.string(),
             mark: z.number(),
           }),
         )
@@ -147,7 +147,7 @@ function getStudentProfileCte(tx: DbTransaction) {
       })
       .from(schema.personRelation)
       .innerJoin(schema.person, eq(schema.person.id, schema.personRelation.relativeId))
-      .where(eq(schema.personRelation.relation, 1)),
+      .where(eq(schema.personRelation.relation, '1')),
   )
   return tx.$with('with_student_profile').as((qb) =>
     qb
@@ -174,6 +174,6 @@ function getStudentProfileCte(tx: DbTransaction) {
       .innerJoin(schema.sd__student, eq(schema.sd__student.id, schema.sd__classStudent.studentId))
       .innerJoin(schema.person, eq(schema.person.id, schema.sd__student.personId))
       .leftJoin(withRelativeFather, eq(withRelativeFather.studentPersonId, schema.person.id))
-      .where(eq(schema.sd__student.status, 1)),
+      .where(eq(schema.sd__student.status, '1')),
   )
 }

@@ -1,16 +1,10 @@
 // ~~~~ This file is separated out to avoid circular imports for '~/schema/profile' ~~
-import { bigint, smallint, timestamp, type ReferenceConfig } from 'drizzle-orm/pg-core'
+import { bigint, timestamp, type ReferenceConfig } from 'drizzle-orm/pg-core'
+
+export { smallId } from './small-id'
 
 export const CASCADE_ON_UPDATE = { onUpdate: 'cascade' as const }
 export const CASCADE_ON_DELETE = { onDelete: 'cascade' as const }
-
-export const smallId = () => smallint()
-smallId.primaryKey = () => smallint().generatedByDefaultAsIdentity().primaryKey()
-smallId.references = (columnRef: ReferenceConfig['ref'], actions?: ReferenceConfig['config']) =>
-  smallint().references(
-    columnRef,
-    actions ? { ...CASCADE_ON_DELETE, ...actions } : CASCADE_ON_DELETE,
-  )
 
 export const bigId = () => bigint({ mode: 'string' })
 bigId.primaryKey = () => bigId().generatedAlwaysAsIdentity().primaryKey()
