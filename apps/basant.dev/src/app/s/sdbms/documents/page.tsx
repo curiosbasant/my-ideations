@@ -21,13 +21,13 @@ export default async function DocumentsPage() {
           No documents found. Please add a document to get started.
         </p>
       </div>
-    : <ul className='grid select-none grid-cols-[repeat(auto-fill,minmax(--spacing(96),1fr))] grid-rows-[1fr_auto_auto] gap-4'>
+    : <ul className='grid select-none grid-cols-[repeat(auto-fill,minmax(min(--spacing(80),100%),1fr))] grid-rows-[1fr_auto_auto] gap-4'>
         {documents.map((doc) => (
           <DialogProvider key={`${doc.personId}${doc.type.id}`}>
             <DialogTrigger asChild>
               <li className='bg-background dark:hover:bg-secondary/25 hover:outline-primary/75 row-span-3 grid grid-rows-subgrid gap-0 rounded-md border outline-2 outline-transparent transition'>
                 <div className='rounded-xs bg-secondary/50 m-2 aspect-video overflow-clip'>
-                  <img src={doc.signedUrl!} className='mx-auto h-full object-contain' />
+                  <FilePreview mimetype={doc.file.mimetype} url={doc.signedUrl!} />
                 </div>
                 <div className='space-y-2 p-2'>
                   <p className='font-bold tabular-nums'>{doc.number}</p>
@@ -74,4 +74,16 @@ export default async function DocumentsPage() {
           </DialogProvider>
         ))}
       </ul>
+}
+
+function FilePreview(props: { url: string; mimetype: string }) {
+  if (props.mimetype === 'application/pdf')
+    return (
+      <iframe
+        className='pointer-events-none h-full w-[calc(100%+15px)]'
+        src={props.url + '#toolbar=0&navpanes=0&scrollbar=0'}
+        loading='lazy'
+      />
+    )
+  return <img className='mx-auto h-full object-contain' src={props.url} />
 }

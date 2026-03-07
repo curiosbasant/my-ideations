@@ -3,10 +3,11 @@ import { TRPCError } from '@trpc/server'
 import { schema, type DbTransaction } from '@my/db'
 import { selectPersonId, userPersonId, userProfileId } from '@my/db/db-functions'
 import { profileDisplayName } from '@my/db/helpers'
-import { and, coalesce, desc, eq, now, or } from '@my/db/sql'
+import { and, coalesce, desc, eq, extractJson, now, or } from '@my/db/sql'
 import { sanitizeFilenameForStorage } from '@my/lib/utils'
 import { z } from '@my/lib/zod'
 
+import { objects } from '../../../db/src/utils/helpers/supabase'
 import { protectedProcedure, publicProcedure } from '../trpc'
 
 export const personRouter = {
@@ -24,8 +25,12 @@ export const personRouter = {
             personId: schema.personDocument.personId,
             type: schema.personDocumentType,
             number: schema.personDocument.number,
-            path: schema.personDocument.path,
             note: schema.personDocument.note,
+            file: {
+              path: schema.personDocument.path,
+              mimetype: extractJson(objects.metadata, 'mimetype').as<string>('mimetype'),
+              size: extractJson(objects.metadata, 'size').mapWith(Number),
+            },
             relation: schema.personRelationType.name,
             createdBy: {
               displayName: profileDisplayName().as('creator_display_name'),
@@ -50,6 +55,7 @@ export const personRouter = {
             eq(schema.personRelation.relation, schema.personRelationType.id),
           )
           .leftJoin(schema.profile, eq(schema.profile.id, schema.personDocument.createdBy))
+          .leftJoin(objects, eq(objects.name, schema.personDocument.path))
           .where(
             or(
               eq(schema.personDocument.personId, userPersonId),
@@ -62,7 +68,7 @@ export const personRouter = {
 
       const bkt = supabase.storage.from('__documents')
       const { data, error } = await bkt.createSignedUrls(
-        documents.map((d) => d.path || ''),
+        documents.map((d) => d.file.path || ''),
         600,
       )
       if (error) {

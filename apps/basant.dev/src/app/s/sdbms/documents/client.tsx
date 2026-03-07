@@ -47,7 +47,7 @@ export function DocumentUpdateForm(props: {
         documentNo: props.document.number ?? '',
         url: props.document.signedUrl ?? '',
         note: props.document.note ?? '',
-        filePath: props.document.path ?? '',
+        filePath: props.document.file.path ?? '',
       }}
       onSubmit={async (value) => {
         const result = await actionUpdateDocument({
