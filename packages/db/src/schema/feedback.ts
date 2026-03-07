@@ -1,11 +1,11 @@
 import { index } from 'drizzle-orm/pg-core'
 
+import { CASCADE_ON_UPDATE, smallId, withCommonColumns } from '../utils/helpers/column'
 import {
   policyAllowAuthenticatedSelect,
   policyAllowProfileInsertOwn,
 } from '../utils/helpers/policy'
 import { pgTable } from '../utils/helpers/table'
-import { CASCADE_ON_UPDATE, smallId, withCommonColumns } from '../utils/pg-column-helpers'
 
 export const feedback = pgTable(
   'feedback',

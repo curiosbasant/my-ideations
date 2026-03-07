@@ -1,8 +1,8 @@
 import { pgTableCreator } from 'drizzle-orm/pg-core'
 import { sql } from 'drizzle-orm/sql'
 
+import { bigId, withCommonColumns } from '../utils/helpers/column'
 import { userProfileId } from '../utils/helpers/db-functions'
-import { bigId, withCommonColumns } from '../utils/pg-column-helpers'
 
 const pgTable = pgTableCreator((tableName) => `gdb__${tableName}`)
 

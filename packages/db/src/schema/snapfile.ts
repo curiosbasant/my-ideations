@@ -1,6 +1,7 @@
 import { index, pgPolicy, pgTableCreator } from 'drizzle-orm/pg-core'
 import { eq, ne, not, or, sql } from 'drizzle-orm/sql'
 
+import { bigId, getDefaultTimezone, withCommonColumns } from '../utils/helpers/column'
 import { selectAuthRole } from '../utils/helpers/db-functions'
 import {
   policyAllowAnyoneInsert,
@@ -10,7 +11,6 @@ import {
 } from '../utils/helpers/policy'
 import { coalesce } from '../utils/helpers/sql'
 import { bucketNames, objects } from '../utils/helpers/supabase'
-import { bigId, getDefaultTimezone, withCommonColumns } from '../utils/pg-column-helpers'
 
 const pgTable = pgTableCreator((tableName) => `sf__${tableName}`)
 

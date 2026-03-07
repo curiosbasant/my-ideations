@@ -2,6 +2,8 @@ import { index, pgPolicy, uniqueIndex } from 'drizzle-orm/pg-core'
 import { eq } from 'drizzle-orm/sql'
 import { authenticatedRole, authUsers } from 'drizzle-orm/supabase'
 
+import { bigId } from '../utils/helpers/column/helpers'
+import { smallId } from '../utils/helpers/column/small-id'
 import { authUserId, selectUserId } from '../utils/helpers/db-functions'
 import {
   policyAllowAnyoneSelect,
@@ -9,7 +11,6 @@ import {
   policyAllowAuthenticatedSelect,
 } from '../utils/helpers/policy'
 import { pgTable } from '../utils/helpers/table'
-import { bigId, smallId } from '../utils/pg-column-helpers/helpers'
 import { person } from './person'
 
 export const department = pgTable(

@@ -2,6 +2,8 @@ import { entityKind } from 'drizzle-orm/entity'
 import { PgColumn, type PgTable, type ReferenceConfig } from 'drizzle-orm/pg-core'
 import { PgIntColumnBuilder } from 'drizzle-orm/pg-core/columns/int.common'
 
+import { CASCADE_ON_DELETE } from './helpers'
+
 export function smallId(name?: string) {
   return new PgSmallIdBuilder(name ?? '')
 }
@@ -9,7 +11,7 @@ smallId.primaryKey = () => smallId().generatedByDefaultAsIdentity().primaryKey()
 smallId.references = (columnRef: ReferenceConfig['ref'], actions?: ReferenceConfig['config']) =>
   smallId().references(
     columnRef,
-    actions ? { onDelete: 'cascade', ...actions } : { onDelete: 'cascade' },
+    actions ? { ...CASCADE_ON_DELETE, ...actions } : CASCADE_ON_DELETE,
   )
 
 class PgSmallIdBuilder extends PgIntColumnBuilder<{

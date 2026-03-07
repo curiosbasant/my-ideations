@@ -2,6 +2,8 @@ import { check, index, pgPolicy, primaryKey } from 'drizzle-orm/pg-core'
 import { eq, sql } from 'drizzle-orm/sql'
 import { authenticatedRole } from 'drizzle-orm/supabase'
 
+import { bigId, CASCADE_ON_UPDATE, getTimestampColumns } from '../utils/helpers/column/helpers'
+import { smallId } from '../utils/helpers/column/small-id'
 import { selectPersonId } from '../utils/helpers/db-functions'
 import {
   policyAllowAnyoneSelect,
@@ -13,12 +15,6 @@ import {
 } from '../utils/helpers/policy'
 import { length } from '../utils/helpers/sql'
 import { pgTable } from '../utils/helpers/table'
-import {
-  bigId,
-  CASCADE_ON_UPDATE,
-  getTimestampColumns,
-  smallId,
-} from '../utils/pg-column-helpers/helpers'
 import { address } from './address'
 
 export const person = pgTable(

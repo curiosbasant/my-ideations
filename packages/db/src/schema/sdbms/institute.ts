@@ -1,7 +1,7 @@
 import { index } from 'drizzle-orm/pg-core'
 
+import { bigId, withCommonColumns } from '../../utils/helpers/column'
 import { policyAllowAnyoneSelect } from '../../utils/helpers/policy'
-import { bigId, withCommonColumns } from '../../utils/pg-column-helpers'
 import { address } from '../address'
 import { pgTable } from './_helpers'
 

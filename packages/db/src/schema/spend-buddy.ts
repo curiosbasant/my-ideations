@@ -5,7 +5,7 @@ import {
   getDefaultTimezone,
   getProfileRef,
   withCommonColumns,
-} from '../utils/pg-column-helpers'
+} from '../utils/helpers/column'
 
 const pgTable = pgTableCreator((tableName) => `sb__${tableName}`)
 

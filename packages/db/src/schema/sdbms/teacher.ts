@@ -2,12 +2,12 @@ import { index, pgPolicy, uniqueIndex, type PgColumn } from 'drizzle-orm/pg-core
 import { and, eq, exists } from 'drizzle-orm/sql'
 import { authenticatedRole } from 'drizzle-orm/supabase'
 
+import { bigId, withCommonColumns } from '../../utils/helpers/column'
 import { selectPersonId } from '../../utils/helpers/db-functions'
 import {
   policyAllowAuthenticatedInsert,
   policyAllowAuthenticatedSelect,
 } from '../../utils/helpers/policy'
-import { bigId, withCommonColumns } from '../../utils/pg-column-helpers'
 import { qb } from '../../utils/qb'
 import { person } from '../person'
 import { pgTable } from './_helpers'

@@ -1,14 +1,14 @@
 import { index, primaryKey } from 'drizzle-orm/pg-core'
 import { sql, type SQL } from 'drizzle-orm/sql'
 
-import { policyAllowAnyoneSelect } from '../utils/helpers/policy'
-import { pgTable } from '../utils/helpers/table'
 import {
   bigId,
   getDefaultTimezone,
   getProfileRef,
   getTimestampColumns,
-} from '../utils/pg-column-helpers'
+} from '../utils/helpers/column'
+import { policyAllowAnyoneSelect } from '../utils/helpers/policy'
+import { pgTable } from '../utils/helpers/table'
 
 export const address = pgTable(
   'address',

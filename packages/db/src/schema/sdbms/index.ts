@@ -2,14 +2,14 @@ import { index, pgPolicy, primaryKey, uniqueIndex } from 'drizzle-orm/pg-core'
 import { eq, exists } from 'drizzle-orm/sql'
 import { authenticatedRole } from 'drizzle-orm/supabase'
 
-import { policyAllowAnyoneSelect, policyAllowAuthenticatedSelect } from '../../utils/helpers/policy'
 import {
   bigId,
   CASCADE_ON_UPDATE,
   getTimestampColumns,
   smallId,
   withCommonColumns,
-} from '../../utils/pg-column-helpers'
+} from '../../utils/helpers/column'
+import { policyAllowAnyoneSelect, policyAllowAuthenticatedSelect } from '../../utils/helpers/policy'
 import { qb } from '../../utils/qb'
 import { person } from '../person'
 import { pgTable } from './_helpers'

@@ -2,6 +2,13 @@ import { pgPolicy, primaryKey } from 'drizzle-orm/pg-core'
 import { and, eq, inArray, sql } from 'drizzle-orm/sql'
 import { authenticatedRole } from 'drizzle-orm/supabase'
 
+import {
+  bigId,
+  CASCADE_ON_UPDATE,
+  getProfileRef,
+  getTimestampColumns,
+  smallId,
+} from '../utils/helpers/column'
 import { userPersonId } from '../utils/helpers/db-functions'
 import {
   policyAllowAnyoneSelect,
@@ -13,13 +20,6 @@ import {
 } from '../utils/helpers/policy'
 import { bucketNames, objects } from '../utils/helpers/supabase'
 import { pgTable } from '../utils/helpers/table'
-import {
-  bigId,
-  CASCADE_ON_UPDATE,
-  getProfileRef,
-  getTimestampColumns,
-  smallId,
-} from '../utils/pg-column-helpers'
 import { qb } from '../utils/qb'
 import { person, personRelation } from './person'
 

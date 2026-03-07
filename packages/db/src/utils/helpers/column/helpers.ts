@@ -1,7 +1,5 @@
-// ~~~~ This file is separated out to avoid circular imports for '~/schema/profile' ~~
+// ~~ This file is separated out to avoid circular imports for '~/schema/profile' ~~
 import { bigint, timestamp, type ReferenceConfig } from 'drizzle-orm/pg-core'
-
-export { smallId } from './small-id'
 
 export const CASCADE_ON_UPDATE = { onUpdate: 'cascade' as const }
 export const CASCADE_ON_DELETE = { onDelete: 'cascade' as const }
