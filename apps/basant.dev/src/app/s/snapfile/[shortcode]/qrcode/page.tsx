@@ -11,25 +11,25 @@ import { Spinner } from '~/components/elements/spinner'
 import { Skeleton } from '~/components/ui/skeleton'
 import { toast } from '~/components/ui/sonner'
 
-export default function SnapFileQrCodePage(props: PageProps<'/s/snapfile/[shortcode]/qrcode'>) {
-  const { shortcode } = use(props.params)
-
+export default function SnapFileQrCodePage() {
   return (
     <>
-      <QrPreview shortcode={shortcode} />
+      <QrPreview />
       <small className='text-sm'>or copy and share this url.</small>
-      <CopyShortLink shortcode={shortcode} />
+      <CopyShortLink />
     </>
   )
 }
 
-function QrPreview(props: { shortcode: string }) {
+function QrPreview() {
   const spinner = <Spinner />
   return (
     <div className='inline-flex size-80 items-center justify-center'>
       <Suspense fallback={spinner}>
         <ClientOnly fallback={spinner}>
-          {() => <QrImage qrPromise={QRCode.toDataURL(`${location.origin}/${props.shortcode}`)} />}
+          {() => (
+            <QrImage qrPromise={QRCode.toDataURL(`${location.origin}/${extractShortcode()}`)} />
+          )}
         </ClientOnly>
       </Suspense>
     </div>
@@ -49,20 +49,25 @@ function QrImage(props: { qrPromise: Promise<string> }) {
   )
 }
 
-function CopyShortLink(props: { shortcode: string }) {
+function CopyShortLink() {
   return (
     <div className='flex divide-x rounded-md border bg-background'>
       <div className='px-4 pt-1 pb-2 leading-none tabular-nums'>
         <ClientOnly fallback={<Skeleton className='-mb-1 inline-block h-5 w-40 rounded-xs' />}>
+          {() => (
+            <>
+              {location.origin}/
+              <span className='text-xl font-bold text-slate-700'>{extractShortcode()}</span>
+            </>
+          )}
         </ClientOnly>
-        /<span className='text-xl font-bold text-slate-700'>{props.shortcode}</span>
       </div>
       <button
         className='inline-flex aspect-square h-full transition hover:bg-secondary/50 hover:opacity-80'
         onClick={async () => {
           if (!navigator.clipboard)
             return toast.info('That action is only supported in secure environment')
-          await navigator.clipboard.writeText(`${location.origin}/${props.shortcode}`)
+          await navigator.clipboard.writeText(`${location.origin}/${extractShortcode()}`)
           toast.success('Copied to clipboard')
         }}
         title='Copy URL'
@@ -71,4 +76,12 @@ function CopyShortLink(props: { shortcode: string }) {
       </button>
     </div>
   )
+}
+
+/**
+ * Couldn't get from params, because of this issue
+ * @link https://github.com/vercel/next.js/issues/86870
+ */
+function extractShortcode() {
+  return location.pathname.match(/^\/([^/]+)/)?.[1]
 }
