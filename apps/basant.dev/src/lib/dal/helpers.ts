@@ -90,7 +90,7 @@ export async function dalUnauthorizedRedirect<T, E extends DalError>(
 
 export async function dalThrowError<T, E extends DalError>(dalResult: Promise<DalResult<T, E>>) {
   const result = await dalResult
-  if (result.success) return result
+  if (result.success) return result.data
   throw 'error' in result.error ? result.error.error : result.error
 }
 
@@ -98,10 +98,9 @@ export async function dalVerifySuccess<T, E extends DalError>(
   dalResult: Promise<DalResult<T, E>>,
   { unauthorizedRedirectPath }: { unauthorizedRedirectPath?: string } = {},
 ): Promise<T> {
-  const result = await dalThrowError(
+  return dalThrowError(
     dalUnauthorizedRedirect(dalLoginRedirect(dalResult), unauthorizedRedirectPath),
   )
-  return result.data
 }
 
 export async function dalNullifyError<T, E extends DalError>(dalResult: Promise<DalResult<T, E>>) {

@@ -5,7 +5,8 @@ import { desc, eq, ilike } from '@my/db/sql'
 import { sanitizeFilenameForStorage } from '@my/lib/utils'
 import { z } from '@my/lib/zod'
 
-import { protectedProcedure, publicProcedure } from '../trpc'
+import { protectedProcedure, publicProcedure } from '../../trpc'
+import { roomRouter } from './room'
 
 export const snapfileRouter = {
   create: publicProcedure
@@ -85,4 +86,5 @@ export const snapfileRouter = {
         return { filePath }
       }),
   },
+  room: roomRouter,
 }

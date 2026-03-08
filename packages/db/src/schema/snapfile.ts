@@ -1,11 +1,18 @@
 import { index, pgPolicy, pgTableCreator } from 'drizzle-orm/pg-core'
 import { eq, ne, not, or, sql } from 'drizzle-orm/sql'
 
-import { bigId, getDefaultTimezone, withCommonColumns } from '../utils/helpers/column'
+import {
+  bigId,
+  getDefaultTimezone,
+  getProfileRef,
+  getTimestampColumns,
+  withCommonColumns,
+} from '../utils/helpers/column'
 import { selectAuthRole } from '../utils/helpers/db-functions'
 import {
   policyAllowAnyoneInsert,
   policyAllowAnyoneSelect,
+  policyAllowAuthenticatedInsert,
   policyAllowProfileInsertOwn,
   policyAllowProfileUpdateOwn,
 } from '../utils/helpers/policy'
@@ -13,6 +20,27 @@ import { coalesce } from '../utils/helpers/sql'
 import { bucketNames, objects } from '../utils/helpers/supabase'
 
 const pgTable = pgTableCreator((tableName) => `sf__${tableName}`)
+
+export const sf__room = pgTable(
+  'room',
+  withCommonColumns((c) => ({
+    name: c.varchar().notNull(),
+    slug: c.varchar().notNull().unique(),
+  })),
+  () => [policyAllowAnyoneSelect, policyAllowAuthenticatedInsert],
+)
+
+export const sf__roomFile = pgTable(
+  'room_file',
+  (c) => ({
+    id: bigId.primaryKey(),
+    roomId: bigId.references(() => sf__room.id).notNull(),
+    path: c.text().notNull(),
+    createdBy: getProfileRef(),
+    ...getTimestampColumns(),
+  }),
+  () => [policyAllowAnyoneSelect, policyAllowAnyoneInsert],
+)
 
 export const sf__shortUrl = pgTable(
   'short_url',

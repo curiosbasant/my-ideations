@@ -10,6 +10,7 @@ import {
   DialogTrigger,
 } from '~/components/ui/dialog'
 import { getDocuments } from '~/features/document/dal'
+import { FilePreview } from '~/features/shared/components/file-preview'
 import { DocumentUpdateForm } from './client'
 
 export default async function DocumentsPage() {
@@ -74,16 +75,4 @@ export default async function DocumentsPage() {
           </DialogProvider>
         ))}
       </ul>
-}
-
-function FilePreview(props: { url: string; mimetype: string }) {
-  if (props.mimetype === 'application/pdf')
-    return (
-      <iframe
-        className='pointer-events-none h-full w-[calc(100%+15px)]'
-        src={props.url + '#toolbar=0&navpanes=0&scrollbar=0'}
-        loading='lazy'
-      />
-    )
-  return <img className='mx-auto h-full object-contain' src={props.url} />
 }
