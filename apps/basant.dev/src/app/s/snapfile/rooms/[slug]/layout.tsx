@@ -20,8 +20,11 @@ export default async function RoomPage(props: LayoutProps<'/s/snapfile/rooms/[sl
 
   return (
     <div className='space-y-8'>
-      <div className='flex items-center justify-between'>
-        <h1 className='text-2xl font-bold'>{room.name}</h1>
+      <div className='flex items-center gap-4'>
+        <h1 className='me-auto text-2xl font-bold'>{room.name}</h1>
+        <Button variant='secondary' asChild>
+          <Link href={`/rooms/${slug}/qr`}>Open QR</Link>
+        </Button>
         <Button asChild>
           <Link href={`/rooms/${slug}/new`}>Share File</Link>
         </Button>
