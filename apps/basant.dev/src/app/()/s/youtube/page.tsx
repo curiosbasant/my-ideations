@@ -31,7 +31,7 @@ export default function YoutubePage() {
                 <span className='text-sm text-gray-400'>1.24 lakh subscribers</span>
               </div>
               <div className=''>
-                <button className='rounded bg-red-600 px-4 py-2 uppercase text-white'>
+                <button className='rounded bg-red-600 px-4 py-2 text-white uppercase'>
                   Subscribe
                 </button>
               </div>
@@ -44,7 +44,7 @@ export default function YoutubePage() {
                 <div className='h-24 bg-gray-900'></div>
                 <div className='h-24 bg-gray-900'></div>
               </div>
-              <button className='text-xs uppercase text-gray-400'>Show More</button>
+              <button className='text-xs text-gray-400 uppercase'>Show More</button>
             </div>
           </section>
           <section id='video-comments' className='h-96 py-4'></section>

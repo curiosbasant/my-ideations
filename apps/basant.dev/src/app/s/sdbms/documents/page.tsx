@@ -17,35 +17,35 @@ export default async function DocumentsPage() {
 
   return documents.length === 0 ?
       <div className='rounded-lg border-2 border-dashed p-6'>
-        <p className='text-muted-foreground text-balance text-center'>
+        <p className='text-center text-balance text-muted-foreground'>
           No documents found. Please add a document to get started.
         </p>
       </div>
-    : <ul className='grid select-none grid-cols-[repeat(auto-fill,minmax(min(--spacing(80),100%),1fr))] grid-rows-[1fr_auto_auto] gap-4'>
+    : <ul className='grid grid-cols-[repeat(auto-fill,minmax(min(--spacing(80),100%),1fr))] grid-rows-[1fr_auto_auto] gap-4 select-none'>
         {documents.map((doc) => (
           <DialogProvider key={`${doc.personId}${doc.type.id}`}>
             <DialogTrigger asChild>
-              <li className='bg-background dark:hover:bg-secondary/25 hover:outline-primary/75 row-span-3 grid grid-rows-subgrid gap-0 rounded-md border outline-2 outline-transparent transition'>
-                <div className='rounded-xs bg-secondary/50 m-2 aspect-video overflow-clip'>
+              <li className='row-span-3 grid grid-rows-subgrid gap-0 rounded-md border bg-background outline-2 outline-transparent transition hover:outline-primary/75 dark:hover:bg-secondary/25'>
+                <div className='m-2 aspect-video overflow-clip rounded-xs bg-secondary/50'>
                   <FilePreview mimetype={doc.file.mimetype} url={doc.signedUrl!} />
                 </div>
                 <div className='space-y-2 p-2'>
                   <p className='font-bold tabular-nums'>{doc.number}</p>
                   <div className='flex items-center'>
-                    <span className='text-muted-foreground text-sm font-bold'>{doc.type.name}</span>
+                    <span className='text-sm font-bold text-muted-foreground'>{doc.type.name}</span>
                     {doc.relation && (
-                      <span className='text-muted-foreground text-sm font-bold'>
+                      <span className='text-sm font-bold text-muted-foreground'>
                         &ensp;•&ensp;{doc.relation}
                       </span>
                     )}
                   </div>
                   {doc.note && (
-                    <div className='bg-secondary/50 rounded-sm border border-dashed p-1 px-2'>
-                      <p className='text-secondary-foreground text-sm'>{doc.note}</p>
+                    <div className='rounded-sm border border-dashed bg-secondary/50 p-1 px-2'>
+                      <p className='text-sm text-secondary-foreground'>{doc.note}</p>
                     </div>
                   )}
                 </div>
-                <div className='text-muted-foreground flex items-center justify-end gap-2 border-t p-2'>
+                <div className='flex items-center justify-end gap-2 border-t p-2 text-muted-foreground'>
                   {doc.createdBy && (
                     <>
                       <Avatar size='sm'>

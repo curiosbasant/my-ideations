@@ -51,15 +51,14 @@ function QrImage(props: { qrPromise: Promise<string> }) {
 
 function CopyShortLink(props: { shortcode: string }) {
   return (
-    <div className='bg-background flex divide-x rounded-md border'>
-      <div className='px-4 pb-2 pt-1 tabular-nums leading-none'>
-        <ClientOnly fallback={<Skeleton className='rounded-xs -mb-1 inline-block h-5 w-40' />}>
-          {() => location.origin}
+    <div className='flex divide-x rounded-md border bg-background'>
+      <div className='px-4 pt-1 pb-2 leading-none tabular-nums'>
+        <ClientOnly fallback={<Skeleton className='-mb-1 inline-block h-5 w-40 rounded-xs' />}>
         </ClientOnly>
         /<span className='text-xl font-bold text-slate-700'>{props.shortcode}</span>
       </div>
       <button
-        className='hover:bg-secondary/50 inline-flex aspect-square h-full transition hover:opacity-80'
+        className='inline-flex aspect-square h-full transition hover:bg-secondary/50 hover:opacity-80'
         onClick={async () => {
           if (!navigator.clipboard)
             return toast.info('That action is only supported in secure environment')

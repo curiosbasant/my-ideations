@@ -35,9 +35,9 @@ export default async function SdbmsHomePage(props: PageProps<'/s/sdbms'>) {
     <div className='h-full'>
       {role === 'teacher' ?
         <div className='@container mx-auto max-w-sm space-y-8'>
-          <FormConnectTeacher className='@xl:grid-cols-2 grid gap-4'>
+          <FormConnectTeacher className='grid gap-4 @xl:grid-cols-2'>
             <FormField label='Employee Id'>
-              <Input className='backdrop-blur-2xs w-full' name='employeeId' required />
+              <Input className='w-full backdrop-blur-2xs' name='employeeId' required />
             </FormField>
             <FormField label='Date of Birth'>
               <Input className='backdrop-blur-2xs' name='dob' required type='date' />
@@ -49,7 +49,7 @@ export default async function SdbmsHomePage(props: PageProps<'/s/sdbms'>) {
         </div>
       : role === 'student' ?
         <div className='@container mx-auto max-w-sm space-y-8'>
-          <FormConnectStudent className='@xl:grid-cols-3 grid gap-4'>
+          <FormConnectStudent className='grid gap-4 @xl:grid-cols-3'>
             <FormField label='SR Number'>
               <Input className='backdrop-blur-2xs' name='srNo' required />
             </FormField>

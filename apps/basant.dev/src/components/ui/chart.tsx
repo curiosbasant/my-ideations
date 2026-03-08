@@ -62,7 +62,7 @@ export function ChartContainer({
         data-slot='chart'
         data-chart={chartId}
         className={cn(
-          "[&_.recharts-cartesian-axis-tick_text]:fill-muted-foreground [&_.recharts-cartesian-grid_line[stroke='#ccc']]:stroke-border/50 [&_.recharts-curve.recharts-tooltip-cursor]:stroke-border [&_.recharts-layer]:outline-hidden [&_.recharts-polar-grid_[stroke='#ccc']]:stroke-border [&_.recharts-radial-bar-background-sector]:fill-muted [&_.recharts-rectangle.recharts-tooltip-cursor]:fill-muted [&_.recharts-reference-line_[stroke='#ccc']]:stroke-border [&_.recharts-sector]:outline-hidden [&_.recharts-surface]:outline-hidden flex aspect-video justify-center text-xs [&_.recharts-dot[stroke='#fff']]:stroke-transparent [&_.recharts-sector[stroke='#fff']]:stroke-transparent",
+          "flex aspect-video justify-center text-xs [&_.recharts-cartesian-axis-tick_text]:fill-muted-foreground [&_.recharts-cartesian-grid_line[stroke='#ccc']]:stroke-border/50 [&_.recharts-curve.recharts-tooltip-cursor]:stroke-border [&_.recharts-dot[stroke='#fff']]:stroke-transparent [&_.recharts-layer]:outline-hidden [&_.recharts-polar-grid_[stroke='#ccc']]:stroke-border [&_.recharts-radial-bar-background-sector]:fill-muted [&_.recharts-rectangle.recharts-tooltip-cursor]:fill-muted [&_.recharts-reference-line_[stroke='#ccc']]:stroke-border [&_.recharts-sector]:outline-hidden [&_.recharts-sector[stroke='#fff']]:stroke-transparent [&_.recharts-surface]:outline-hidden",
           className,
         )}
         {...props}>
@@ -163,7 +163,7 @@ export function ChartTooltipContent({
   return (
     <div
       className={cn(
-        'border-border/50 bg-background grid min-w-32 items-start gap-1.5 rounded-lg border px-2.5 py-1.5 text-xs shadow-xl',
+        'grid min-w-32 items-start gap-1.5 rounded-lg border border-border/50 bg-background px-2.5 py-1.5 text-xs shadow-xl',
         className,
       )}>
       {!nestLabel ? tooltipLabel : null}
@@ -177,7 +177,7 @@ export function ChartTooltipContent({
             <div
               key={item.dataKey}
               className={cn(
-                '[&>svg]:text-muted-foreground flex w-full flex-wrap items-stretch gap-2 [&>svg]:size-2.5',
+                'flex w-full flex-wrap items-stretch gap-2 [&>svg]:size-2.5 [&>svg]:text-muted-foreground',
                 indicator === 'dot' && 'items-center',
               )}>
               {formatter && item?.value !== undefined && item.name ?
@@ -188,7 +188,7 @@ export function ChartTooltipContent({
                   : !hideIndicator && (
                       <div
                         className={cn(
-                          'rounded-xs border-(--color-border) bg-(--color-bg) shrink-0',
+                          'shrink-0 rounded-xs border-(--color-border) bg-(--color-bg)',
                           {
                             'size-2.5': indicator === 'dot',
                             'w-1': indicator === 'line',
@@ -218,7 +218,7 @@ export function ChartTooltipContent({
                       </span>
                     </div>
                     {item.value && (
-                      <span className='text-foreground font-mono font-medium tabular-nums'>
+                      <span className='font-mono font-medium text-foreground tabular-nums'>
                         {item.value.toLocaleString()}
                       </span>
                     )}
@@ -267,12 +267,12 @@ export function ChartLegendContent({
           <div
             key={item.value}
             className={cn(
-              '[&>svg]:text-muted-foreground flex shrink-0 items-center gap-1.5 [&>svg]:size-3',
+              'flex shrink-0 items-center gap-1.5 [&>svg]:size-3 [&>svg]:text-muted-foreground',
             )}>
             {itemConfig?.icon && !hideIcon ?
               <itemConfig.icon />
             : <div
-                className='rounded-xs size-3 shrink-0'
+                className='size-3 shrink-0 rounded-xs'
                 style={{
                   backgroundColor: item.color,
                 }}

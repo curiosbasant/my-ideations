@@ -11,7 +11,7 @@ export default function GiveFeedbackPage() {
     <div className='space-y-8 py-8'>
       <header className='space-y-2'>
         <h1 className='me-auto text-2xl font-bold'>We value your feedback</h1>
-        <p className='text-muted-foreground text-sm'>
+        <p className='text-sm text-muted-foreground'>
           Let us know how we're doing, so we can improve your experience.
         </p>
       </header>

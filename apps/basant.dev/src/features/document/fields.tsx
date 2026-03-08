@@ -17,7 +17,7 @@ export function SelectDocumentType() {
     <Suspense
       fallback={
         <Select name='documentType' required disabled>
-          <SelectTrigger className='backdrop-blur-2xs w-full' id='document-type'>
+          <SelectTrigger className='w-full backdrop-blur-2xs' id='document-type'>
             <SelectValue placeholder='Loading document types...' />
           </SelectTrigger>
         </Select>
@@ -25,7 +25,7 @@ export function SelectDocumentType() {
       <Query options={(api) => api.person.document.type.list.queryOptions()}>
         {(documentTypes) => (
           <Select name='documentType' required>
-            <SelectTrigger className='backdrop-blur-2xs w-full' id='document-type'>
+            <SelectTrigger className='w-full backdrop-blur-2xs' id='document-type'>
               <SelectValue />
             </SelectTrigger>
             <SelectContent>

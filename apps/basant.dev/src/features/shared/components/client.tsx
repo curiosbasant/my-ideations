@@ -41,9 +41,9 @@ export function BannerDeviceOnline() {
   const isOnline = useIsDeviceOnline()
   return (
     isOnline || (
-      <div className='bg-destructive flex items-center justify-center gap-2 py-1 transition'>
+      <div className='flex items-center justify-center gap-2 bg-destructive py-1 transition'>
         <WifiOffIcon />
-        <p className='text-center text-sm font-bold leading-none text-white'>You're Offline</p>
+        <p className='text-center text-sm leading-none font-bold text-white'>You're Offline</p>
       </div>
     )
   )

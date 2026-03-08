@@ -27,7 +27,7 @@ export default function SnapFileHomePage() {
 
   return (
     <DropArea
-      className='bg-background flex h-full flex-col items-center justify-center gap-4 rounded-2xl border-4 border-dotted'
+      className='flex h-full flex-col items-center justify-center gap-4 rounded-2xl border-4 border-dotted bg-background'
       activeClassName='border-primary bg-primary/10'
       enablePromptFile
       onFilesDrop={handleUploadFiles}>

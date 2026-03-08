@@ -24,7 +24,7 @@ export default async function FormSlot(props: PageProps<'/s/parinaam'>) {
     <Form action='/' className='grid gap-4 sm:grid-cols-3'>
       <FormField label='Session'>
         <Select name='year' defaultValue={year} key={year}>
-          <SelectTrigger className='backdrop-blur-2xs w-full'>
+          <SelectTrigger className='w-full backdrop-blur-2xs'>
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -35,7 +35,7 @@ export default async function FormSlot(props: PageProps<'/s/parinaam'>) {
       </FormField>
       <FormField label='Standard'>
         <Select name='standard' defaultValue={standard ?? undefined} key={standard}>
-          <SelectTrigger className='backdrop-blur-2xs w-full'>
+          <SelectTrigger className='w-full backdrop-blur-2xs'>
             <SelectValue />
           </SelectTrigger>
           <SelectContent>

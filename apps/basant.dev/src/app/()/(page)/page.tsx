@@ -25,11 +25,11 @@ export default function PortfolioPage() {
       className='size-full'
       viewportClassName='scroll-smooth [--header-size:--spacing(15)] relative snap-y scroll-pt-(--header-size)'>
       <div className='isolate flex min-h-full w-full flex-col divide-y [--page-padding:--spacing(4)] [--page-size:var(--container-7xl)] sm:[--page-padding:--spacing(6)] md:[--page-padding:--spacing(8)]'>
-        <header className='bg-background/80 group sticky top-0 z-10 backdrop-blur-sm'>
+        <header className='group sticky top-0 z-10 bg-background/80 backdrop-blur-sm'>
           <div className='px-(--page-padding)'>
-            <div className='max-w-(--page-size) h-(--header-size) mx-auto flex items-center justify-between gap-4'>
+            <div className='mx-auto flex h-(--header-size) max-w-(--page-size) items-center justify-between gap-4'>
               <Link href='/' className='inline-flex items-center gap-3'>
-                <CodeXmlIcon className='text-primary stroke-3 size-7' />
+                <CodeXmlIcon className='size-7 stroke-3 text-primary' />
                 <span className='text-xl font-extrabold md:text-2xl'>basant.dev</span>
               </Link>
               <nav className='flex items-center max-sm:hidden'>
@@ -54,8 +54,8 @@ export default function PortfolioPage() {
             </div>
           </div>
           {/* Mobile Nav */}
-          <div className='px-(--page-padding) not-sm:group-has-[input:checked]:block hidden border-t'>
-            <div className='max-w-(--page-size) mx-auto'>
+          <div className='hidden border-t px-(--page-padding) not-sm:group-has-[input:checked]:block'>
+            <div className='mx-auto max-w-(--page-size)'>
               <nav className='flex flex-col gap-2 py-4 text-sm font-medium'>
                 {navLinks.map((link) => (
                   <Button className='cursor-pointer justify-start' variant='ghost' key={link.label}>
@@ -69,20 +69,20 @@ export default function PortfolioPage() {
         <main className='flex-1'>
           {/* Hero Section */}
           <Section className='relative md:py-32'>
-            <div className='mask-b-from-0 pointer-events-none absolute start-0 top-0 -z-10 h-full w-full opacity-25 mix-blend-color-burn'>
+            <div className='pointer-events-none absolute start-0 top-0 -z-10 h-full w-full mask-b-from-0 opacity-25 mix-blend-color-burn'>
               <div
                 className='h-full'
                 style={{ background: 'url(/public/bg-polygon-pattern.jpg) top / 600px' }}></div>
             </div>
             <div className='mx-auto flex w-full max-w-3xl flex-col items-center gap-8 text-center'>
               <div className='space-y-6'>
-                <h1 className='text-balance text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl'>
+                <h1 className='text-4xl font-bold tracking-tighter text-balance sm:text-5xl md:text-6xl lg:text-7xl'>
                   Hi 👋, I'm{' '}
-                  <span className='bg-linear-to-tr to-primary from-violet-800 to-65% bg-clip-text font-bold text-transparent'>
+                  <span className='bg-linear-to-tr from-violet-800 to-primary to-65% bg-clip-text font-bold text-transparent'>
                     Basant Barupal
                   </span>
                 </h1>
-                <p className='text-muted-foreground text-balance text-lg md:text-xl'>
+                <p className='text-lg text-balance text-muted-foreground md:text-xl'>
                   Full-Stack Developer passionate about creating beautiful, functional web and
                   mobile applications that solve real-world problems.
                 </p>
@@ -127,7 +127,7 @@ export default function PortfolioPage() {
           <Section id='about' className='bg-primary/5'>
             <div className='mx-auto w-full max-w-3xl space-y-8 text-center'>
               <SectionTitle>About Me</SectionTitle>
-              <div className='text-muted-foreground space-y-6 text-balance text-lg'>
+              <div className='space-y-6 text-lg text-balance text-muted-foreground'>
                 <p>
                   I'm a passionate full-stack developer building web applications since 2018. I love
                   turning complex problems into simple, beautiful designs and bringing ideas to life
@@ -149,7 +149,7 @@ export default function PortfolioPage() {
             <div className='mx-auto w-full max-w-5xl space-y-12'>
               <div className='space-y-4 text-center'>
                 <SectionTitle>Skills & Technologies</SectionTitle>
-                <p className='text-muted-foreground text-balance text-lg'>
+                <p className='text-lg text-balance text-muted-foreground'>
                   Here are some of the technologies I work with
                 </p>
               </div>
@@ -177,10 +177,10 @@ export default function PortfolioPage() {
           </Section>
 
           <Section id='projects' className='bg-muted/50'>
-            <div className='max-w-(--page-size) mx-auto w-full space-y-12'>
+            <div className='mx-auto w-full max-w-(--page-size) space-y-12'>
               <div className='space-y-4 text-center'>
                 <SectionTitle>Featured Projects</SectionTitle>
-                <p className='text-muted-foreground text-balance text-lg'>
+                <p className='text-lg text-balance text-muted-foreground'>
                   Some of my recent work that I'm proud of
                 </p>
               </div>
@@ -237,7 +237,7 @@ export default function PortfolioPage() {
 
           <Section id='contact' className='relative'>
             <div
-              className='pointer-events-none absolute bottom-0 end-0 aspect-square h-full opacity-20 mix-blend-color-burn'
+              className='pointer-events-none absolute end-0 bottom-0 aspect-square h-full opacity-20 mix-blend-color-burn'
               style={{
                 background:
                   'url(/public/illustration-neural-network.jpg) center / contain no-repeat',
@@ -245,7 +245,7 @@ export default function PortfolioPage() {
             <div className='mx-auto w-full max-w-2xl space-y-8 text-center'>
               <div className='space-y-4'>
                 <SectionTitle>Get In Touch</SectionTitle>
-                <p className='text-muted-foreground text-balance text-lg'>
+                <p className='text-lg text-balance text-muted-foreground'>
                   I'm always interested in new opportunities and collaborations. Let's build
                   something amazing together!
                 </p>
@@ -266,10 +266,10 @@ export default function PortfolioPage() {
             </div>
           </Section>
         </main>
-        <footer className='px-(--page-padding) bg-muted/50'>
-          <div className='max-w-(--page-size) mx-auto w-full py-4'>
+        <footer className='bg-muted/50 px-(--page-padding)'>
+          <div className='mx-auto w-full max-w-(--page-size) py-4'>
             <div className='flex flex-col items-center justify-between gap-4 sm:flex-row'>
-              <p className='text-muted-foreground text-sm'>© 2025 Basant. All rights reserved.</p>
+              <p className='text-sm text-muted-foreground'>© 2025 Basant. All rights reserved.</p>
               <div className='flex gap-4'>
                 <Button variant='ghost' size='icon' asChild>
                   <Link href={socialLinks.github} target='_blank'>

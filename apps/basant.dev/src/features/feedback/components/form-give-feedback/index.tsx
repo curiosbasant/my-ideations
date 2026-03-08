@@ -54,7 +54,7 @@ export function FormGiveFeedback() {
 function RateItem(props: { value: number }) {
   return (
     <li className=''>
-      <label className='has-checked:bg-primary hover:bg-muted has-checked:border-none has-checked:text-primary-foreground has-focus-visible:outline-ring has-focus-visible:outline-2 has-focus-visible:outline-offset-2 flex size-10 rounded-full border transition'>
+      <label className='flex size-10 rounded-full border transition hover:bg-muted has-checked:border-none has-checked:bg-primary has-checked:text-primary-foreground has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-ring'>
         <input className='swoosh' name='rating' value={props.value} type='radio' />
         <span className='m-auto text-xl font-bold'>{props.value}</span>
       </label>

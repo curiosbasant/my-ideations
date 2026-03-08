@@ -36,7 +36,7 @@ export default async function FormatsPage(props: PageProps<'/s/snapfile/formats'
           ))}
         </ul>
       : <div className='rounded-2xl border-2 border-dashed px-4 py-8'>
-          <p className='text-balance text-center'>
+          <p className='text-center text-balance'>
             There are no formats matching your search query.
           </p>
         </div>
@@ -47,11 +47,11 @@ export default async function FormatsPage(props: PageProps<'/s/snapfile/formats'
 
 function FormatListItem(props: { format: RouterOutputs['snapfile']['format']['list'][number] }) {
   return (
-    <li className='bg-background col-span-2 grid grid-flow-col grid-cols-subgrid grid-rows-2 rounded-md border p-4'>
+    <li className='col-span-2 grid grid-flow-col grid-cols-subgrid grid-rows-2 rounded-md border bg-background p-4'>
       <h3 className='text-lg font-bold'>{props.format.name}</h3>
       <div className=''>
-        <p className='text-muted-foreground text-sm'>{props.format.description}</p>
-        <p className='text-muted-foreground text-end text-xs'>
+        <p className='text-sm text-muted-foreground'>{props.format.description}</p>
+        <p className='text-end text-xs text-muted-foreground'>
           <TimeFormat
             dateTime={props.format.createdAt.toJSON()}
             formattedTime={format(props.format.createdAt, 'PPpp')}

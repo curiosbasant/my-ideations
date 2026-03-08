@@ -59,13 +59,13 @@ const PROFESSIONAL_SKILLS = [
 export default function ResumePage() {
   return (
     <ScrollArea className='h-full bg-slate-100' data-theme='light'>
-      <div className='xl:pb-16 xl:pt-8 print:p-0'>
-        <div className='not-print:max-w-7xl not-print:xl:rounded-2xl mx-auto size-full overflow-clip border-e bg-white text-lg text-slate-700 shadow-xl'>
+      <div className='xl:pt-8 xl:pb-16 print:p-0'>
+        <div className='mx-auto size-full overflow-clip border-e bg-white text-lg text-slate-700 shadow-xl not-print:max-w-7xl not-print:xl:rounded-2xl'>
           <div className='grid h-full grid-cols-1 gap-y-8 lg:auto-rows-[auto_1fr] lg:grid-cols-[minmax(25rem,3fr)_7fr]'>
             <aside className='row-span-2 grid grid-rows-subgrid border-x border-x-sky-200/75 bg-sky-100 pb-16'>
-              <header className='relative isolate flex pb-10 pt-16'>
-                <div className='rotate-24 skew-x-45 absolute -z-10 -m-20 h-48 w-64 bg-sky-200'></div>
-                <div className='border-12 m-auto overflow-clip rounded-full border-sky-400 bg-slate-200 shadow-inner'>
+              <header className='relative isolate flex pt-16 pb-10'>
+                <div className='absolute -z-10 -m-20 h-48 w-64 rotate-24 skew-x-45 bg-sky-200'></div>
+                <div className='m-auto overflow-clip rounded-full border-12 border-sky-400 bg-slate-200 shadow-inner'>
                   <Image
                     className='size-64 object-cover object-center'
                     src='/public/display-photo.jpeg'
@@ -157,7 +157,7 @@ export default function ResumePage() {
               </div>
             </aside>
             <main className='relative isolate row-span-2 grid grid-rows-subgrid px-4 pb-16 md:px-8 xl:px-24'>
-              <div className='mask-b-to-90% absolute inset-0 -z-10 h-96 w-full'>
+              <div className='absolute inset-0 -z-10 h-96 w-full mask-b-to-90%'>
                 <div
                   className='h-full'
                   style={{
@@ -352,7 +352,7 @@ function Range(props: { value?: string | number }) {
       <div
         className='relative h-full rounded-full bg-sky-400 shadow shadow-sky-200'
         style={{ width: (props.value ?? 50) + '%' }}>
-        <span className='absolute right-0 top-1/2 size-5 -translate-y-1/2 translate-x-1/2 rounded-full border bg-white shadow'></span>
+        <span className='absolute top-1/2 right-0 size-5 translate-x-1/2 -translate-y-1/2 rounded-full border bg-white shadow'></span>
       </div>
     </div>
   )

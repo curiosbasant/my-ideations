@@ -190,7 +190,7 @@ function SelectDesignation(props: {
                 key={department.id}>
                 {department.name}
                 {department.count > 0 && (
-                  <div className={`bg-accent me-auto`}>{department.count}</div>
+                  <div className={`me-auto bg-accent`}>{department.count}</div>
                 )}
               </CommandItem>
             ))}

@@ -36,14 +36,14 @@ export default async function SdbmsRootLayout(props: LayoutProps<'/s/sdbms'>) {
         </head>
         <body className={`${geistSans.variable} ${geistMono.variable} isolate size-full`}>
           <TrpcClientProvider>
-            <div className='light:bg-secondary selection:bg-primary/25 isolate size-full'>
+            <div className='isolate size-full selection:bg-primary/25 light:bg-secondary'>
               <ScrollArea className='size-full'>
                 <div className='isolate flex min-h-full w-full flex-col divide-y [--page-padding:--spacing(2)] [--page-size:var(--container-7xl)] sm:[--page-padding:--spacing(4)] md:[--page-padding:--spacing(8)]'>
                   <BannerDeviceOnline />
-                  <header className='bg-background/80 px-(--page-padding) sticky top-0 z-10 backdrop-blur-sm'>
-                    <div className='@container max-w-(--page-size) h-13 m-auto flex items-center gap-4'>
+                  <header className='sticky top-0 z-10 bg-background/80 px-(--page-padding) backdrop-blur-sm'>
+                    <div className='@container m-auto flex h-13 max-w-(--page-size) items-center gap-4'>
                       <Link href='/' className='inline-flex items-center gap-4'>
-                        <span className='@xl:text-2xl text-primary text-xl font-extrabold'>
+                        <span className='text-xl font-extrabold text-primary @xl:text-2xl'>
                           SDBMS
                         </span>
                       </Link>
@@ -53,13 +53,13 @@ export default async function SdbmsRootLayout(props: LayoutProps<'/s/sdbms'>) {
                       <ProfileDropdownMenu />
                     </div>
                   </header>
-                  <div className='px-(--page-padding) flex flex-1'>
-                    <main className='max-w-(--page-size) mx-auto w-full pb-16 pt-8'>
+                  <div className='flex flex-1 px-(--page-padding)'>
+                    <main className='mx-auto w-full max-w-(--page-size) pt-8 pb-16'>
                       {props.children}
                     </main>
                   </div>
                   <footer className='bg-background px-(--page-padding)'>
-                    <div className='max-w-(--page-size) m-auto py-4'>
+                    <div className='m-auto max-w-(--page-size) py-4'>
                       <div className='flex flex-col items-center justify-between gap-2 text-sm sm:flex-row'>
                         <p>
                           Made with ❤️ by{' '}

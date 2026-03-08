@@ -181,7 +181,7 @@ function DocumentUploadArea(props: {
   return (
     <DropArea
       className={cn(
-        'hover:bg-input/25 group flex min-h-80 overflow-clip rounded-lg border-2 border-dashed transition md:row-span-full',
+        'group flex min-h-80 overflow-clip rounded-lg border-2 border-dashed transition hover:bg-input/25 md:row-span-full',
         props.invalid && 'border-destructive bg-destructive/5',
       )}
       activeClassName='border-primary bg-primary/10'
@@ -211,10 +211,10 @@ function DocumentUploadArea(props: {
       }}>
       {fileUrl ?
         <div className='flex flex-1'>
-          <img src={fileUrl} className='group-data-drag-over:opacity-20 m-auto object-contain' />
+          <img src={fileUrl} className='m-auto object-contain group-data-drag-over:opacity-20' />
         </div>
       : <div className='m-auto'>
-          <p className='text-muted-foreground text-balance text-center text-sm'>
+          <p className='text-center text-sm text-balance text-muted-foreground'>
             Drag and drop a file here to upload
           </p>
         </div>

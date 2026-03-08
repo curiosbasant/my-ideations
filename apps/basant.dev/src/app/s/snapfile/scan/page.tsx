@@ -27,12 +27,12 @@ function QRCodeScanner(props: { onDecode(text: string): void }) {
   }, [])
 
   return error ?
-      <p className='mb-8 text-balance text-center text-rose-500'>
+      <p className='mb-8 text-center text-balance text-rose-500'>
         This device either does not have a camera or does not have permission to access it.
       </p>
     : <video
         ref={videoRef}
-        className='bg-background/50 size-full rounded-md object-cover'
+        className='size-full rounded-md bg-background/50 object-cover'
         width={1080}
         height={1080}
         autoPlay

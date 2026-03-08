@@ -53,7 +53,7 @@ const config = {
       options: {
         tailwindStylesheet: path.join(
           import.meta.dirname,
-          '../../apps/basant.dev/src/app/globals.css',
+          '../../apps/basant.dev/src/app/tailwind.css',
         ),
       },
     },

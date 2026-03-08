@@ -41,7 +41,7 @@ export function DialogOverlay({
     <DialogPrimitive.Overlay
       data-slot='dialog-overlay'
       className={cn(
-        'data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 backdrop-blur-2xs bg-background/50',
+        'bg-background/50 backdrop-blur-2xs data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:animate-in data-[state=open]:fade-in-0',
         'fixed inset-0 z-50',
         'scrollbar-hidden grid place-items-center overflow-y-auto sm:p-4',
         className,
@@ -69,7 +69,7 @@ export function DialogContent({
         <DialogPrimitive.Content
           data-slot='dialog-content'
           className={cn(
-            'bg-background data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 relative z-50 grid w-full gap-4 p-6 shadow-lg duration-200 sm:max-w-lg sm:rounded-lg sm:border',
+            'relative z-50 grid w-full gap-4 bg-background p-6 shadow-lg duration-200 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 sm:max-w-lg sm:rounded-lg sm:border',
             className,
           )}
           onEscapeKeyDown={closeOnEscapeKeyDown ? undefined : (ev) => ev.preventDefault()}
@@ -79,7 +79,7 @@ export function DialogContent({
           {showCloseButton && (
             <DialogPrimitive.Close
               data-slot='dialog-close'
-              className="ring-offset-background focus:ring-ring data-[state=open]:bg-accent data-[state=open]:text-muted-foreground rounded-xs focus:outline-hidden absolute end-4 top-4 opacity-70 transition-opacity hover:opacity-100 focus:ring-2 focus:ring-offset-2 disabled:pointer-events-none [&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0">
+              className="absolute end-4 top-4 rounded-xs opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:outline-hidden disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4">
               <XIcon />
               <span className='sr-only'>Close</span>
             </DialogPrimitive.Close>
@@ -114,7 +114,7 @@ export function DialogTitle({ className, ...props }: ComponentProps<typeof Dialo
   return (
     <DialogPrimitive.Title
       data-slot='dialog-title'
-      className={cn('text-lg font-semibold leading-none', className)}
+      className={cn('text-lg leading-none font-semibold', className)}
       {...props}
     />
   )
@@ -127,7 +127,7 @@ export function DialogDescription({
   return (
     <DialogPrimitive.Description
       data-slot='dialog-description'
-      className={cn('text-muted-foreground text-balance text-sm', className)}
+      className={cn('text-sm text-balance text-muted-foreground', className)}
       {...props}
     />
   )

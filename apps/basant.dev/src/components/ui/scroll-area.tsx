@@ -1,7 +1,7 @@
 'use client'
 
 import type { ComponentProps } from 'react'
-import {ScrollArea as ScrollAreaPrimitive} from 'radix-ui'
+import { ScrollArea as ScrollAreaPrimitive } from 'radix-ui'
 
 import { cn } from '~/lib/utils'
 
@@ -18,7 +18,7 @@ export function ScrollArea({ className, children, viewportClassName, ...props }:
       <ScrollAreaPrimitive.Viewport
         data-slot='scroll-area-viewport'
         className={cn(
-          'rounded-inherit focus-visible:ring-3 focus-visible:ring-ring/50 size-full outline-none transition-[color,box-shadow] *:h-full focus-visible:outline-1',
+          'size-full rounded-inherit transition-[color,box-shadow] outline-none *:h-full focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-1',
           viewportClassName,
         )}>
         {children}
@@ -39,7 +39,7 @@ export function ScrollBar({
       data-slot='scroll-area-scrollbar'
       orientation={orientation}
       className={cn(
-        'flex touch-none select-none p-px transition-colors',
+        'flex touch-none p-px transition-colors select-none',
         orientation === 'vertical' && 'h-full w-2.5 border-s border-s-transparent',
         orientation === 'horizontal' && 'h-2.5 flex-col border-t border-t-transparent',
         className,
@@ -47,7 +47,7 @@ export function ScrollBar({
       {...props}>
       <ScrollAreaPrimitive.ScrollAreaThumb
         data-slot='scroll-area-thumb'
-        className='bg-border relative flex-1 rounded-full'
+        className='relative flex-1 rounded-full bg-border'
       />
     </ScrollAreaPrimitive.ScrollAreaScrollbar>
   )

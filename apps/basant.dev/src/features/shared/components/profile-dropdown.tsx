@@ -18,8 +18,8 @@ export function ProfileDropdownMenu() {
     <Suspense
       fallback={
         <div className='flex items-center gap-3'>
-          <div className='bg-muted size-8 animate-pulse rounded-full' />
-          <div className='bg-muted h-6 w-32 animate-pulse rounded-md' />
+          <div className='size-8 animate-pulse rounded-full bg-muted' />
+          <div className='h-6 w-32 animate-pulse rounded-md bg-muted' />
         </div>
       }>
       <ProfileDropdownMenuInner />
@@ -33,7 +33,7 @@ async function ProfileDropdownMenuInner() {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className='focus-visible:border-ring focus-visible:outline-3 focus-visible:outline-ring/50 flex items-center gap-3 rounded-md outline-offset-4'>
+      <DropdownMenuTrigger className='flex items-center gap-3 rounded-md outline-offset-4 focus-visible:border-ring focus-visible:outline-3 focus-visible:outline-ring/50'>
         <Avatar>
           <AvatarImage src={profile.avatarUrl || ''} alt={`${profile.displayName} Photo`} />
           <AvatarFallback>{getNameInitials(profile.displayName)}</AvatarFallback>

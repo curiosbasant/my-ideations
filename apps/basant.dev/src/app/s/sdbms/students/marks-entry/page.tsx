@@ -24,7 +24,7 @@ export default async function StudentsMarksEntryPage(
 
   return (
     <div className='@container mx-auto max-w-md'>
-      <Form action='' className='@md:grid-cols-2 @2xl:grid-cols-4 grid gap-4'>
+      <Form action='' className='grid gap-4 @md:grid-cols-2 @2xl:grid-cols-4'>
         <FormFieldSelectSession defaultValue={session} />
         <FormFieldSelectExam defaultValue={exam} />
         <FormFieldSelectClass defaultValue={standard} />
@@ -38,7 +38,7 @@ export default async function StudentsMarksEntryPage(
         <Suspense
           fallback={
             <div className='rounded-md border px-6 py-4'>
-              <p className='text-muted-foreground text-center'>Please wait...</p>
+              <p className='text-center text-muted-foreground'>Please wait...</p>
             </div>
           }>
           <StudentsList studentsPromise={getClassStudentsMark(session, exam, +standard, subject)} />
@@ -53,23 +53,23 @@ async function StudentsList(props: { studentsPromise: ReturnType<typeof getClass
 
   return students.length === 0 ?
       <div className='rounded-md border px-6 py-4'>
-        <p className='text-muted-foreground text-center'>Sorry, no match found!</p>
+        <p className='text-center text-muted-foreground'>Sorry, no match found!</p>
       </div>
     : <ul className='grid grid-cols-[1fr_5rem] gap-2 gap-x-6 md:grid-cols-[1fr_6rem]'>
         {students.map((student) => (
           <li
-            className='focus-within:border-primary col-span-full grid grid-cols-subgrid rounded-md border p-2 transition-colors'
+            className='col-span-full grid grid-cols-subgrid rounded-md border p-2 transition-colors focus-within:border-primary'
             key={student.id}>
             <div className=''>
               <div className='flex items-center gap-3'>
                 <span className='font-bold'>{student.admissionNo}</span>
                 <span className=''>{student.fullName}</span>
               </div>
-              <span className='text-muted-foreground text-sm'>{student.fName}</span>
+              <span className='text-sm text-muted-foreground'>{student.fName}</span>
             </div>
             <MarkInput
               classStudentId={student.class.studentId}
-              className='placeholder:text-muted-foreground/50 size-full text-center text-xl font-bold tabular-nums leading-normal shadow-inner md:text-2xl'
+              className='size-full text-center text-xl leading-normal font-bold tabular-nums shadow-inner placeholder:text-muted-foreground/50 md:text-2xl'
               placeholder='0'
               name={`mark_${student.class.studentId}`}
               defaultValue={student.mark ?? undefined}

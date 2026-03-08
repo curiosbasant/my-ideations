@@ -13,7 +13,7 @@ export function HeaderNavItem(props: PropsWithChildren<{ path: Route }>) {
 
   return (
     <Button className='text-base' variant='ghost' size='sm' asChild>
-      <Link href={props.path} className={isActive ? 'text-primary bg-secondary/25' : undefined}>
+      <Link href={props.path} className={isActive ? 'bg-secondary/25 text-primary' : undefined}>
         {props.children}
       </Link>
     </Button>

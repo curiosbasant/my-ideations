@@ -11,7 +11,7 @@
     "db:reset": "pnpm -F db reset",
     "db:studio": "pnpm -F db studio",
     "dev": "turbo dev --parallel",
-    "format": "prettier \"**/*\" -w -u --ignore-path pnpm-lock.yaml",
+    "format": "prettier . -w -u --ignore-path .gitignore",
     "gen": "turbo gen",
     "lint": "turbo lint",
     "sb:restart": "supabase stop && supabase start",

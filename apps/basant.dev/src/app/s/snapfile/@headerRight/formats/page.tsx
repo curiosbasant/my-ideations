@@ -50,11 +50,11 @@ export default function FileUploadModalViews() {
         className='group grid h-96 place-items-center content-center rounded-2xl border-2 border-dashed'
         activeClassName='border-primary bg-primary/10'
         onFilesDrop={handleFile}>
-        <CloudUploadIcon className='group-data-drag-over:text-primary size-20 text-gray-400' />
-        <p className='group-data-drag-over:text-primary text-gray-500'>
+        <CloudUploadIcon className='size-20 text-gray-400 group-data-drag-over:text-primary' />
+        <p className='text-gray-500 group-data-drag-over:text-primary'>
           Drag and drop your file here
         </p>
-        <p className='group-data-drag-over:text-primary text-gray-500'>or click to select a file</p>
+        <p className='text-gray-500 group-data-drag-over:text-primary'>or click to select a file</p>
         <Button className='mt-4' variant='outline' asChild>
           <label>
             Select File

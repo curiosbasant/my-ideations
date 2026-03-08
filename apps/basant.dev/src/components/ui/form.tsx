@@ -29,7 +29,7 @@ export function FormControl(props: PropsWithChildren<FormControlProps>) {
         <FieldContent>
           <FieldLabel className='capitalize' htmlFor={props.fieldId}>
             {props.label}
-            <span className='text-muted-foreground group-has-required/field:hidden font-normal'>
+            <span className='font-normal text-muted-foreground group-has-required/field:hidden'>
               (optional)
             </span>
           </FieldLabel>
@@ -50,7 +50,7 @@ export type FormSelectProps = SelectProps
 export function FormSelect({ placeholder, fieldId, ...props }: FormSelectProps) {
   return (
     <Select {...props}>
-      <SelectTrigger className='backdrop-blur-2xs w-full' id={fieldId}>
+      <SelectTrigger className='w-full backdrop-blur-2xs' id={fieldId}>
         <SelectValue placeholder={placeholder ?? '---'} />
       </SelectTrigger>
       <SelectContent position='item-aligned'>{props.children}</SelectContent>

@@ -24,11 +24,11 @@ export default function SnapFileRootLayout(props: LayoutProps<'/s/snapfile'>) {
       <body className={`size-full ${latoFont.className}`}>
         <ScrollArea className='size-full'>
           <div className='isolate flex min-h-full w-full flex-col divide-y [--page-padding:--spacing(2)] [--page-size:var(--container-7xl)] sm:[--page-padding:--spacing(4)] md:[--page-padding:--spacing(8)]'>
-            <header className='bg-background/80 px-(--page-padding) sticky top-0 z-10 backdrop-blur-sm'>
-              <div className='max-w-(--page-size) m-auto flex items-center gap-4 py-3'>
+            <header className='sticky top-0 z-10 bg-background/80 px-(--page-padding) backdrop-blur-sm'>
+              <div className='m-auto flex max-w-(--page-size) items-center gap-4 py-3'>
                 <Link href='/' className='inline-flex items-center gap-4'>
                   <Image src='/public/icons/snapfile.png' width={32} height={32} alt='Logo' />
-                  <span className='@2xs:text-2xl text-xl font-extrabold'>Snap File</span>
+                  <span className='text-xl font-extrabold @2xs:text-2xl'>Snap File</span>
                 </Link>
                 <Button className='text-base' variant='ghost' asChild>
                   <Link href='/scan'>Scan QR</Link>
@@ -39,8 +39,8 @@ export default function SnapFileRootLayout(props: LayoutProps<'/s/snapfile'>) {
                 {props.headerRight}
               </div>
             </header>
-            <div className='px-(--page-padding) bg-secondary flex flex-1'>
-              <main className='max-w-(--page-size) mx-auto w-full pb-16 pt-8'>
+            <div className='flex flex-1 bg-secondary px-(--page-padding)'>
+              <main className='mx-auto w-full max-w-(--page-size) pt-8 pb-16'>
                 {props.children}
               </main>
             </div>

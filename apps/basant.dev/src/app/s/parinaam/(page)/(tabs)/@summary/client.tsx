@@ -37,7 +37,8 @@ export function ClassResultPieChart() {
       className='aspect-square max-h-128 flex-1'
       config={divisions.reduce(
         (acc, [division], i) => (
-          (acc[`division-${i + 1}`] = { label: division, color: `var(--chart-${i + 1})` }), acc
+          (acc[`division-${i + 1}`] = { label: division, color: `var(--chart-${i + 1})` }),
+          acc
         ),
         {} as ChartConfig,
       )}>
@@ -140,7 +141,8 @@ export function ClassToppersBarChart(props: {
       style={{ aspectRatio }}
       config={top3[0].subjects.reduce(
         (acc, s, i) => (
-          (acc[`subject-${i + 1}`] = { label: s.name, color: `var(--chart-${i + 1})` }), acc
+          (acc[`subject-${i + 1}`] = { label: s.name, color: `var(--chart-${i + 1})` }),
+          acc
         ),
         {} as ChartConfig,
       )}>

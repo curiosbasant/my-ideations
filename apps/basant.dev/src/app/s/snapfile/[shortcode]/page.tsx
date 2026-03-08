@@ -14,7 +14,7 @@ export default async function SnapFileDownloadPage(props: PageProps<'/s/snapfile
 
   return (
     <div className='flex h-full flex-col items-center justify-center gap-6'>
-      <h2 className='text-balance text-center text-4xl font-bold'>
+      <h2 className='text-center text-4xl font-bold text-balance'>
         <FileDownloadingText />
       </h2>
       <p className='text-sm'>if not, try using the button below</p>

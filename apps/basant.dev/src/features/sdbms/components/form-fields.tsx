@@ -14,7 +14,7 @@ export function FormFieldSelectClass(props: { defaultValue?: string | null }) {
   return (
     <FormField label='Class'>
       <Select name='class' defaultValue={props.defaultValue ?? undefined} required>
-        <SelectTrigger className='backdrop-blur-2xs w-full'>
+        <SelectTrigger className='w-full backdrop-blur-2xs'>
           <SelectValue placeholder='Select a class' />
         </SelectTrigger>
         <SelectContent>
@@ -49,7 +49,7 @@ export function FormFieldSelectExam(props: { defaultValue?: string | null }) {
   return (
     <FormField label='Exam'>
       <Select name='exam' defaultValue={props.defaultValue ?? undefined} required>
-        <SelectTrigger className='backdrop-blur-2xs w-full'>
+        <SelectTrigger className='w-full backdrop-blur-2xs'>
           <SelectValue placeholder='Select a exam' />
         </SelectTrigger>
         <SelectContent>
@@ -84,7 +84,7 @@ export function FormFieldSelectInstitute() {
   return (
     <FormField className='col-span-full' label='School Name'>
       <Select name='school' required>
-        <SelectTrigger className='backdrop-blur-2xs w-full'>
+        <SelectTrigger className='w-full backdrop-blur-2xs'>
           <SelectValue placeholder='Select your school' />
         </SelectTrigger>
         <SelectContent>
@@ -128,7 +128,7 @@ async function OptionsSession(props: { defaultValue?: string | null }) {
   const lastSessionId = props.defaultValue ?? Math.max(...sessions.map((s) => +s.id))
   return (
     <Select name='session' required defaultValue={lastSessionId.toString()}>
-      <SelectTrigger className='backdrop-blur-2xs w-full'>
+      <SelectTrigger className='w-full backdrop-blur-2xs'>
         <SelectValue />
       </SelectTrigger>
       <SelectContent>
@@ -146,7 +146,7 @@ export function FormFieldSelectSubject(props: { defaultValue?: string | null }) 
   return (
     <FormField label='Subject'>
       <Select name='subject' defaultValue={props.defaultValue ?? undefined} required>
-        <SelectTrigger className='backdrop-blur-2xs w-full'>
+        <SelectTrigger className='w-full backdrop-blur-2xs'>
           <SelectValue placeholder='Select a class' />
         </SelectTrigger>
         <SelectContent>

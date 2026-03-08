@@ -6,7 +6,7 @@ export function Skeleton({ className, ...props }: ComponentProps<'div'>) {
   return (
     <div
       data-slot='skeleton'
-      className={cn('bg-accent dark:bg-accent/50 animate-pulse rounded-md', className)}
+      className={cn('animate-pulse rounded-md bg-accent dark:bg-accent/50', className)}
       {...props}
     />
   )
