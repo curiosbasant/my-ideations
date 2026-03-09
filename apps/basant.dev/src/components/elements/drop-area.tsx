@@ -61,7 +61,7 @@ export function DropArea({
         enablePromptFile ?
           async () => {
             if (disabled) return
-            const files = await promptFile()
+            const files = await promptFile({ multiple: true })
             files.length > 0 && onFilesDrop(files)
           }
         : undefined

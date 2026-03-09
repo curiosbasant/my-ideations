@@ -282,13 +282,15 @@ export function createOrigin(subdomain?: string) {
 /**
  * Prompts the user to select a file
  */
-export function promptFile(params?: Partial<Pick<HTMLInputElement, 'accept' | 'capture'>>) {
+export function promptFile(
+  params?: Partial<Pick<HTMLInputElement, 'accept' | 'capture' | 'multiple'>>,
+) {
   const input = document.createElement('input')
   input.type = 'file'
 
   if (params) {
     for (const [attr, value] of Object.entries(params)) {
-      input.setAttribute(attr, value)
+      input.setAttribute(attr, String(value))
     }
   }
 
