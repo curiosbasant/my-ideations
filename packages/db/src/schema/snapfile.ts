@@ -1,5 +1,5 @@
 import { index, pgPolicy, pgTableCreator } from 'drizzle-orm/pg-core'
-import { eq, ne, not, or, sql } from 'drizzle-orm/sql'
+import { and, eq, sql } from 'drizzle-orm/sql'
 
 import {
   bigId,
@@ -16,7 +16,7 @@ import {
   policyAllowProfileInsertOwn,
   policyAllowProfileUpdateOwn,
 } from '../utils/helpers/policy'
-import { coalesce } from '../utils/helpers/sql'
+import { caseWhen } from '../utils/helpers/sql'
 import { bucketNames, objects } from '../utils/helpers/supabase'
 
 const pgTable = pgTableCreator((tableName) => `sf__${tableName}`)
@@ -70,22 +70,24 @@ export const sf__formats = pgTable(
 
 // ~~~~~~ Bucket Policies ~~~~~~
 
-const isSnapfileBucket = eq(objects.bucketId, sql.raw(`'${bucketNames.snapfileFiles}'`))
+const isSnapfileBucket = and(
+  eq(objects.bucketId, sql.raw(`'${bucketNames.snapfileFiles}'`)),
+  caseWhen(
+    eq(sql`${objects.pathTokens}[1]`, sql.raw(`'formats'`)),
+    eq(selectAuthRole, sql.raw(`'authenticated'`)),
+  ).else(sql`true`),
+)
 
-export const policyAllowFilesUpload = pgPolicy('allow_anyone_upload', {
+export const policyAllowFilesSelect = pgPolicy('allow_anyone_select_snapfile', {
+  as: 'permissive',
+  for: 'select',
+  to: 'public',
+  using: isSnapfileBucket,
+}).link(objects)
+
+export const policyAllowFilesUpload = pgPolicy('allow_anyone_upload_snapfile', {
   as: 'permissive',
   for: 'insert',
   to: 'public',
   withCheck: isSnapfileBucket,
-}).link(objects)
-
-export const policyAllowAuthenticatedUpload = pgPolicy('disallow_anyone_upload_in_formats', {
-  as: 'restrictive',
-  for: 'insert',
-  to: 'public', // necessary for restrictive policy
-  withCheck: or(
-    not(isSnapfileBucket),
-    ne(coalesce(sql`${objects.pathTokens}[1]`, sql.raw("''")), sql.raw(`'formats'`)),
-    eq(selectAuthRole, sql.raw(`'authenticated'`)),
-  ),
 }).link(objects)
