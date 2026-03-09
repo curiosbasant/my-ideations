@@ -37,7 +37,10 @@ export const roomRouter = {
           .select({
             id: schema.sf__roomFile.id,
             path: schema.sf__roomFile.path,
-            mimetype: extractJson(objects.metadata, 'mimetype').as<string>('mimetype'),
+            originalName: extractJson(objects.userMetadata, 'fileName').as<string | null>(
+              'file_name',
+            ),
+            mimetype: extractJson(objects.metadata, 'mimetype').as<string | null>('mimetype'),
             size: extractJson(objects.metadata, 'size').mapWith(Number),
             lastModifiedAt: coalesce(
               schema.sf__roomFile.updatedAt,

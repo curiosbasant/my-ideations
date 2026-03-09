@@ -53,6 +53,7 @@ function FormatListItem(props: { format: RouterOutputs['snapfile']['format']['li
         <p className='text-sm text-muted-foreground'>{props.format.description}</p>
         <p className='text-end text-xs text-muted-foreground'>
           <TimeFormat
+            className='cursor-default'
             dateTime={props.format.createdAt.toJSON()}
             formattedTime={format(props.format.createdAt, 'PPpp')}
             distanceTime={formatDistance(props.format.createdAt)}

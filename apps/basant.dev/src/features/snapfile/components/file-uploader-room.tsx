@@ -23,7 +23,9 @@ export function FileUploaderRoom(props: { slug: string }) {
 
       const supabase = getSupabaseClient()
       const bkt = supabase.storage.from('sf__files')
-      const { error } = await bkt.upload(filePath, fileToUpload)
+      const { error } = await bkt.upload(filePath, fileToUpload, {
+        metadata: { fileName: fileToUpload.name },
+      })
       if (error) {
         return createErrorReturn({ type: 'unknown-error', error })
       }

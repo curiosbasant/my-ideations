@@ -11,7 +11,7 @@ export function QrRoomFileUpload(props: { slug: string }) {
   const spinner = <LoaderCircleIcon className='size-6 animate-spin md:size-8' />
 
   return (
-    <div className='inline-flex size-80 items-center justify-center'>
+    <div className='inline-flex items-center justify-center'>
       <Suspense fallback={spinner}>
         <ClientOnly fallback={spinner}>
           {() => (

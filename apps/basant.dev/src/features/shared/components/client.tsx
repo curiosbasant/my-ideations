@@ -24,6 +24,7 @@ function CurrentYearInner() {
 }
 
 export function TimeFormat(props: {
+  className?: string
   dateTime: string
   formattedTime: string
   distanceTime: string
@@ -31,7 +32,7 @@ export function TimeFormat(props: {
   const [isToggled, toggle] = useToggle()
 
   return (
-    <time className='cursor-default' dateTime={props.dateTime} onClick={toggle}>
+    <time className={props.className} dateTime={props.dateTime} onClick={toggle}>
       {isToggled ? props.formattedTime : props.distanceTime}
     </time>
   )
