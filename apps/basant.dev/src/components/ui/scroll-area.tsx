@@ -14,6 +14,7 @@ export function ScrollArea({ className, children, viewportClassName, ...props }:
     <ScrollAreaPrimitive.Root
       data-slot='scroll-area'
       className={cn('relative', className)}
+      type='scroll'
       {...props}>
       <ScrollAreaPrimitive.Viewport
         data-slot='scroll-area-viewport'

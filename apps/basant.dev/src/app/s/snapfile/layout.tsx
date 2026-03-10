@@ -4,6 +4,7 @@ import './theme.css'
 import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
+import { MenuIcon } from 'lucide-react'
 
 import { Button } from '~/components/ui/button'
 import { ScrollArea } from '~/components/ui/scroll-area'
@@ -24,20 +25,36 @@ export default function SnapFileRootLayout(props: LayoutProps<'/s/snapfile'>) {
       <body className={`size-full ${latoFont.className}`}>
         <ScrollArea className='size-full'>
           <div className='isolate flex min-h-full w-full flex-col divide-y [--page-padding:--spacing(2)] [--page-size:var(--container-7xl)] sm:[--page-padding:--spacing(4)] md:[--page-padding:--spacing(8)]'>
-            <header className='sticky top-0 z-10 bg-background/80 px-(--page-padding) backdrop-blur-sm'>
-              <div className='m-auto flex max-w-(--page-size) items-center gap-4 py-3'>
-                <Link href='/' className='inline-flex items-center gap-4'>
+            <header className='group sticky top-0 z-10 bg-background/80 px-(--page-padding) backdrop-blur-sm'>
+              <div className='m-auto flex h-14 max-w-(--page-size) items-center gap-4'>
+                <Button className='md:hidden' variant='ghost' size='icon' asChild>
+                  <label>
+                    <MenuIcon />
+                    <input id='mobile-menu' className='swoosh' type='checkbox' />
+                  </label>
+                </Button>
+                <Link href='/' className='inline-flex items-center gap-3'>
                   <Image src='/public/icons/snapfile.png' width={32} height={32} alt='Logo' />
                   <span className='text-xl font-extrabold @2xs:text-2xl'>Snap File</span>
                 </Link>
-                <Button className='text-base' variant='ghost' asChild>
-                  <Link href='/scan'>Scan QR</Link>
-                </Button>
-                <Button className='text-base' variant='ghost' asChild>
-                  <Link href='/formats'>Formats</Link>
-                </Button>
+                <nav className='hidden md:contents'>
+                  <Button className='text-base' variant='ghost' asChild>
+                    <Link href='/scan'>Scan QR</Link>
+                  </Button>
+                  <Button className='text-base' variant='ghost' asChild>
+                    <Link href='/formats'>Formats</Link>
+                  </Button>
+                </nav>
                 {props.headerRight}
               </div>
+              <nav className='hidden flex-col gap-1 pb-2 group-has-[#mobile-menu:checked]:flex'>
+                <Button className='justify-start' variant='ghost' asChild>
+                  <Link href='/scan'>Scan QR</Link>
+                </Button>
+                <Button className='justify-start' variant='ghost' asChild>
+                  <Link href='/formats'>Formats</Link>
+                </Button>
+              </nav>
             </header>
             <div className='flex flex-1 bg-secondary px-(--page-padding)'>
               <main className='mx-auto w-full max-w-(--page-size) pt-8 pb-16'>
