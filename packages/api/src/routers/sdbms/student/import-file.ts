@@ -4,8 +4,8 @@ import type { PgInsertOnConflictDoUpdateConfig } from 'drizzle-orm/pg-core/query
 import { schema, type DbTransaction } from '@my/db'
 import { aliasExcluded } from '@my/db/helpers'
 import { and, eq, inArray, isDistinctFrom, now, or } from '@my/db/sql'
-import { extractDataFromSheet } from '@my/lib/file'
 import { groupBy, splitFullName } from '@my/lib/utils'
+import { extractDataFromSheet } from '@my/lib/utils/file'
 import { z } from '@my/lib/zod'
 
 import {

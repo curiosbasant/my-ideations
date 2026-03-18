@@ -23,19 +23,28 @@ export type FormControlProps =
     }
 
 export function FormControl(props: PropsWithChildren<FormControlProps>) {
+  const renderLabel = () => {
+    if (props.label === false) return null
+    const labelJsx = (
+      <FieldLabel className='capitalize' htmlFor={props.fieldId}>
+        {props.label}
+        <span className='font-normal text-muted-foreground group-has-required/field:hidden'>
+          (optional)
+        </span>
+      </FieldLabel>
+    )
+    if (!props.description) return labelJsx
+
+    return (
+      <FieldContent>
+        {labelJsx}
+        <FieldDescription>{props.description}</FieldDescription>
+      </FieldContent>
+    )
+  }
   return (
     <Field data-invalid={!!props.errors}>
-      {props.label === false || (
-        <FieldContent>
-          <FieldLabel className='capitalize' htmlFor={props.fieldId}>
-            {props.label}
-            <span className='font-normal text-muted-foreground group-has-required/field:hidden'>
-              (optional)
-            </span>
-          </FieldLabel>
-          {props.description && <FieldDescription>{props.description}</FieldDescription>}
-        </FieldContent>
-      )}
+      {renderLabel()}
       {props.children}
       {props.errors && <FieldError errors={props.errors} />}
     </Field>

@@ -1,8 +1,8 @@
 import { schema } from '@my/db'
 import { aliasExcluded } from '@my/db/helpers'
 import { and, eq, inArray, isDistinctFrom, now, or } from '@my/db/sql'
-import { extractDataFromSheet } from '@my/lib/file'
 import { splitFullName } from '@my/lib/utils'
+import { extractDataFromSheet } from '@my/lib/utils/file'
 import { z } from '@my/lib/zod'
 
 import { dateSchema, genderSchema, trimmedString } from '../../../lib/utils/sd-schema'
