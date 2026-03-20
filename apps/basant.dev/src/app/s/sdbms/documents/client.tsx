@@ -8,7 +8,7 @@ import { DialogContext } from '~/components/ui/dialog'
 import { toast } from '~/components/ui/sonner'
 import { actionCreateDocument, actionUpdateDocument } from '~/features/document/actions'
 import { FormSetDocument } from '~/features/document/components/form-set-document'
-import { dalFormatErrorMessage } from '~/lib/dal/shared'
+import { dalFormatErrorMessage } from '~/lib/dal/helpers'
 
 export function DocumentCreateForm() {
   const setOpen = use(DialogContext)

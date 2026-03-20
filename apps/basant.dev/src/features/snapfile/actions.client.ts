@@ -1,6 +1,6 @@
 import { getSupabaseClient } from '@my/lib/supabase/client'
 
-import { createErrorReturn, createSuccessReturn } from '~/lib/dal/shared'
+import { createErrorReturn, createSuccessReturn } from '~/lib/dal/types'
 import { zipFiles } from '~/lib/utils'
 import { actionCreateFormat, actionUploadSnapFile } from './actions'
 

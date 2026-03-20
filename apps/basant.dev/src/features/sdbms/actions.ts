@@ -2,7 +2,7 @@
 
 import { revalidatePath } from 'next/cache'
 
-import { dalLoginRedirect, dalTrpcAction } from '~/lib/dal/helpers'
+import { dalLoginRedirect, dalTrpcAction } from '~/lib/dal/server'
 import { api } from '~/lib/trpc'
 
 export const actionStudentImportFile = dalTrpcAction(api.sdbms.student.importFile, dalLoginRedirect)

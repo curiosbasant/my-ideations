@@ -1,7 +1,8 @@
 import { startTransition, useActionState } from 'react'
 
 import { toast } from '~/components/ui/sonner'
-import { dalFormatErrorMessage, type DalResult } from './shared'
+import { dalFormatErrorMessage } from './helpers'
+import type { DalResult } from './types'
 
 export function useDalMutation<TInput, TData>(
   dalActionFn: (payload: TInput) => Promise<DalResult<TData>>,

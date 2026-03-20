@@ -1,4 +1,4 @@
-import { dalTrpcQuery, dalVerifySuccess } from '~/lib/dal/helpers'
+import { dalTrpcQuery, dalVerifySuccess } from '~/lib/dal/server'
 import { api } from '~/lib/trpc'
 
 export const getPublicUrlFromShortcode = dalTrpcQuery(api.snapfile.publicUrl, dalVerifySuccess)

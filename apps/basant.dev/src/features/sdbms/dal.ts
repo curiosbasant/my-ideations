@@ -1,6 +1,7 @@
 import { cache } from 'react'
 
-import { dalDbOperation, dalVerifySuccess } from '~/lib/dal/helpers'
+import { dalDbOperation } from '~/lib/dal/helpers'
+import { dalVerifySuccess } from '~/lib/dal/server'
 import { api } from '~/lib/trpc'
 
 export const getProfileDetails = cache(() => {
