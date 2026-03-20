@@ -2,7 +2,8 @@
 
 import { revalidatePath } from 'next/cache'
 
-import { dalThrowError, dalTrpcAction, dalVerifySuccess } from '~/lib/dal/helpers'
+import { dalThrowError } from '~/lib/dal/helpers'
+import { dalTrpcAction, dalVerifySuccess } from '~/lib/dal/server'
 import { api } from '~/lib/trpc'
 
 export const actionUploadSnapFile = dalTrpcAction(api.snapfile.create, dalVerifySuccess)

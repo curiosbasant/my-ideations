@@ -1,7 +1,8 @@
 import { cache } from 'react'
 import { redirect } from 'next/navigation'
 
-import { dalDbOperation, dalNullifyError, dalVerifySuccess } from '~/lib/dal/helpers'
+import { dalDbOperation, dalNullifyError } from '~/lib/dal/helpers'
+import { dalVerifySuccess } from '~/lib/dal/server'
 import { api } from '~/lib/trpc'
 
 export const getPersonId = cache(() => dalNullifyError(dalDbOperation(() => api.person.id())))
