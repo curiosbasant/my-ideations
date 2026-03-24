@@ -1,11 +1,10 @@
 'use client'
 
-import type { ComponentProps } from 'react'
 import { ScrollArea as ScrollAreaPrimitive } from 'radix-ui'
 
 import { cn } from '~/lib/utils'
 
-type ScrollAreaProps = ComponentProps<typeof ScrollAreaPrimitive.Root> & {
+type ScrollAreaProps = ScrollAreaPrimitive.ScrollAreaProps & {
   viewportClassName?: string
 }
 
@@ -34,7 +33,7 @@ export function ScrollBar({
   className,
   orientation = 'vertical',
   ...props
-}: ComponentProps<typeof ScrollAreaPrimitive.ScrollAreaScrollbar>) {
+}: ScrollAreaPrimitive.ScrollAreaScrollbarProps) {
   return (
     <ScrollAreaPrimitive.ScrollAreaScrollbar
       data-slot='scroll-area-scrollbar'

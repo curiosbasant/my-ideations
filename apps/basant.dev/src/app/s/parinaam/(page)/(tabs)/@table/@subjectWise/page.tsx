@@ -69,7 +69,7 @@ export default function SubjectWiseTable() {
   return (
     <div className='-mx-(--page-padding) flex'>
       <div className='w-0 flex-1'>
-        <ScrollArea className='-mb-3 pb-3'>
+        <ScrollArea className='-mb-3 pb-3' type='auto'>
           <div className='px-(--page-padding)'>
             <div className='overflow-clip rounded-md border'>
               <Table rows={Object.values(rowsObj)} columns={columns} />

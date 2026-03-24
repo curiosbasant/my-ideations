@@ -31,7 +31,7 @@ export default function ResultTableSlot() {
   return (
     <div className='-mx-(--page-padding) flex'>
       <div className='w-0 flex-1 xl:mask-x-from-transparent xl:mask-x-to-black xl:mask-x-to-(--page-padding)'>
-        <ScrollArea className='-mb-3 pb-3'>
+        <ScrollArea className='-mb-3 pb-3' type='auto'>
           <div className='px-(--page-padding)'>
             <div className='overflow-clip rounded-md border'>
               <Table rows={results} columns={columns} />

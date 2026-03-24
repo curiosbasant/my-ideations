@@ -30,14 +30,14 @@ export default function ParinaamRootLayout(props: LayoutProps<'/s/parinaam'>) {
                 style={{ background: 'url(/public/bg-doodles-school.jpg) top / 600px' }}
               />
             </div>
-            <ScrollArea className='size-full'>
+            <ScrollArea className='size-full' type='auto'>
               <div className='isolate flex min-h-full w-full flex-col divide-y [--page-padding:--spacing(2)] [--page-size:var(--container-7xl)] sm:[--page-padding:--spacing(4)] md:[--page-padding:--spacing(8)]'>
                 <header className='sticky top-0 z-10 bg-background/80 px-(--page-padding) backdrop-blur-sm'>
-                  <div className='m-auto flex max-w-(--page-size) items-center gap-4 py-3'>
+                  <div className='m-auto flex h-13 max-w-(--page-size) items-center gap-4'>
                     <div className='@container flex-1'>
                       <Link href='/' className='inline-flex items-center gap-4'>
                         <img src='/public/icons/parinaam.svg' width={26} height={26} alt='Logo' />
-                        <span className='text-xl font-extrabold @2xs:text-2xl'>
+                        <span className='text-xl font-extrabold @xs:text-2xl'>
                           Pariksha Parinaam
                         </span>
                       </Link>
