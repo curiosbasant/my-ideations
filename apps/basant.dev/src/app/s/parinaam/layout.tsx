@@ -58,7 +58,7 @@ export default function ParinaamRootLayout(props: LayoutProps<'/s/parinaam'>) {
                         Made with ❤️ by{' '}
                         <a
                           className='text-blue-400 hover:text-blue-500'
-                          href='https://www.github.com/curiosbasant/pariksha-parinaam'
+                          href='https://www.github.com/curiosbasant'
                           target='_blank'>
                           Basant (Computer Instructor)
                         </a>

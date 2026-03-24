@@ -8,7 +8,7 @@ import { getResultsOptions } from './shared'
 export function useResultsQuery() {
   const searchParams = useSearchParams()
   const year = searchParams.get('year')
-  const standard = searchParams.get('standard')
+  const standard = searchParams.get('class')
   const roll = searchParams.get('roll')
 
   return useQuery(getResultsOptions({ year, standard, roll }))

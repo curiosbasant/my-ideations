@@ -16,25 +16,26 @@ import {
 export default async function FormSlot(props: PageProps<'/s/parinaam'>) {
   const searchParams = await props.searchParams
 
-  const year = resolveStringParam(searchParams.year) ?? '2025'
-  const standard = resolveStringParam(searchParams.standard)
+  const year = resolveStringParam(searchParams.year) ?? '2026'
+  const standard = resolveStringParam(searchParams.class)
   const roll = resolveStringParam(searchParams.roll)
 
   return (
     <Form action='/' className='grid gap-4 sm:grid-cols-3'>
-      <FormField label='Session'>
-        <Select name='year' defaultValue={year} key={year}>
+      <FormField label='Select Session'>
+        <Select name='year' defaultValue={year} required key={year}>
           <SelectTrigger className='w-full backdrop-blur-2xs'>
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
+            <SelectItem value='2026'>2025-26</SelectItem>
             <SelectItem value='2025'>2024-25</SelectItem>
             <SelectItem value='2024'>2023-24</SelectItem>
           </SelectContent>
         </Select>
       </FormField>
-      <FormField label='Standard'>
-        <Select name='standard' defaultValue={standard ?? undefined} key={standard}>
+      <FormField label='Select Class'>
+        <Select name='class' defaultValue={standard ?? undefined} required key={standard}>
           <SelectTrigger className='w-full backdrop-blur-2xs'>
             <SelectValue />
           </SelectTrigger>
@@ -49,6 +50,7 @@ export default async function FormSlot(props: PageProps<'/s/parinaam'>) {
           className='backdrop-blur-2xs'
           name='roll'
           defaultValue={roll ?? undefined}
+          required
           key={roll}
         />
       </FormField>

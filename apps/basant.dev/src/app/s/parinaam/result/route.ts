@@ -10,7 +10,7 @@ export function GET(request: NextRequest) {
 
   if (!standard || !roll) return NextResponse.json({ success: false })
 
-  const iterator = makeIterator({ board: 'rj', year: year ?? '2025', standard, roll })
+  const iterator = makeIterator({ board: 'rj', year: year ?? '2026', standard, roll })
   const stream = iteratorToStream(iterator)
 
   return new Response(stream)
