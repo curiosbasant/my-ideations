@@ -471,11 +471,11 @@ importers:
         specifier: workspace:*
         version: link:../lib
       drizzle-orm:
-        specifier: 1.0.0-beta.15-859cf75
-        version: 1.0.0-beta.15-859cf75(@types/mssql@9.1.9)(mssql@11.0.1)(postgres@3.4.8)(zod@4.3.5)
+        specifier: 1.0.0-beta.19
+        version: 1.0.0-beta.19(@types/mssql@9.1.9)(mssql@11.0.1)(postgres@3.4.8)(zod@4.3.5)
       drizzle-plus:
         specifier: 1.0.0-beta.34
-        version: 1.0.0-beta.34(drizzle-orm@1.0.0-beta.15-859cf75(@types/mssql@9.1.9)(mssql@11.0.1)(postgres@3.4.8)(zod@4.3.5))
+        version: 1.0.0-beta.34(drizzle-orm@1.0.0-beta.19(@types/mssql@9.1.9)(mssql@11.0.1)(postgres@3.4.8)(zod@4.3.5))
       postgres:
         specifier: ^3.3.5
         version: 3.4.8
@@ -487,11 +487,11 @@ importers:
         specifier: ^11
         version: 11.0.0
       drizzle-kit:
-        specifier: 1.0.0-beta.15-859cf75
-        version: 1.0.0-beta.15-859cf75
+        specifier: 1.0.0-beta.19
+        version: 1.0.0-beta.19
       drizzle-seed:
         specifier: 0.3.1
-        version: 0.3.1(drizzle-orm@1.0.0-beta.15-859cf75(@types/mssql@9.1.9)(mssql@11.0.1)(postgres@3.4.8)(zod@4.3.5))
+        version: 0.3.1(drizzle-orm@1.0.0-beta.19(@types/mssql@9.1.9)(mssql@11.0.1)(postgres@3.4.8)(zod@4.3.5))
       typescript:
         specifier: ~5.9.3
         version: 5.9.3
@@ -5482,12 +5482,12 @@ packages:
     resolution: {integrity: sha512-IO8C/dzEb6O3F9/twg6ZLXz164a2fhTnEWb95H23Dm4OuN+92NmEAlTrupP9VW6Jm3sO26tQlqyvyi4CsnY9GA==}
     engines: {node: '>=12'}
 
-  drizzle-kit@1.0.0-beta.15-859cf75:
-    resolution: {integrity: sha512-Y36s1XQGVb1PgU3aRNgufp1K3D2VkIifu8kv4Ubsmxi+Dq+N7KMklnpp7Knu/XC4FZi2MHPPG3v3o097r0/TcQ==}
+  drizzle-kit@1.0.0-beta.19:
+    resolution: {integrity: sha512-LO9cz8iipjyOROaBLmVAhu1WT4JGd8QKSc0XYhnO0FGXP5FappHII52lHcxfj2j+vVuDCTjoqeTTvW1N9NJYZQ==}
     hasBin: true
 
-  drizzle-orm@1.0.0-beta.15-859cf75:
-    resolution: {integrity: sha512-dGVb2Q70H2AV6513hkOXR3Ud0FeGXLdugVq3YehoqkGIVTJrkuo0gRnCcW/dfI00O07t3T4HSh4clF/D/o/IsQ==}
+  drizzle-orm@1.0.0-beta.19:
+    resolution: {integrity: sha512-wL8FoHl9NRVYdrescFWyAVY5rNuEmbY4KDqO6Qo4RTVt1rYMbz7btq5Mhg91GN3x+qeUbQ83l9QkHYd4QmVTvg==}
     peerDependencies:
       '@aws-sdk/client-rds-data': '>=3'
       '@cloudflare/workers-types': '>=4'
@@ -5500,7 +5500,6 @@ packages:
       '@op-engineering/op-sqlite': '>=2'
       '@opentelemetry/api': ^1.4.1
       '@planetscale/database': '>=1.13'
-      '@prisma/client': '*'
       '@sinclair/typebox': '>=0.34.8'
       '@sqlitecloud/drivers': '>=1.0.653'
       '@tidbcloud/serverless': '*'
@@ -5523,7 +5522,6 @@ packages:
       mysql2: '>=2'
       pg: '>=8'
       postgres: '>=3'
-      prisma: '*'
       sql.js: '>=1'
       sqlite3: '>=5'
       typebox: '>=1.0.0'
@@ -5551,8 +5549,6 @@ packages:
       '@opentelemetry/api':
         optional: true
       '@planetscale/database':
-        optional: true
-      '@prisma/client':
         optional: true
       '@sinclair/typebox':
         optional: true
@@ -5593,8 +5589,6 @@ packages:
       pg:
         optional: true
       postgres:
-        optional: true
-      prisma:
         optional: true
       sql.js:
         optional: true
@@ -6223,6 +6217,9 @@ packages:
   get-tsconfig@4.13.0:
     resolution: {integrity: sha512-1VKTZJCwBrvbd+Wn3AOgQP/2Av+TfTCOlE4AcRJE72W1ksZXbAx8PPBR9RzgTeSPzlPMHrbANMH3LbltH73wxQ==}
 
+  get-tsconfig@4.13.7:
+    resolution: {integrity: sha512-7tN6rFgBlMgpBML5j8typ92BKFi2sFQvIdpAqLA2beia5avZDrMs0FLZiM5etShWq5irVyGcGMEA1jcDaK7A/Q==}
+
   get-value@2.0.6:
     resolution: {integrity: sha512-Ln0UQDlxH1BapMu3GPtf7CuYNwRZf2gwCuPqbyG6pB8WfmFpzqcy4xtAaAMUhnNqjMKTiCPZG2oMT3YSx8U2NA==}
     engines: {node: '>=0.10.0'}
@@ -6253,20 +6250,20 @@ packages:
 
   glob@6.0.4:
     resolution: {integrity: sha512-MKZeRNyYZAVVVG1oZeLaWie1uweH40m9AZwIwxyPbTSX4hHrVYSzLg0Ro5Z5R7XKkIX+Cc6oD1rqeDJnwsB8/A==}
-    deprecated: Glob versions prior to v9 are no longer supported
+    deprecated: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
 
   glob@7.1.6:
     resolution: {integrity: sha512-LwaxwyZ72Lk7vZINtNNrywX0ZuLyStrdDtabefZKAY5ZGJhVtgdznluResxNmPitE0SAO+O26sWTHeKSI2wMBA==}
-    deprecated: Glob versions prior to v9 are no longer supported
+    deprecated: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
 
   glob@7.2.3:
     resolution: {integrity: sha512-nFR0zLpU2YCaRxwoCJvL6UvCH2JFyFVIvwTLsIf21AuHlMskA1hhTdk+LlYJtOlYt9v6dvszD2BGRqBL+iQK9Q==}
-    deprecated: Glob versions prior to v9 are no longer supported
+    deprecated: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
 
   glob@8.1.0:
     resolution: {integrity: sha512-r8hpEjiQEYlF2QU0df3dS+nxxSIreXQS1qRhMJM0Q5NDdR386C7jb7Hwwod8Fgiuex+k0GFjgft18yvxm5XoCQ==}
     engines: {node: '>=12'}
-    deprecated: Glob versions prior to v9 are no longer supported
+    deprecated: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
 
   globalthis@1.0.4:
     resolution: {integrity: sha512-DpLKbNU4WylpxJykQujfCcwYWiV/Jhm50Goo0wrVILAv5jOr9d+H+UR3PhSCD2rCCEIg0uc+G+muBTwD54JhDQ==}
@@ -15852,14 +15849,15 @@ snapshots:
 
   dotenv@17.3.1: {}
 
-  drizzle-kit@1.0.0-beta.15-859cf75:
+  drizzle-kit@1.0.0-beta.19:
     dependencies:
       '@drizzle-team/brocli': 0.11.0
       '@js-temporal/polyfill': 0.5.1
       esbuild: 0.25.12
+      get-tsconfig: 4.13.7
       jiti: 2.6.1
 
-  drizzle-orm@1.0.0-beta.15-859cf75(@types/mssql@9.1.9)(mssql@11.0.1)(postgres@3.4.8)(zod@4.3.5):
+  drizzle-orm@1.0.0-beta.19(@types/mssql@9.1.9)(mssql@11.0.1)(postgres@3.4.8)(zod@4.3.5):
     dependencies:
       '@types/mssql': 9.1.9
       mssql: 11.0.1
@@ -15867,15 +15865,15 @@ snapshots:
       postgres: 3.4.8
       zod: 4.3.5
 
-  drizzle-plus@1.0.0-beta.34(drizzle-orm@1.0.0-beta.15-859cf75(@types/mssql@9.1.9)(mssql@11.0.1)(postgres@3.4.8)(zod@4.3.5)):
+  drizzle-plus@1.0.0-beta.34(drizzle-orm@1.0.0-beta.19(@types/mssql@9.1.9)(mssql@11.0.1)(postgres@3.4.8)(zod@4.3.5)):
     dependencies:
-      drizzle-orm: 1.0.0-beta.15-859cf75(@types/mssql@9.1.9)(mssql@11.0.1)(postgres@3.4.8)(zod@4.3.5)
+      drizzle-orm: 1.0.0-beta.19(@types/mssql@9.1.9)(mssql@11.0.1)(postgres@3.4.8)(zod@4.3.5)
 
-  drizzle-seed@0.3.1(drizzle-orm@1.0.0-beta.15-859cf75(@types/mssql@9.1.9)(mssql@11.0.1)(postgres@3.4.8)(zod@4.3.5)):
+  drizzle-seed@0.3.1(drizzle-orm@1.0.0-beta.19(@types/mssql@9.1.9)(mssql@11.0.1)(postgres@3.4.8)(zod@4.3.5)):
     dependencies:
       pure-rand: 6.1.0
     optionalDependencies:
-      drizzle-orm: 1.0.0-beta.15-859cf75(@types/mssql@9.1.9)(mssql@11.0.1)(postgres@3.4.8)(zod@4.3.5)
+      drizzle-orm: 1.0.0-beta.19(@types/mssql@9.1.9)(mssql@11.0.1)(postgres@3.4.8)(zod@4.3.5)
 
   dtrace-provider@0.8.8:
     dependencies:
@@ -16814,6 +16812,10 @@ snapshots:
     dependencies:
       resolve-pkg-maps: 1.0.0
     optional: true
+
+  get-tsconfig@4.13.7:
+    dependencies:
+      resolve-pkg-maps: 1.0.0
 
   get-value@2.0.6: {}
 
@@ -19555,8 +19557,7 @@ snapshots:
 
   resolve-from@5.0.0: {}
 
-  resolve-pkg-maps@1.0.0:
-    optional: true
+  resolve-pkg-maps@1.0.0: {}
 
   resolve-protobuf-schema@2.1.0:
     dependencies:
