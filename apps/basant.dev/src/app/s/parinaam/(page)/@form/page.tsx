@@ -45,7 +45,7 @@ export default async function FormSlot(props: PageProps<'/s/parinaam'>) {
           </SelectContent>
         </Select>
       </FormField>
-      <FormField label='Starting Roll Number'>
+      <FormField label='Roll Number'>
         <Input
           className='backdrop-blur-2xs'
           name='roll'

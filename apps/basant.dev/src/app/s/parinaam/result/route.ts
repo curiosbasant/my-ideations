@@ -4,13 +4,13 @@ import { getResult, type ResultInput } from '../server'
 
 export function GET(request: NextRequest) {
   const params = request.nextUrl.searchParams
-  const year = params.get('year')
-  const standard = params.get('standard')
+  const year = params.get('year') || '2026'
+  const standard = params.get('class')
   const roll = params.get('roll')
 
   if (!standard || !roll) return NextResponse.json({ success: false })
 
-  const iterator = makeIterator({ board: 'rj', year: year ?? '2026', standard, roll })
+  const iterator = makeIterator({ board: 'rj', year, standard, roll })
   const stream = iteratorToStream(iterator)
 
   return new Response(stream)
@@ -35,21 +35,24 @@ async function* makeIterator(data: ResultInput) {
   if (!firstResult) return null
   yield firstResult
 
-  const resultSequence = generateResultSequence(data)
-
-  for (;;) {
-    for await (const result of take(resultSequence, 5)) {
-      if (result && firstResult.school === result.school) {
-        yield result
-      } else {
-        return
+  sequence: for (const resultSequence of [
+    generateResultSequence(data, -1),
+    generateResultSequence(data, 1),
+  ]) {
+    for (;;) {
+      for await (const result of take(resultSequence, 5).toArray()) {
+        if (firstResult.school === result?.school) {
+          yield result
+        } else {
+          continue sequence
+        }
       }
     }
   }
 }
 
-function* generateResultSequence(data: ResultInput) {
-  for (let currentRoll = Number.parseInt(data.roll) + 1; ; currentRoll++) {
+function* generateResultSequence(data: ResultInput, offset: number) {
+  for (let currentRoll = Number.parseInt(data.roll) + offset; ; currentRoll += offset) {
     yield getResult({ ...data, roll: currentRoll.toString() })
   }
 }
