@@ -59,7 +59,7 @@ async function ProfileDropdownMenuInner() {
 
 function getNameInitials(fullName?: string | null) {
   if (!fullName) return 'AA'
-  const parts = fullName.split(/ +/)
-  if (parts.length === 1) return fullName.slice(0, 2).toUpperCase()
-  return (parts[0][0] + parts[1][0]).toUpperCase()
+  const [first, second] = fullName.split(/ +/)
+  if (!second) return fullName.slice(0, 2).toUpperCase()
+  return (first![0]! + second[0]).toUpperCase()
 }

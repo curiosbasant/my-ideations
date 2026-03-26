@@ -16,9 +16,9 @@ import {
 export default async function FormSlot(props: PageProps<'/s/parinaam'>) {
   const searchParams = await props.searchParams
 
-  const year = resolveStringParam(searchParams.year) ?? '2026'
-  const standard = resolveStringParam(searchParams.class)
-  const roll = resolveStringParam(searchParams.roll)
+  const year = resolveStringParam(searchParams['year']) ?? '2026'
+  const standard = resolveStringParam(searchParams['class'])
+  const roll = resolveStringParam(searchParams['roll'])
 
   return (
     <Form action='/' className='grid gap-4 sm:grid-cols-3'>

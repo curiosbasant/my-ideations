@@ -49,17 +49,21 @@ export default function SubjectWiseTable() {
         thirdDivisionCount: 0,
         failCount: 0,
       }
-      arr[sub.name].totalStudents++
+      const subject = arr[sub.name]!
+      subject.totalStudents++
 
-      if (sub.totalMarks < 33) arr[sub.name].failCount++
-      else {
-        arr[sub.name].passCount++
+      if (sub.totalMarks < 33) {
+        subject.failCount++
+      } else {
+        subject.passCount++
         if (sub.totalMarks < 40) {
-        } else if (sub.totalMarks < 50) arr[sub.name].thirdDivisionCount++
-        else if (sub.totalMarks < 60) arr[sub.name].secondDivisionCount++
-        else {
-          arr[sub.name].firstDivisionCount++
-          if (sub.totalMarks >= 75) arr[sub.name].distinctionCount++
+        } else if (sub.totalMarks < 50) {
+          subject.thirdDivisionCount++
+        } else if (sub.totalMarks < 60) {
+          subject.secondDivisionCount++
+        } else {
+          subject.firstDivisionCount++
+          if (sub.totalMarks >= 75) subject.distinctionCount++
         }
       }
     }

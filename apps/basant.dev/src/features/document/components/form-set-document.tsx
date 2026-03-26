@@ -188,6 +188,7 @@ function DocumentUploadArea(props: {
       enablePromptFile
       aria-invalid={props.invalid}
       onFilesDrop={async ([file]) => {
+        if (!file) return
         setFileUrl((prev) => {
           prev && URL.revokeObjectURL(prev)
           return URL.createObjectURL(file)

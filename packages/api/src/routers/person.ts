@@ -8,12 +8,13 @@ import { sanitizeFilenameForStorage } from '@my/lib/utils'
 import { z } from '@my/lib/zod'
 
 import { objects } from '../../../db/src/utils/helpers/supabase'
+import { ensureSingleRow } from '../lib/utils/helpers'
 import { protectedProcedure, publicProcedure } from '../trpc'
 
 export const personRouter = {
   id: protectedProcedure.query(async ({ ctx: { rls } }) => {
     return rls(async (tx) => {
-      const [row] = await tx.execute<{ personId: number }>(selectPersonId)
+      const row = await tx.execute<{ personId: number }>(selectPersonId).then(ensureSingleRow)
       return row.personId
     })
   }),
@@ -80,7 +81,7 @@ export const personRouter = {
       }
       return documents.map((doc, i) => ({
         ...doc,
-        signedUrl: data[i].error ? null : data[i].signedUrl,
+        signedUrl: !data[i] || data[i].error ? null : data[i].signedUrl,
       }))
     }),
     type: {
@@ -95,8 +96,9 @@ export const personRouter = {
         }),
       )
       .query(async ({ input, ctx: { rls, supabase } }) => {
-        const [{ personId }] = await rls((tx) => tx.execute<{ personId: number }>(selectPersonId))
-
+        const { personId } = await rls((tx) =>
+          tx.execute<{ personId: number }>(selectPersonId),
+        ).then(ensureSingleRow)
         const bkt = supabase.storage.from('__documents')
         const filePath = `${personId}/${sanitizeFilenameForStorage(input.fileName)}`
         const { data, error } = await bkt.createSignedUploadUrl(filePath)

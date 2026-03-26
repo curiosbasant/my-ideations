@@ -27,14 +27,14 @@ export default function ResultLayout(props: LayoutProps<'/s/parinaam'>) {
   if (data && data.length > 0) {
     return (
       <>
-        <h2 className='px-8 text-center text-2xl font-bold text-balance'>{data[0].school}</h2>
+        <h2 className='px-8 text-center text-2xl font-bold text-balance'>{data[0]!.school}</h2>
         <ResultTabs>
           <div className='flex items-center justify-between gap-4'>
             <TabsList>
               <TabsTrigger value='table'>Table</TabsTrigger>
               <TabsTrigger value='summary'>Summary</TabsTrigger>
             </TabsList>
-            {data[0].stream && (
+            {data[0]!.stream && (
               <>
                 <label className='ms-auto'>Stream:</label>
                 <SelectStreamFilter />
@@ -81,7 +81,7 @@ function SelectStreamFilter() {
   const allStreams = Object.entries(streamMap)
 
   return (
-    <Select value={param ?? results[0].stream} onValueChange={setParam}>
+    <Select value={param ?? results[0]?.stream} onValueChange={setParam}>
       <SelectTrigger className='min-w-32 capitalize'>
         <SelectValue />
       </SelectTrigger>

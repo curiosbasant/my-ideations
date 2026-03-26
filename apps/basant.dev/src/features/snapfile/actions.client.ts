@@ -5,7 +5,7 @@ import { zipFiles } from '~/lib/utils'
 import { actionCreateFormat, actionUploadSnapFile } from './actions'
 
 export async function actionUploadFiles(files: File[]) {
-  const fileToUpload = files.length > 1 ? await zipFiles(files) : files[0]
+  const fileToUpload = files.length > 1 ? await zipFiles(files) : files[0]!
   const { code: fileShortCode, url: filePath } = await actionUploadSnapFile({
     fileName: fileToUpload.name,
   })

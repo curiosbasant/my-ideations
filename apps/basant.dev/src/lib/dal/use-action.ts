@@ -12,7 +12,7 @@ export function useDalMutation<TInput, TData>(
     onError?: (message: string, payload: TInput) => void
   } = {},
 ) {
-  const reducer = async (prev: DalResult<TData> | null, payload: TInput) => {
+  const reducer = async (_prev: DalResult<TData> | null, payload: TInput) => {
     const result = await dalActionFn(payload)
     if (result.success) {
       options.onSuccess?.(result.data, payload)

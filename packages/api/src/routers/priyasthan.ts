@@ -3,6 +3,7 @@ import { isAllNotNull, profileDisplayName } from '@my/db/helpers'
 import { and, desc, eq } from '@my/db/sql'
 import { z } from '@my/lib/zod'
 
+import { ensureSingleRow } from '../lib/utils/helpers'
 import { protectedProcedure } from '../trpc'
 
 export const priyasthanRouter = {
@@ -56,12 +57,13 @@ export const priyasthanRouter = {
       )
       .mutation(async ({ ctx: { db, authUserId }, input }) => {
         return db.transaction(async (tx) => {
-          const [[{ profileId }], [{ addressId }]] = await Promise.all([
+          const [{ profileId }, { addressId }] = await Promise.all([
             // exchange authId with profileId
             tx
               .select({ profileId: schema.profile.id })
               .from(schema.profile)
-              .where(eq(schema.profile.createdBy, authUserId)),
+              .where(eq(schema.profile.createdBy, authUserId))
+              .then(ensureSingleRow),
             tx
               .insert(schema.address)
               .values({
@@ -69,7 +71,8 @@ export const priyasthanRouter = {
                 latitude: input.latitude,
                 longitude: input.longitude,
               })
-              .returning({ addressId: schema.address.id }),
+              .returning({ addressId: schema.address.id })
+              .then(ensureSingleRow),
           ])
           await tx.insert(schema.profileAddress).values({ profileId, addressId, type: input.type })
           return addressId

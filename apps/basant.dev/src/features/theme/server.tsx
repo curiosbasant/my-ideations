@@ -37,9 +37,11 @@ export function ScriptAutoApplyTheme() {
         .split('; ')
         .find((row) => row.startsWith(cookieThemeKey + '='))
         ?.split('=')[1]
-      document.documentElement.dataset.theme = resolveThemePreference(themePreference ?? 'system')
+      document.documentElement.dataset['theme'] = resolveThemePreference(
+        themePreference ?? 'system',
+      )
     } catch {
-      document.documentElement.dataset.theme = resolveThemePreference('system')
+      document.documentElement.dataset['theme'] = resolveThemePreference('system')
     }
   }
 

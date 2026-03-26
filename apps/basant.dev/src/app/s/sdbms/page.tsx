@@ -29,7 +29,7 @@ export default async function SdbmsHomePage(props: PageProps<'/s/sdbms'>) {
   }
 
   const searchParams = await props.searchParams
-  const role = resolveStringParam(searchParams.role)
+  const role = resolveStringParam(searchParams['role'])
 
   return (
     <div className='h-full'>

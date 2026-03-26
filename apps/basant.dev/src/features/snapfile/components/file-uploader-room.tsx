@@ -15,7 +15,7 @@ import { actionUploadRoomFile } from '../actions'
 export function FileUploaderRoom(props: { slug: string }) {
   const { isPending, actionTransition } = useDalMutation(
     async (files: File[]) => {
-      const fileToUpload = files.length > 1 ? await zipFiles(files) : files[0]
+      const fileToUpload = files.length > 1 ? await zipFiles(files) : files[0]!
       const { roomId, path: filePath } = await actionUploadRoomFile({
         slug: props.slug,
         fileName: fileToUpload.name,

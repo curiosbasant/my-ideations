@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 
 export default async function FormatsPage(props: PageProps<'/s/snapfile/formats'>) {
   const searchParams = await props.searchParams
-  const query = resolveStringParam(searchParams.query)
+  const query = resolveStringParam(searchParams['query'])
   const recentFormats = await getRecentFormats({ query }).catch(() => [])
 
   return (

@@ -5,14 +5,15 @@ import { useMemo, useRef, useState } from 'react'
 import { useToggle } from '@my/core/hooks'
 
 class Puzzle {
+  rows: number
+  cols: number
   moves = 0
   position: number[]
   status!: 'start' | 'complete'
 
-  constructor(
-    readonly rows = 4,
-    readonly cols = rows,
-  ) {
+  constructor(rows = 4, cols = rows) {
+    this.rows = rows
+    this.cols = cols
     this.position = Array.from(Array(rows * cols), (_, i) => i)
     this.restart()
   }
@@ -41,8 +42,8 @@ class Puzzle {
     }
   }
   _slideTile(index: number) {
-    const loc = this.position[index]
-    if (loc == this.empty) return
+    const loc = this.position[index] ?? this.empty
+    if (loc === this.empty) return
 
     const locRC = this.toRC(loc),
       empRC = this.toRC(this.empty)
@@ -55,7 +56,7 @@ class Puzzle {
 
     const direction = offset * (loc < this.empty ? 1 : -1)
     for (let t = index; this.position[t] != this.empty; ) {
-      const tgt = this.position[t] + direction,
+      const tgt = this.position[t]! + direction,
         pt = t
       t = this.position.indexOf(tgt)
       this.position[pt] = tgt
@@ -213,7 +214,7 @@ export default function PuzzleGamePage() {
         <label className='inline-block cursor-pointer rounded-full bg-sky-500 px-4 py-2 text-sky-50'>
           Upload Image
           <input
-            className='absolute -left-[9999px]'
+            className='swoosh'
             onChange={(ev) => {
               const file = ev.currentTarget.files?.[0]
               if (!file) return

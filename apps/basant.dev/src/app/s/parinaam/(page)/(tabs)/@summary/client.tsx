@@ -66,24 +66,23 @@ export function ClassResultPieChart() {
           ))}
           <Label
             content={({ viewBox }) => {
-              if (viewBox && 'cx' in viewBox && 'cy' in viewBox) {
-                return (
-                  <text x={viewBox.cx} y={viewBox.cy} textAnchor='middle' dominantBaseline='middle'>
-                    <tspan
-                      x={viewBox.cx}
-                      y={viewBox.cy}
-                      className='fill-foreground text-3xl font-bold'>
-                      {results.length.toLocaleString()}
-                    </tspan>
-                    <tspan
-                      x={viewBox.cx}
-                      y={(viewBox.cy || 0) + 24}
-                      className='fill-muted-foreground'>
-                      Total Students
-                    </tspan>
-                  </text>
-                )
-              }
+              if (!(viewBox && 'cx' in viewBox && 'cy' in viewBox)) return null
+              return (
+                <text x={viewBox.cx} y={viewBox.cy} textAnchor='middle' dominantBaseline='middle'>
+                  <tspan
+                    x={viewBox.cx}
+                    y={viewBox.cy}
+                    className='fill-foreground text-3xl font-bold'>
+                    {results.length.toLocaleString()}
+                  </tspan>
+                  <tspan
+                    x={viewBox.cx}
+                    y={(viewBox.cy || 0) + 24}
+                    className='fill-muted-foreground'>
+                    Total Students
+                  </tspan>
+                </text>
+              )
             }}
           />
         </Pie>
@@ -139,7 +138,7 @@ export function ClassToppersBarChart(props: {
       ref={props.ref}
       className='min-h-50 w-full'
       style={{ aspectRatio }}
-      config={top3[0].subjects.reduce(
+      config={top3[0]!.subjects.reduce(
         (acc, s, i) => (
           (acc[`subject-${i + 1}`] = { label: s.name, color: `var(--chart-${i + 1})` }),
           acc
@@ -159,7 +158,7 @@ export function ClassToppersBarChart(props: {
         />
         <YAxis {...yAxisProps} tickMargin={10} />
         <XAxis {...xAxisProps} tickMargin={10} />
-        {top3[0].subjects.map((_, i) => (
+        {top3[0]!.subjects.map((_, i) => (
           <Bar
             name={`subject-${i + 1}`}
             fill={`var(--color-subject-${i + 1})`}
@@ -175,7 +174,7 @@ export function ClassToppersBarChart(props: {
 }
 
 function getTop3Results(results: ResultQueryOutput[]) {
-  if (!results[0].rank) return results.slice(-3)
+  if (!results[0]?.rank) return results.slice(-3)
   const top3: ResultQueryOutput[] = []
   for (const r of results) {
     if (r.rank < 4) {

@@ -19,9 +19,9 @@ function ddmmyyyyParser(value: string) {
   const parts = value.split(/-|\//)
   if (parts.length !== 3) return null
 
-  const day = Number.parseInt(parts[0], 10)
-  const month = Number.parseInt(parts[1], 10) - 1 // JS months are 0-indexed
-  const year = Number.parseInt(parts[2], 10)
+  const day = Number.parseInt(parts[0]!, 10)
+  const month = Number.parseInt(parts[1]!, 10) - 1 // JS months are 0-indexed
+  const year = Number.parseInt(parts[2]!, 10)
 
   if (isNaN(day) || isNaN(month) || isNaN(year)) return null
 

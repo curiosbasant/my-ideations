@@ -5,6 +5,7 @@ import { authUserId, userPersonId } from '@my/db/db-functions'
 import { and, caseWhen, eq, isNull, now } from '@my/db/sql'
 import { z } from '@my/lib/zod'
 
+import { ensureSingleRow } from '../../../lib/utils/helpers'
 import { protectedProcedure } from '../../../trpc'
 import { importFileProcedure } from './import-file'
 
@@ -92,11 +93,11 @@ export const teacherRouter = {
       )
       .mutation(async ({ input, ctx: { rls } }) => {
         return rls(async (tx) => {
-          const [row] = await tx
+          const row = await tx
             .select({ id: schema.sd__teacher.id })
             .from(schema.sd__teacher)
             .where(eq(schema.sd__teacher.personId, userPersonId))
-
+            .then(ensureSingleRow)
           await tx
             .insert(schema.sd__teacherSubject)
             .values({

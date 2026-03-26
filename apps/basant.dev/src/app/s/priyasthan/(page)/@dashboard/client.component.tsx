@@ -35,7 +35,7 @@ export function MapWorkPlaces(props: { locations: Location[] }) {
     (prev, payload: { lat: number; lng: number; index?: number }) => {
       if (typeof payload.index === 'number') {
         return prev.with(payload.index, {
-          ...prev[payload.index],
+          ...prev[payload.index]!,
           latitude: payload.lat,
           longitude: payload.lng,
         })
@@ -50,13 +50,16 @@ export function MapWorkPlaces(props: { locations: Location[] }) {
   )
 
   const setMarker: typeof setOptimisticMarker = (...args) => {
+    const index = args[0]?.index
+    const addressId = typeof index === 'number' && optimisticMarkers[index]?.addressId
+
     startTransition(() => {
       setOptimisticMarker(...args)
       startTransition(async () => {
         await saveWorkplace(
-          typeof args[0].index === 'number' ?
+          addressId ?
             {
-              addressId: optimisticMarkers[args[0].index].addressId,
+              addressId,
               latitude: args[0].lat,
               longitude: args[0].lng,
             }

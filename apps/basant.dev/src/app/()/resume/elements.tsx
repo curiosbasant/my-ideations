@@ -1,4 +1,4 @@
-import type { ComponentType, ElementType, ReactNode } from 'react'
+import type { ComponentType } from 'react'
 import type { LucideProps } from 'lucide-react'
 
 import { styled } from '~/lib/utils'

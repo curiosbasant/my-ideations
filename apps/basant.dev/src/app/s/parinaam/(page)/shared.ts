@@ -39,6 +39,7 @@ const fetchResults = streamedQuery<
         } finally {
           reader.releaseLock()
         }
+        return
       },
     }
   },
@@ -53,8 +54,8 @@ export const getResultsOptions = (data: ResultQueryInput) =>
 
       const rankMap = results
         .toSorted((a, b) => b.percentage - a.percentage)
-        .reduce((acc, row, i) => ((acc[row.roll] = i + 1), acc), {} as Record<string, number>)
-      return results.map((r) => ({ ...r, rank: rankMap[r.roll] }))
+        .reduce<Record<string, number>>((acc, row, i) => ((acc[row.roll] = i + 1), acc), {})
+      return results.map((r) => ({ ...r, rank: rankMap[r.roll]! }))
     },
     staleTime: Number.POSITIVE_INFINITY,
   })

@@ -2,6 +2,7 @@ import { schema } from '@my/db'
 import { eq, sql } from '@my/db/sql'
 import { z } from '@my/lib/zod'
 
+import { ensureSingleRow } from '../lib/utils/helpers'
 import { anonymousProcedure, protectedProcedure, publicProcedure } from '../trpc'
 
 export const dotsAndBoxesRouter = {
@@ -40,10 +41,11 @@ export const dotsAndBoxesRouter = {
         })
         .where(eq(schema.gdb__board.id, input.boardId))
       return db.transaction(async (tx) => {
-        const [board] = await tx
+        const board = await tx
           .select({ players: schema.gdb__board.players })
           .from(schema.gdb__board)
           .where(eq(schema.gdb__board.id, input.boardId))
+          .then(ensureSingleRow)
 
         await tx.update(schema.gdb__board).set({
           players: [...board.players, authUserId],
@@ -65,13 +67,14 @@ export const dotsAndBoxesRouter = {
     .input(z.object({ boardId: z.string(), dashName: z.string() }))
     .mutation(async ({ ctx: { db }, input }) => {
       return db.transaction(async (tx) => {
-        const [board] = await tx
+        const board = await tx
           .select({
             activePlayerIndex: schema.gdb__board.activePlayerIndex,
             dashes: schema.gdb__board.dashes,
           })
           .from(schema.gdb__board)
           .where(eq(schema.gdb__board.id, input.boardId))
+          .then(ensureSingleRow)
 
         await tx
           .update(schema.gdb__board)

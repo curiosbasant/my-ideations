@@ -10,7 +10,7 @@ export function Dialog(props: ComponentProps<typeof DialogPrimitive.Root>) {
   return <DialogPrimitive.Root data-slot='dialog' {...props} />
 }
 
-export const DialogContext = createContext((bool: boolean) => {})
+export const DialogContext = createContext((_: boolean) => {})
 export function DialogProvider(props: ComponentProps<typeof DialogPrimitive.Root>) {
   const [open, setOpen] = useState(false)
 

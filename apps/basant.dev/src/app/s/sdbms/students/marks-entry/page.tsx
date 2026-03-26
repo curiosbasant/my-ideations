@@ -17,10 +17,10 @@ export default async function StudentsMarksEntryPage(
   props: PageProps<'/s/sdbms/students/marks-entry'>,
 ) {
   const searchParams = await props.searchParams
-  const session = resolveStringParam(searchParams.session)
-  const exam = resolveStringParam(searchParams.exam)
-  const standard = resolveStringParam(searchParams.class)
-  const subject = resolveStringParam(searchParams.subject)
+  const session = resolveStringParam(searchParams['session'])
+  const exam = resolveStringParam(searchParams['exam'])
+  const standard = resolveStringParam(searchParams['class'])
+  const subject = resolveStringParam(searchParams['subject'])
 
   return (
     <div className='@container mx-auto max-w-md'>

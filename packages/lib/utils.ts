@@ -227,11 +227,11 @@ export function isDarkColor(color: string) {
   if (color.startsWith('rgb')) {
     // if RGB, extract the rgb values
     const rgbValues = color.match(/^rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*(\d+(?:\.\d+)?))?\)$/)
-    if (!rgbValues) throw new Error('Invalid rgb color value')
+    if (rgbValues?.length !== 3) throw new Error('Invalid rgb color value')
 
-    r = +rgbValues[1]
-    g = +rgbValues[2]
-    b = +rgbValues[3]
+    r = +rgbValues[1]!
+    g = +rgbValues[2]!
+    b = +rgbValues[3]!
   } else {
     // if hex, convert and get rgb values: http://gist.github.com/983661
     const numericalPart = color.replace('#', '')
@@ -267,7 +267,7 @@ export { resolveStringParam, resolveArrayParam }
 export function splitFullName(fullName: string): { firstName: string; lastName: string | null } {
   const parts = fullName.split(/ +/)
   if (parts.length === 1) return { firstName: fullName, lastName: null }
-  if (parts.length === 2) return { firstName: parts[0], lastName: parts[1] }
+  if (parts.length === 2) return { firstName: parts[0]!, lastName: parts[1]! }
 
   const lastName = parts.pop() ?? null
   return { firstName: parts.join(' '), lastName }

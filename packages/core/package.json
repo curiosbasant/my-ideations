@@ -27,7 +27,7 @@
     "@my/api": "workspace:*",
     "@my/tsconfig": "workspace:*",
     "@trpc/server": "^11.12",
-    "typescript": "~5.9.3"
+    "typescript": "~6.0"
   },
   "peerDependencies": {
     "react": "*"

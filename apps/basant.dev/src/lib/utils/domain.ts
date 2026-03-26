@@ -15,7 +15,7 @@ export function extractSubdomain(host: string | null) {
     // <project-name>-git-<branch-name>-<scope-slug>.vercel.app
     if (hostname.includes('-git-app-')) {
       // if a vercel branch url and the branch starts with `app`
-      return process.env.VERCEL_GIT_COMMIT_REF?.slice(4) || null // remove the 'app/' from branch name
+      return process.env['VERCEL_GIT_COMMIT_REF']?.slice(4) || null // remove the 'app/' from branch name
     }
 
     if (hostname.includes('---')) {

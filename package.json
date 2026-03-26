@@ -24,7 +24,7 @@
     "@turbo/gen": "~2.8",
     "supabase": "^2.77",
     "turbo": "~2.8",
-    "typescript": "~5.9.3"
+    "typescript": "~6.0"
   },
   "pnpm": {
     "overrides": {

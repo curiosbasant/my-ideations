@@ -1,10 +1,13 @@
+import { TRPCError } from '@trpc/server'
+
 import { schema } from '@my/db'
 import { authUserId } from '@my/db/db-functions'
 import { profileDisplayName } from '@my/db/helpers'
-import { and, desc, eq, sql } from '@my/db/sql'
+import { and, desc, eq, now } from '@my/db/sql'
 import { placeIdToLocation } from '@my/lib/maps'
 import { z } from '@my/lib/zod'
 
+import { ensureSingleRow } from '../lib/utils/helpers'
 import { protectedProcedure, publicProcedure } from '../trpc'
 
 export const userRouter = {
@@ -21,7 +24,9 @@ export const userRouter = {
         .from(schema.profile)
         .leftJoin(schema.designation, eq(schema.designation.id, schema.profile.postId))
         .where(eq(schema.profile.createdBy, authUserId))
-
+      if (!user) {
+        throw new TRPCError({ code: 'NOT_FOUND' })
+      }
       return user
     })
   }),
@@ -111,12 +116,13 @@ export const userRouter = {
       )
       .mutation(async ({ ctx: { db, authUserId }, input }) => {
         await db.transaction(async (tx) => {
-          const [[{ profileId }], [{ addressId }]] = await Promise.all([
+          const [{ profileId }, { addressId }] = await Promise.all([
             // exchange authId with profileId
             tx
               .select({ profileId: schema.profile.id })
               .from(schema.profile)
-              .where(eq(schema.profile.createdBy, authUserId)),
+              .where(eq(schema.profile.createdBy, authUserId))
+              .then(ensureSingleRow),
             // ensure address exists
             tx
               .select({ addressId: schema.address.id })
@@ -136,7 +142,8 @@ export const userRouter = {
                     longitude: location.longitude,
                   })
                   .returning({ addressId: schema.address.id })
-              }),
+              })
+              .then(ensureSingleRow),
           ])
 
           // link profile with address
@@ -149,7 +156,7 @@ export const userRouter = {
             })
             .onConflictDoUpdate({
               target: [schema.profileAddress.profileId, schema.profileAddress.addressId],
-              set: { updatedAt: sql`now()` },
+              set: { updatedAt: now() },
             })
         })
 

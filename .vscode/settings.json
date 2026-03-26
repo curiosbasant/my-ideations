@@ -45,6 +45,15 @@
   "files.associations": {
     "**/tailwind.css": "tailwindcss"
   },
+  "js/ts.tsdk.promptToUseWorkspaceVersion": true,
+  "js/ts.preferences.autoImportFileExcludePatterns": [
+    "next/router.d.ts",
+    "next/dist/client/router.d.ts",
+    "drizzle-orm/mysql-core/index.d.ts",
+    "drizzle-orm/sqlite-core/index.d.ts"
+  ],
+  "js/ts.tsdk.path": "node_modules/typescript/lib",
+  "js/ts.tsserver.experimental.enableProjectDiagnostics": true,
   "material-icon-theme.files.associations": {
     "tailwind.css": "tailwindcss"
   },
@@ -64,15 +73,6 @@
     "apps/random/tailwind.config.ts": "apps/random/src/**/*.tsx",
     "apps/spend-buddy/tailwind.config.ts": "apps/spend-buddy/src/**/*.tsx"
   },
-  "typescript.enablePromptUseWorkspaceTsdk": true,
-  "typescript.preferences.autoImportFileExcludePatterns": [
-    "next/router.d.ts",
-    "next/dist/client/router.d.ts",
-    "drizzle-orm/mysql-core/index.d.ts",
-    "drizzle-orm/sqlite-core/index.d.ts"
-  ],
-  "typescript.tsdk": "node_modules/typescript/lib",
-  "typescript.tsserver.experimental.enableProjectDiagnostics": true,
   "workbench.editor.customLabels.enabled": true,
   "workbench.editor.customLabels.patterns": {
     "**/app/**/{page,layout,template,loading,error,route}.{ts,tsx}": "${dirname(1)}/${dirname} <${filename}>",

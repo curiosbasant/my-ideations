@@ -10,7 +10,9 @@ export async function extractDataFromSheet<T>(
     typeof sheetNameOrIndex === 'string' ? sheetNameOrIndex : (
       workbook.SheetNames[sheetNameOrIndex || 0]
     )
-  const sheet = workbook.Sheets[sheetName]
+  const sheet = sheetName && workbook.Sheets[sheetName]
+  if (!sheet) throw new Error('Invalid Sheet')
+
   const data = xlsx.utils.sheet_to_json<T>(sheet, {
     defval: '', // prevents missing cells from becoming undefined
   })

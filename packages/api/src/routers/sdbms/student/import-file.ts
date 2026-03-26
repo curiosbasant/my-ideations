@@ -8,6 +8,7 @@ import { extractDataFromSheet } from '@my/lib/file'
 import { groupBy, splitFullName } from '@my/lib/utils'
 import { z } from '@my/lib/zod'
 
+import { ensureSingleRow } from '../../../lib/utils/helpers'
 import {
   categorySchema,
   coerceNumber,
@@ -168,8 +169,8 @@ async function createInstitutes(tx: DbTransaction, sdRecords: SchemaStudent[]) {
   }))
 
   for (let i = 0; i < instituteEntries.length; i++) {
-    const [, instituteProfiles] = instituteEntries[i]
-    const instituteId = instituteIds[i]
+    const [, instituteProfiles] = instituteEntries[i]!
+    const instituteId = instituteIds[i]!
 
     // create all classes in those institutes
     const classEntries = Object.entries(groupBy(instituteProfiles, 'standard'))
@@ -187,8 +188,8 @@ async function createInstitutes(tx: DbTransaction, sdRecords: SchemaStudent[]) {
       .returning({ id: schema.sd__class.id })
 
     for (let i = 0; i < classEntries.length; i++) {
-      const [, classProfiles] = classEntries[i]
-      const classId = classes[i].id
+      const [, classProfiles] = classEntries[i]!
+      const classId = classes[i]!.id
 
       const sectionEntries = Object.entries(groupBy(classProfiles, 'section'))
       // create all sections in those classes
@@ -331,11 +332,12 @@ async function createPersons(
 
       const relations = parentRelations.filter(({ personId }) => personId === studentPersonId)
 
-      if (relations.length !== 2) throw new Error('Must be exactly two parents!')
       const [f, m] = relations
-
-      values[+f.relation].id = f.relativeId // 1
-      values[+m.relation].id = m.relativeId // 2
+      const fRelative = f && values[+f.relation]
+      const mRelative = m && values[+m.relation]
+      if (!fRelative || !mRelative) throw new Error('Must be exactly two parents!')
+      fRelative.id = f.relativeId // 1
+      mRelative.id = m.relativeId // 2
       return values
     })
     await tx
@@ -381,13 +383,13 @@ async function createPersons(
         (_, i) =>
           [
             {
-              personId: allPersonIds[i * 3],
-              relativeId: allPersonIds[i * 3 + 1],
+              personId: allPersonIds[i * 3]!,
+              relativeId: allPersonIds[i * 3 + 1]!,
               relation: '1',
             },
             {
-              personId: allPersonIds[i * 3],
-              relativeId: allPersonIds[i * 3 + 2],
+              personId: allPersonIds[i * 3]!,
+              relativeId: allPersonIds[i * 3 + 2]!,
               relation: '2',
             },
           ] satisfies (typeof schema.personRelation.$inferInsert)[],
@@ -409,7 +411,7 @@ async function createStudents(
     const v = cache.get(key)
     if (v) return v
 
-    const [data] = await tx
+    const data = await tx
       .select({
         instituteId: schema.sd__institute.id,
         classId: schema.sd__class.id,
@@ -425,6 +427,7 @@ async function createStudents(
           eq(schema.sd__classSection.name, sectionName),
         ),
       )
+      .then(ensureSingleRow)
     cache.set(key, data)
     return data
   }
@@ -432,9 +435,11 @@ async function createStudents(
   const studentValues = await Promise.all(
     sdRecords.map(async (record, i) => {
       const { instituteId } = await getData(record.schoolName, record.standard, record.section)
+      const personId = persons[i]
+      if (!personId) throw new Error('Invalid Person')
 
       return {
-        personId: persons[i],
+        personId,
         instituteId,
         admissionDate: record.doa?.toISOString(),
         admissionNo: record.srNo,
@@ -465,12 +470,15 @@ async function createStudents(
         record.standard,
         record.section,
       )
+      const studentId = students[i]?.id
+      if (!studentId) throw new Error('Invalid Student')
+
       return {
         sessionId,
         instituteId,
         classId,
         sectionId,
-        studentId: students[i].id,
+        studentId,
         rollNo: record.rollNo,
       } satisfies typeof schema.sd__classStudent.$inferInsert
     }),

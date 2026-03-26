@@ -8,6 +8,7 @@ import {
 } from '@my/lib/schema/spend-buddy'
 import { z } from '@my/lib/zod'
 
+import { ensureSingleRow } from '../lib/utils/helpers'
 import { protectedProcedure } from '../trpc'
 
 export const spendBuddyRouter = {
@@ -73,7 +74,7 @@ export const spendBuddyRouter = {
                 .from(schema.profile)
                 .where(eq(schema.profile.createdBy, authUserId)),
             )
-          const [group] = await tx
+          const group = await tx
             .insert(schema.sb__group)
             .values({
               name: input.name,
@@ -84,6 +85,7 @@ export const spendBuddyRouter = {
               name: schema.sb__group.name,
               profileId: schema.sb__group.createdBy,
             })
+            .then(ensureSingleRow)
 
           await tx.insert(schema.sb__member).values({
             groupId: group.id,

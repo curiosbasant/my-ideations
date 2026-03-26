@@ -14,9 +14,10 @@ export function useElementSize<T extends HTMLElement, V>(
   const ref = useCallback((elem: T | null) => {
     if (!elem) return
 
-    const fn = select ?? ((n) => n)
-    const observer = new ResizeObserver(([{ borderBoxSize }]) => {
-      const size = fn(borderBoxSize[0].inlineSize)
+    const observer = new ResizeObserver(([element]) => {
+      const inlineSize = element?.borderBoxSize[0]?.inlineSize
+      if (typeof inlineSize !== 'number') return
+      const size = select?.(inlineSize) ?? inlineSize
       // @ts-expect-error
       startTransition(() => setElementSize(size))
     })

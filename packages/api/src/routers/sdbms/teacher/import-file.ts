@@ -152,7 +152,9 @@ export const importFileProcedure = adminProcedure
           ]
 
           const f = parentRelations.find(({ personId }) => personId === teacherPersonId)
-          f && (values[+f.relation].id = f.relativeId) // 1
+          const fRelative = f && values[+f.relation]
+          if (!fRelative) throw new Error('Invalid Data')
+          fRelative.id = f.relativeId // 1
           return values
         })
         await tx
@@ -192,8 +194,8 @@ export const importFileProcedure = adminProcedure
         .insert(schema.personRelation)
         .values(
           teacherPersonIds.map((_, i) => ({
-            personId: allPersonIds[i * 2],
-            relativeId: allPersonIds[i * 2 + 1],
+            personId: allPersonIds[i * 2]!,
+            relativeId: allPersonIds[i * 2 + 1]!,
             relation: '1',
           })),
         )
@@ -204,7 +206,7 @@ export const importFileProcedure = adminProcedure
         .values(
           recordsToInsert
             .map((record, i) => ({
-              personId: personsInserted[i * 2],
+              personId: personsInserted[i * 2]!,
               instituteId: input.instituteId,
               employeeId: record.employeeId,
               joiningDate: record.joiningDate?.toISOString(),

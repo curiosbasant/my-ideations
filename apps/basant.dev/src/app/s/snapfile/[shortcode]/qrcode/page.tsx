@@ -68,7 +68,7 @@ function CopyShortLink() {
           if (!navigator.clipboard)
             return toast.info('That action is only supported in secure environment')
           await navigator.clipboard.writeText(`${location.origin}/${extractShortcode()}`)
-          toast.success('Copied to clipboard')
+          return toast.success('Copied to clipboard')
         }}
         title='Copy URL'
         type='button'>

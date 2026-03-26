@@ -53,7 +53,7 @@
     "@types/react": "~18.2.45",
     "dotenv-cli": "^11",
     "eas-cli": "^10.0.2",
-    "typescript": "~5.9.3"
+    "typescript": "~6.0"
   },
   "private": true
 }

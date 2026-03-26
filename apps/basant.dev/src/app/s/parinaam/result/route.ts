@@ -49,6 +49,7 @@ async function* makeIterator(data: ResultInput) {
       }
     }
   }
+  return
 }
 
 function* generateResultSequence(data: ResultInput, offset: number) {
