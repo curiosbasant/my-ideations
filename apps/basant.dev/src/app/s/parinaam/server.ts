@@ -9,33 +9,32 @@ export type ResultInput = {
 
 export async function getResult(payload: ResultInput) {
   const data = await fetchResult(payload)
-  if (!data || !data.ROLL_NO) return null
+  if (!data?.['ROLL_NO']) return null
 
   const subjects = []
-  for (let i = 1; i < 7; i++) {
-    const subjectName = data[`SC${i}`] as string
+  for (let i = 1; i < 15; i++) {
+    const subjectName = data[`SC${i}`]
     if (!subjectName) continue
     subjects.push({
       name: prettifyText(subjectName),
-      theoryMarks: data[`SC${i}P1`] as string,
-      sessionalMarks: data[`SC${i}P3`] as string,
-      totalMarksText: data[`TOT${i}`] as string,
-      totalMarks: Number.parseInt(data[`TOT${i}`]),
+      theoryMarks: data[`SC${i}P1`],
+      sessionalMarks: data[`SC${i}P3`],
+      totalMarks: data[`TOT${i}`] ? Number.parseInt(data[`TOT${i}`]!) : 0,
     })
   }
 
+  const percentage = data['PER'] ? Number.parseFloat(data['PER']) : 0
   return {
-    roll: data.ROLL_NO as number,
-    name: data.CAN_NAME as string,
-    fName: data.FNAME as string,
-    mName: data.MNAME as string,
-    school: prettifyText(data.CENT_NAME as string),
-    stream: data.GROUP as string,
-    division: data.RESULT as string,
-    percentage: Number.parseFloat(data.PER),
-    percentageText: `${Number.parseFloat(data.PER).toFixed(2)}%`,
-    marksObtained: Number.parseInt(data.TOT_MARKS),
-    marksText: data.TOT_MARKS as string,
+    roll: data['ROLL_NO'] as unknown as number,
+    name: data['CAN_NAME'],
+    fName: data['FNAME'],
+    mName: data['MNAME'],
+    school: data['CENT_NAME'] && prettifyText(data['CENT_NAME']),
+    stream: data['GROUP'] || null,
+    division: data['RESULT'] || '',
+    percentage,
+    percentageText: `${percentage.toFixed(2)}%`,
+    marksObtained: data['TOT_MARKS'] ? Number.parseInt(data['TOT_MARKS']) : 0,
     subjects,
   }
 }
@@ -49,7 +48,7 @@ async function fetchResult(payload: ResultInput) {
   })
   return fetch(`https://boardresultapi${payload.standard}.amarujala.com/result?${searchParams}`, {
     cache: 'force-cache',
-  }).then((res) => res.json())
+  }).then<Record<string, string>>((res) => res.json())
 }
 
 export type ResultOutput = NonNullable<Awaited<ReturnType<typeof getResult>>>
