@@ -45,7 +45,5 @@ export function ScriptAutoApplyTheme() {
     }
   }
 
-  return (
-    <script dangerouslySetInnerHTML={{ __html: `(${fn.toString()})('${COOKIE_THEME_KEY}');` }} />
-  )
+  return <script>{`(${fn.toString()})('${COOKIE_THEME_KEY}');`}</script>
 }
