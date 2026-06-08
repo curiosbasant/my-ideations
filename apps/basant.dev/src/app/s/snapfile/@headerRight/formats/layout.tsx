@@ -8,7 +8,7 @@ import {
   DialogTrigger,
 } from '~/components/ui/dialog'
 
-export default function UploadFileModalButtonLayout(props: LayoutProps<'/s/snapfile'>) {
+export default function UploadFileModalButtonLayout(props: LayoutProps<'/s/snapfile/formats'>) {
   return (
     <DialogProvider>
       <DialogTrigger asChild>

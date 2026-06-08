@@ -3,8 +3,8 @@ import Link from 'next/link'
 import { resolveStringParam } from '@my/lib/utils'
 
 import { FormSubmitButton } from '~/components/forms/client'
-import { FormField } from '~/components/forms/shared'
 import { Button } from '~/components/ui/button'
+import { FormControl } from '~/components/ui/form'
 import { Input } from '~/components/ui/input'
 import { getProfileDetails, getUserRole } from '~/features/sdbms/dal'
 import { FormConnectStudent, FormConnectTeacher } from './client'
@@ -36,12 +36,17 @@ export default async function SdbmsHomePage(props: PageProps<'/s/sdbms'>) {
       {role === 'teacher' ?
         <div className='@container mx-auto max-w-sm space-y-8'>
           <FormConnectTeacher className='grid gap-4 @xl:grid-cols-2'>
-            <FormField label='Employee Id'>
-              <Input className='w-full backdrop-blur-2xs' name='employeeId' required />
-            </FormField>
-            <FormField label='Date of Birth'>
-              <Input className='backdrop-blur-2xs' name='dob' required type='date' />
-            </FormField>
+            <FormControl labelClassName='text-base' label='Employee Id' fieldId='employee-id'>
+              <Input
+                className='w-full backdrop-blur-2xs'
+                name='employeeId'
+                id='employee-id'
+                required
+              />
+            </FormControl>
+            <FormControl labelClassName='text-base' label='Date of Birth' fieldId='dob'>
+              <Input className='backdrop-blur-2xs' name='dob' id='dob' required type='date' />
+            </FormControl>
             <div className='col-span-full flex justify-end'>
               <FormSubmitButton>Save</FormSubmitButton>
             </div>
@@ -50,12 +55,12 @@ export default async function SdbmsHomePage(props: PageProps<'/s/sdbms'>) {
       : role === 'student' ?
         <div className='@container mx-auto max-w-sm space-y-8'>
           <FormConnectStudent className='grid gap-4 @xl:grid-cols-3'>
-            <FormField label='SR Number'>
-              <Input className='backdrop-blur-2xs' name='srNo' required />
-            </FormField>
-            <FormField label='Date of Birth'>
-              <Input className='backdrop-blur-2xs' name='dob' required type='date' />
-            </FormField>
+            <FormControl labelClassName='text-base' label='SR Number' fieldId='sr-no'>
+              <Input className='backdrop-blur-2xs' name='srNo' id='sr-no' required />
+            </FormControl>
+            <FormControl labelClassName='text-base' label='Date of Birth' fieldId='dob'>
+              <Input className='backdrop-blur-2xs' name='dob' id='dob' required type='date' />
+            </FormControl>
             <div className='col-span-full flex justify-end'>
               <FormSubmitButton>Submit</FormSubmitButton>
             </div>

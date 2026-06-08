@@ -4,38 +4,30 @@ import { Suspense } from 'react'
 
 import { Query } from '@my/core/trpc/query'
 
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '~/components/ui/select'
+import { FormSelect } from '~/components/ui/form'
+import { SelectItem } from '~/components/ui/select'
 
 export function SelectDocumentType() {
   return (
     <Suspense
       fallback={
-        <Select name='documentType' required disabled>
-          <SelectTrigger className='w-full backdrop-blur-2xs' id='document-type'>
-            <SelectValue placeholder='Loading document types...' />
-          </SelectTrigger>
-        </Select>
+        <FormSelect
+          name='documentType'
+          fieldId='document-type'
+          placeholder='Loading document types...'
+          disabled
+          required
+        />
       }>
       <Query options={(api) => api.person.document.type.list.queryOptions()}>
         {(documentTypes) => (
-          <Select name='documentType' required>
-            <SelectTrigger className='w-full backdrop-blur-2xs' id='document-type'>
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {documentTypes.map((type) => (
-                <SelectItem value={type.id.toString()} key={type.id}>
-                  {type.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          <FormSelect name='documentType' fieldId='document-type' required>
+            {documentTypes.map((type) => (
+              <SelectItem value={type.id.toString()} key={type.id}>
+                {type.name}
+              </SelectItem>
+            ))}
+          </FormSelect>
         )}
       </Query>
     </Suspense>

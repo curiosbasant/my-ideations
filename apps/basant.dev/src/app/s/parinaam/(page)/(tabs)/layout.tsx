@@ -2,13 +2,8 @@
 
 import type { PropsWithChildren } from 'react'
 
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '~/components/ui/select'
+import { FormSelect } from '~/components/ui/form'
+import { SelectItem } from '~/components/ui/select'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '~/components/ui/tabs'
 import { useNativeSearchParam } from '~/hooks/use-search-params'
 import { useResults, useResultsQuery } from '../query'
@@ -77,21 +72,19 @@ function SelectStreamFilter() {
   const results = useResults()
   const [param, setParam] = useNativeSearchParam('stream')
 
-  const streamMap = Object.groupBy(results, (row) => row.stream)
+  const streamMap = Object.groupBy(results, (row) => row.stream ?? '')
   const allStreams = Object.entries(streamMap)
 
   return (
-    <Select value={param ?? results[0]?.stream} onValueChange={setParam}>
-      <SelectTrigger className='min-w-32 capitalize'>
-        <SelectValue />
-      </SelectTrigger>
-      <SelectContent>
-        {allStreams.map(([stream, rows]) => (
-          <SelectItem className='capitalize' value={stream} key={stream}>
-            {stream.toLowerCase()} ({rows?.length})
-          </SelectItem>
-        ))}
-      </SelectContent>
-    </Select>
+    <FormSelect
+      className='w-auto min-w-32 capitalize'
+      value={param ?? results[0]?.stream ?? ''}
+      onValueChange={setParam}>
+      {allStreams.map(([stream, rows]) => (
+        <SelectItem className='capitalize' value={stream} key={stream}>
+          {stream.toLowerCase()} ({rows?.length})
+        </SelectItem>
+      ))}
+    </FormSelect>
   )
 }

@@ -75,11 +75,9 @@ const fieldVariants = cva('group/field flex w-full gap-3 data-[invalid=true]:tex
   },
 })
 
-export function Field({
-  className,
-  orientation = 'vertical',
-  ...props
-}: ComponentProps<'div'> & VariantProps<typeof fieldVariants>) {
+export type FieldProps = ComponentProps<'div'> & VariantProps<typeof fieldVariants>
+
+export function Field({ className, orientation = 'vertical', ...props }: FieldProps) {
   return (
     <div
       role='group'

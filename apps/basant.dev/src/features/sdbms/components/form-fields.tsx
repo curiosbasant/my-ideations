@@ -1,34 +1,28 @@
 import { Suspense } from 'react'
 
-import { FormField } from '~/components/forms/shared'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '~/components/ui/select'
+import { FormControl, FormSelect } from '~/components/ui/form'
+import { SelectItem } from '~/components/ui/select'
 import { getExams, getInstituteClasses, getInstitutes, getSessions, getSubjects } from '../dal'
 
 export function FormFieldSelectClass(props: { defaultValue?: string | null }) {
   return (
-    <FormField label='Class'>
-      <Select name='class' defaultValue={props.defaultValue ?? undefined} required>
-        <SelectTrigger className='w-full backdrop-blur-2xs'>
-          <SelectValue placeholder='Select a class' />
-        </SelectTrigger>
-        <SelectContent>
-          <Suspense
-            fallback={
-              <SelectItem value='0' disabled>
-                Loading...
-              </SelectItem>
-            }>
-            <OptionsClass />
-          </Suspense>
-        </SelectContent>
-      </Select>
-    </FormField>
+    <FormControl labelClassName='text-lg font-bold' label='Class' fieldId='class'>
+      <FormSelect
+        name='class'
+        defaultValue={props.defaultValue ?? undefined}
+        placeholder='Select a class'
+        fieldId='class'
+        required>
+        <Suspense
+          fallback={
+            <SelectItem value='0' disabled>
+              Loading...
+            </SelectItem>
+          }>
+          <OptionsClass />
+        </Suspense>
+      </FormSelect>
+    </FormControl>
   )
 }
 async function OptionsClass() {
@@ -47,23 +41,23 @@ async function OptionsClass() {
 
 export function FormFieldSelectExam(props: { defaultValue?: string | null }) {
   return (
-    <FormField label='Exam'>
-      <Select name='exam' defaultValue={props.defaultValue ?? undefined} required>
-        <SelectTrigger className='w-full backdrop-blur-2xs'>
-          <SelectValue placeholder='Select a exam' />
-        </SelectTrigger>
-        <SelectContent>
-          <Suspense
-            fallback={
-              <SelectItem value='0' disabled>
-                Loading...
-              </SelectItem>
-            }>
-            <OptionsExam />
-          </Suspense>
-        </SelectContent>
-      </Select>
-    </FormField>
+    <FormControl labelClassName='text-lg font-bold' label='Exam' fieldId='exam'>
+      <FormSelect
+        name='exam'
+        defaultValue={props.defaultValue ?? undefined}
+        placeholder='Select a exam'
+        fieldId='exam'
+        required>
+        <Suspense
+          fallback={
+            <SelectItem value='0' disabled>
+              Loading...
+            </SelectItem>
+          }>
+          <OptionsExam />
+        </Suspense>
+      </FormSelect>
+    </FormControl>
   )
 }
 async function OptionsExam() {
@@ -82,23 +76,22 @@ async function OptionsExam() {
 
 export function FormFieldSelectInstitute() {
   return (
-    <FormField className='col-span-full' label='School Name'>
-      <Select name='school' required>
-        <SelectTrigger className='w-full backdrop-blur-2xs'>
-          <SelectValue placeholder='Select your school' />
-        </SelectTrigger>
-        <SelectContent>
-          <Suspense
-            fallback={
-              <SelectItem value='0' disabled>
-                Loading Schools...
-              </SelectItem>
-            }>
-            <OptionsInstitute />
-          </Suspense>
-        </SelectContent>
-      </Select>
-    </FormField>
+    <FormControl
+      className='col-span-full'
+      labelClassName='text-lg font-bold'
+      label='School Name'
+      fieldId='school'>
+      <FormSelect name='school' placeholder='Select your school' fieldId='school' required>
+        <Suspense
+          fallback={
+            <SelectItem value='0' disabled>
+              Loading Schools...
+            </SelectItem>
+          }>
+          <OptionsInstitute />
+        </Suspense>
+      </FormSelect>
+    </FormControl>
   )
 }
 async function OptionsInstitute() {
@@ -116,51 +109,51 @@ async function OptionsInstitute() {
 
 export function FormFieldSelectSession(props: { defaultValue?: string | null }) {
   return (
-    <FormField label='Session'>
+    <FormControl labelClassName='text-lg font-bold' label='Session' fieldId='session'>
       <Suspense>
         <OptionsSession defaultValue={props.defaultValue} />
       </Suspense>
-    </FormField>
+    </FormControl>
   )
 }
 async function OptionsSession(props: { defaultValue?: string | null }) {
   const sessions = await getSessions()
   const lastSessionId = props.defaultValue ?? Math.max(...sessions.map((s) => +s.id))
   return (
-    <Select name='session' required defaultValue={lastSessionId.toString()}>
-      <SelectTrigger className='w-full backdrop-blur-2xs'>
-        <SelectValue />
-      </SelectTrigger>
-      <SelectContent>
-        {sessions.map((opt) => (
-          <SelectItem value={String(opt.id)} key={opt.id}>
-            {opt.name}
-          </SelectItem>
-        ))}
-      </SelectContent>
-    </Select>
+    <FormSelect
+      name='session'
+      defaultValue={lastSessionId.toString()}
+      placeholder='Select a session'
+      fieldId='session'
+      required>
+      {sessions.map((opt) => (
+        <SelectItem value={String(opt.id)} key={opt.id}>
+          {opt.name}
+        </SelectItem>
+      ))}
+    </FormSelect>
   )
 }
 
 export function FormFieldSelectSubject(props: { defaultValue?: string | null }) {
   return (
-    <FormField label='Subject'>
-      <Select name='subject' defaultValue={props.defaultValue ?? undefined} required>
-        <SelectTrigger className='w-full backdrop-blur-2xs'>
-          <SelectValue placeholder='Select a class' />
-        </SelectTrigger>
-        <SelectContent>
-          <Suspense
-            fallback={
-              <SelectItem value='0' disabled>
-                Loading...
-              </SelectItem>
-            }>
-            <OptionsSubject />
-          </Suspense>
-        </SelectContent>
-      </Select>
-    </FormField>
+    <FormControl labelClassName='text-lg font-bold' label='Subject' fieldId='subject'>
+      <FormSelect
+        name='subject'
+        defaultValue={props.defaultValue ?? undefined}
+        placeholder='Select a subject'
+        fieldId='subject'
+        required>
+        <Suspense
+          fallback={
+            <SelectItem value='0' disabled>
+              Loading...
+            </SelectItem>
+          }>
+          <OptionsSubject />
+        </Suspense>
+      </FormSelect>
+    </FormControl>
   )
 }
 async function OptionsSubject() {

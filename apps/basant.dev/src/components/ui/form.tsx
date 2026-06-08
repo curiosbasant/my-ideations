@@ -1,5 +1,3 @@
-import type { PropsWithChildren } from 'react'
-
 import {
   Select,
   SelectContent,
@@ -8,11 +6,19 @@ import {
   type SelectProps,
   type SelectValueProps,
 } from '~/components/ui/select'
-import { Field, FieldContent, FieldDescription, FieldError, FieldLabel } from './field'
+import {
+  Field,
+  FieldContent,
+  FieldDescription,
+  FieldError,
+  FieldLabel,
+  type FieldProps,
+} from './field'
 
 export type FormControlProps =
   | {
       label: string
+      labelClassName?: string
       fieldId?: string
       description?: string | null
       errors?: ({ message?: string } | undefined)[]
@@ -22,31 +28,35 @@ export type FormControlProps =
       errors?: ({ message?: string } | undefined)[]
     }
 
-export function FormControl(props: PropsWithChildren<FormControlProps>) {
+export function FormControl(props: FieldProps & FormControlProps) {
+  // @ts-expect-error - Lemme destructure plz
+  const { label, labelClassName, fieldId, description, errors, ...restProps } = props
+
   const renderLabel = () => {
-    if (props.label === false) return null
+    if (label === false) return null
+
     const labelJsx = (
-      <FieldLabel className='capitalize' htmlFor={props.fieldId}>
-        {props.label}
+      <FieldLabel className={labelClassName ?? 'capitalize'} htmlFor={fieldId}>
+        {label}
         <span className='font-normal text-muted-foreground group-has-required/field:hidden'>
           (optional)
         </span>
       </FieldLabel>
     )
-    if (!props.description) return labelJsx
+    if (!description) return labelJsx
 
     return (
       <FieldContent>
         {labelJsx}
-        <FieldDescription>{props.description}</FieldDescription>
+        <FieldDescription>{description}</FieldDescription>
       </FieldContent>
     )
   }
   return (
-    <Field data-invalid={!!props.errors}>
+    <Field data-invalid={!!errors} {...restProps}>
       {renderLabel()}
       {props.children}
-      {props.errors && <FieldError errors={props.errors} />}
+      {errors && <FieldError errors={errors} />}
     </Field>
   )
 }
@@ -56,10 +66,10 @@ export type FormSelectProps = SelectProps
     fieldId?: string
   }
 
-export function FormSelect({ placeholder, fieldId, ...props }: FormSelectProps) {
+export function FormSelect({ placeholder, fieldId, className, ...props }: FormSelectProps) {
   return (
     <Select {...props}>
-      <SelectTrigger className='w-full backdrop-blur-2xs' id={fieldId}>
+      <SelectTrigger className={'w-full backdrop-blur-2xs ' + className} id={fieldId}>
         <SelectValue placeholder={placeholder ?? '---'} />
       </SelectTrigger>
       <SelectContent position='item-aligned'>{props.children}</SelectContent>
