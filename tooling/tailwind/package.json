@@ -21,7 +21,7 @@
   },
   "devDependencies": {
     "@my/tsconfig": "workspace:*",
-    "typescript": "~6.0"
+    "typescript": "~7.0"
   },
   "private": true
 }
