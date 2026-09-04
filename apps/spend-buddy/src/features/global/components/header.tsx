@@ -1,11 +1,11 @@
 import { Pressable, type PressableProps } from 'react-native'
 import { Link } from 'expo-router'
-import type { ExpoRouter } from 'expo-router/types/expo-router'
+import type { Href } from 'expo-router'
 
 import { Icon, type IconName } from '~/ui'
 
 export function HeaderButton(
-  props: (PressableProps | { to?: ExpoRouter.Href }) & {
+  props: (PressableProps | { to?: Href }) & {
     icon: IconName
     color?: string
   },

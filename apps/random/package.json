@@ -5,7 +5,6 @@
     "build": "pnpm with-env next build",
     "clean": "git clean -xdf .next .turbo node_modules",
     "dev": "pnpm with-env next dev",
-    "lint": "tsc --noEmit",
     "start": "pnpm with-env next start",
     "emulator": "firebase emulators:start --only=auth,firestore,database --import=./.firebase.archive --export-on-exit=./.firebase.archive",
     "with-env": "dotenv -e ../../.env --"

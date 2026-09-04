@@ -1,5 +1,5 @@
 export * from 'react-hook-form'
-export { zodResolver, type Resolver as ZodResolver } from '@hookform/resolvers/zod'
+export { zodResolver } from '@hookform/resolvers/zod'
 
 export function getDirtyFields<T extends Record<string, any>>(
   formValues?: T | null,

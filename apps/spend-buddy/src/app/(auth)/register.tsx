@@ -49,7 +49,7 @@ function RegisterForm(props: { loading?: boolean; onSubmit(data: signUpSchema): 
             autoComplete='name'
             spellCheck={false}
             returnKeyType='next'
-            onSubmitEditing={() => emailRef.current?.focus()}
+            onSubmitEditing={() => emailRef?.current?.focus()}
           />
         )}
       />
@@ -67,7 +67,7 @@ function RegisterForm(props: { loading?: boolean; onSubmit(data: signUpSchema): 
             blurOnSubmit={false}
             autoCapitalize='none'
             returnKeyType='next'
-            onSubmitEditing={() => passwordRef.current?.focus()}
+            onSubmitEditing={() => passwordRef?.current?.focus()}
           />
         )}
       />
@@ -89,7 +89,7 @@ function RegisterForm(props: { loading?: boolean; onSubmit(data: signUpSchema): 
             onSubmitEditing={() => {
               getValues('fullName')?.length ?
                 handleSubmit(props.onSubmit)()
-              : fullNameRef.current?.focus()
+              : fullNameRef?.current?.focus()
             }}
           />
         )}

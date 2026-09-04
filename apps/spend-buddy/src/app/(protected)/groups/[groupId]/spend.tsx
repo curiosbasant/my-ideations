@@ -11,7 +11,7 @@ import { Button, Input, Screen } from '~/ui'
 export default function GroupSpendCreateScreen() {
   const params = useLocalSearchParams<{ groupId: string }>()
   const [amountRef, noteRef] = useRefs<TextInput | null>(null)
-  const { control, handleSubmit } = useForm<groupSpendCreateSchema>({
+  const { control, handleSubmit } = useForm({
     resolver: zodResolver(groupSpendCreateSchema),
     defaultValues: {
       groupId: params.groupId!,
@@ -40,7 +40,7 @@ export default function GroupSpendCreateScreen() {
             blurOnSubmit={false}
             keyboardType='numeric'
             returnKeyType='next'
-            onSubmitEditing={() => noteRef.current?.focus()}
+            onSubmitEditing={() => noteRef?.current?.focus()}
           />
         )}
       />

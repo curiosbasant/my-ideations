@@ -1,12 +1,12 @@
 import { Pressable, Text, type PressableProps } from 'react-native'
 import { Link } from 'expo-router'
-import type { ExpoRouter } from 'expo-router/types/expo-router'
+import type { Href } from 'expo-router'
 import { useColorScheme } from 'nativewind'
 
 import { Icon, type IconName } from '../../../ui'
 
 export function SettingItem(
-  props: ({ disabled?: boolean; onPress?: () => void } | { to: ExpoRouter.Href }) & {
+  props: ({ disabled?: boolean; onPress?: () => void } | { to: Href }) & {
     icon: IconName
     label: string
   },

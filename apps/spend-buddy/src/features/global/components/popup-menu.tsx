@@ -9,7 +9,7 @@ import {
   type ViewProps,
 } from 'react-native'
 import { Link } from 'expo-router'
-import type { ExpoRouter } from 'expo-router/types/expo-router'
+import type { Href } from 'expo-router'
 
 import { useToggle } from '@my/core/hooks'
 import { cn } from '@my/lib/tw'
@@ -62,7 +62,7 @@ export function PopupMenuContent(props: ViewProps) {
 PopupMenu.Content = PopupMenuContent
 
 export function PopupMenuItem(
-  props: (PressableProps | { to?: ExpoRouter.Href }) & {
+  props: (PressableProps | { to?: Href }) & {
     icon?: IconName
     label: string
   },

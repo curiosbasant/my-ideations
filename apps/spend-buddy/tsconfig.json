@@ -6,6 +6,7 @@
       "~/assets/*": ["./assets/*"]
     },
     "jsx": "react-native",
+    "noUncheckedSideEffectImports": false,
     "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json",
     "types": ["nativewind/types"]
   },

@@ -47,7 +47,7 @@ function LoginForm(props: { loading?: boolean; onSubmit(data: signInSchema): voi
             blurOnSubmit={false}
             autoCapitalize='none'
             returnKeyType='next'
-            onSubmitEditing={() => passwordRef.current?.focus()}
+            onSubmitEditing={() => passwordRef?.current?.focus()}
           />
         )}
       />
@@ -69,7 +69,7 @@ function LoginForm(props: { loading?: boolean; onSubmit(data: signInSchema): voi
             onSubmitEditing={() => {
               getValues('userIdentity')?.length ?
                 handleSubmit(props.onSubmit)()
-              : emailRef.current?.focus()
+              : emailRef?.current?.focus()
             }}
           />
         )}

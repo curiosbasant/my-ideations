@@ -60,7 +60,7 @@ export default function GroupViewScreen() {
           extraData={user.id}
           ListEmptyComponent={EmptyListView}
           renderItem={SpendListItem}
-          inverted={!!group.pages[0].items.length}
+          inverted={!!group.pages[0]?.items.length}
           refreshing={isRefetching}
           onRefresh={refetch}
           onEndReached={fetchNextPage}
