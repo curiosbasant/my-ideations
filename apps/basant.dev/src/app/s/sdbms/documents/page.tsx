@@ -55,7 +55,9 @@ export default async function DocumentsPage() {
                       <span className='text-sm'>{doc.createdBy.displayName}</span>•
                     </>
                   )}
-                  <span className='text-sm'>{formatDistance(doc.lastModifiedAt)}</span>
+                  {doc.lastModifiedAt && (
+                    <span className='text-sm'>{formatDistance(doc.lastModifiedAt)}</span>
+                  )}
                 </div>
               </li>
             </DialogTrigger>

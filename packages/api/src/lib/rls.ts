@@ -6,7 +6,7 @@ import type { JwtPayload } from '@my/lib/supabase'
 // https://github.com/orgs/supabase/discussions/23224
 // Should be secure because we use the access token that is signed, and not the data read directly from the storage
 export function rlsCreator<
-  TDatabase extends PgAsyncDatabase<any, any, any>,
+  TDatabase extends PgAsyncDatabase<any, any>,
   TTransaction extends TDatabase['transaction'],
   TJwtPayload extends JwtPayload = JwtPayload,
 >(db: TDatabase, jwtPayload?: TJwtPayload | null, admin?: true): TTransaction {

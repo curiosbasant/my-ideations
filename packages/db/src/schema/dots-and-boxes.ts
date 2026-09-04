@@ -4,7 +4,7 @@ import { sql } from 'drizzle-orm/sql'
 import { bigId, withCommonColumns } from '../utils/helpers/column'
 import { userProfileId } from '../utils/helpers/db-functions'
 
-const pgTable = pgTableCreator((tableName) => `gdb__${tableName}`)
+const pgTable = pgTableCreator((tableName) => `gdb__${tableName}`, 'snake_case')
 
 export const gdb__board = pgTable(
   'board',

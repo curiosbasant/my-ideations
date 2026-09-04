@@ -19,7 +19,7 @@ import {
 import { caseWhen } from '../utils/helpers/sql'
 import { bucketNames, objects } from '../utils/helpers/supabase'
 
-const pgTable = pgTableCreator((tableName) => `sf__${tableName}`)
+const pgTable = pgTableCreator((tableName) => `sf__${tableName}`, 'snake_case')
 
 export const sf__room = pgTable(
   'room',

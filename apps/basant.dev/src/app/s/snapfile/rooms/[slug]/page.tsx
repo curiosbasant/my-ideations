@@ -25,12 +25,14 @@ export default async function RoomPage(props: PageProps<'/s/snapfile/rooms/[slug
             <div className='flex items-center justify-between p-2'>
               <div className='flex flex-1 flex-col'>
                 <strong className='line-clamp-1'>{file.originalName}</strong>
-                <TimeFormat
-                  className='text-sm'
-                  dateTime={file.lastModifiedAt.toString()}
-                  formattedTime={format(file.lastModifiedAt, 'PPpp')}
-                  distanceTime={formatDistance(file.lastModifiedAt)}
-                />
+                {file.lastModifiedAt && (
+                  <TimeFormat
+                    className='text-sm'
+                    dateTime={file.lastModifiedAt.toString()}
+                    formattedTime={format(file.lastModifiedAt, 'PPpp')}
+                    distanceTime={formatDistance(file.lastModifiedAt)}
+                  />
+                )}
               </div>
               <FileDownloadButton
                 variant='secondary'

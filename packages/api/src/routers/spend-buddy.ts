@@ -54,7 +54,7 @@ export const spendBuddyRouter = {
           name: myGroups.name,
           ownerId: myGroups.ownerId,
           memberCount: groupMemberCount.count,
-          totalSpends: coalesce(sql`${groupSpends.spends} / 100`, 0).as('total_spends'),
+          totalSpends: coalesce(sql<number>`${groupSpends.spends} / 100`, 0).as('total_spends'),
         })
         .from(myGroups)
         .leftJoin(groupMemberCount, eq(myGroups.id, groupMemberCount.id))
@@ -178,7 +178,7 @@ export const spendBuddyRouter = {
             displayName: profileDisplayName().as('display_name'),
             avatarUrl: schema.profile.avatarUrl,
             joinedAt: schema.sb__member.joinedAt,
-            spends: coalesce(sql`${memberSpends.spends} / 100`, 0).as('total_spends'),
+            spends: coalesce(sql<number>`${memberSpends.spends} / 100`, 0).as('total_spends'),
           })
           .from(schema.sb__member)
           .innerJoin(schema.profile, eq(schema.profile.id, schema.sb__member.userId))
@@ -260,7 +260,7 @@ export const spendBuddyRouter = {
               },
               member: {
                 id: sql<string>`${null}`,
-                displayName: sql<string>`${null}`,
+                displayName: sql<string | null>`${null}`,
                 avatarUrl: sql<string | null>`${null}`,
               },
               group: {
@@ -304,7 +304,7 @@ export const spendBuddyRouter = {
             .where(
               and(
                 lt(query.createdAt, input.cursor!).if(input.cursor),
-                eq(query.type, 'group_member_join'),
+                eq(query.type, 'group_member_add'),
               ),
             ),
         )

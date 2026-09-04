@@ -4,7 +4,6 @@ import type { Config } from 'drizzle-kit'
 if (!process.env['POSTGRES_URL_NON_POOLING']) throw new Error('Required PostgreSQL connection url.')
 
 export default {
-  casing: 'snake_case',
   dialect: 'postgresql',
   dbCredentials: {
     url: process.env['POSTGRES_URL_NON_POOLING'],

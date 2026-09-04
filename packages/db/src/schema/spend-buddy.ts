@@ -7,7 +7,7 @@ import {
   withCommonColumns,
 } from '../utils/helpers/column'
 
-const pgTable = pgTableCreator((tableName) => `sb__${tableName}`)
+const pgTable = pgTableCreator((tableName) => `sb__${tableName}`, 'snake_case')
 
 export const sb__group = pgTable(
   'group',
@@ -39,7 +39,7 @@ export const sb__spend = pgTable(
 export const sb__notification = pgTable(
   'notification',
   withCommonColumns((c) => ({
-    type: c.varchar({ enum: ['group_spend_add', 'group_member_join'] }).notNull(),
+    type: c.varchar({ enum: ['group_spend_add', 'group_member_add'] }).notNull(),
     read: c.boolean().default(false),
     resourceId: bigId(),
     /** The user who receives the notification */

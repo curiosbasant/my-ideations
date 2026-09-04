@@ -6,8 +6,7 @@ import { person } from '../../schema/person'
 import { profile } from '../../schema/profile'
 import { coalesce, concat, concatWs, nullIf, numNonnulls } from './sql'
 
-export const personFullName = () =>
-  nullIf<string>(concatWs(' ', person.firstName, person.lastName), '')
+export const personFullName = () => nullIf(concatWs(' ', person.firstName, person.lastName), '')
 
 export const profileDisplayName = () =>
   coalesce(

@@ -33,11 +33,11 @@ class PgSmallId extends PgColumn<'number int16'> {
   getSQLType() {
     return 'smallint'
   }
-  override mapFromDriverValue(value: number | string) {
+  override mapFromDriverValue = (value: number | string) => {
     if (typeof value === 'string') return value
     return String(value)
   }
-  override mapToDriverValue(value: unknown) {
+  override mapToDriverValue = (value: unknown) => {
     if (typeof value === 'number') return value
     return Number(value)
   }
