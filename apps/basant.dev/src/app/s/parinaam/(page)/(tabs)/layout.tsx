@@ -4,7 +4,7 @@ import type { PropsWithChildren } from 'react'
 
 import { FormSelect } from '~/components/ui/form'
 import { SelectItem } from '~/components/ui/select'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '~/components/ui/tabs'
+import { Tabs, TabsList, TabsTrigger } from '~/components/ui/tabs'
 import { useNativeSearchParam } from '~/hooks/use-search-params'
 import { useResults, useResultsQuery } from '../query'
 
@@ -36,12 +36,8 @@ export default function ResultLayout(props: LayoutProps<'/s/parinaam'>) {
               </>
             )}
           </div>
-          <TabsContent value='table' asChild>
-            {props.table}
-          </TabsContent>
-          <TabsContent value='summary' className='grid items-start gap-y-16 lg:grid-cols-[1fr_2fr]'>
-            {props.summary}
-          </TabsContent>
+          {props.table}
+          {props.summary}
         </ResultTabs>
       </>
     )
