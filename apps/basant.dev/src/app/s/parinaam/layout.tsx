@@ -5,7 +5,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 
 import { ScrollArea } from '~/components/ui/scroll-area'
-import { CurrentYear } from '~/features/shared/components/client'
+import { CopyrightYear } from '~/features/shared/components/copyright-year'
 import { geistMono, geistSans } from '~/features/shared/fonts'
 import { ScriptAutoApplyTheme, ThemeProvider } from '~/features/theme/server'
 import { Providers, ShareResultButton } from './client'
@@ -64,7 +64,7 @@ export default function ParinaamRootLayout(props: LayoutProps<'/s/parinaam'>) {
                         </a>
                       </p>
                       <span>
-                        ©<CurrentYear />
+                        ©<CopyrightYear />
                       </span>
                       <p>
                         Thanks to{' '}

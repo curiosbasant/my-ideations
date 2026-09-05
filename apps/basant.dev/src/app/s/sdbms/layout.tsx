@@ -9,7 +9,8 @@ import { TrpcClientProvider } from '@my/core/trpc/client'
 import { ScrollArea } from '~/components/ui/scroll-area'
 import { Toaster } from '~/components/ui/sonner'
 import { PathDocuments } from '~/features/sdbms/components/header-nav-path'
-import { BannerDeviceOnline, CurrentYear } from '~/features/shared/components/client'
+import { BannerDeviceOnline } from '~/features/shared/components/client'
+import { CopyrightYear } from '~/features/shared/components/copyright-year'
 import { ProfileDropdownMenu } from '~/features/shared/components/profile-dropdown'
 import { geistMono, geistSans } from '~/features/shared/fonts'
 import { ThemeToggleGroupButton } from '~/features/theme/client'
@@ -67,7 +68,7 @@ export default async function SdbmsRootLayout(props: LayoutProps<'/s/sdbms'>) {
                           </a>
                         </p>
                         <span>
-                          ©<CurrentYear />
+                          ©<CopyrightYear />
                         </span>
                         <ThemeToggleGroupButton />
                       </div>

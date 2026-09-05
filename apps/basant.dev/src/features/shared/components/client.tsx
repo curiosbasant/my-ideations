@@ -1,20 +1,8 @@
 'use client'
 
-import { Suspense } from 'react'
 import { WifiOffIcon } from 'lucide-react'
 
 import { useIsDeviceOnline, useToggle } from '@my/core/hooks'
-
-export function CurrentYear() {
-  return (
-    <Suspense>
-      <CurrentYearInner />
-    </Suspense>
-  )
-}
-function CurrentYearInner() {
-  return <span suppressHydrationWarning>{new Date().getFullYear()}</span>
-}
 
 export function TimeFormat(props: {
   className?: string
