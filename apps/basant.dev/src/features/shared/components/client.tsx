@@ -1,16 +1,9 @@
 'use client'
 
-import { Suspense, use, type ComponentProps } from 'react'
+import { Suspense } from 'react'
 import { WifiOffIcon } from 'lucide-react'
 
 import { useIsDeviceOnline, useToggle } from '@my/core/hooks'
-
-import { ThemeContext } from '~/features/theme/provider'
-
-export function HtmlWithDataTheme(props: ComponentProps<'html'>) {
-  const { themeResolved } = use(ThemeContext)
-  return <html {...props} data-theme={themeResolved} suppressHydrationWarning />
-}
 
 export function CurrentYear() {
   return (

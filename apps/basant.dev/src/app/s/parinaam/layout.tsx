@@ -5,7 +5,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 
 import { ScrollArea } from '~/components/ui/scroll-area'
-import { CurrentYear, HtmlWithDataTheme } from '~/features/shared/components/client'
+import { CurrentYear } from '~/features/shared/components/client'
 import { geistMono, geistSans } from '~/features/shared/fonts'
 import { ScriptAutoApplyTheme, ThemeProvider } from '~/features/theme/server'
 import { Providers, ShareResultButton } from './client'
@@ -17,12 +17,12 @@ export const metadata: Metadata = {
 
 export default function ParinaamRootLayout(props: LayoutProps<'/s/parinaam'>) {
   return (
-    <ThemeProvider>
-      <HtmlWithDataTheme className='size-full antialiased' lang='en'>
-        <head>
-          <ScriptAutoApplyTheme />
-        </head>
-        <body className={`${geistSans.variable} ${geistMono.variable} isolate size-full`}>
+    <html className='size-full antialiased' lang='en' suppressHydrationWarning>
+      <head>
+        <ScriptAutoApplyTheme />
+      </head>
+      <body className={`${geistSans.variable} ${geistMono.variable} isolate size-full`}>
+        <ThemeProvider>
           <div className='isolate size-full selection:bg-primary/25 light:bg-secondary'>
             <div className='pointer-events-none absolute top-0 -z-10 h-2/3 w-full mask-b-from-50%'>
               <div
@@ -82,8 +82,8 @@ export default function ParinaamRootLayout(props: LayoutProps<'/s/parinaam'>) {
               </div>
             </ScrollArea>
           </div>
-        </body>
-      </HtmlWithDataTheme>
-    </ThemeProvider>
+        </ThemeProvider>
+      </body>
+    </html>
   )
 }

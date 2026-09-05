@@ -1,8 +1,15 @@
 import { cache, Suspense, type PropsWithChildren } from 'react'
 import { cookies } from 'next/headers'
 
+import { ScriptInline } from '@my/core/elements'
+
 import { ThemeProvider as ThemeProviderClient } from './provider'
-import { COOKIE_THEME_KEY, DEFAULT_THEME_VALUE, type ThemePreference } from './shared'
+import {
+  COOKIE_THEME_KEY,
+  DEFAULT_THEME_VALUE,
+  resolveThemePreference,
+  type ThemePreference,
+} from './shared'
 
 export function ThemeProvider(props: PropsWithChildren) {
   return (
@@ -23,27 +30,28 @@ export const getThemePreference = cache(async () => {
 })
 
 export function ScriptAutoApplyTheme() {
-  function fn(cookieThemeKey: string) {
-    const resolveThemePreference = (themePreference: string) => {
-      if (themePreference === 'dark' || themePreference === 'light') {
-        return themePreference
-      }
-      const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches
-      return isDark ? 'dark' : 'light'
-    }
-
+  function fn(
+    resolveThemePreference: (v: string) => string,
+    cookieThemeKey: string,
+    defaultThemeValue: string,
+  ) {
     try {
-      const themePreference = document.cookie
-        .split('; ')
-        .find((row) => row.startsWith(cookieThemeKey + '='))
-        ?.split('=')[1]
-      document.documentElement.dataset['theme'] = resolveThemePreference(
-        themePreference ?? 'system',
-      )
+      function getCookieValue(cookieName: string) {
+        const regex = new RegExp(`(?:^|; )${cookieName}=([^;]*)`)
+        return document.cookie.match(regex)?.[1] ?? null
+      }
+      const themePreference = getCookieValue(cookieThemeKey) ?? defaultThemeValue
+      document.documentElement.dataset['theme'] = resolveThemePreference(themePreference)
     } catch {
-      document.documentElement.dataset['theme'] = resolveThemePreference('system')
+      document.documentElement.dataset['theme'] = resolveThemePreference(defaultThemeValue)
     }
   }
 
-  return <script>{`(${fn.toString()})('${COOKIE_THEME_KEY}');`}</script>
+  return (
+    <ScriptInline>{`(${fn})(
+      ${resolveThemePreference},
+      '${COOKIE_THEME_KEY}',
+      '${DEFAULT_THEME_VALUE}'
+    )`}</ScriptInline>
+  )
 }

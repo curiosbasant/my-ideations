@@ -9,11 +9,7 @@ import { TrpcClientProvider } from '@my/core/trpc/client'
 import { ScrollArea } from '~/components/ui/scroll-area'
 import { Toaster } from '~/components/ui/sonner'
 import { PathDocuments } from '~/features/sdbms/components/header-nav-path'
-import {
-  BannerDeviceOnline,
-  CurrentYear,
-  HtmlWithDataTheme,
-} from '~/features/shared/components/client'
+import { BannerDeviceOnline, CurrentYear } from '~/features/shared/components/client'
 import { ProfileDropdownMenu } from '~/features/shared/components/profile-dropdown'
 import { geistMono, geistSans } from '~/features/shared/fonts'
 import { ThemeToggleGroupButton } from '~/features/theme/client'
@@ -29,12 +25,12 @@ export const metadata: Metadata = {
 
 export default async function SdbmsRootLayout(props: LayoutProps<'/s/sdbms'>) {
   return (
-    <ThemeProvider>
-      <HtmlWithDataTheme className='size-full antialiased' lang='en'>
-        <head>
-          <ScriptAutoApplyTheme />
-        </head>
-        <body className={`${geistSans.variable} ${geistMono.variable} isolate size-full`}>
+    <html className='size-full antialiased' lang='en' suppressHydrationWarning>
+      <head>
+        <ScriptAutoApplyTheme />
+      </head>
+      <body className={`${geistSans.variable} ${geistMono.variable} isolate size-full`}>
+        <ThemeProvider>
           <TrpcClientProvider>
             <div className='isolate size-full selection:bg-primary/25 light:bg-secondary'>
               <ScrollArea className='size-full'>
@@ -83,8 +79,8 @@ export default async function SdbmsRootLayout(props: LayoutProps<'/s/sdbms'>) {
             <Toaster />
             {props.modals}
           </TrpcClientProvider>
-        </body>
-      </HtmlWithDataTheme>
-    </ThemeProvider>
+        </ThemeProvider>
+      </body>
+    </html>
   )
 }
