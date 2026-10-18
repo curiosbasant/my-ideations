@@ -3,6 +3,7 @@ import type { NextConfig } from 'next'
 export default {
   allowedDevOrigins: getDevOrigins(),
   cacheComponents: true,
+  partialPrefetching: false,
   logging: {
     fetches: {
       fullUrl: true,
