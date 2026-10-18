@@ -7,10 +7,13 @@ import { and, desc, eq, now } from '@my/db/sql'
 import { placeIdToLocation } from '@my/lib/maps'
 import { z } from '@my/lib/zod'
 
-import { ensureSingleRow } from '../lib/utils/helpers'
-import { protectedProcedure, publicProcedure } from '../trpc'
+import { ensureSingleRow } from '../../lib/utils/helpers'
+import { protectedProcedure, publicProcedure } from '../../trpc'
+import { profileRouter } from './profile'
 
 export const userRouter = {
+  profile: profileRouter,
+
   get: protectedProcedure.query(({ ctx: { rls } }) => {
     return rls(async (tx) => {
       const [user] = await tx
@@ -24,10 +27,9 @@ export const userRouter = {
         .from(schema.profile)
         .leftJoin(schema.designation, eq(schema.designation.id, schema.profile.postId))
         .where(eq(schema.profile.createdBy, authUserId))
-      if (!user) {
-        throw new TRPCError({ code: 'NOT_FOUND' })
-      }
-      return user
+      if (user) return user
+
+      throw new TRPCError({ code: 'NOT_FOUND' })
     })
   }),
 

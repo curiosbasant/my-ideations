@@ -8,12 +8,12 @@ import { DepartmentDesignation, MapWorkPlaces } from './client.component'
 export default async function DashboardPage() {
   const profile = await getProfileDetails()
 
-  if (profile?.designation?.departmentId && profile.designation?.name) {
+  if (profile?.designation?.departmentId && profile.designation.name) {
     const workplaces = await api.priyasthan.workplace.list()
 
     return (
       <PageLayoutFluid>
-        <MapWorkPlaces locations={workplaces} />
+        <MapWorkPlaces userProfileId={profile.id} locations={workplaces} />
       </PageLayoutFluid>
     )
   }

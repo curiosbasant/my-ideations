@@ -1,6 +1,8 @@
-import { schema, unionAll } from '@my/db'
+import { getColumns, schema, union } from '@my/db'
+import { selectProfileId } from '@my/db/db-functions'
 import { isAllNotNull, profileDisplayName } from '@my/db/helpers'
-import { and, desc, eq } from '@my/db/sql'
+import { and, desc, eq, inArray, ne, sql, ST_DWithin } from '@my/db/sql'
+import type { RemoveNullable } from '@my/lib/types'
 import { z } from '@my/lib/zod'
 
 import { ensureSingleRow } from '../lib/utils/helpers'
@@ -8,43 +10,114 @@ import { protectedProcedure } from '../trpc'
 
 export const priyasthanRouter = {
   workplace: {
-    list: protectedProcedure.query(async ({ ctx: { db, authUserId } }) => {
-      const places = unionAll(
-        db
-          .selectDistinctOn([schema.profileAddress.profileId])
-          .from(schema.profileAddress)
-          .where(eq(schema.profileAddress.type, 'current-workplace'))
-          .orderBy(schema.profileAddress.profileId, desc(schema.profileAddress.updatedAt)),
-        db
-          .select()
-          .from(schema.profileAddress)
-          .where(eq(schema.profileAddress.type, 'preferred-workplace')),
-      ).as('wp')
-
-      const locations = await db
-        .select({
-          profileId: schema.profile.id,
-          addressId: schema.address.id,
-          text: schema.address.text,
-          latitude: schema.address.latitude,
-          longitude: schema.address.longitude,
-          type: places.type,
-        })
-        .from(places)
-        .innerJoin(schema.profile, eq(schema.profile.id, places.profileId))
-        .innerJoin(schema.address, eq(schema.address.id, places.addressId))
-        .where(
-          and(
-            isAllNotNull(schema.address.latitude, schema.address.longitude),
-            eq(schema.profile.createdBy, authUserId),
-          ),
+    list: protectedProcedure.query(async ({ ctx: { rls } }) => {
+      const km50 = sql<number>`50000`
+      return rls(async (tx) => {
+        const allCurrentWorkplaces = tx.$with('acw').as((qb) =>
+          qb
+            .selectDistinctOn([schema.profileAddress.profileId], {
+              profileId: schema.profileAddress.profileId,
+              addressId: schema.profileAddress.addressId,
+              geom: schema.address.geom,
+              latitude: schema.address.latitude,
+              longitude: schema.address.longitude,
+              type: schema.profileAddress.type,
+            })
+            .from(schema.profileAddress)
+            .innerJoin(schema.address, eq(schema.address.id, schema.profileAddress.addressId))
+            .where(
+              and(
+                isAllNotNull(schema.address.latitude, schema.address.longitude),
+                eq(schema.profileAddress.type, sql.raw("'current-workplace'")),
+              ),
+            )
+            .orderBy(schema.profileAddress.profileId, desc(schema.profileAddress.updatedAt)),
         )
-      return locations.map((l) => ({
-        ...l,
-        latitude: l.latitude!,
-        longitude: l.longitude!,
-        type: l.type!,
-      }))
+
+        const allPreferredWorkplaces = tx.$with('apw').as((qb) =>
+          qb
+            .select({
+              profileId: schema.profileAddress.profileId,
+              addressId: schema.profileAddress.addressId,
+              geom: schema.address.geom,
+              latitude: schema.address.latitude,
+              longitude: schema.address.longitude,
+              type: schema.profileAddress.type,
+            })
+            .from(schema.profileAddress)
+            .innerJoin(schema.address, eq(schema.address.id, schema.profileAddress.addressId))
+            .where(
+              and(
+                isAllNotNull(schema.address.latitude, schema.address.longitude),
+                eq(schema.profileAddress.type, sql.raw("'preferred-workplace'")),
+              ),
+            ),
+        )
+
+        const ctePairs = tx.$with('pairs').as((qb) =>
+          qb
+            .with(allCurrentWorkplaces, allPreferredWorkplaces)
+            .select({
+              currentProfileId: allCurrentWorkplaces.profileId.as('currentProfileId'),
+              preferredProfileId: allPreferredWorkplaces.profileId.as('preferredProfileId'),
+            })
+            .from(allCurrentWorkplaces)
+            .innerJoin(
+              allPreferredWorkplaces,
+              and(
+                // make pairs with others preferred workplaces except mine
+                ne(allCurrentWorkplaces.profileId, allPreferredWorkplaces.profileId),
+                ST_DWithin(allCurrentWorkplaces.geom, allPreferredWorkplaces.geom, km50),
+              ),
+            )
+            .where(
+              inArray(selectProfileId, [
+                allCurrentWorkplaces.profileId,
+                allPreferredWorkplaces.profileId,
+              ]),
+            ),
+        )
+
+        const { geom: _1, ...acw } = getColumns(allCurrentWorkplaces)
+        const { geom: _2, ...apw } = getColumns(allPreferredWorkplaces)
+        const [myWorkPlaces, pairs] = await Promise.all([
+          union(
+            tx
+              .with(allCurrentWorkplaces)
+              .select(acw)
+              .from(allCurrentWorkplaces)
+              .where(eq(selectProfileId, allCurrentWorkplaces.profileId)),
+            tx
+              .with(allPreferredWorkplaces)
+              .select(apw)
+              .from(allPreferredWorkplaces)
+              .where(eq(selectProfileId, allPreferredWorkplaces.profileId)),
+          ),
+          tx
+            .with(allCurrentWorkplaces, allPreferredWorkplaces, ctePairs)
+            .select({ acw, apw })
+            .from(ctePairs)
+            .innerJoin(
+              allCurrentWorkplaces,
+              eq(allCurrentWorkplaces.profileId, ctePairs.preferredProfileId),
+            )
+            .innerJoin(
+              allPreferredWorkplaces,
+              and(
+                eq(allPreferredWorkplaces.profileId, ctePairs.currentProfileId),
+                ST_DWithin(allCurrentWorkplaces.geom, allPreferredWorkplaces.geom, km50),
+              ),
+            ),
+        ])
+
+        const allWorkplaces = pairs.flatMap(({ acw, apw }) => [acw, apw]).concat(myWorkPlaces)
+        const uniqueWorkplaces = allWorkplaces.reduce(
+          (acc, loc) => acc.set(loc.profileId + loc.addressId, loc as any),
+          new Map<string, RemoveNullable<(typeof myWorkPlaces)[number]>>(),
+        )
+
+        return Array.from(uniqueWorkplaces.values())
+      })
     }),
     create: protectedProcedure
       .input(

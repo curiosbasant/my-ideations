@@ -20,7 +20,7 @@ export function extractSubdomain(host: string | null) {
 
     if (hostname.includes('---')) {
       // Handle preview deployment URLs (tenant---branch-name.vercel.app)
-      return hostname.split('---', 1)[0]
+      return hostname.split('---', 1)[0] || null
     }
   }
 

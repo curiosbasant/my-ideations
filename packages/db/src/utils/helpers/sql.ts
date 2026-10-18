@@ -49,3 +49,9 @@ export function extractJson<T extends ColumnBaseConfig<'object json'>>(
 ) {
   return sql`${json} ->> ${typeof key === 'string' ? sql.raw(`'${key}'`) : key}`
 }
+
+export const ST_DWithin = (
+  column: AnyColumn,
+  otherColumn: AnyColumn,
+  distance: SQLWrapper<number> | number,
+) => sql`ST_DWithin(${column}::geography, ${otherColumn}::geography, ${distance})`

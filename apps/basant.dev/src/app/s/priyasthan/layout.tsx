@@ -4,6 +4,8 @@ import './theme.css'
 import type { Metadata } from 'next'
 import Link from 'next/link'
 
+import { TrpcClientProvider } from '@my/core/trpc/client'
+
 import { ScrollArea } from '~/components/ui/scroll-area'
 import { latoFont } from '~/features/shared/fonts'
 
@@ -17,7 +19,7 @@ export const metadata: Metadata = {
 
 export default function SnapFileRootLayout(props: LayoutProps<'/s/priyasthan'>) {
   return (
-    <html lang='en' className='size-full antialiased'>
+    <html lang='en' className='size-full antialiased' data-theme='light'>
       <body className={`size-full ${latoFont.className}`}>
         <ScrollArea className='size-full'>
           <div className='isolate flex min-h-full w-full flex-col divide-y [--page-padding:--spacing(2)] [--page-size:var(--container-7xl)] sm:[--page-padding:--spacing(4)] md:[--page-padding:--spacing(8)]'>
@@ -30,7 +32,7 @@ export default function SnapFileRootLayout(props: LayoutProps<'/s/priyasthan'>) 
                 {props.headerProfile}
               </div>
             </header>
-            {props.children}
+            <TrpcClientProvider>{props.children}</TrpcClientProvider>
           </div>
         </ScrollArea>
       </body>

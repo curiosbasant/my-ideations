@@ -1,14 +1,17 @@
 import { appRouter, createTRPCContext, fetchRequestHandler } from '@my/api'
-import { createOrigin } from '@my/lib/utils'
 
 import { getSupabase } from '~/lib/supabase'
+import { extractSubdomain } from '~/lib/utils/domain'
+
+const ALLOWED_SUBDOMAINS = ['priyasthan', 'sdbms']
 
 /**
  * Configure basic CORS headers
  * You should extend this to match your needs
  */
 const setCorsHeaders = (res: Response, origin: string) => {
-  if ([createOrigin('sdbms')].includes(origin)) {
+  const currentSubdomain = extractSubdomain(URL.parse(origin)?.host ?? null)
+  if (currentSubdomain && ALLOWED_SUBDOMAINS.includes(currentSubdomain)) {
     res.headers.set('Access-Control-Allow-Origin', origin)
   }
   res.headers.set('Access-Control-Allow-Credentials', 'true')
