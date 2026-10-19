@@ -2,9 +2,9 @@
 
 import { CloudUploadIcon, LoaderCircleIcon } from 'lucide-react'
 
+import { DropArea } from '@my/core/elements'
 import { getSupabaseClient } from '@my/lib/supabase/client'
 
-import { DropArea } from '~/components/elements/drop-area'
 import { Button } from '~/components/ui/button'
 import { toast } from '~/components/ui/sonner'
 import { createErrorReturn, createSuccessReturn } from '~/lib/dal/types'

@@ -16,6 +16,8 @@ import {
 import type { LabelPosition } from 'recharts/types/component/Label'
 import type { BaseAxisProps } from 'recharts/types/util/types'
 
+import { useElementSize } from '@my/core/hooks'
+
 import {
   ChartContainer,
   ChartLegend,
@@ -24,7 +26,6 @@ import {
   ChartTooltipContent,
   type ChartConfig,
 } from '~/components/ui/chart'
-import { useElementSize } from '~/hooks/use-element-size'
 import { useFilteredResults } from '../../query'
 import type { ResultQueryOutput } from '../../shared'
 

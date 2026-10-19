@@ -2,12 +2,13 @@ import { Suspense, useState, type PropsWithChildren } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
 import imageCompression from 'browser-image-compression'
 
+import { DropArea } from '@my/core/elements'
 import { useTrpc } from '@my/core/trpc/client'
 import { Query } from '@my/core/trpc/query'
 import { getSupabaseClient } from '@my/lib/supabase/client'
+import { cn } from '@my/lib/tw'
 import { z } from '@my/lib/zod'
 
-import { DropArea } from '~/components/elements/drop-area'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -24,7 +25,6 @@ import { DialogClose, DialogFooter } from '~/components/ui/dialog'
 import { SelectItem } from '~/components/ui/select'
 import { toast } from '~/components/ui/sonner'
 import { useAppForm } from '~/features/shared/form/hooks'
-import { cn } from '~/lib/utils'
 
 const schema = z.object({
   relation: z.string(),

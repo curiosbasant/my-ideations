@@ -1,4 +1,5 @@
 export * from './client-only'
+export * from './drop-area'
 export * from './for'
 export * from './repeat'
 export * from './script-inline'

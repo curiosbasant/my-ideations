@@ -4,6 +4,8 @@ import type { ComponentProps } from 'react'
 import { Command as CommandPrimitive } from 'cmdk'
 import { SearchIcon } from 'lucide-react'
 
+import { cn } from '@my/lib/tw'
+
 import {
   Dialog,
   DialogContent,
@@ -11,7 +13,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from '~/components/ui/dialog'
-import { cn } from '~/lib/utils'
 
 export function Command({ className, ...props }: ComponentProps<typeof CommandPrimitive>) {
   return (

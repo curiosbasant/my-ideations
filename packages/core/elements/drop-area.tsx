@@ -2,9 +2,8 @@
 
 import { useState, type ComponentProps } from 'react'
 
+import { cn } from '@my/lib/tw'
 import { promptFile } from '@my/lib/utils'
-
-import { cn } from '~/lib/utils'
 
 type DropAreaProps = ComponentProps<'div'> & {
   activeClassName: string

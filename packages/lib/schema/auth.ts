@@ -3,7 +3,7 @@ import { z } from 'zod'
 import type { Provider as AuthProvider } from '../supabase'
 
 const phoneNumberSchema = z.string().transform((val) => (val.length === 10 ? '91' + val : val))
-export const userIdentitySchema = z.string().email().or(phoneNumberSchema)
+export const userIdentitySchema = z.email().or(phoneNumberSchema)
 const passwordSchema = z.string().min(6, 'Password must be at-least 6 character long.')
 
 export const signInSchema = z.object({

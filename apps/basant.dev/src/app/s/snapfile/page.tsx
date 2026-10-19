@@ -3,7 +3,8 @@
 import { useRouter } from 'next/navigation'
 import { UploadIcon } from 'lucide-react'
 
-import { DropArea } from '~/components/elements/drop-area'
+import { DropArea } from '@my/core/elements'
+
 import { Spinner } from '~/components/elements/spinner'
 import { Button } from '~/components/ui/button'
 import { actionUploadFiles } from '~/features/snapfile/actions.client'

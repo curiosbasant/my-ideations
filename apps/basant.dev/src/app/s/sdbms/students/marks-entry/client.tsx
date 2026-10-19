@@ -2,10 +2,11 @@
 
 import type { ComponentProps } from 'react'
 
+import { cn } from '@my/lib/tw'
+
 import { Input } from '~/components/ui/input'
 import { actionSetStudentClassMark } from '~/features/sdbms/actions'
 import { useDalMutation } from '~/lib/dal/use-action'
-import { cn } from '~/lib/utils'
 
 export function MarkInput({
   classStudentId,

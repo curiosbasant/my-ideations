@@ -3,9 +3,9 @@
 import { use, useState, type PropsWithChildren } from 'react'
 import { CloudUploadIcon } from 'lucide-react'
 
+import { DropArea } from '@my/core/elements'
 import { formatBytes } from '@my/lib/utils'
 
-import { DropArea } from '~/components/elements/drop-area'
 import { Spinner } from '~/components/elements/spinner'
 import { Button } from '~/components/ui/button'
 import { DialogClose, DialogContext, DialogFooter } from '~/components/ui/dialog'

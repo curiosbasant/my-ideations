@@ -5,13 +5,9 @@ import {
   type JSX,
   type ReactNode,
 } from 'react'
-import { cx, type CxOptions } from 'class-variance-authority'
 import Zip from 'jszip'
-import { twMerge } from 'tailwind-merge'
 
-export function cn(...inputs: CxOptions) {
-  return twMerge(cx(inputs))
-}
+import { cn } from '@my/lib/tw'
 
 export function styled<
   Tag extends keyof JSX.IntrinsicElements = keyof JSX.IntrinsicElements,
