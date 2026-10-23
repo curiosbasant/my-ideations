@@ -29,8 +29,16 @@ export function useDalMutation<TInput, TData>(
   }
   const errorMessage = formatError(state)
   return state ?
-      { ...state, errorMessage, action, actionTransition, isPending }
-    : { success: false as const, error: null, errorMessage, action, actionTransition, isPending }
+      { data: null, ...state, errorMessage, isPending, action, actionTransition }
+    : {
+        success: false as const,
+        data: null,
+        error: null,
+        errorMessage,
+        isPending,
+        action,
+        actionTransition,
+      }
 }
 
 function formatError(result: DalResult<any> | null) {

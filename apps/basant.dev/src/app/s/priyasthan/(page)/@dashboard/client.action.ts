@@ -1,6 +1,6 @@
 'use client'
 
-import { saveDesignation } from './server.action'
+import { saveDesignation } from '~/features/user/actions'
 
 export function handleDesignationUpdate(fd: FormData) {
   const departmentId = fd.get('department') as string

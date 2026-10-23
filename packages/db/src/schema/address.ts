@@ -7,7 +7,11 @@ import {
   getProfileRef,
   getTimestampColumns,
 } from '../utils/helpers/column'
-import { policyAllowAnyoneSelect } from '../utils/helpers/policy'
+import {
+  policyAllowAnyoneSelect,
+  policyAllowAuthenticatedInsert,
+  policyAllowProfileUpdateOwn,
+} from '../utils/helpers/policy'
 import { pgTable } from '../utils/helpers/table'
 
 export const address = pgTable(
@@ -26,7 +30,7 @@ export const address = pgTable(
     placeId: c.text().unique(),
     ...getTimestampColumns(),
   }),
-  (t) => [index().using('gist', t.geom), policyAllowAnyoneSelect],
+  (t) => [index().using('gist', t.geom), policyAllowAnyoneSelect, policyAllowAuthenticatedInsert],
 )
 
 export const profileAddress = pgTable(
@@ -41,5 +45,7 @@ export const profileAddress = pgTable(
     primaryKey({ columns: [t.profileId, t.addressId] }),
     index().on(t.type, t.updatedAt.desc()),
     policyAllowAnyoneSelect,
+    policyAllowAuthenticatedInsert,
+    policyAllowProfileUpdateOwn(t.profileId),
   ],
 )

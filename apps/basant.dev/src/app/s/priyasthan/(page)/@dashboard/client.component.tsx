@@ -17,11 +17,12 @@ import {
   CommandItem,
   CommandList,
 } from '~/components/ui/command'
+import { FormControl } from '~/components/ui/form'
 import { Input } from '~/components/ui/input'
-import { Label } from '~/components/ui/label'
 import { Popover, PopoverContent, PopoverTrigger } from '~/components/ui/popover'
-import { useAction } from '~/lib/utils/helper-action/client'
-import { getDepartmentDesignations, saveWorkplace } from './server.action'
+import { saveWorkplace } from '~/features/priyasthan/actions'
+import { getDepartmentDesignations } from '~/features/user/actions'
+import { useDalMutation } from '~/lib/dal/use-action'
 
 type Location = {
   profileId: string
@@ -119,38 +120,95 @@ export function DepartmentDesignation(props: {
   defaultDepartmentId?: string
   defaultDesignation?: string
 }) {
-  const { isPending, state, actionTransition } = useAction({
-    actionFn: getDepartmentDesignations,
-  })
+  const {
+    isPending,
+    data: designations,
+    actionTransition,
+  } = useDalMutation(getDepartmentDesignations)
 
   return (
     <>
-      <div className='space-y-2'>
-        <Label>Department</Label>
+      <FormControl className='**:[label>span]:hidden' label='Department'>
         <SelectDepartment
-          currentDepartment={props.defaultDepartmentId || '0'}
           departments={props.departments}
+          currentDepartment={props.defaultDepartmentId ?? null}
           onSelect={(departmentId) => {
             actionTransition({ departmentId })
           }}
         />
-      </div>
-      <div className='space-y-2'>
-        <Label>Designation</Label>
-        {state?.data?.length ?
+      </FormControl>
+      <FormControl className='**:[label>span]:hidden' label='Designation'>
+        {designations?.length ?
           <SelectDesignation
             defaultValue={props.defaultDesignation}
             loading={isPending}
-            designations={state.data}
+            designations={designations}
           />
         : <Input
             className='bg-background'
             name='designation'
             defaultValue={props.defaultDesignation}
+            placeholder='Enter your designation'
+            required
+            disabled={!designations}
           />
         }
-      </div>
+      </FormControl>
     </>
+  )
+}
+
+function SelectDepartment(props: {
+  currentDepartment: string | null
+  departments: Promise<{ id: string; name: string }[]>
+  onSelect: (value: string) => void
+}) {
+  const departments = use(props.departments)
+  const [open, setOpen] = useState(false)
+  const [departmentId, setDepartmentId] = useState(props.currentDepartment)
+
+  return (
+    <Popover open={open} onOpenChange={setOpen}>
+      <input name='department' value={departmentId ?? ''} type='hidden' />
+      <PopoverTrigger asChild>
+        <Button
+          variant='outline'
+          role='combobox'
+          aria-expanded={open}
+          className='w-full justify-between text-start'>
+          <span className='line-clamp-1 w-0 flex-1'>
+            {(departmentId && departments.find(({ id }) => id === departmentId)?.name)
+              || 'Select your department...'}
+          </span>
+          <ChevronsUpDownIcon className='size-4 opacity-50' />
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className='w-(--radix-popper-anchor-width) min-w-xs p-0' align='start'>
+        <Command>
+          <CommandInput placeholder='Search for your department...' className='h-9' />
+          <CommandList>
+            <CommandEmpty>No department found.</CommandEmpty>
+            <CommandGroup>
+              {departments.map((department) => (
+                <CommandItem
+                  value={department.name}
+                  onSelect={() => {
+                    setDepartmentId(department.id)
+                    props.onSelect(department.id)
+                    setOpen(false)
+                  }}
+                  key={department.id}>
+                  {department.name}
+                  <Check
+                    className={`me-auto ${departmentId === department.id ? 'opacity-100' : 'opacity-0'}`}
+                  />
+                </CommandItem>
+              ))}
+            </CommandGroup>
+          </CommandList>
+        </Command>
+      </PopoverContent>
+    </Popover>
   )
 }
 
@@ -197,75 +255,20 @@ function SelectDesignation(props: {
                 Add Designation
               </Button>
             </CommandEmpty>
-            {props.designations.map((department) => (
+            {props.designations.map((designation) => (
               <CommandItem
-                value={department.name}
+                value={designation.name}
                 onSelect={() => {
-                  setValue(department.name)
+                  setValue(designation.name)
                   setOpen(false)
                 }}
-                key={department.id}>
-                {department.name}
-                {department.count > 0 && (
-                  <div className={`me-auto bg-accent`}>{department.count}</div>
+                key={designation.id}>
+                {designation.name}
+                {designation.count > 0 && (
+                  <div className='me-auto bg-accent'>{designation.count}</div>
                 )}
               </CommandItem>
             ))}
-          </CommandList>
-        </Command>
-      </PopoverContent>
-    </Popover>
-  )
-}
-
-function SelectDepartment(props: {
-  currentDepartment: string
-  departments: Promise<{ id: string; name: string }[]>
-  onSelect: (value: string) => void
-}) {
-  const departments = use(props.departments)
-  const [open, setOpen] = useState(false)
-  const [departmentId, setDepartmentId] = useState(props.currentDepartment)
-
-  return (
-    <Popover open={open} onOpenChange={setOpen}>
-      <input name='department' value={departmentId} type='hidden' />
-      <PopoverTrigger asChild>
-        <Button
-          variant='outline'
-          role='combobox'
-          aria-expanded={open}
-          className='w-full justify-between text-start'>
-          <span className='line-clamp-1 w-0 flex-1'>
-            {departmentId ?
-              departments.find(({ id }) => id === departmentId)?.name
-            : 'Select your department...'}
-          </span>
-          <ChevronsUpDownIcon className='size-4 opacity-50' />
-        </Button>
-      </PopoverTrigger>
-      <PopoverContent className='w-(--radix-popper-anchor-width) min-w-xs p-0' align='start'>
-        <Command>
-          <CommandInput placeholder='Search for your department...' className='h-9' />
-          <CommandList>
-            <CommandEmpty>No department found.</CommandEmpty>
-            <CommandGroup>
-              {departments.map((department) => (
-                <CommandItem
-                  value={department.name}
-                  onSelect={() => {
-                    setDepartmentId(department.id)
-                    props.onSelect(department.id)
-                    setOpen(false)
-                  }}
-                  key={department.id}>
-                  {department.name}
-                  <Check
-                    className={`me-auto ${departmentId === department.id ? 'opacity-100' : 'opacity-0'}`}
-                  />
-                </CommandItem>
-              ))}
-            </CommandGroup>
           </CommandList>
         </Command>
       </PopoverContent>

@@ -128,26 +128,23 @@ export const priyasthanRouter = {
           type: z.enum(['current-workplace', 'preferred-workplace']),
         }),
       )
-      .mutation(async ({ ctx: { db, authUserId }, input }) => {
-        return db.transaction(async (tx) => {
-          const [{ profileId }, { addressId }] = await Promise.all([
-            // exchange authId with profileId
-            tx
-              .select({ profileId: schema.profile.id })
-              .from(schema.profile)
-              .where(eq(schema.profile.createdBy, authUserId))
-              .then(ensureSingleRow),
-            tx
-              .insert(schema.address)
-              .values({
-                text: input.text,
-                latitude: input.latitude,
-                longitude: input.longitude,
-              })
-              .returning({ addressId: schema.address.id })
-              .then(ensureSingleRow),
-          ])
-          await tx.insert(schema.profileAddress).values({ profileId, addressId, type: input.type })
+      .mutation(async ({ ctx: { rls }, input }) => {
+        return rls(async (tx) => {
+          const { addressId } = await tx
+            .insert(schema.address)
+            .values({
+              text: input.text,
+              latitude: input.latitude,
+              longitude: input.longitude,
+            })
+            .returning({ addressId: schema.address.id })
+            .then(ensureSingleRow)
+
+          await tx.insert(schema.profileAddress).values({
+            profileId: selectProfileId,
+            addressId,
+            type: input.type,
+          })
           return addressId
         })
       }),
@@ -160,15 +157,17 @@ export const priyasthanRouter = {
           longitude: z.number(),
         }),
       )
-      .mutation(async ({ ctx: { db }, input }) => {
-        return db
-          .update(schema.address)
-          .set({
-            text: input.text,
-            latitude: input.latitude,
-            longitude: input.longitude,
-          })
-          .where(eq(schema.address.id, input.addressId))
+      .mutation(async ({ ctx: { rls }, input }) => {
+        await rls((tx) =>
+          tx
+            .update(schema.address)
+            .set({
+              text: input.text,
+              latitude: input.latitude,
+              longitude: input.longitude,
+            })
+            .where(eq(schema.address.id, input.addressId)),
+        )
       }),
     recent: protectedProcedure.query(({ ctx: { db } }) => {
       return db

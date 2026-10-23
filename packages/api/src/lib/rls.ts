@@ -1,18 +1,16 @@
 import { TRPCError } from '@trpc/server'
 
-import type { PgAsyncDatabase } from '@my/db'
+import type { PgAsyncDatabase, PgAsyncTransaction } from '@my/db'
 import type { JwtPayload } from '@my/lib/supabase'
 
 // https://github.com/orgs/supabase/discussions/23224
 // Should be secure because we use the access token that is signed, and not the data read directly from the storage
 export function rlsCreator<
   TDatabase extends PgAsyncDatabase<any, any>,
-  TTransaction extends TDatabase['transaction'],
   TJwtPayload extends JwtPayload = JwtPayload,
->(db: TDatabase, jwtPayload?: TJwtPayload | null, admin?: true): TTransaction {
-  // @ts-expect-error
+>(db: TDatabase, jwtPayload?: TJwtPayload | null, admin?: true): TDatabase['transaction'] {
   return async (txCallback, ...rest) => {
-    const txFn: typeof txCallback = async (tx) => {
+    const txFn = async (tx: PgAsyncTransaction<any, any>) => {
       // Supabase exposes auth.uid() and auth.jwt()
       // https://supabase.com/docs/guides/database/postgres/row-level-security#helper-functions
       try {
@@ -33,14 +31,14 @@ export function rlsCreator<
       } catch (err) {
         console.log('Caught RLS Error: ', err)
 
-        if (!(err instanceof Error && err.cause instanceof Error)) throw err
-
-        const pgMessage = err.cause.message
-        if (pgMessage.startsWith('new row violates row-level security policy for table')) {
-          throw new TRPCError({ code: 'FORBIDDEN', message: 'Permission Denied', cause: err })
-        }
-        if (pgMessage.startsWith('duplicate key value violates unique constraint')) {
-          throw new TRPCError({ code: 'CONFLICT', message: 'Resource already exist', cause: err })
+        if (err instanceof Error && err.cause instanceof Error) {
+          const pgMessage = err.cause.message
+          if (pgMessage.startsWith('new row violates row-level security policy for table')) {
+            throw new TRPCError({ code: 'FORBIDDEN', message: 'Permission Denied', cause: err })
+          }
+          if (pgMessage.startsWith('duplicate key value violates unique constraint')) {
+            throw new TRPCError({ code: 'CONFLICT', message: 'Resource already exist', cause: err })
+          }
         }
 
         throw err
