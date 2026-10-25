@@ -128,7 +128,7 @@ export const authRouter = {
     }),
   signInWithProvider: publicProcedure
     .input(signInWithProviderSchema)
-    .mutation(async ({ ctx: { origin, supabase }, input }) => {
+    .mutation(async ({ ctx: { origin, supabase, headers }, input }) => {
       if ('idToken' in input) {
         const { data, error } = await supabase.auth.signInWithIdToken({
           provider: input.provider,
@@ -138,11 +138,21 @@ export const authRouter = {
         return { session: data.session }
       }
 
+      if (!origin) throw new Error('No origin header found')
+
+      const redirectUrl = new URL('/api/auth/callback', origin)
+      if (input.continue === true) {
+        const referrer = headers.get('referer')
+        const continuePathname = referrer && URL.parse(referrer)?.searchParams.get('continue')
+        continuePathname && redirectUrl.searchParams.set('next', continuePathname)
+      } else if (input.continue) {
+        redirectUrl.searchParams.set('next', input.continue)
+      }
+
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: input.provider,
         options: {
-          redirectTo:
-            origin + '/api/auth/callback' + (input.redirectTo ? '?next=' + input.redirectTo : ''),
+          redirectTo: redirectUrl.toString(),
         },
       })
       if (error) throw error

@@ -31,7 +31,7 @@ export const signInWithProviderSchema = z
   .or(
     z.object({
       provider: z.custom<AuthProvider>((value) => typeof value === 'string'),
-      redirectTo: z.string().optional(),
+      continue: z.string().or(z.boolean()).optional(),
     }),
   )
 export type signInWithProviderSchema = z.infer<typeof signInWithProviderSchema>
@@ -44,7 +44,7 @@ export const signInWithPhoneSchema = z.object({
 export type signInWithPhoneSchema = z.infer<typeof signInWithPhoneSchema>
 
 export const changePasswordSchema = z.object({
-  userId: z.string().uuid().nullish(),
+  userId: z.uuid().nullish(),
   currentPassword: z.string().nullish(),
   newPassword: passwordSchema,
 })
