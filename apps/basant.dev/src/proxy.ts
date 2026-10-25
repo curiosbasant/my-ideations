@@ -16,7 +16,7 @@ const routesConfig: RouteConfig[] = [
   {
     subdomain: 'priyasthan',
     publicPaths: ['/'],
-    authRedirectPath: '/',
+    authRedirectPath: SIGN_IN_PATH,
     landingPath: '/',
   },
   {

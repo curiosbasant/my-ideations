@@ -11,6 +11,7 @@ export const getDepartmentDesignations = dalTrpcAction(
 )
 
 export const saveDesignation = dalTrpcAction(api.user.department.update, async (operation) => {
-  await dalLoginRedirect(operation)
+  const result = await dalLoginRedirect(operation)
   revalidatePath('/')
+  return result
 })

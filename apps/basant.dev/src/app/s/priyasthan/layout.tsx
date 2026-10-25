@@ -7,6 +7,7 @@ import Link from 'next/link'
 import { TrpcClientProvider } from '@my/core/trpc/client'
 
 import { ScrollArea } from '~/components/ui/scroll-area'
+import { Toaster } from '~/components/ui/sonner'
 import { latoFont } from '~/features/shared/fonts'
 
 export const metadata: Metadata = {
@@ -35,6 +36,7 @@ export default function SnapFileRootLayout(props: LayoutProps<'/s/priyasthan'>) 
             <TrpcClientProvider>{props.children}</TrpcClientProvider>
           </div>
         </ScrollArea>
+        <Toaster />
       </body>
     </html>
   )
