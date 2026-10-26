@@ -41,7 +41,14 @@ export default async function StudentsMarksEntryPage(
               <p className='text-center text-muted-foreground'>Please wait...</p>
             </div>
           }>
-          <StudentsList studentsPromise={getClassStudentsMark(session, exam, +standard, subject)} />
+          <StudentsList
+            studentsPromise={getClassStudentsMark({
+              sessionId: session,
+              exam,
+              standard: +standard,
+              subject,
+            })}
+          />
         </Suspense>
       )}
     </div>

@@ -5,7 +5,7 @@ import { FormSubmitButton } from '~/components/forms/client'
 import { FormControl } from '~/components/ui/form'
 import { Input } from '~/components/ui/input'
 import { FormFieldSelectSession } from '~/features/sdbms/components/form-fields'
-import { checkIfAdmin } from '~/features/sdbms/dal'
+import { checkIfAdmin } from '~/features/user/dal'
 import { FormWrapper } from './client'
 
 export const metadata: Metadata = {

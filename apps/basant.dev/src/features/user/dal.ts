@@ -1,6 +1,8 @@
 import { dalTrpcQuery, dalVerifySuccess } from '~/lib/dal/server'
 import { api } from '~/lib/trpc'
 
+export const checkIfAdmin = dalTrpcQuery(api.user.admin.check, dalVerifySuccess)
+
 export const getProfileDetails = dalTrpcQuery(api.user.get, async (operation) => {
   const result = await operation
   if (result.success) return result.data || null
@@ -8,5 +10,7 @@ export const getProfileDetails = dalTrpcQuery(api.user.get, async (operation) =>
 
   throw 'error' in result.error ? result.error.error : result.error
 })
+
+export const ensureProfileDetails = dalTrpcQuery(api.user.get, dalVerifySuccess)
 
 export const getDepartments = dalTrpcQuery(api.user.department.list, dalVerifySuccess)

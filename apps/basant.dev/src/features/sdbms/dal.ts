@@ -1,51 +1,21 @@
-import { cache } from 'react'
-
-import { dalDbOperation } from '~/lib/dal/helpers'
-import { dalVerifySuccess } from '~/lib/dal/server'
+import { dalTrpcQuery, dalVerifySuccess } from '~/lib/dal/server'
 import { api } from '~/lib/trpc'
 
-export const getProfileDetails = cache(() => {
-  return dalVerifySuccess(dalDbOperation(() => api.user.get()))
-})
+export const getExams = dalTrpcQuery(api.sdbms.exam.list, dalVerifySuccess)
 
-export const checkIfAdmin = cache(() => {
-  return dalVerifySuccess(dalDbOperation(() => api.sdbms.admin.check()))
-})
+export const getSessions = dalTrpcQuery(api.sdbms.session.list, dalVerifySuccess)
 
-export const getExams = cache(() => {
-  return api.sdbms.exam.list()
-})
+export const getSubjects = dalTrpcQuery(api.sdbms.subject.list, dalVerifySuccess)
 
-export const getSessions = cache(() => {
-  return api.sdbms.session.list()
-})
+export const getTeacherSubjects = dalTrpcQuery(api.sdbms.teacher.subject.list, dalVerifySuccess)
 
-export const getSubjects = cache(() => {
-  return dalVerifySuccess(dalDbOperation(() => api.sdbms.subject.list()))
-})
+export const getInstitutes = dalTrpcQuery(api.sdbms.institute.list, dalVerifySuccess)
 
-export const getTeacherSubjects = cache((sessionId: string) => {
-  return dalVerifySuccess(dalDbOperation(() => api.sdbms.teacher.subject.list({ sessionId })))
-})
+export const getInstituteClasses = dalTrpcQuery(api.sdbms.class.list, dalVerifySuccess)
 
-export const getInstitutes = cache(() => {
-  return api.sdbms.institute.list()
-})
-
-export const getInstituteClasses = cache(() => {
-  return dalVerifySuccess(dalDbOperation(() => api.sdbms.class.list()))
-})
-
-export const getClassStudentsMark = cache(
-  (sessionId: string, exam: string, standard: number, subject: string) => {
-    return dalVerifySuccess(
-      dalDbOperation(() =>
-        api.sdbms.class.student.mark.list({ sessionId, exam, standard, subject }),
-      ),
-    )
-  },
+export const getClassStudentsMark = dalTrpcQuery(
+  api.sdbms.class.student.mark.list,
+  dalVerifySuccess,
 )
 
-export const getUserRole = cache(() => {
-  return dalVerifySuccess(dalDbOperation(() => api.sdbms.user.role()))
-})
+export const getUserRole = dalTrpcQuery(api.sdbms.user.role, dalVerifySuccess)

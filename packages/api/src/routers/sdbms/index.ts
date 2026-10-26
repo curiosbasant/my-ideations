@@ -8,11 +8,6 @@ import { studentRouter } from './student'
 import { teacherRouter } from './teacher'
 
 export const sdbmsRouter = {
-  admin: {
-    check: protectedProcedure.query(
-      ({ ctx }) => ctx.authUserId === process.env['SUPABASE_ADMIN_USER_ID'],
-    ),
-  },
   class: classRouter,
   exam: {
     list: publicProcedure.query(({ ctx: { rls } }) => {

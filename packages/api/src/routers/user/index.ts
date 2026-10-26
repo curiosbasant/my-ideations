@@ -9,9 +9,11 @@ import { z } from '@my/lib/zod'
 
 import { ensureSingleRow } from '../../lib/utils/helpers'
 import { protectedProcedure, publicProcedure } from '../../trpc'
+import { adminRouter } from './admin'
 import { profileRouter } from './profile'
 
 export const userRouter = {
+  admin: adminRouter,
   profile: profileRouter,
 
   get: protectedProcedure.query(({ ctx: { rls } }) => {

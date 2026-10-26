@@ -188,9 +188,7 @@ async function resolvePersonIdFromRelation(tx: DbTransaction, relation?: string)
         ),
       )
   : tx.execute<{ personId: string }>(selectPersonId))
+  if (row?.personId) return row.personId
 
-  if (!row?.personId)
-    throw new TRPCError({ code: 'NOT_FOUND', message: `Relation with ${relation} not found` })
-
-  return row.personId
+  throw new TRPCError({ code: 'NOT_FOUND', message: `Relation with ${relation} not found` })
 }

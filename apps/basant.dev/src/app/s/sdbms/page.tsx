@@ -6,11 +6,12 @@ import { FormSubmitButton } from '~/components/forms/client'
 import { Button } from '~/components/ui/button'
 import { FormControl } from '~/components/ui/form'
 import { Input } from '~/components/ui/input'
-import { getProfileDetails, getUserRole } from '~/features/sdbms/dal'
+import { getUserRole } from '~/features/sdbms/dal'
+import { ensureProfileDetails } from '~/features/user/dal'
 import { FormConnectStudent, FormConnectTeacher } from './client'
 
 export default async function SdbmsHomePage(props: PageProps<'/s/sdbms'>) {
-  const profile = await getProfileDetails()
+  const profile = await ensureProfileDetails()
 
   if (profile.personId) {
     const role = await getUserRole()
