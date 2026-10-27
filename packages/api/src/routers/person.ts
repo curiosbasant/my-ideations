@@ -12,12 +12,6 @@ import { ensureSingleRow } from '../lib/utils/helpers'
 import { protectedProcedure, publicProcedure } from '../trpc'
 
 export const personRouter = {
-  id: protectedProcedure.query(async ({ ctx: { rls } }) => {
-    return rls(async (tx) => {
-      const row = await tx.execute<{ personId: number }>(selectPersonId).then(ensureSingleRow)
-      return row.personId
-    })
-  }),
   document: {
     list: protectedProcedure.query(async ({ ctx: { rls, supabase } }) => {
       const documents = await rls((tx) => {

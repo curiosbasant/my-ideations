@@ -1,14 +1,10 @@
-import { cache } from 'react'
 import { redirect } from 'next/navigation'
 
-import { dalDbOperation, dalNullifyError } from '~/lib/dal/helpers'
-import { dalVerifySuccess } from '~/lib/dal/server'
-import { api } from '~/lib/trpc'
+import { getProfileDetails } from '~/features/user/dal'
 
-export const getPersonId = cache(() => dalNullifyError(dalDbOperation(() => api.person.id())))
+export async function ensurePersonId() {
+  const profile = await getProfileDetails()
+  if (profile?.personId) return profile.personId
 
-export const ensurePersonId = cache(async () => {
-  const result = await dalVerifySuccess(dalDbOperation(() => api.person.id()))
-  if (!result) redirect('/')
-  return result
-})
+  redirect('/')
+}
