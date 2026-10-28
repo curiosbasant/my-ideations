@@ -1,13 +1,12 @@
 import { TRPCError } from '@trpc/server'
 
 import { schema } from '@my/db'
-import { authUserId } from '@my/db/db-functions'
+import { selectProfileId, selectUserId, userProfileId } from '@my/db/db-functions'
 import { profileDisplayName } from '@my/db/helpers'
-import { and, desc, eq, now } from '@my/db/sql'
+import { and, desc, eq, isNull, now } from '@my/db/sql'
 import { placeIdToLocation } from '@my/lib/maps'
 import { z } from '@my/lib/zod'
 
-import { ensureSingleRow } from '../../lib/utils/helpers'
 import { protectedProcedure, publicProcedure } from '../../trpc'
 import { adminRouter } from './admin'
 import { profileRouter } from './profile'
@@ -28,7 +27,7 @@ export const userRouter = {
         })
         .from(schema.profile)
         .leftJoin(schema.designation, eq(schema.designation.id, schema.profile.postId))
-        .where(eq(schema.profile.createdBy, authUserId))
+        .where(eq(schema.profile.createdBy, selectUserId))
       if (user) return user
 
       throw new TRPCError({ code: 'NOT_FOUND' })
@@ -36,13 +35,13 @@ export const userRouter = {
   }),
 
   department: {
-    list: publicProcedure.query(async ({ ctx: { db } }) => {
-      return db.select().from(schema.department)
+    list: publicProcedure.query(async ({ ctx: { rls } }) => {
+      return rls((tx) => tx.select().from(schema.department))
     }),
     update: protectedProcedure
       .input(z.object({ departmentId: z.string(), designation: z.string() }))
-      .mutation(async ({ ctx: { db, authUserId }, input }) => {
-        db.transaction(async (tx) => {
+      .mutation(async ({ ctx: { rls }, input }) => {
+        return rls(async (tx) => {
           const [insertedRow] = await tx
             .insert(schema.designation)
             .values({
@@ -56,7 +55,7 @@ export const userRouter = {
             await tx
               .update(schema.profile)
               .set({ postId: insertedRow.postId })
-              .where(eq(schema.profile.createdBy, authUserId))
+              .where(eq(schema.profile.createdBy, selectUserId))
           } else {
             await tx
               .update(schema.profile)
@@ -64,7 +63,7 @@ export const userRouter = {
               .from(schema.designation)
               .where(
                 and(
-                  eq(schema.profile.createdBy, authUserId),
+                  eq(schema.profile.createdBy, selectUserId),
                   eq(schema.designation.departmentId, input.departmentId),
                   eq(schema.designation.name, input.designation),
                 ),
@@ -76,39 +75,42 @@ export const userRouter = {
     designation: {
       list: publicProcedure
         .input(z.object({ departmentId: z.string() }))
-        .query(async ({ ctx: { db }, input }) => {
-          return db
-            .select({
-              id: schema.designation.id,
-              name: schema.designation.name,
-              count: db.$count(schema.profile, eq(schema.profile.postId, schema.designation.id)),
-            })
-            .from(schema.designation)
-            .where(eq(schema.designation.departmentId, input.departmentId))
+        .query(async ({ ctx: { rls }, input }) => {
+          return rls((tx) =>
+            tx
+              .select({
+                id: schema.designation.id,
+                name: schema.designation.name,
+                count: tx.$count(schema.profile, eq(schema.profile.postId, schema.designation.id)),
+              })
+              .from(schema.designation)
+              .where(eq(schema.designation.departmentId, input.departmentId)),
+          )
         }),
     },
   },
   address: {
-    get: protectedProcedure.query(async ({ ctx: { db, authUserId } }) => {
-      const [address] = await db
-        .select({
-          placeId: schema.address.id,
-          addressText: schema.address.text,
-          addressSecondaryText: schema.address.secondaryText,
-        })
-        .from(schema.profile)
-        .leftJoin(schema.profileAddress, eq(schema.profileAddress.profileId, schema.profile.id))
-        .innerJoin(schema.address, eq(schema.address.id, schema.profileAddress.addressId))
-        .where(
-          and(
-            eq(schema.profileAddress.type, 'current-workplace'),
-            eq(schema.profile.createdBy, authUserId),
-          ),
-        )
-        .orderBy(desc(schema.profileAddress.updatedAt)) // only take the latest address
-        .limit(1)
+    get: protectedProcedure.query(({ ctx: { rls } }) => {
+      return rls(async (tx) => {
+        const [address] = await tx
+          .select({
+            placeId: schema.address.id,
+            addressText: schema.address.text,
+            addressSecondaryText: schema.address.secondaryText,
+          })
+          .from(schema.profileAddress)
+          .innerJoin(schema.address, eq(schema.address.id, schema.profileAddress.addressId))
+          .where(
+            and(
+              isNull(schema.profileAddress.type),
+              eq(schema.profileAddress.profileId, selectProfileId),
+            ),
+          )
+          .orderBy(desc(schema.profileAddress.updatedAt)) // only take the latest address
+          .limit(1)
 
-      return address || null
+        return address ?? null
+      })
     }),
     upsert: protectedProcedure
       .input(
@@ -118,53 +120,45 @@ export const userRouter = {
           secondaryText: z.string().nullish(),
         }),
       )
-      .mutation(async ({ ctx: { db, authUserId }, input }) => {
-        await db.transaction(async (tx) => {
-          const [{ profileId }, { addressId }] = await Promise.all([
-            // exchange authId with profileId
-            tx
-              .select({ profileId: schema.profile.id })
-              .from(schema.profile)
-              .where(eq(schema.profile.createdBy, authUserId))
-              .then(ensureSingleRow),
-            // ensure address exists
-            tx
+      .mutation(async ({ ctx: { rls }, input }) => {
+        return rls(async (tx) => {
+          async function ensureAddressIdByPlaceId() {
+            const [row] = await tx
               .select({ addressId: schema.address.id })
               .from(schema.address)
               .where(eq(schema.address.placeId, input.placeId))
-              .then(async (rows) => {
-                if (rows.length) return rows
-                // create address if not exists
-                const location = await placeIdToLocation(input.placeId)
-                return tx
-                  .insert(schema.address)
-                  .values({
-                    placeId: input.placeId,
-                    text: input.text,
-                    secondaryText: input.secondaryText,
-                    latitude: location.latitude,
-                    longitude: location.longitude,
-                  })
-                  .returning({ addressId: schema.address.id })
+            if (row?.addressId) return row.addressId
+
+            const location = await placeIdToLocation(input.placeId)
+            const [insertedRow] = await tx
+              .insert(schema.address)
+              .values({
+                placeId: input.placeId,
+                text: input.text,
+                secondaryText: input.secondaryText,
+                latitude: location.latitude,
+                longitude: location.longitude,
               })
-              .then(ensureSingleRow),
-          ])
+              .returning({ addressId: schema.address.id })
+            if (insertedRow?.addressId) return insertedRow.addressId
+
+            throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR' })
+          }
+
+          const addressId = await ensureAddressIdByPlaceId()
 
           // link profile with address
           await tx
             .insert(schema.profileAddress)
             .values({
-              profileId,
+              profileId: userProfileId,
               addressId,
-              type: 'current-workplace',
             })
             .onConflictDoUpdate({
               target: [schema.profileAddress.profileId, schema.profileAddress.addressId],
               set: { updatedAt: now() },
             })
         })
-
-        return { message: 'done' }
       }),
   },
 }

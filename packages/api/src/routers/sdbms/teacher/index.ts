@@ -1,7 +1,7 @@
 import { TRPCError } from '@trpc/server'
 
 import { schema } from '@my/db'
-import { authUserId, userPersonId } from '@my/db/db-functions'
+import { selectPersonId, selectUserId } from '@my/db/db-functions'
 import { and, caseWhen, eq, isNull, now } from '@my/db/sql'
 import { z } from '@my/lib/zod'
 
@@ -28,7 +28,7 @@ export const teacherRouter = {
             and(
               eq(schema.person.dob, input.dob),
               eq(schema.sd__teacher.employeeId, input.employeeId),
-              eq(schema.profile.createdBy, authUserId),
+              eq(schema.profile.createdBy, selectUserId),
             ),
           )
           .returning({ personId: schema.person.id })
@@ -77,7 +77,7 @@ export const teacherRouter = {
               and(
                 isNull(schema.sd__teacherSubject.deletedAt),
                 eq(schema.sd__teacherSubject.sessionId, input.sessionId),
-                eq(schema.sd__teacher.personId, userPersonId),
+                eq(schema.sd__teacher.personId, selectPersonId),
               ),
             )
             .orderBy(schema.sd__class.id)
@@ -96,7 +96,7 @@ export const teacherRouter = {
           const row = await tx
             .select({ id: schema.sd__teacher.id })
             .from(schema.sd__teacher)
-            .where(eq(schema.sd__teacher.personId, userPersonId))
+            .where(eq(schema.sd__teacher.personId, selectPersonId))
             .then(ensureSingleRow)
           await tx
             .insert(schema.sd__teacherSubject)
