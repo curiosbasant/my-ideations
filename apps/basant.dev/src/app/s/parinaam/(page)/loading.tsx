@@ -1,3 +1,1 @@
-export default function HomeLoadingPage() {
-  return <p>Please Wait...</p>
-}
+export { LoadingSpinner as default } from '~/features/shared/components/loading-spinner'
