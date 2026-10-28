@@ -5,7 +5,7 @@ import { schema, type DbTransaction } from '@my/db'
 import { aliasExcluded } from '@my/db/helpers'
 import { and, eq, inArray, isDistinctFrom, now, or } from '@my/db/sql'
 import { extractDataFromSheet } from '@my/lib/file'
-import { groupBy, splitFullName } from '@my/lib/utils'
+import { extractTrailingParenthesisNumber, groupBy, splitFullName } from '@my/lib/utils'
 import { z } from '@my/lib/zod'
 
 import { ensureSingleRow } from '../../../lib/utils/helpers'
@@ -134,6 +134,7 @@ async function createInstitutes(tx: DbTransaction, sdRecords: SchemaStudent[]) {
     .values(
       instituteEntries.map(([instituteName]) => ({
         name: instituteName,
+        nicCode: extractTrailingParenthesisNumber(instituteName),
       })),
     )
     .onConflictDoUpdate({

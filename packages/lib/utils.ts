@@ -319,3 +319,9 @@ export function sanitizeFilenameForStorage(fileName: string) {
   const sanitizedBasename = basename.replace(/\W+/g, '_').slice(0, 64)
   return `${Date.now().toString(36)}_${sanitizedBasename}${extname}`
 }
+
+export function extractTrailingParenthesisNumber(text: string) {
+  // Matches digits inside the last parentheses in the string, ignoring trailing whitespace
+  const match = text.match(/\((\d+)\)[^()]*$/)
+  return match?.[1] ?? null
+}

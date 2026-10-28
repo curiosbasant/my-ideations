@@ -4,7 +4,6 @@ import type { Metadata } from 'next/types'
 import { FormSubmitButton } from '~/components/forms/client'
 import { FormControl } from '~/components/ui/form'
 import { Input } from '~/components/ui/input'
-import { FormFieldSelectInstitute } from '~/features/sdbms/components/form-fields'
 import { checkIfAdmin } from '~/features/user/dal'
 import { FormWrapper } from './client'
 
@@ -19,7 +18,9 @@ export default async function TeachersImportPage() {
   return (
     <div className='mx-auto max-w-sm'>
       <FormWrapper>
-        <FormFieldSelectInstitute />
+        <FormControl labelClassName='text-lg font-bold' label='School NIC Code' fieldId='nic-code'>
+          <Input className='backdrop-blur-2xs' name='nicCode' id='nic-code' required type='text' />
+        </FormControl>
         <FormControl labelClassName='text-lg font-bold' label='Excel File' fieldId='excel-file'>
           <Input
             className='backdrop-blur-2xs'

@@ -9,6 +9,7 @@ export const sd__institute = pgTable(
   'institute',
   withCommonColumns((c) => ({
     name: c.varchar().unique().notNull(),
+    nicCode: c.varchar().unique(),
     addressId: bigId.references(() => address.id),
   })),
   (t) => [index().on(t.createdAt.desc()), policyAllowAnyoneSelect],

@@ -1,3 +1,5 @@
+import { TRPCError } from '@trpc/server'
+
 import { schema } from '@my/db'
 import { aliasExcluded } from '@my/db/helpers'
 import { and, caseWhen, eq, inArray, isDistinctFrom, now, or } from '@my/db/sql'
@@ -5,6 +7,7 @@ import { extractDataFromSheet } from '@my/lib/file'
 import { splitFullName } from '@my/lib/utils'
 import { z } from '@my/lib/zod'
 
+import { getSchoolDetailsByNicCode } from '../../../lib/shaladarpan'
 import { dateSchema, genderSchema, trimmedString } from '../../../lib/utils/sd-schema'
 import { adminProcedure } from '../../../trpc'
 
@@ -54,14 +57,40 @@ const schemaTeacherArray = z.preprocess(transformRawTeacher, SchemaTeacher).arra
 export const importFileProcedure = adminProcedure
   .input(
     z.object({
-      instituteId: z.string(),
+      nicCode: z.string(),
       file: z.instanceof(File),
     }),
   )
   .query(async ({ input, ctx: { rls } }) => {
-    const sdRecords = await extractDataFromSheet(input.file).then(schemaTeacherArray.parse)
+    const [sdRecords, { schoolName }] = await Promise.all([
+      extractDataFromSheet(input.file).then(schemaTeacherArray.parse),
+      getSchoolDetailsByNicCode(input.nicCode),
+    ])
 
     return rls(async (tx) => {
+      const [institute] = await tx
+        .insert(schema.sd__institute)
+        .values({
+          name: schoolName,
+          nicCode: input.nicCode,
+        })
+        .onConflictDoUpdate(
+          aliasExcluded(schema.sd__institute, (excluded) => ({
+            target: schema.sd__institute.nicCode,
+            set: {
+              name: excluded.name,
+              updatedAt: caseWhen(
+                isDistinctFrom(schema.sd__institute.name, excluded.name),
+                now(),
+              ).else(schema.sd__institute.updatedAt),
+            },
+          })),
+        )
+        .returning({
+          id: schema.sd__institute.id,
+        })
+      if (!institute?.id) throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR' })
+
       const existingRows = await tx
         .select({
           personId: schema.sd__teacher.personId,
@@ -79,7 +108,7 @@ export const importFileProcedure = adminProcedure
         )
         .where(
           and(
-            eq(schema.sd__teacher.instituteId, input.instituteId),
+            eq(schema.sd__teacher.instituteId, institute.id),
             inArray(
               schema.sd__teacher.employeeId,
               sdRecords.map((r) => r.employeeId),
@@ -148,7 +177,7 @@ export const importFileProcedure = adminProcedure
         .values(
           sdRecords.map((record, i) => ({
             personId: personRows[i * 2]!.id,
-            instituteId: input.instituteId,
+            instituteId: institute.id,
             employeeId: record.employeeId,
             joiningDate: record.joiningDate?.toISOString(),
           })),
