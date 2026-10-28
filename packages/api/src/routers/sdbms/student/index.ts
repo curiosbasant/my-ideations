@@ -1,7 +1,7 @@
 import { TRPCError } from '@trpc/server'
 
 import { schema } from '@my/db'
-import { authUserId } from '@my/db/db-functions'
+import { selectUserId } from '@my/db/db-functions'
 import { and, eq } from '@my/db/sql'
 import { z } from '@my/lib/zod'
 
@@ -27,7 +27,7 @@ export const studentRouter = {
             and(
               eq(schema.person.dob, input.dob),
               eq(schema.sd__student.admissionNo, input.srNo),
-              eq(schema.profile.createdBy, authUserId),
+              eq(schema.profile.createdBy, selectUserId),
             ),
           )
           .returning({ personId: schema.person.id })

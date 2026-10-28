@@ -9,7 +9,7 @@ import {
   getTimestampColumns,
   smallId,
 } from '../utils/helpers/column'
-import { userPersonId } from '../utils/helpers/db-functions'
+import { selectPersonId, userPersonId } from '../utils/helpers/db-functions'
 import {
   policyAllowAnyoneSelect,
   policyAllowPersonInsertOwn,
@@ -47,7 +47,7 @@ export const personDocument = pgTable(
         qb
           .select({ relativeId: personRelation.relativeId })
           .from(personRelation)
-          .where(eq(personRelation.personId, userPersonId)),
+          .where(eq(personRelation.personId, selectPersonId)),
       ),
     }),
     policyAllowPersonUpdateOwn(t.personId),

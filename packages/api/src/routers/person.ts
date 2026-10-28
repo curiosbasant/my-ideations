@@ -1,7 +1,7 @@
 import { TRPCError } from '@trpc/server'
 
 import { schema, type DbTransaction } from '@my/db'
-import { selectPersonId, userPersonId, userProfileId } from '@my/db/db-functions'
+import { selectPersonId, selectProfileId, selectUserId } from '@my/db/db-functions'
 import { profileDisplayName } from '@my/db/helpers'
 import { and, coalesce, desc, eq, extractJson, now, or } from '@my/db/sql'
 import { sanitizeFilenameForStorage } from '@my/lib/utils'
@@ -53,8 +53,8 @@ export const personRouter = {
           .leftJoin(objects, eq(objects.name, schema.personDocument.path))
           .where(
             or(
-              eq(schema.personDocument.personId, userPersonId),
-              eq(schema.personDocument.createdBy, userProfileId),
+              eq(schema.personDocument.personId, selectPersonId),
+              eq(schema.personDocument.createdBy, selectProfileId),
             ),
           )
           .orderBy(desc(coalesce(schema.personDocument.updatedAt, schema.personDocument.createdAt)))
