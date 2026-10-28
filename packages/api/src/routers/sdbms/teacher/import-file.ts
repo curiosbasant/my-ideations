@@ -1,6 +1,6 @@
 import { schema } from '@my/db'
 import { aliasExcluded } from '@my/db/helpers'
-import { and, eq, inArray, isDistinctFrom, now, or } from '@my/db/sql'
+import { and, caseWhen, eq, inArray, isDistinctFrom, now, or } from '@my/db/sql'
 import { extractDataFromSheet } from '@my/lib/file'
 import { splitFullName } from '@my/lib/utils'
 import { z } from '@my/lib/zod'
@@ -26,7 +26,7 @@ type RawKeyTeacher =
 const transformRawTeacher = (raw: Record<RawKeyTeacher, string>) => ({
   name: raw.Name,
   employeeId: raw.EmployeeID,
-  fName: raw.FatherName.replace(/^(Late|L.SHRI|SHRI) /, ''),
+  fName: raw.FatherName.replace(/^(Lt.|Late|L.SHRI|SHRI)/, ''),
   gender: raw.Gender,
   dob: raw.DOB,
   post: raw.Post,
@@ -37,10 +37,10 @@ const transformRawTeacher = (raw: Record<RawKeyTeacher, string>) => ({
 
 const SchemaTeacher = z.object({
   name: trimmedString,
-  fName: trimmedString,
+  fName: trimmedString.nullable().catch(null),
   gender: genderSchema,
   dob: dateSchema,
-  bloodGroup: trimmedString,
+  bloodGroup: trimmedString.nullable().catch(null),
   employeeId: trimmedString,
   post: trimmedString.nullable().catch(null),
   subject: trimmedString.nullable().catch(null),
@@ -62,13 +62,21 @@ export const importFileProcedure = adminProcedure
     const sdRecords = await extractDataFromSheet(input.file).then(schemaTeacherArray.parse)
 
     return rls(async (tx) => {
-      const [recordsToInsert, recordsToUpdate] = await tx
+      const existingRows = await tx
         .select({
           personId: schema.sd__teacher.personId,
+          fatherPersonId: schema.personRelation.relativeId,
           employeeId: schema.sd__teacher.employeeId,
         })
         .from(schema.person)
         .innerJoin(schema.sd__teacher, eq(schema.person.id, schema.sd__teacher.personId))
+        .leftJoin(
+          schema.personRelation,
+          and(
+            eq(schema.personRelation.relation, '1'),
+            eq(schema.personRelation.personId, schema.person.id),
+          ),
+        )
         .where(
           and(
             eq(schema.sd__teacher.instituteId, input.instituteId),
@@ -78,124 +86,58 @@ export const importFileProcedure = adminProcedure
             ),
           ),
         )
-        .then(async (rows) => {
-          const teachersMap = rows.reduce(
-            (acc, s) => acc.set(s.employeeId!, s.personId),
-            new Map<string, string>(),
-          )
-          const recordsToInsert = [],
-            recordsToUpdate = []
 
-          for (const record of sdRecords) {
-            const teacherPersonId = teachersMap.get(record.employeeId)
-            teacherPersonId ?
-              recordsToUpdate.push({ teacherPersonId, record })
-            : recordsToInsert.push(record)
-          }
-          return [recordsToInsert, recordsToUpdate] as const
-        })
-
-      const insertPersons = async () => {
-        if (!recordsToInsert.length) return []
-        const personsInserted = await tx
-          .insert(schema.person)
-          .values(
-            recordsToInsert.flatMap(
-              (record) =>
-                [
-                  {
-                    ...splitFullName(record.name),
-                    gender: String(['M', 'F', 'T'].indexOf(record.gender) + 1),
-                    dob: record.dob.toISOString(),
-                    bloodGroup: record.bloodGroup,
-                  },
-                  {
-                    ...splitFullName(record.fName),
-                    gender: '1',
-                  },
-                ] satisfies (typeof schema.person.$inferInsert)[],
-            ),
-          )
-          .returning({
-            id: schema.person.id,
-          })
-
-        return personsInserted.map((v) => v.id)
-      }
-      const updatePersons = async () => {
-        if (!recordsToUpdate.length) return []
-
-        const personIds = recordsToUpdate.map((r) => r.teacherPersonId)
-        const parentRelations = await tx
-          .select()
-          .from(schema.personRelation)
-          .where(
-            and(
-              eq(schema.personRelation.relation, '1'),
-              inArray(schema.personRelation.personId, personIds),
-            ),
-          )
-
-        const personUpdateValues = recordsToUpdate.flatMap(({ teacherPersonId, record }) => {
-          const values: (typeof schema.person.$inferInsert)[] = [
-            {
-              id: teacherPersonId,
-              ...splitFullName(record.name),
-              gender: String(['M', 'F', 'T'].indexOf(record.gender) + 1),
-              dob: record.dob.toISOString(),
-              bloodGroup: record.bloodGroup,
-            },
-            {
-              ...splitFullName(record.fName),
-              gender: '1',
-            },
-          ]
-
-          const f = parentRelations.find(({ personId }) => personId === teacherPersonId)
-          const fRelative = f && values[+f.relation]
-          if (!fRelative) throw new Error('Invalid Data')
-          fRelative.id = f.relativeId // 1
-          return values
-        })
-        await tx
-          .insert(schema.person)
-          .values(personUpdateValues)
-          .onConflictDoUpdate(
-            aliasExcluded(schema.person, (excluded) => ({
-              target: schema.person.id,
-              set: {
-                firstName: excluded.firstName,
-                lastName: excluded.lastName,
-                dob: excluded.dob,
-                gender: excluded.gender,
-                bloodGroup: excluded.bloodGroup,
-                updatedAt: now(),
+      const personRows = await tx
+        .insert(schema.person)
+        .values(
+          sdRecords.flatMap((record) => {
+            const row = existingRows.find((e) => e.employeeId === record.employeeId)
+            return [
+              {
+                id: row?.personId,
+                ...splitFullName(record.name),
+                gender: String(['M', 'F', 'T'].indexOf(record.gender) + 1),
+                dob: record.dob.toISOString(),
+                bloodGroup: record.bloodGroup,
               },
-              setWhere: or(
-                isDistinctFrom(schema.person.firstName, excluded.firstName),
-                isDistinctFrom(schema.person.lastName, excluded.lastName),
-                isDistinctFrom(schema.person.dob, excluded.dob),
-                isDistinctFrom(schema.person.gender, excluded.gender),
-                isDistinctFrom(schema.person.bloodGroup, excluded.bloodGroup),
-              ),
-            })),
-          )
-        return personUpdateValues.map((v) => v.id!)
-      }
-
-      const [personsInserted, personsUpdated] = await Promise.all([
-        insertPersons(),
-        updatePersons(),
-      ])
-      const allPersonIds = [...personsInserted, ...personsUpdated]
-      const teacherPersonIds = allPersonIds.filter((_, i) => i % 2 === 0)
+              {
+                id: row?.fatherPersonId ?? undefined,
+                ...splitFullName(record.fName ?? ''),
+                gender: '1',
+              },
+            ] satisfies (typeof schema.person.$inferInsert)[]
+          }),
+        )
+        .onConflictDoUpdate(
+          aliasExcluded(schema.person, (excluded) => ({
+            target: schema.person.id,
+            set: {
+              firstName: excluded.firstName,
+              lastName: excluded.lastName,
+              dob: excluded.dob,
+              gender: excluded.gender,
+              bloodGroup: excluded.bloodGroup,
+              updatedAt: caseWhen(
+                or(
+                  isDistinctFrom(schema.person.firstName, excluded.firstName),
+                  isDistinctFrom(schema.person.lastName, excluded.lastName),
+                  isDistinctFrom(schema.person.dob, excluded.dob),
+                  isDistinctFrom(schema.person.gender, excluded.gender),
+                  isDistinctFrom(schema.person.bloodGroup, excluded.bloodGroup),
+                ),
+                now(),
+              ).else(schema.person.updatedAt),
+            },
+          })),
+        )
+        .returning({ id: schema.person.id })
 
       const insertRelationsPromise = tx
         .insert(schema.personRelation)
         .values(
-          teacherPersonIds.map((_, i) => ({
-            personId: allPersonIds[i * 2]!,
-            relativeId: allPersonIds[i * 2 + 1]!,
+          sdRecords.map((_, i) => ({
+            personId: personRows[i * 2]!.id,
+            relativeId: personRows[i * 2 + 1]!.id,
             relation: '1',
           })),
         )
@@ -204,21 +146,12 @@ export const importFileProcedure = adminProcedure
       const insertTeachersPromise = tx
         .insert(schema.sd__teacher)
         .values(
-          recordsToInsert
-            .map((record, i) => ({
-              personId: personsInserted[i * 2]!,
-              instituteId: input.instituteId,
-              employeeId: record.employeeId,
-              joiningDate: record.joiningDate?.toISOString(),
-            }))
-            .concat(
-              recordsToUpdate.map(({ teacherPersonId, record }) => ({
-                personId: teacherPersonId,
-                instituteId: input.instituteId,
-                employeeId: record.employeeId,
-                joiningDate: record.joiningDate?.toISOString(),
-              })),
-            ),
+          sdRecords.map((record, i) => ({
+            personId: personRows[i * 2]!.id,
+            instituteId: input.instituteId,
+            employeeId: record.employeeId,
+            joiningDate: record.joiningDate?.toISOString(),
+          })),
         )
         .onConflictDoUpdate(
           aliasExcluded(schema.sd__teacher, (excluded) => ({
