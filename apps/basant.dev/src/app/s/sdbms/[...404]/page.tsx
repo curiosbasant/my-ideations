@@ -1,20 +1,13 @@
+import { notFound } from 'next/navigation'
 import type { Metadata } from 'next/types'
-import { GlobeXIcon } from 'lucide-react'
 
 export const metadata: Metadata = {
-  title: '404',
+  title: '404 Not Found',
   description: 'Page not found',
 }
 
+export const instant = false
+
 export default function NotFoundPage() {
-  return (
-    <div className='flex h-full flex-col items-center justify-center gap-2'>
-      <GlobeXIcon className='size-16' />
-      <h1 className='text-center text-7xl font-bold'>404</h1>
-      <p className='text-center'>Oops... page not found!</p>
-      <p className='text-center text-sm text-balance text-muted-foreground'>
-        This might not be the page, you're looking for.
-      </p>
-    </div>
-  )
+  notFound()
 }
